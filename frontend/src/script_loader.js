@@ -117,6 +117,7 @@ const script_loader={
         "frontend/src/dialog/dev_chart.js",
         "frontend/src/dialog/feedback.js",
         "frontend/src/dialog/kennblatt.js",
+        "frontend/src/dialog/statistics.js",
         //TODO: needs to be removed if Reini is finished
         "frontend/src/dialog/dialog.js",
         //export
