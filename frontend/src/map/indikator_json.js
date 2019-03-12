@@ -228,7 +228,6 @@ const indikator_json = {
             statistics.chart.settings.indText=indikatorauswahl.getSelectedIndikatorText();
             statistics.chart.settings.indUnit=indikatorauswahl.getIndikatorEinheit();
             console.log("Done: onClick Statistics read");
-
             statistics.open();
         });
         $(document).on('click','#pop_up_diagramm_entwicklung_ags_'+id_popup,function(){

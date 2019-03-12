@@ -23,11 +23,16 @@ const statistics = {
             deviation:"Abweichung vom Mittelwert",
             areaCount: "Anzahl in die Berechnung einbezogenen Gebietseinheiten",
             probability:"Wahrscheinlichkeit",
-            amount:"Anzahl",
+            amount:"anzahl",
             area:"Gebiet",
             areas:"Gebiete",
             value:"Wert",
-            values:"Werte"
+            values:"Werte",
+            probDensity:"Wahrscheinlichkeitsdichte",
+            cumulativeDistribution:"Verteilungsfunktion",
+            intervalCount:"Anzahl Intervale",
+            interval:"Intervall",
+            selectChart:"Diagramm wählen"
 
         },
         en: {
@@ -51,11 +56,16 @@ const statistics = {
             deviation:"Deviation from mean",
             areaCount: "Number of administrative areas used in calculation",
             probability: "Probability",
-            amount: "Amount",
+            amount: "amount",
             area:"Area",
             areas:"Areas",
             value:"Value",
-            values:"Values"
+            values:"Values",
+            probDensity:"Probability density",
+            cumulativeDistribution:"Cumulative distribution",
+            intervalCount:"Interval count",
+            interval:"Interval",
+            selectChart:"Select chart"
 
 
         }
@@ -64,19 +74,20 @@ const statistics = {
     open: function () {
 
         let lan = language_manager.getLanguage(),
-            geoJSON = this.chart.settings.allValuesJSON;
-        this.chart.settings.lan=lan;
+            geoJSON = this.chart.settings.allValuesJSON,
+            chart = this.chart;
+        chart.settings.lan=lan;
         // todo REINIS REFACTOR the getting of Data Values TO init:function(..){....} !!!  Here only the Visualisation Data-, html binding!
-        this.chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
-        this.chart.settings.currentValue = this.getCurrentValue(geoJSON);
-        this.chart.settings.areaCount = this.getAreaCount(geoJSON);
-        this.chart.settings.areaType = this.getAreaType(geoJSON);
-        this.chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray));
-        this.chart.data=this.sortObjectAscending(this.chart.settings.allValuesObjectArray,"value","ags");
-        this.chart.data = this.getDistributionFunctionValues(this.chart.data);
-        this.chart.data = this.getDeviationValues(this.chart.data, this.chart.settings.statistics.average);
+        chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
+        chart.settings.currentValue = this.getCurrentValue(geoJSON);
+        chart.settings.areaCount = this.getAreaCount(geoJSON);
+        chart.settings.areaType = this.getAreaType(geoJSON);
+        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray));
+        chart.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
+        chart.data = this.getDistributionFunctionValues(chart.data);
+        chart.data = this.getDeviationValues(chart.data, this.chart.settings.statistics.average);
+        chart.settings.densityIntervalCount=Math.round(chart.data.length/4);
 
-        let chart = this.chart;
         const timeStamp = zeit_slider.getTimeSet();
 
         let html = he.encode(`
@@ -131,29 +142,23 @@ const statistics = {
                     <div id="chart_select_container" class="ui form" style="margin-left: 60px">
                         <div class="fields">
                             <div class="field">
-                                <label>Select chart:</label>
+                                <label>${this.text[lan].selectChart}:</label>
                                     <div id="chart_ddm_diagramm" class="ui selection dropdown">
                                         <i class="dropdown icon"></i>    
-                                        <div class="default text">Values</div>                    
+                                        <div class="text">${this.text[lan].values}</div>                    
                                         <div class="menu">
-                                            <div class="item" data-value="valueChart">Values</div>
-                                            <div class="item" data-value="densityChart">Probability density</div>
-                                            <div class="item" data-value="distributionChart">Cumulative distribution</div>
+                                            <div class="item" data-value="valueChart">${this.text[lan].values}</div>
+                                            <div class="item" data-value="densityChart">${this.text[lan].probDensity}</div>
+                                            <div class="item" data-value="distributionChart">${this.text[lan].cumulativeDistribution}</div>
                                         </div>
                               
                                     </div>
                                 </div>
                                <div class="two wide field" id="classCountInput">
-                                   <label>Class count:</label>                                
-                                   <input type="text"  class="form-control" id="classCountInputField" placeholder="25" >
+                                   <label>${this.text[lan].intervalCount}:</label>                                
+                                   <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
                                </div>
                         </div>
-                               <div class="ui warning message field" >
-                                <div class="header">Zu viele Klassen!</div>
-                                <ul class="list">
-                                 <li>Geben Sie nicht mehr als ${chart.data.length/2} Klassen ein.</li>
-                                </ul>
-                               </div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
@@ -162,6 +167,7 @@ const statistics = {
                             <svg id="statistics_visualisation" height="100"></svg>
                         </div>
                         <div id="tooltip"></div>
+                        <div id="intervalInfo"></div>
                     </div>
                 </div>
             </div>
@@ -188,7 +194,7 @@ const statistics = {
             allValuesJSON: "",
             currentValue: "",
             allValuesObjectArray: {},
-            densityClasCount:25,
+            densityIntervalCount:25,
             areaCount: "",
             areaType: {},
             selectedChart:"valueChart",
@@ -222,7 +228,10 @@ const statistics = {
             $(".uneven").css({"background-color":"gainsboro"});
 
 
+            //reset the default visualisation style, start drawing
+            chart.settings.selectedChart="valueChart";
             chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+            //Initialize the drop-down menu
             chart.controller.setDropDownMenu(svg, chart_width, chart_height, margin);
 
         },
@@ -236,14 +245,14 @@ const statistics = {
                     visualisation=$("#statistics_visualisation");
 
                 chart_auswahl.dropdown({
-                    onChange: function (value, text, $choice) {
+                    onChange: function (value) {
                         if (value === 'valueChart') {
                             chart.settings.selectedChart='valueChart';
                             visualisation.empty();
                             chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                             chart_auswahl.dropdown("hide");
                             classCountInput.hide();
-                            tooltip.hide();
+
                         } else if (value === 'densityChart') {
                             chart.settings.selectedChart='densityChart';
                             visualisation.empty();
@@ -251,7 +260,7 @@ const statistics = {
                             classCountInput.show();
                             tooltip.hide();
                             chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
-                        } else if (value='distributionChart'){
+                        } else if (value==='distributionChart'){
                             chart.settings.selectedChart='distributionChart';
                             visualisation.empty();
                             chart_auswahl.dropdown("hide");
@@ -264,24 +273,21 @@ const statistics = {
                 setTimeout(function(){
                     chart_auswahl.dropdown("hide");
                 },500);
-                // Set the classCount inpt field css.properties
-                // todo ! REINIS Add the Warning, handle event when too many classes chosen. Set default class amount
+
+                // Set the classCount input field css.properties
                 $("#classCountInputField").css({"width":"60px"});
                 classCountInput.hide();
                 classCountInput.on('change', function(e) {
                     let inputClassCount=$("#classCountInputField").val();
                     console.log("ClassCount! "+inputClassCount);
                     console.log("Data length: "+chart.data.length);
-                    if (inputClassCount > chart.data.length/2){
-                        inputClassCount=Math.round(chart.data.length/2);
-                        chart_auswahl.addClass("warning");
 
-                        $("#classCountInputField").val(inputClassCount);
-                        console.log("Too much! "+inputClassCount);
-                        console.log(chart_auswahl.attr("class"));
-                    }
-                    else {chart_auswahl.removeClass("warning")}
-                    chart.settings.densityClasCount=inputClassCount;
+
+                    $("#classCountInputField").val(inputClassCount);
+                    console.log("Too much! "+inputClassCount);
+                    console.log(chart_auswahl.attr("class"));
+
+                    chart.settings.densityIntervalCount=inputClassCount;
                     visualisation.empty();
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                 });
@@ -309,8 +315,7 @@ const statistics = {
 
                 if (selection === "valueChart") {
                     // Bar graph of Values Ascending!!!!!
-                    let dataSorted = statistics.sortObjectAscending(chart.data, "value", "ags");
-                    parameters.data=dataSorted;
+                    parameters.data=statistics.sortObjectAscending(chart.data, "value", "ags"); // Sort the data according to indicator value
                     parameters.xAxisName=statistics.text[chart.settings.lan].areas;
                     parameters.yAxisName=statistics.text[chart.settings.lan].values;
                     parameters.xValue="ags";
@@ -322,20 +327,18 @@ const statistics = {
                 else if(selection=== "densityChart"){
                     // Bar graph of Density function!
                     //todo REINIS add the ClassCount selector!!
-                    let classCount= chart.settings.densityClasCount,
-                        classData =statistics.getDensityFunctionClassValues(chart.data,classCount);
-                    parameters.data=classData;
+                    let classCount= chart.settings.densityIntervalCount;
+                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount); // separate indicator values into intervals to display in density chart
                     parameters.xAxisName=(statistics.text[chart.settings.lan].deviation);
-                    parameters.yAxisName=statistics.text[chart.settings.lan].amount;
-                    parameters.xValue="classMiddle";
-                    parameters.yValue="count";
+                    parameters.yAxisName=statistics.text[chart.settings.lan].probability;
+                    parameters.xValue="intervalMiddle";
+                    parameters.yValue="probability";
                     statistics.drawDensityFunctionChart(parameters);
                 }
 
                 else if(selection==="distributionChart"){
                     // Line graph, distribution Function !!!!!
-                    let dataSorted = statistics.sortObjectAscending(chart.data, "distFuncValue", "ags");
-                    parameters.data=dataSorted;
+                    parameters.data=statistics.sortObjectAscending(chart.data, "distFuncValue", "ags");
                     parameters.xAxisName=statistics.text[chart.settings.lan].values;
                     parameters.yAxisName=statistics.text[chart.settings.lan].probability;
                     parameters.xValue="value";
@@ -504,37 +507,37 @@ const statistics = {
         return deviationArray
     },
 
-    getDensityFunctionClassValues: function(data,classCount) {
+    getDensityFunctionIntervalValues: function(data,classCount) {
         let densityFunctionObjectArray = [];
-        if (classCount > (data.length / 2)){
-            classCount=data.length/2
-        }
 
         data = this.sortObjectAscending(data, "deviation", "ags");
         let min = data[0].deviation,
             max = data[data.length-1].deviation,
             difference = max - min,
             classSize = difference / classCount,
-            classLowerLimit = min;
+            intervalLowerLimit = min;
         for (let i = 0; i < classCount; i++) {
             let counter = 0,
-                classElementValues=[],
-                classUpperLimit = classLowerLimit + classSize,
-                classMiddle=classLowerLimit+(classUpperLimit-classLowerLimit)/2;
+                intervalElementValues=[],
+                intervalElements=[];
+            intervalUpperLimit = intervalLowerLimit + classSize;
+            intervalMiddle=intervalLowerLimit+(intervalUpperLimit-intervalLowerLimit)/2;
             for (let elem in data) {
-                if (data[elem].deviation >= classLowerLimit && data[elem].deviation <= classUpperLimit) {
+                if (data[elem].deviation >= intervalLowerLimit && data[elem].deviation <= intervalUpperLimit) {
                     counter++;
-                    classElementValues.push(data[elem].deviation);
-
+                    let element={name:data[elem].name, value:data[elem].value, deviation:data[elem].deviation};
+                    intervalElementValues.push(data[elem].deviation);
+                    intervalElements.push(element);
                 }
             }
-            let averageClassValue=this.calculateAverage(classElementValues),
-                className=`${this.roundNumber(classLowerLimit)} bis ${this.roundNumber(classUpperLimit)}`,
-                classObject = {name:className, classUpperLimit:classUpperLimit, classLowerLimit:classLowerLimit,classMiddle:classMiddle,  count:counter, classAverageValue:averageClassValue};
-            classLowerLimit=classUpperLimit;
+            let averageClassValue=Math.round(this.calculateAverage(intervalElementValues) * 1000) / 1000,
+                probability=counter/data.length,
+
+                classObject = {intervalUpperLimit:intervalUpperLimit, intervalLowerLimit:intervalLowerLimit,intervalMiddle:intervalMiddle,  count:counter, probability: probability, intervalAverageValue:averageClassValue, elements:intervalElements};
+            intervalLowerLimit=intervalUpperLimit;
             densityFunctionObjectArray.push(classObject);
         }
-
+        console.log("Min Max: "+ max+ " "+min);
         return densityFunctionObjectArray;
     },
 
@@ -553,15 +556,12 @@ const statistics = {
             chart_width = parameters.chart_width,
             chart_height = parameters.chart_height,
             margins = parameters.margins;
-
-
-        let lan = language_manager.getLanguage(),
-            maxValue = d3.max(data, function (d, i) {
-                return d[yValue];
-            }),
-            minValue = d3.min(data, function (d, i) {
-                return d[yValue]
-            });
+        maxValue = d3.max(data, function (d, i) {
+            return d[yValue];
+        });
+        minValue = d3.min(data, function (d, i) {
+            return d[yValue]
+        });
         if (minValue >= 0) {
             minValue = 0
         }
@@ -652,8 +652,6 @@ const statistics = {
             });
 
 // Add initial Tooltip
-
-
         $("#tooltip")
             .html(selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit)
             .css({"left": xScale(selectedObject[xValue]), "top": yScale(selectedObject[yValue]) - 40})
@@ -669,13 +667,51 @@ const statistics = {
             .attr("y1", yScale(mean))      // y position of the first end of the line
             .attr("x2", chart_width + 5)     // x position of the second end of the line
             .attr("y2", yScale(mean));    // y position of the second end of the line
-
 //Text for AverageLine
         g.append("text")
             .attr("x", margins.left)
             .attr("y", yScale(mean) + margins.top - 40)
             .style("text-anchor", "middle")
             .text(`${averageName} ${decodeURI('%CE%BC')}`);
+
+        // Draw standard Deviation lines
+        // upper stDeviation
+
+        if (mean+stDeviation<maxValue) { // check if StDeviation does not exceed axis domain
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", -5)     // x position of the first end of the line
+                .attr("y1", yScale(mean+stDeviation))      // y position of the first end of the line
+                .attr("x2", chart_width + 5)     // x position of the second end of the line
+                .attr("y2", yScale(mean+stDeviation));    // y position of the second end of the line
+            // text label for the upper stDeviation
+            g.append("text")
+                .attr("x", margins.left)
+                .attr("y", yScale(mean+stDeviation) -15)
+                .style("text-anchor", "middle")
+                .text(`+ ${decodeURI('%CF%83')}`);
+        }
+        // lower stDeviation
+        // check if StDeviation does not exceed axis domain
+        if(mean-stDeviation>minValue) {
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", -5)     // x position of the first end of the line
+                .attr("x1", -5)     // x position of the first end of the line
+                .attr("y1", yScale(mean-stDeviation))      // y position of the first end of the line
+                .attr("x2", chart_width + 5)     // x position of the second end of the line
+                .attr("y2", yScale(mean-stDeviation));    // y position of the second end of the line
+            // text label for the upper stDeviation
+            g.append("text")
+                .attr("x", margins.left)
+                .attr("y", yScale(mean-stDeviation) +15)
+                .style("text-anchor", "middle")
+                .text(`- ${decodeURI('%CF%83')}`);
+        }
 
         //Initialise both Axis
         //determine if Axis should have ticks
@@ -684,12 +720,7 @@ const statistics = {
             .tickSize(0);
 
 
-
-
-
-
         let yAxis = d3.axisLeft(yScale);
-
         g.append('g')
             .call(xAxis)
             .attr('transform', 'translate(0,' + (yScale(0)) + ')');
@@ -723,6 +754,7 @@ const statistics = {
             yAxisName = parameters.yAxisName,
             mean=parameters.mean,
             stDeviation=parameters.stDeviation,
+            indUnit=parameters.indUnit,
             svg = parameters.svg,
             averageName=parameters.averageName,
             chart_width = parameters.chart_width,
@@ -730,27 +762,29 @@ const statistics = {
             margins = parameters.margins,
             barWidth=chart_width / data.length,
 
-            lan = language_manager.getLanguage(),
-
             maxYValue = d3.max(data, function (d) {
                 return d[yValue];
             }),
-            minYValue = d3.min(data, function (d) {
-                return d[yValue]
-            }),
+            //minYValue = d3.min(data, function (d) {
+            //    return d[yValue]
+            //}),
+
+            minYValue = 0,
+
             maxXValue=d3.max(data,function(d){
                 return d[xValue]
             }),
             minXValue=d3.min(data,function(d){
                 return d[xValue]
             });
-        console.log("Bar width:" +barWidth);
 
+$("intervalInfo").click(function(){$("intervalInfo").hide()});
 
         let xScale = d3.scaleLinear()
             .domain(d3.extent([minXValue, maxXValue]))
             .range([barWidth/2, chart_width-barWidth/2]);
 
+        // drawing the yAxis 1/10 longer than max Value, to facilitate space for Average, stDeviation texts
         let yScale = d3.scaleLinear()
             .range([chart_height, 0])
             .domain(d3.extent([minYValue, maxYValue+Math.round(maxYValue/10)]))
@@ -786,9 +820,9 @@ const statistics = {
                 } else return 0
             })
             .on("mouseover", function (d) {
-                let html ="Wertebereich: "+ d.name + "<br/>" +yAxisName+ ": "+ d[yValue] ;
-                let x = xScale(d[xValue]),//(d3.event.pageX - document.getElementById('visualisation').getBoundingClientRect().x) - 100,
-                    y = yScale(d[yValue]) - 40//(d3.event.pageY - document.getElementById('visualisation').getBoundingClientRect().y) - 60;
+                let html ="Interval: "+ Math.round(d.intervalLowerLimit*100)/100 + " / "+ Math.round(d.intervalUpperLimit*100)/100+"<br/>" +yAxisName+ ": "+ Math.round(d[yValue]*1000)/1000 ,
+                    x = xScale(d[xValue]),
+                    y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
 
@@ -797,13 +831,25 @@ const statistics = {
                     .css({"left": x, "top": y})
                     .show();
             })
-            .on("mouseout", function (d) {
+            .on("mouseout", function () {
                 // change tooltip
                 $("#tooltip")
                     .hide();
                 d3.select(this).style("fill", function(d){return klassengrenzen.getColor(d[xValue]+mean)});
+            })
+            .on('click', function(d){
+                let html="",
+                    x = xScale(d[xValue])+40,
+                    y = yScale(d[yValue]/2);
+                for (let elem in d.elements){
+                    html += d.elements[elem].name + ": "+d.elements[elem].value+ " " +indUnit+ "<br/>"+ " ";
 
-
+                }
+                console.log(html);
+                $("#intervalInfo")
+                    .html(html)
+                    .css({"left": x, "top": y})
+                    .show()
             });
 
 // Draw the Average line in Graph
@@ -826,25 +872,41 @@ const statistics = {
 
         // Draw standard Deviation lines
         // upper stDeviation
-        /*
-        g.append("line")          // attach a line
-            .attr("class", "stDeviationLine")
-            .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3,15,3"))
-            .attr("x1", xScale(0))     // x position of the first end of the line
-            .attr("y1", yScale(maxYValue))      // y position of the first end of the line
-            .attr("x2", xScale(0))     // x position of the second end of the line
-            .attr("y2", yScale(minYValue));    // y position of the second end of the line
+        // check if StDeviation does not exceed axis domain
+        if (stDeviation<maxXValue) {
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", xScale(0 + stDeviation))     // x position of the first end of the line
+                .attr("y1", yScale(maxYValue + Math.round(maxYValue / 10)))      // y position of the first end of the line
+                .attr("x2", xScale(0 + stDeviation))     // x position of the second end of the line
+                .attr("y2", yScale(minYValue));    // y position of the second end of the line
+            // text label for the upper stDeviation
+            g.append("text")
+                .attr("x", xScale(0 + stDeviation) + 15)
+                .attr("y", yScale(maxYValue + Math.round(maxYValue / 10)) + margins.top)
+                .style("text-anchor", "middle")
+                .text(`+ ${decodeURI('%CF%83')}  `);
+        }
         // lower stDeviation
-        g.append("line")          // attach a line
-            .attr("class", "stDeviationLine")
-            .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3,15,3"))
-            .attr("x1", xScale(0))     // x position of the first end of the line
-            .attr("y1", yScale(maxYValue))      // y position of the first end of the line
-            .attr("x2", xScale(0))     // x position of the second end of the line
-            .attr("y2", yScale(minYValue));    // y position of the second end of the line
-*/
+        // check if StDeviation does not exceed axis domain
+        if(-stDeviation>minXValue) {
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", xScale(0 - stDeviation))     // x position of the first end of the line
+                .attr("y1", yScale(maxYValue + Math.round(maxYValue / 10)))      // y position of the first end of the line
+                .attr("x2", xScale(0 - stDeviation))     // x position of the second end of the line
+                .attr("y2", yScale(minYValue));    // y position of the second end of the line
+            // text label for the lower stDeviation
+            g.append("text")
+                .attr("x", xScale(0 - stDeviation) - 15)
+                .attr("y", yScale(maxYValue + Math.round(maxYValue / 10)) + margins.top)
+                .style("text-anchor", "middle")
+                .text(`- ${decodeURI('%CF%83')}  `);
+        }
 
 
 
@@ -927,6 +989,7 @@ const statistics = {
         let g = svg.append("g")
             .attr("class", "graph")
             .attr("transform", `translate(${margins.left}, ${margins.top})`);
+
         // Create lineGraph!
         let line = d3.line()
             .x(function (d, i) {
@@ -935,9 +998,17 @@ const statistics = {
             .y(function (d) {
                 return yScale(d[yValue]);
             }); // set the y values for the line generator
-        //.curve(d3.curveMonotoneX) // apply smoothing to the line
 
-        // Draw the Average line in Graph
+        g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", farbschema.getColorHexMain())
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("d", line);
+
+        // Draw the Average line
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
@@ -953,15 +1024,45 @@ const statistics = {
             .attr("y", yScale(maxYValue) + margins.top)
             .style("text-anchor", "middle")
             .text(`${averageName} ${decodeURI('%CE%BC')}`);
-        // Draw the main plot
-        g.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", farbschema.getColorHexMain())
-            .attr("stroke-width", 1.5)
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("d", line);
+
+        // Draw standard Deviation lines
+        // upper stDeviation
+
+        if (mean+stDeviation<maxXValue) { // check if StDeviation does not exceed axis domain
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", xScale(mean+stDeviation))     // x position of the first end of the line
+                .attr("y1", yScale(maxYValue))      // y position of the first end of the line
+                .attr("x2", xScale(mean+stDeviation))     // x position of the second end of the line
+                .attr("y2", yScale(minYValue));    // y position of the second end of the line
+            // text label for the upper stDeviation
+            g.append("text")
+                .attr("x", xScale(mean+stDeviation)+15)
+                .attr("y", yScale(maxYValue) + margins.top)
+                .style("text-anchor", "middle")
+                .text(`+ ${decodeURI('%CF%83')}  `);
+        }
+        // lower stDeviation
+        // check if StDeviation does not exceed axis domain
+        if(mean-stDeviation>minXValue) {
+            g.append("line")          // attach a line
+                .attr("class", "stDeviationLine")
+                .style("stroke", "black")  // colour the line
+                .style("stroke-dasharray", ("3, 3,15,3"))
+                .attr("x1", xScale(mean-stDeviation))     // x position of the first end of the line
+                .attr("y1", yScale(maxYValue ))      // y position of the first end of the line
+                .attr("x2", xScale(mean - stDeviation))     // x position of the second end of the line
+                .attr("y2", yScale(minYValue));    // y position of the second end of the line
+            // text label for the lower stDeviation
+            g.append("text")
+                .attr("x", xScale(mean-stDeviation)-15)
+                .attr("y", yScale(maxYValue) + margins.top)
+                .style("text-anchor", "middle")
+                .text(`- ${decodeURI('%CF%83')}  `);
+        }
+
 
         //Initialise both Axis
         let xAxis = d3.axisBottom(xScale)

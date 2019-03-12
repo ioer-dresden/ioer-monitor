@@ -143,6 +143,18 @@
     border: 1px solid black;
 }
 
+#intervalInfo {
+    background-color: white;
+    display: none;
+    padding: 5px;
+    position: absolute;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid black;
+    onClick:hide
+}
+
 path.plot {
     stroke: #FFA319;
 }
