@@ -23,8 +23,21 @@
     margin-left: 0;
     width: 95%;
 }
+#print_container .print_map_content .print_header .w-25{
+    position: absolute;
+    height: 105px;
+    right: 10px;
+    top: 40px;
+}
+#print_container .print_map_content .print_header .logo{
+    background-image: url("../assets/kopf_v2.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height:100%;
+}
 #print_container .map_print_container{
-    margin-top: 2vh;
+    margin-top: 20px;
 }
 #print_container .print_map_content  .map_print_container #print_map{
     float: left;
@@ -34,7 +47,7 @@
     border: .5px solid lightgray;
 }
 #print_container .print_map_content  .map_print_container #print_map svg{
-    margin-top: 2vh;
+    margin-top: 20px;
 }
 #print_container .print_map_content .map_print_container #print_map .leaflet-control-scale-line{
     margin-left: 20px;
@@ -43,10 +56,13 @@
     margin-right: 20px;
 }
 #print_container .print_info_content{
-    float: left;
     display: block;
     width: 140px;
     margin-left: 30px;
+    position: absolute;
+    right: 35px;
+    top: 150px;
+    height:145px;
 }
 #print_container .highlight{
     color: var(--active-color);
@@ -54,15 +70,16 @@
     cursor: pointer !important;
 }
 #print_container .hover_close{
-    margin-top: 3vh;
+    margin-top: 35px;
 }
-#print_container .hover_close .disable_print{
+#print_container .hover_close:hover{
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
     opacity: 0.5;
+    cursor: not-allowed;
 }
-#print_container .hover_close .display-none{
-    display: none;
+#print_container #print_histogramm_container{
+    margin-top: 250px;
 }
 #print_container .print_info_content #print_legende{
     width: 100%;

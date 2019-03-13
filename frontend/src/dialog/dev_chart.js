@@ -576,58 +576,19 @@ const dev_chart={
     },
     controller:{
         set:function(){
-                let chart_array = [],
-                    id_input="search_ags",
-                    set_autocomplete = function () {
-                        chart_array = indikator_json_group.getAGSArray();
-                        auto_complete.autocomplete(document.getElementById(id_input), chart_array);
-                    },
-                    get_ags=function(){
-                        return $(`#${id_input}`).data("id");
-                    },
-                    get_name=function(){
-                        return $(`#${id_input}`).val();
-                    },
-                    lan = language_manager.getLanguage(),
-                    set_swal=function(callback){
-                        swal({
-                            title: `${dev_chart.text[lan].set_choice()}`,
-                            text: `<div class="form-group" style="display: unset !important;">
-                                <input type="text" id="${id_input}" class="form-control" tabindex="3" placeholder="Gebiet...">
-                           </div>`,
-                            showCancelButton: true,
-                            cancelButtonText: `${dev_chart.text[lan].cancel}`,
-                            html: true
-                        }, function (isConfirm) {
-                            if (isConfirm) {
-                                callback();
-                            }
-
-                        });
-                        //on enter also open the chart
-                        $(`#${id_input}`)
-                            .unbind()
-                            .keypress(function(e){
-                                var keycode = (e.keyCode ? e.keyCode : e.which);
-                                if (keycode == '13') {
-                                    callback();
-                                }
-                            });
-                        set_autocomplete()
-                    };
                 //call on select inside the toolbar
                 $(document).on("click", dev_chart.chart_selector, function () {
                     let callback = function () {
-                        if(get_ags()) {
-                            dev_chart.chart.settings.ags = get_ags();
-                            dev_chart.chart.settings.name = get_name();
+                        if(Dialoghelper.getAGS_Input()) {
+                            dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
+                            dev_chart.chart.settings.name =Dialoghelper.getAGS_InputName();
                             dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
                             dev_chart.chart.settings.ind_vergleich = false;
                             dev_chart.open();
                         }
                     };
                     try {
-                        set_swal(callback);
+                        Dialoghelper.setSwal(callback);
                     }catch(err){
                        alert_manager.alertError();
                     }
@@ -635,16 +596,16 @@ const dev_chart={
 
             $(document).on("click", dev_chart.chart_compare_selector, function () {
                 let callback = function () {
-                    if(get_ags()) {
-                        dev_chart.chart.settings.ags = get_ags();
-                        dev_chart.chart.settings.name = get_name();
+                    if(Dialoghelper.getAGS_Input()) {
+                        dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
+                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName()
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
                         dev_chart.chart.settings.ind_vergleich = true;
                         dev_chart.open();
                     }
                 };
                 try {
-                    set_swal(callback);
+                    Dialoghelper.setSwal(callback);
                 }catch(err){
                     alert_manager.alertError();
                 }

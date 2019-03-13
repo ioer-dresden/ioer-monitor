@@ -66,7 +66,7 @@ const script_loader={
         "frontend/src/models/view_state.js",
         "frontend/src/models/base_raumgliederung.js",
         "frontend/src/models/exclude.js",
-        "frontend/src/models/auto_complete.js",
+        "frontend/src/auto_complete.js",
         //menu
         "frontend/src/menu/raeumliche_visualisierung.js",
         "frontend/src/menu/raeumliche_analyseebene.js",
@@ -79,6 +79,7 @@ const script_loader={
         "frontend/src/menu/farbliche_darstellungsart.js",
         "frontend/src/menu/navbar.js",
         "frontend/src/menu/farbschema.js",
+        "frontend/src/menu/MenuHelper.js",
         //map
         "frontend/src/map/layer_control.js",
         "frontend/src/map/map_controller.js",
@@ -117,8 +118,8 @@ const script_loader={
         "frontend/src/dialog/dev_chart.js",
         "frontend/src/dialog/feedback.js",
         "frontend/src/dialog/kennblatt.js",
+        "frontend/src/dialog/DialogHelper.js",
         "frontend/src/dialog/statistics.js",
-        //TODO: needs to be removed if Reini is finished
         "frontend/src/dialog/dialog.js",
         //export
         "frontend/src/export/ogc_export.js",
@@ -138,11 +139,11 @@ const script_loader={
         const loader = this;
         $.getMultiScripts = function(arr) {
             var _arr = $.map(arr, function(scr) {
-                return $.getScript(  scr );
+                return $.getScript(  scr);
             });
 
             _arr.push($.Deferred(function( deferred ){
-                $( deferred.resolve );
+                $( deferred.resolve);
             }));
 
             return $.when.apply($, _arr);
@@ -156,8 +157,9 @@ const script_loader={
                 if(helper.checkIE()){
                     alert_manager.alertIE();
                 }else{
+                    console.log(err);
                     if(!window.location.href.includes("monitor_test")) {
-                        let message = error.getErrorMessage("script Loading");
+                        let message = error.getErrorMessage(err);
                         alert_manager.alertError();
                         request_manager.sendMailError(message.name, message.message);
                     }

@@ -15,7 +15,8 @@ const map_controller={
         'glaetten.init()',
         'dev_chart.init()',
         'map_link.init()',
-        'geolocate.init()'
+        'geolocate.init()',
+        'statistics.init()'
     ],
   set:function(){
       map.on('moveend',         function () {

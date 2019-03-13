@@ -269,20 +269,28 @@ const toolbar = {
                             <ul class="tools w-100">
                                 <li class="w-30">
                                     <div class="btn_container">
-                                        <div id="dev_chart" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes" title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
+                                        <div id="${dev_chart.chart_selector.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes" title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance}">Werte- entwicklung</div>
                                     </div>
                                 </li>
                                  <li class="w-35">
                                     <div class="btn_container">
-                                        <div id="dev_chart_compare" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte" title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
-                                        <div class="btn_txt wordbreak ${exclude.class_performance}" data-title="">Entwicklungs- vergleich</div>
+                                        <div id="${dev_chart.chart_compare_selector.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte" title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
+                                        <div class="btn_txt wordbreak ${exclude.class_performance.replace("#","")}" data-title="">Entwicklungs- vergleich</div>
                                     </div>
                                 </li>
                                 <li class="w-30">
                                     <div class="btn_container">
-                                        <div id="ind_compare" class="image cursor ${exclude.class_raster}" data-title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander" title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
+                                        <div id="${raster_split.selector.replace("#","")}" class="image cursor ${exclude.class_raster}" data-title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander" title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
                                         <div class="btn_txt wordbreak" data-title="">Karten- vergleich</div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="tools w-100">
+                                <li class="w-30">
+                                    <div class="btn_container">
+                                        <div id="${statistics.selector.replace("#","")}" class="image cursor" data-title="Statistik des Indikators" title="Statistik des Indikators"></div>
+                                        <div class="btn_txt wordbreak">Statistik</div>
                                     </div>
                                 </li>
                             </ul>
@@ -300,9 +308,9 @@ const toolbar = {
                         <div class="dropdown_menu mobile_hidden" id="dropdown_ogc">
                             <div class="export_div"><b>Einbinden in eigenes GIS als</b></div>
                             <hr class="hr"/>
-                            <button id="wms" class="btn .btn-info btn_export raster_export" data-format="WMS" onclick="ogc_export.wms.open()">WMS</button>
-                            <button id="wcs" class="btn .btn-info btn_export raster_export" data-format="WCS" onclick="ogc_export.wcs.open()">WCS</button>
-                            <button id="wfs" class="btn .btn-info btn_export gebiete_export" data-format="WFS" onclick="ogc_export.wfs.open()">WFS</button>
+                            <button id="wms" class="btn .btn-info btn_export raster_export" data-format="WMS" onclick="ogc_export.open('wms')">WMS</button>                            
+                            <button id="wcs" class="btn .btn-info btn_export raster_export" data-format="WCS" onclick="ogc_export.open('wcs')">WCS</button>
+                            <button id="wfs" class="btn .btn-info btn_export gebiete_export" data-format="WFS" onclick="ogc_export.open('wfs')">WFS</button>
                             <div class="export_div" id="export_map_display"><b>Export der Kartendarstellung als</b></div>
                             <hr class="hr"/>
                             <div class="btn-group">

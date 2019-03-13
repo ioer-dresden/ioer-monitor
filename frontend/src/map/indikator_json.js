@@ -220,14 +220,12 @@ const indikator_json = {
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
-            console.log("Starting: onClick Statistics");
             statistics.chart.settings.ags=ags;
             statistics.chart.settings.name=gen;
             statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
             statistics.chart.settings.allValuesJSON  = indikator_json.getJSONFile();
             statistics.chart.settings.indText=indikatorauswahl.getSelectedIndikatorText();
             statistics.chart.settings.indUnit=indikatorauswahl.getIndikatorEinheit();
-            console.log("Done: onClick Statistics read");
             statistics.open();
         });
         $(document).on('click','#pop_up_diagramm_entwicklung_ags_'+id_popup,function(){
@@ -273,8 +271,7 @@ const indikator_json = {
     },
     setStyle:function(feature) {
         //the error Code
-        let fc = feature.properties.fc,
-            des = feature.properties.des;
+        let fc = feature.properties.fc;
         //init styling
         if (fc === '0') {
             return style.getLayerStyle(feature.properties.value);
