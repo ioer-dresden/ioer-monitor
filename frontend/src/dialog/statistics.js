@@ -1,6 +1,5 @@
 const statistics = {
     endpoint_id: "statistics_content",
-    chart_selector:"#statistics",
     text: {
         de: {
             title: "Statistik",
@@ -93,7 +92,7 @@ const statistics = {
         let html = he.encode(`
              <div class="jq_dialog" id="${this.endpoint_id}">
                 <div class="container">
-                    <div class="header">               
+                    <div class="header" id="statistics_header">               
                         <h4>${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
                         <h2>${chart.settings.indText}</h2>
                         <h3 id="selectedArea">${chart.settings.name}</h3>
@@ -103,7 +102,7 @@ const statistics = {
                         <h6 id="currentValue">${this.text[lan].value}: ${chart.settings.currentValue} ${chart.settings.indUnit}</h6>
                     </div>
                     <hr />
-                    <div class="table" > 
+                    <div class="table" id="statistics_table"> 
                     <h4 style="text-align:center;">${this.text[lan].info}</h4>
                     <table id="statistics_table" >
                           <tr class="uneven">
@@ -209,9 +208,13 @@ const statistics = {
         data: [],
         init: function () {
 
-            // TODO REINIS Set correct Height and Width of the Visualisation!!
-            $("#statistics_content #statistics_visualisation").height(532);
-            $("#statistics_content #statistics_visualisation").width(1100);
+            // Setting dynamic visualisation dimensions
+            const container_height= dialog_manager.calculateHeight()-$("#statistics_header").height()-$("#statistics_table").height()-$("#chart_select_container").height(),
+                container_width=dialog_manager.calculateWidth();
+            $("#statistics_content #statistics_visualisation").height(container_height);
+            $("#statistics_content #statistics_visualisation").width(container_width);
+
+
             let svg = d3.select("#statistics_content #statistics_visualisation"),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
                 diagram = $('#statistics_content #diagramm'),
@@ -219,9 +222,10 @@ const statistics = {
                 chart_width = diagram.width() - margin.left - margin.right,
                 chart_height = $('.ui-dialog').height() * (1.5 / 3) - 100,
                 chart= statistics.chart;
-
+            console.log("container height: "+ container_height);
+            console.log("container width: "+container_width);
             //Set table css styling
-            $("#statistics_table").css({    "margin-left":"auto",
+            $(".table #statistics_table").css({    "margin-left":"auto",
                 "margin-right":"auto"});
             $(".table_element").css({"border":"1px solid black","padding":"5px"});
             $(".even").css({"background-color":"white"});
@@ -232,11 +236,11 @@ const statistics = {
             chart.settings.selectedChart="valueChart";
             chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
             //Initialize the drop-down menu
-            chart.controller.setDropDownMenu(svg, chart_width, chart_height, margin);
+            chart.controller.setInteractiveElemenents(svg, chart_width, chart_height, margin);
 
         },
         controller: {
-            setDropDownMenu:function(svg, chart_width, chart_height, margin){
+            setInteractiveElemenents:function(svg, chart_width, chart_height, margin){
                 //set up the dropdown menu
                 let chart_auswahl = $('#chart_ddm_diagramm'),
                     chart=statistics.chart,
@@ -290,6 +294,16 @@ const statistics = {
                     chart.settings.densityIntervalCount=inputClassCount;
                     visualisation.empty();
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                });
+                // set IntervalInfo:n Info popup div should disappear on click outside of it
+                $("body").mouseup(function(e)
+                {
+                    let intervalInfo = $("#intervalInfo");
+                    // if the target of the click isn't the container nor a descendant of the container
+                    if (!intervalInfo.is(e.target) && intervalInfo.has(e.target).length === 0)
+                    {
+                        intervalInfo.hide();
+                    }
                 });
 
             },
@@ -382,7 +396,7 @@ const statistics = {
         for (let elem in this.chart.settings.allValuesJSON["features"]) {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
-                if (object["ags"] == this.chart.settings.ags) {
+                if (object["ags"] === this.chart.settings.ags) {
                     currentValue = this.parseFloatWithComma(object["value_comma"]);
                 }
             }
@@ -553,23 +567,25 @@ const statistics = {
             mean = parameters.mean,
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
-            margins = parameters.margins;
-        maxValue = d3.max(data, function (d, i) {
-            return d[yValue];
-        });
-        minValue = d3.min(data, function (d, i) {
-            return d[yValue]
-        });
+            margins = parameters.margins,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
+
+            maxValue = d3.max(data, function (d, i) {
+                return d[yValue];
+            }),
+            minValue = d3.min(data, function (d, i) {
+                return d[yValue]
+            }),
+            selectedObject = data.find(function (obj) {
+                return obj[xValue] === selectedValue
+            });
         if (minValue >= 0) {
             minValue = 0
         }
-        let selectedObject = data.find(function (obj) {
-            return obj[xValue] === selectedValue
-        });
 
 
+        // Setting the scales for chart
         let xScale = d3.scaleBand()
             .domain(data.map(function (d) {
                 return d[xValue];
@@ -757,19 +773,15 @@ const statistics = {
             indUnit=parameters.indUnit,
             svg = parameters.svg,
             averageName=parameters.averageName,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
             margins = parameters.margins,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
             barWidth=chart_width / data.length,
 
             maxYValue = d3.max(data, function (d) {
                 return d[yValue];
             }),
-            //minYValue = d3.min(data, function (d) {
-            //    return d[yValue]
-            //}),
-
-            minYValue = 0,
+            minYValue = 0, // minimum Y value should always be 0
 
             maxXValue=d3.max(data,function(d){
                 return d[xValue]
@@ -777,8 +789,6 @@ const statistics = {
             minXValue=d3.min(data,function(d){
                 return d[xValue]
             });
-
-$("intervalInfo").click(function(){$("intervalInfo").hide()});
 
         let xScale = d3.scaleLinear()
             .domain(d3.extent([minXValue, maxXValue]))
@@ -837,7 +847,7 @@ $("intervalInfo").click(function(){$("intervalInfo").hide()});
                     .hide();
                 d3.select(this).style("fill", function(d){return klassengrenzen.getColor(d[xValue]+mean)});
             })
-            .on('click', function(d){
+            .on('click', function(d){ // onClick on a Bar rectangle opens a list of all included areas w/ their corresponding values
                 let html="",
                     x = xScale(d[xValue])+40,
                     y = yScale(d[yValue]/2);
@@ -845,10 +855,9 @@ $("intervalInfo").click(function(){$("intervalInfo").hide()});
                     html += d.elements[elem].name + ": "+d.elements[elem].value+ " " +indUnit+ "<br/>"+ " ";
 
                 }
-                console.log(html);
                 $("#intervalInfo")
                     .html(html)
-                    .css({"left": x, "top": y})
+                    .css({"left": x, "top": y, "max-height":chart_height-y+margins.top+margins.bottom, "overflow":"auto"})
                     .show()
             });
 
@@ -956,9 +965,9 @@ $("intervalInfo").click(function(){$("intervalInfo").hide()});
             averageName=parameters.averageName,
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
             margins = parameters.margins,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
             maxYValue = d3.max(data, function (d, i) {
                 return d[yValue];
             }),
@@ -990,7 +999,23 @@ $("intervalInfo").click(function(){$("intervalInfo").hide()});
             .attr("class", "graph")
             .attr("transform", `translate(${margins.left}, ${margins.top})`);
 
+        // modify data to be able to display DISCRETE distribution function
+        let distData=[];
+        for (let i=0;i<data.length;i++) {
+            let firstPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]},
+                secondPoint={};
+            if (i === data.length - 1) {
+                 secondPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]}
+            } else {
+                 secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
+            }
+            console.log(xValue);
+            distData.push(firstPoint);
+            distData.push(secondPoint);
+        }
+
         // Create lineGraph!
+
         let line = d3.line()
             .x(function (d, i) {
                 return xScale(d[xValue]);
@@ -1000,7 +1025,7 @@ $("intervalInfo").click(function(){$("intervalInfo").hide()});
             }); // set the y values for the line generator
 
         g.append("path")
-            .datum(data)
+            .datum(distData)
             .attr("fill", "none")
             .attr("stroke", farbschema.getColorHexMain())
             .attr("stroke-width", 1.5)
