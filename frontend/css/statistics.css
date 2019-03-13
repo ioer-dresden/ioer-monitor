@@ -1,11 +1,12 @@
 /* HERE THE STATISTICS CSS */
-
 #statistics_header{
     display:inline-block;
 }
 #statistics_content .container{
     width: 90%;
     height: 90%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 #statistics_content #diagramm_button{
     width: 80%;
@@ -14,22 +15,6 @@
     display: inline-block;
     width: 100%;
 }
-
-
-#statistics_content #selectedArea{
-
-}
-
-#statistics_content #selectedAGS{
-
-}
-#statistics_content #timeStamp{
-
-}
-#statistics_content #currentValue{
-
-}
-
 #statistics_content #indikator_choice_container_diagramm{
     width: 48%;
     margin-right: 10px;

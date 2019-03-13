@@ -99,7 +99,15 @@ const indikatorauswahl ={
                 //create the cat choices
                 if(main_view.getHeight()>=700) {
                     menu.responsive=false;
-                    html += `<div id="kat_item_${cat_id}" class="ui left pointing dropdown link item link_kat" data-value="${cat_id}" style="${background_color}">${icon_set}<i class="dropdown icon"></i>${cat_name()}<div id="submenu${cat_id}" class="menu submenu upward">`;
+                    html += `<div id="kat_item_${cat_id}"
+                                  title="${main_view.getHeight() >= 800 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
+                                  class="ui left pointing dropdown link item link_kat" 
+                                  data-value="${cat_id}"
+                                  style="${background_color}">
+                                ${icon_set}
+                                <i class="dropdown icon"></i>
+                                ${cat_name()}
+                                <div id="submenu${cat_id}" class="menu submenu upward">`;
                 }else{
                     menu.responsive=true;
                     html += `<div class="header">
@@ -128,7 +136,15 @@ const indikatorauswahl ={
                             return set;
                         };
 
-                    html += `<div class="${markierung_class()} item link_sub" id="${ind_id}_item" data-times="${times}" data-einheit="${einheit}" data-value="${ind_id}" data-kat="${cat_id}" data-name="${ind_name()}" data-sort="1" data-actuality="${grundakt_state}">`;
+                    html += `<div class="${markierung_class()} item link_sub" 
+                                    id="${ind_id}_item" 
+                                    data-times="${times}" 
+                                    data-einheit="${einheit}" 
+                                    data-value="${ind_id}" 
+                                    data-kat="${cat_id}" 
+                                    data-name="${ind_name()}" 
+                                    data-sort="1" 
+                                    data-actuality="${grundakt_state}">`;
                     html += ind_name() + "</div>";
                 });
                 html +='</div></div>';
@@ -156,7 +172,6 @@ const indikatorauswahl ={
                 if(value.ind === ind) {
                     if(value.avability==false){
                         alert_manager.alertNotAsRaster();
-                        $('.raster_export').hide();
                         return false;
                     }else{
                         if(!ind){
@@ -167,7 +182,6 @@ const indikatorauswahl ={
                         if(draw){
                             menu.setIndicator(ind);
                         }
-                        $('.raster_export').show();
                         return true;
                     }
                 }
@@ -326,7 +340,32 @@ const indikatorauswahl ={
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh')
                 .dropdown({
+                    onShow:function(){
+                        $('.link_kat')
+                            .unbind()
+                            .click(function(){
+                                MenuHelper.setUpward($(this).find('.submenu'));
+                            });
+                    },
                     onChange: function (value, text, $choice) {
+                        //enable or disbale OGC Services 
+                        let state_ogc = indikatorauswahl.getIndikatorInfo(value,"ogc");
+                        var interval = setInterval(function () {
+                            //if all indictaor values are ready
+                            if (state_ogc) {
+                                clearInterval(interval);
+                                if (state_ogc.wfs !=="1"){
+                                    helper.disableElement("#wfs","");
+                                }else{
+                                    helper.enableElement("#wfs","");
+                                }
+                                if (state_ogc.wcs !=="1"){
+                                    helper.disableElement(".raster_export","");
+                                }else{
+                                    helper.enableElement(".raster_export","");
+                                }
+                            }
+                        }, 100);
                         //clean the search field
                         $('#search_input_indikatoren').val('');
                         //save the prev selected indicator as paramter

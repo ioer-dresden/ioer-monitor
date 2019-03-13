@@ -102,36 +102,42 @@ const statistics = {
                         <h6 id="currentValue">${this.text[lan].value}: ${chart.settings.currentValue} ${chart.settings.indUnit}</h6>
                     </div>
                     <hr />
-                    
                     <div class="table" id="statistics_table"> 
                     <h4 style="text-align:center;">${this.text[lan].info}</h4>
                     <table id="statistics_table" >
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].areaCount}</td>
-                            <td class="table_element">${chart.settings.allValuesObjectArray.length}  ${chart.settings.areaType}</td>                         
+                            <td class="table_element">${chart.settings.allValuesObjectArray.length}  ${chart.settings.areaType}</td>
+                           
+                            
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].average}</td>
                             <td class="table_element">${chart.settings.statistics.average}  ${chart.settings.indUnit}</td>
+                    
+                            
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].median}</td>
-                            <td class="table_element">${chart.settings.statistics.median}  ${chart.settings.indUnit}</td>                           
+                            <td class="table_element">${chart.settings.statistics.median}  ${chart.settings.indUnit}</td>
+                           
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].stDev}</td>
-                            <td class="table_element">${chart.settings.statistics.stDeviation}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element">${chart.settings.statistics.stDeviation}  ${chart.settings.indUnit}</td>
+                            
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].max}</td>
-                            <td class="table_element">${chart.settings.statistics.max}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element">${chart.settings.statistics.max}  ${chart.settings.indUnit}</td>
+                            
                           </tr class="even">                          <tr>
                             <td class="table_element">${this.text[lan].min}</td>
                             <td class="table_element">${chart.settings.statistics.min}  ${chart.settings.indUnit}</td>
-                          </tr>                          
+                          </tr>
+                          
                     </table>
                     </div>
-                    
                     <div id="chart_select_container" class="ui form" style="margin-left: 60px">
                         <div class="fields">
                             <div class="field">
@@ -153,9 +159,11 @@ const statistics = {
                                </div>
                         </div>
                     </div>
-                    <div id="statistics_container_diagramm" class="container_diagramm">
-                        <div id="statistics_diagramm">
-                            <svg id="statistics_visualisation"></svg>
+                    <div id="container_diagramm" class="container_diagramm">
+                        <div id="diagramm">
+                            <h3 class="Hinweis_diagramm" id="Hinweis_diagramm_empty">${this.text[lan].no_choice}</h3>
+                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}</h3>
+                            <svg id="statistics_visualisation" height="100"></svg>
                         </div>
                         <div id="tooltip"></div>
                         <div id="intervalInfo"></div>
@@ -173,7 +181,6 @@ const statistics = {
 
 
     },
-
     chart: {
         settings: {
             lan:"",
@@ -200,15 +207,16 @@ const statistics = {
         data: [],
         init: function () {
 
-            const svg = d3.select("#statistics_content #statistics_visualisation"),
+            // Setting dynamic visualisation dimensions
+            const container_height= dialog_manager.calculateHeight()-$("#statistics_header").height()-$("#statistics_table").height()-$("#chart_select_container").height(),
+                container_width=dialog_manager.calculateWidth();
+            $("#statistics_content #statistics_visualisation").height(container_height);
+            $("#statistics_content #statistics_visualisation").width(container_width);
+
+
+            let svg = d3.select("#statistics_content #statistics_visualisation"),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
-
-                // Setting dynamic visualisation dimensions
-                container_height= dialog_manager.calculateHeight()-$("#statistics_header").height()-$("#statistics_table").height()-$("#chart_select_container").height()-margin.top-margin.bottom,
-                container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
-            $("#statistics_content #statistics_visualisation").height(container_height).width(container_width).css("overflow","hidden");
-
-            const diagram = $('#statistics_content #statistics_diagramm'),
+                diagram = $('#statistics_content #diagramm'),
 
                 chart_width = diagram.width() - margin.left - margin.right,
                 chart_height = $('.ui-dialog').height() * (1.5 / 3) - 100,
@@ -361,8 +369,6 @@ const statistics = {
         },
 
     },
-
-
     getAllValues: function (geoJSON) {
         // extracts the indicator Values from GeoJSON
         let valueArray = [];
@@ -378,9 +384,7 @@ const statistics = {
             }
         }
         return valueArray;
-
     },
-
     getCurrentValue: function (geoJSON) {
         let currentValue = null;
         // check if geoJSON has value "ags", and finds the corresponding value
@@ -405,7 +409,6 @@ const statistics = {
     parseFloatWithComma: function (string) {
         return parseFloat(string.replace(',', '.'));
     },
-
     calculateStatistics: function (values) {
         let maxValue = Math.max(...values);
         console.log("Max: " + maxValue);
@@ -460,7 +463,6 @@ const statistics = {
             let sqr = diff * diff;
             squareDiffSum = squareDiffSum + sqr;
         }
-        ;
         let stDeviation = Math.sqrt(squareDiffSum / (count - 1));
         return stDeviation;
 
@@ -547,7 +549,6 @@ const statistics = {
     },
 
     drawOrderedValuesChart: function (parameters) {
-        const tooltip = $("#tooltip")
         let data = parameters.data,
             xValue = parameters.xValue,
             yValue = parameters.yValue,
@@ -560,8 +561,8 @@ const statistics = {
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
             margins = parameters.margins,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
 
             maxValue = d3.max(data, function (d, i) {
                 return d[yValue];
@@ -629,11 +630,11 @@ const statistics = {
             .on("mouseover", function (d) {
                 let html = d.name + "<br/>" + d[yValue] + " " + indUnit;
                 let x = xScale(d[xValue]),
-                    y = yScale(d[yValue]) - 40
+                    y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
 
-                tooltip
+                $('#tooltip')
                     .html(html)
                     .css({"left": x, "top": y})
                     .show();
@@ -660,7 +661,7 @@ const statistics = {
             });
 
 // Add initial Tooltip
-        tooltip
+        $("#tooltip")
             .html(selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit)
             .css({"left": xScale(selectedObject[xValue]), "top": yScale(selectedObject[yValue]) - 40})
             .show();
@@ -671,9 +672,9 @@ const statistics = {
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
             .style("stroke-dasharray", ("3, 3"))
-            .attr("x1", 0)     // x position of the first end of the line
+            .attr("x1", -5)     // x position of the first end of the line
             .attr("y1", yScale(mean))      // y position of the first end of the line
-            .attr("x2", chart_width)     // x position of the second end of the line
+            .attr("x2", chart_width + 5)     // x position of the second end of the line
             .attr("y2", yScale(mean));    // y position of the second end of the line
 //Text for AverageLine
         g.append("text")
@@ -690,9 +691,9 @@ const statistics = {
                 .attr("class", "stDeviationLine")
                 .style("stroke", "black")  // colour the line
                 .style("stroke-dasharray", ("3, 3,15,3"))
-                .attr("x1", 0)     // x position of the first end of the line
+                .attr("x1", -5)     // x position of the first end of the line
                 .attr("y1", yScale(mean+stDeviation))      // y position of the first end of the line
-                .attr("x2", chart_width )     // x position of the second end of the line
+                .attr("x2", chart_width + 5)     // x position of the second end of the line
                 .attr("y2", yScale(mean+stDeviation));    // y position of the second end of the line
             // text label for the upper stDeviation
             g.append("text")
@@ -709,9 +710,9 @@ const statistics = {
                 .style("stroke", "black")  // colour the line
                 .style("stroke-dasharray", ("3, 3,15,3"))
                 .attr("x1", -5)     // x position of the first end of the line
-                .attr("x1", 0)     // x position of the first end of the line
+                .attr("x1", -5)     // x position of the first end of the line
                 .attr("y1", yScale(mean-stDeviation))      // y position of the first end of the line
-                .attr("x2", chart_width)     // x position of the second end of the line
+                .attr("x2", chart_width + 5)     // x position of the second end of the line
                 .attr("y2", yScale(mean-stDeviation));    // y position of the second end of the line
             // text label for the upper stDeviation
             g.append("text")
@@ -766,8 +767,8 @@ const statistics = {
             svg = parameters.svg,
             averageName=parameters.averageName,
             margins = parameters.margins,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
             barWidth=chart_width / data.length,
 
             maxYValue = d3.max(data, function (d) {
@@ -780,8 +781,7 @@ const statistics = {
             }),
             minXValue=d3.min(data,function(d){
                 return d[xValue]
-            }),
-            tooltip=$("#tooltip");
+            });
 
         let xScale = d3.scaleLinear()
             .domain(d3.extent([minXValue, maxXValue]))
@@ -829,14 +829,14 @@ const statistics = {
                 //Change Color
                 d3.select(this).style("fill", "green");
 
-                tooltip
+                $('#tooltip')
                     .html(html)
                     .css({"left": x, "top": y})
                     .show();
             })
             .on("mouseout", function () {
                 // change tooltip
-                tooltip
+                $("#tooltip")
                     .hide();
                 d3.select(this).style("fill", function(d){return klassengrenzen.getColor(d[xValue]+mean)});
             })
@@ -959,8 +959,8 @@ const statistics = {
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
             margins = parameters.margins,
-            chart_width = parameters.chart_width,
-            chart_height = parameters.chart_height,
+            chart_width = parameters.chart_width-margins.left-margins.right,
+            chart_height = parameters.chart_height-margins.top-margins.bottom,
             maxYValue = d3.max(data, function (d, i) {
                 return d[yValue];
             }),
@@ -998,9 +998,9 @@ const statistics = {
             let firstPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]},
                 secondPoint={};
             if (i === data.length - 1) {
-                secondPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]}
+                 secondPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]}
             } else {
-                secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
+                 secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
             }
             console.log(xValue);
             distData.push(firstPoint);
