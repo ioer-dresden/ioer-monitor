@@ -59,10 +59,6 @@ const dialog_manager={
                 let height = manager.instructions.height;
                 if(height) {return height;}
                 else{return manager.calculateHeight();}
-            },
-            title=function(){
-                let title =  manager.instructions.title;
-                return title.replace("- ","");
             };
         //close existing dialog
         manager.close();
@@ -70,7 +66,7 @@ const dialog_manager={
         body.append(html);
         manager.content=body.find(`#${manager.instructions.endpoint}`);
         manager.content.dialog({
-            title: title(),
+            title: manager.instructions.title,
             hide: 'blind',
             show: 'blind',
             width:width(),
@@ -95,5 +91,7 @@ const dialog_manager={
     },
     close:function(){
         $('.jq_dialog').remove();
+        //reset instructions
+        //this.instructions={endpoint:"",html:"",title:"",open:false,close:false,modal:false};
     }
 };

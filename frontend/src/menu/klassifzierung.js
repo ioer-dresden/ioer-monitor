@@ -19,11 +19,7 @@ const klassifzierung = {
     getSelectionId:function(_modus){
         const object = this;
         let parameter = this.getParamter();
-        let modus = raeumliche_visualisierung.getRaeumlicheGliederung();
-        if(_modus){
-            modus = _modus;
-        }
-        if(modus==="gebiete") {
+        if(raeumliche_visualisierung.getRaeumlicheGliederung()==='gebiete'|| _modus==="gebiete") {
             if (!parameter) {
                 object.setParamter('haeufigkeit');
             }
@@ -37,9 +33,6 @@ const klassifzierung = {
                 return values[1];
             }
         }
-    },
-    getSelectionText:function(){
-      return this.getDOMObject().find(`#${this.getSelectionId('gebiete')}_label`).find("span").text();
     },
     init:function() {
         this.constroller.set();

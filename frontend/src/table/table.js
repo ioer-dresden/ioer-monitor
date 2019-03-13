@@ -53,7 +53,7 @@ const table = {
                     colspan=6;
                 }
                 //the html for the header
-                let html = `<thead id="thead">
+                let html = `<thead id="thead" class="full-width">
                     <tr id="first_row_head">
                     <th colspan="${colspan}" data-sorter="false" class="sorter-false" id="header_ind_set">${indikatorauswahl.getSelectedIndikatorText_Lang()} (${zeit_slider.getTimeSet()})</th>
                     </tr>
@@ -68,7 +68,7 @@ const table = {
                     html += '<th class="th_head grundakt_head" id="grundakt_head">Mittlere Grund- aktualität</th>';
                 }
 
-                return (html+"</tr></thead>").trim();
+                return html+"</tr></thead>";
             },
             createTableBody=function() {
                 let html = `
@@ -197,7 +197,7 @@ const table = {
                                         ${grundaktualitaet_td()}
                                     </tr>`;
                 });
-                return (html+"</tbody>").trim();
+                return html+"</tbody>";
             },
             createTableFooter=function(){
                 //germany values
@@ -237,7 +237,7 @@ const table = {
                                                           style="margin-left: .5vh;" 
                                                           src="${dev_chart.icon.single.path}"/>`;
 
-                                    tfoot_ags += `<tfoot class="tfoot">
+                                    tfoot_ags += `<tfoot class="tfoot full-width">
                                                 <tr id="tfoot_${ags}">
                                                     <th></th>
                                                     <th colspan="2"></th>
@@ -248,13 +248,13 @@ const table = {
                                                              title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
                                                              class="indikatoren_gebietsprofil" 
                                                              src="frontend/assets/icon/indikatoren.png"/>
-                                                             ${name}
+                                                         <b>${name}</b>
                                                     </th>
                                                     <th class="val-ags" 
                                                         data-name="${value.gen}" 
                                                         data-val="${value_g}" 
                                                         data-ind="${indikatorauswahl.getSelectedIndikator()}">
-                                                        ${value_set}
+                                                        <b>${value_set}</b>
                                                         <img data-name="Bundesrepublik" 
                                                              data-ags="${ags}" 
                                                              data-ind="${indikatorauswahl.getSelectedIndikator()}" 
@@ -271,7 +271,7 @@ const table = {
                                     }
                                 });
                             });
-                            return tfoot_ags.trim();
+                            return tfoot_ags;
                         }else{
                             return ' ';
                         }
@@ -311,7 +311,7 @@ const table = {
                                           id="indikatoren_diagramm_ags_ind99" 
                                           style="margin-left: .5vh;" 
                                           src="${dev_chart.icon.single.path}"/>`,
-                            tfoot_brd = `<tfoot class="tfoot">
+                            tfoot_brd = `<tfoot class="tfoot full-width">
                                     <tr id="tfoot_99">
                                         <th></th>
                                         <th colspan="2"></th>
@@ -321,13 +321,13 @@ const table = {
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                  title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
                                                  class="indikatoren_gebietsprofil" src="frontend/assets/icon/indikatoren.png"/>
-                                                 Bundes- republik
+                                             <b>Bundesrepublik</b>
                                         </th>
                                         <th class="val-ags" 
                                             data-name="Bundesrepublik" 
                                             data-val="${value_g}" 
                                             data-ind="${indikatorauswahl.getSelectedIndikator()}">
-                                            ${value_g}
+                                            <b>${value_g}</b>
                                             <img data-name="Bundesrepublik" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
@@ -343,7 +343,7 @@ const table = {
                         if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
                             tfoot_brd += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
                         }
-                        return tfoot_brd.trim();
+                        return tfoot_brd;
                     };
                 return `${brd_footer()+ags_footer()}</tr></tfoot>`;
             };
@@ -819,20 +819,14 @@ const table = {
                         name = $(this).data('name');
                     openGebietsprofil(ags,name);
                 });
-            //statistics
+            //development chart button
             $('.indikatoren_diagramm_ags')
                 .unbind()
                 .click(function() {
                     let ags = $(this).data('ags'),
-                        name = $(this).data('name');
-
-                    statistics.chart.settings.ags=ags;
-                    statistics.chart.settings.name=name;
-                    statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
-                    statistics.chart.settings.allValuesJSON  = indikator_json.getJSONFile();
-                    statistics.chart.settings.indText=indikatorauswahl.getSelectedIndikatorText();
-                    statistics.chart.settings.indUnit=indikatorauswahl.getIndikatorEinheit();
-                    statistics.open();
+                        name = $(this).data('name'),
+                        wert = $(this).data('wert');
+                    openStatistik(ags,name,wert);
                 });
             //development chart single ind
             if(exclude.checkPerformanceAreas()) {

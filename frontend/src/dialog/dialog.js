@@ -38,6 +38,18 @@ function openGebietsprofil(ags,name){
         }
     });
 }
+function openStatistik(ags, name, wert){
+    let dialogContainer = $('#objektinformationen_content');
+    dialogContainer.dialog({
+        title: 'Statistik',
+        width: calculateWidth(),
+        height: calculateHeight(),
+        open: function(ev, ui){
+            $('.ui-widget-overlay').addClass('custom-overlay');
+            $.when(getStatistik(ags, name, wert)).done(function(data){dialogContainer.html(data);})
+        }
+    });
+}
 //calculate Width and Height of the setted dialog's
 function calculateWidth(){
     const width = main_view.getWidth();

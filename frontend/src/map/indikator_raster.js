@@ -55,8 +55,6 @@ const indikator_raster = {
                         id:"indicator_raster"
                     });
 
-                console.log(_seite);
-
                 if (_seite) {
                     //removeRasterBySide(_seite);
                     indikator_raster_group.clean(_seite);
@@ -126,8 +124,6 @@ const indikator_raster = {
                     mapOptions = object.getInfos('links');
                 }
             }
-
-            console.log(mapOptions);
 
             let URL = 'https://maps.ioer.de/cgi-bin/mapserv_dv?Map=' +
                 mapOptions[0].pfadmapfile + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
@@ -218,7 +214,7 @@ const indikator_raster = {
 
         raster_group.eachLayer(function (layer) {
             if (_seite) {
-                if (layer.wmsParams.seite === _seite) {
+                if (layer.wmsParams.id === _seite) {
                     layer_set = layer;
                 }
             }

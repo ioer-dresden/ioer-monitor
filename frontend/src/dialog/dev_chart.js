@@ -170,6 +170,14 @@ const dev_chart={
             let g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+            let line = d3.line()
+                .x(function (d) {
+                    return x(d.date);
+                })
+                .y(function (d) {
+                    return y(d.value);
+                });
+
             let legend = svg.append("g")
                 .attr("class", "legend");
 
@@ -206,7 +214,7 @@ const dev_chart={
 
                 $('#diagramm_loading_info').hide();
                 scaleChart();
-                scalePathData();
+                createPath();
             });
 
             function scaleChart() {
@@ -228,15 +236,13 @@ const dev_chart={
                 if (!chart.settings.state_prognose) {
                     max_date = new Date(current_year + 2, 0, 1);
                 }
-                if (minYear===maxYear) {
+                if (minYear== maxYear) {
                     x.domain(d3.extent([new Date(maxYear - 5, 0, 1), max_date]));
                 } else {
                     x.domain(d3.extent([min_date, max_date]));
                 }
 
-                console.log(minValue,maxValue);
-
-                y.domain(d3.extent([parseInt(minValue)-1, parseInt(maxValue)+1]));
+                y.domain(d3.extent([minValue, maxValue]));
 
                 g.append("g")
                     .attr("class", "axis axis--x")
@@ -255,14 +261,14 @@ const dev_chart={
                     .attr("class", "axis axis--y")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
                         if (chart.settings.ind_vergleich) {
-                            if (d === 0) {
-                                if (array.length=== 1) {
+                            if (d == 0) {
+                                if (array.length== 1) {
                                     return data[0].real_value;
                                 } else {
                                     return 'x';
                                 }
                             }
-                            else if (d !== minValue || d !== maxValue) {
+                            else if (d != minValue || d != maxValue) {
                                 return d;
                             }
                         } else {
@@ -272,27 +278,20 @@ const dev_chart={
             }
 
             //fill the path values
-            function scalePathData() {
+            function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
                     parseTime(data);
-                    createPath(data, data[0].color.toString());
+                    appendData(data, data[0].color.toString());
                     createCircle(data, data[0].color.toString());
                     setLegende(data, data[0].color.toString());
                 });
             }
 
             //add the data
-            function createPath(data, color) {
+            function appendData(data, color) {
                 let values_line = [],
                     values_future=[],
-                    lineCatmull=d3.line().curve(d3.curveLinear)
-                        .x(function (d) {
-                            return x(d.date);
-                        })
-                        .y(function (d) {
-                            return y(d.value);
-                        }),
                     set=function(array,_dash_array){
                         g.append("path")
                             .data(array)
@@ -300,7 +299,7 @@ const dev_chart={
                             .attr('stroke', color)
                             .attr("stroke-dasharray",_dash_array)
                             .attr("fill", "none")
-                            .attr("d",lineCatmull(array));
+                            .attr("d", line(array));
                 };
                 $.each(data,function(key,value){
                     if(value.year <(new Date).getFullYear()){

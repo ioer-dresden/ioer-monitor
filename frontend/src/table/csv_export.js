@@ -18,7 +18,6 @@ const csv_export = {
                     mimeType: "data:application/csv;charset=UTF-8"
                 }
             };
-
             if(TableHelper.countTableRows()<=2500) {
                 helper.enableElement("#"+csv_button.attr("id"),csv_button.data("title"));
                 csv_button

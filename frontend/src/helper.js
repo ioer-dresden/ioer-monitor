@@ -57,8 +57,7 @@ const helper={
         elem
             .addClass('disabled')
             .prop('disabled', true)
-            .css('cursor', 'not-allowed')
-            .unbind();
+            .css('cursor', 'not-allowed');
 
         if(title){
             elem.prop('title',title);
