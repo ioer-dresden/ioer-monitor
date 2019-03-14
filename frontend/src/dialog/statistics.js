@@ -1,6 +1,7 @@
 const statistics = {
     endpoint_id: "statistics_content",
-    selector:"#ind_stat",
+    //toolbar selector
+    selector_toolbar:"#ind_stat",
     text: {
         de: {
             title: "Statistik",
@@ -71,31 +72,36 @@ const statistics = {
         }
     },
     init:function(){
+        //disable element for raster view and enable for gebiete view
+        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
+            helper.disableElement(this.selector_toolbar,exclude.disable_text);
+        }else{
+            helper.enableElement(this.selector_toolbar,$(this.chart_selector_toolbar).data("title"));
+        }
         this.controller.set();
     },
     controller:{
-        set:function() {
-            //open toolbar swal to pre select AGS
-            $(document).on("click", statistics.selector, function () {
-                console.log("click");
-                let callback = function () {
-                    if (Dialoghelper.getAGS_Input()) {
-                        statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
-                        statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
-                        statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
-                        statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
-                        statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
-                        statistics.open();
-                    }
-                };
-                try {
-                    Dialoghelper.setSwal(callback);
-                } catch (err) {
-                    alert_manager.alertError();
-                }
-            });
-        }
+      set:function(){
+          $(document).on("click", statistics.selector_toolbar, function () {
+              console.log("click");
+              let callback = function () {
+                  if (Dialoghelper.getAGS_Input()) {
+                      statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
+                      statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
+                      statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                      statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
+                      statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
+                      statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
+                      statistics.open();
+                  }
+              };
+              try {
+                  Dialoghelper.setSwal(callback);
+              } catch (err) {
+                  alert_manager.alertError();
+              }
+          });
+      }
     },
     open: function () {
 
@@ -200,7 +206,6 @@ const statistics = {
 
 
     },
-
     chart: {
         settings: {
             lan:"",
@@ -225,7 +230,6 @@ const statistics = {
             }
         },
         data: [],
-        //Todo umschreiben da init nur das Objekt initialisiert aslo die controller setzte-> siehe z.B dev_chart.init
         init: function () {
 
             const svg = d3.select("#statistics_content #statistics_visualisation"),
@@ -255,20 +259,17 @@ const statistics = {
             chart.settings.selectedChart="valueChart";
             chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
             //Initialize the drop-down menu
-
+            chart.controller.setInteractiveElemenents(svg, chart_width, chart_height, margin);
 
         },
         controller: {
-            //please leave this name for wording, it's always set for interactive elements ;-)
-            set:function(svg, chart_width, chart_height, margin){
-                console.log("set");
+            setInteractiveElemenents:function(svg, chart_width, chart_height, margin){
                 //set up the dropdown menu
                 let chart_auswahl = $('#chart_ddm_diagramm'),
                     chart=statistics.chart,
                     classCountInput=$("#classCountInput"),
                     tooltip= $("#tooltip"),
-                    visualisation=$("#statistics_visualisation"),
-                    class_input_field = $("#classCountInputField");
+                    visualisation=$("#statistics_visualisation");
 
                 chart_auswahl.dropdown({
                     onChange: function (value) {
@@ -301,22 +302,30 @@ const statistics = {
                 },500);
 
                 // Set the classCount input field css.properties
-                class_input_field.css({"width":"60px"});
+                $("#classCountInputField").css({"width":"60px"});
                 classCountInput.hide();
                 classCountInput.on('change', function(e) {
-                    let inputClassCount=class_input_field.val();
+                    let inputClassCount=$("#classCountInputField").val();
                     console.log("ClassCount! "+inputClassCount);
                     console.log("Data length: "+chart.data.length);
 
 
-                    class_input_field.val(inputClassCount);
-                    console.log("Too much! "+inputClassCount);
-                    console.log(chart_auswahl.attr("class"));
-
+                    $("#classCountInputField").val(inputClassCount);
                     chart.settings.densityIntervalCount=inputClassCount;
                     visualisation.empty();
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                 });
+                // set IntervalInfo:n Info popup div should disappear on click outside of it
+                $("body").mouseup(function(e)
+                {
+                    let intervalInfo = $("#intervalInfo");
+                    // if the target of the click isn't the container nor a descendant of the container
+                    if (!intervalInfo.is(e.target) && intervalInfo.has(e.target).length === 0)
+                    {
+                        intervalInfo.hide();
+                    }
+                });
+
             },
 
             showVisualisation: function (selection, svg, chart_width, chart_height, margin) {
@@ -381,8 +390,6 @@ const statistics = {
         },
 
     },
-
-
     getAllValues: function (geoJSON) {
         // extracts the indicator Values from GeoJSON
         let valueArray = [];
@@ -400,7 +407,6 @@ const statistics = {
         return valueArray;
 
     },
-
     getCurrentValue: function (geoJSON) {
         let currentValue = null;
         // check if geoJSON has value "ags", and finds the corresponding value
@@ -414,7 +420,6 @@ const statistics = {
         }
         return currentValue;
     },
-
     getAreaCount: function (geoJSON) {
         return Object.keys(geoJSON["features"]).length
     },
@@ -480,6 +485,7 @@ const statistics = {
             let sqr = diff * diff;
             squareDiffSum = squareDiffSum + sqr;
         }
+
         return Math.sqrt(squareDiffSum / (count - 1));
 
     },
@@ -488,10 +494,9 @@ const statistics = {
     },
 
     sortObjectAscending: function (objectArray, key1, key2) {
-        let sortedData = objectArray.sort((function (a, b) {
+        return objectArray.sort((function (a, b) {
             return a[key1] - b[key1] || a[key2] - b[key2];
         }));
-        return sortedData;
     },
     getOnlyValues: function (objectArray) {
         let valueArray = [];
@@ -565,7 +570,7 @@ const statistics = {
     },
 
     drawOrderedValuesChart: function (parameters) {
-        const tooltip = $("#tooltip")
+        const tooltip = $("#tooltip");
         let data = parameters.data,
             xValue = parameters.xValue,
             yValue = parameters.yValue,
@@ -1130,7 +1135,6 @@ const statistics = {
             .text(`${yAxisName}`);
     }
 };
-
 
 
 

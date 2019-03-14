@@ -1,6 +1,6 @@
 const dev_chart={
-    chart_compare_selector:"#dev_chart_compare",
-    chart_selector:"#dev_chart",
+    chart_compare_selector_toolbar:"#dev_chart_compare",
+    chart_selector_toolbar:"#dev_chart",
     endpoint_id:"entwicklungsdiagramm_content",
     text:{
         de:{
@@ -45,11 +45,11 @@ const dev_chart={
     },
     init:function(){
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
-            helper.disableElement(this.chart_selector,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
-            helper.disableElement(this.chart_compare_selector,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
+            helper.disableElement(this.chart_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
+            helper.disableElement(this.chart_compare_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
         }else{
-            helper.enableElement(this.chart_selector,$(this.chart_selector).data("title"));
-            helper.enableElement(this.chart_compare_selector,$(this.chart_compare_selector).data("title"));
+            helper.enableElement(this.chart_selector_toolbar,$(this.chart_selector_toolbar).data("title"));
+            helper.enableElement(this.chart_compare_selector_toolbar,$(this.chart_compare_selector_toolbar).data("title"));
         }
         this.controller.set();
     },
@@ -577,7 +577,7 @@ const dev_chart={
     controller:{
         set:function(){
                 //call on select inside the toolbar
-                $(document).on("click", dev_chart.chart_selector, function () {
+                $(document).on("click", dev_chart.chart_selector_toolbar, function () {
                     let callback = function () {
                         if(Dialoghelper.getAGS_Input()) {
                             dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
@@ -594,7 +594,7 @@ const dev_chart={
                     }
                 });
 
-            $(document).on("click", dev_chart.chart_compare_selector, function () {
+            $(document).on("click", dev_chart.chart_compare_selector_toolbar, function () {
                 let callback = function () {
                     if(Dialoghelper.getAGS_Input()) {
                         dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
