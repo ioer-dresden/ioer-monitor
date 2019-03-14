@@ -1,20 +1,20 @@
 <?php
-require_once('DB_SETTINGS.php');
-
-class POSTGRESQL_MANAGER extends DB_SETTINGS {
+require_once('DbSettings.php');
+//quelle:https://gist.github.com/johnmorris/6001ad2b4ef82d114b77
+class MysqlManager extends DbSettings {
 
     protected static $instance = NULL;
-
+    public $berechtigung = 3;
     public function __construct() {
 
-        $settings = DB_SETTINGS::getSettings_postgre();
+        $settings = DbSettings::getSettings_mysql();
 
         $this->user = $settings['dbusername'];
         $this->password = $settings['dbpassword'];
         $this->database = $settings['dbname'];
         $this->host = $settings['dbhost'];
     }
-
+    
     public static function get_instance()
     {
         if ( NULL === self::$instance )
@@ -24,14 +24,22 @@ class POSTGRESQL_MANAGER extends DB_SETTINGS {
     }
 
     protected function connect() {
-        return new PDO('pgsql:host='.$this->host.';dbname='.$this->database,$this->user,$this->password);
+        return new mysqli($this->host, $this->user, $this->password, $this->database);
+    }
+    public function setBerechtigung($_berechtigung){
+        $this->berechtigung=$_berechtigung;
+    }
+    public function getBerechtigung(){
+        return $this->berechtigung;
     }
     public function query($query) {
         $db = $this->connect();
         $result = $db->query($query);
-        while ( $row = $result->fetchObject() ) {
+
+        while ( $row = $result->fetch_object() ) {
             $results[] = $row;
         }
+
         return $results;
     }
     public function insert($table, $data, $format) {
@@ -51,12 +59,16 @@ class POSTGRESQL_MANAGER extends DB_SETTINGS {
         $format = implode('', $format);
         $format = str_replace('%', '', $format);
 
-        list( $fields, $values ) = $this->prep_query($data);
+        list( $fields, $placeholders, $values ) = $this->prep_query($data);
 
         // Prepend $format onto $values
         array_unshift($values, $format);
         // Prepary our query for binding
-        $stmt = $db->prepare("INSERT INTO {$table} ({$fields}) VALUES ({$values})");
+        $stmt = $db->prepare("INSERT INTO {$table} ({$fields}) VALUES ({$placeholders})");
+        // Dynamically bind values
+        call_user_func_array( array( $stmt, 'bind_param'), $this->ref_values($values));
+
+        // Execute the query
         $stmt->execute();
 
         // Check for successful insertion
@@ -122,6 +134,25 @@ class POSTGRESQL_MANAGER extends DB_SETTINGS {
 
         return false;
     }
+    public function select($query) {
+        // Connect to the database
+        $db = $this->connect();
+
+        //Prepare our query for binding
+        $stmt = $db->prepare($query);
+
+        //Execute the query
+        $stmt->execute();
+
+        //Fetch results
+        $result = $stmt->get_result();
+
+        //Create results object
+        while ($row = $result->fetch_object()) {
+            $results[] = $row;
+        }
+        return $results;
+    }
     public function delete($table, $id) {
         // Connect to the database
         $db = $this->connect();
@@ -130,7 +161,7 @@ class POSTGRESQL_MANAGER extends DB_SETTINGS {
         $stmt = $db->prepare("DELETE FROM {$table} WHERE ID = ?");
 
         // Dynamically bind values
-        $stmt->bindParam('d', $id);
+        $stmt->bind_param('d', $id);
 
         // Execute the query
         $stmt->execute();
@@ -143,19 +174,27 @@ class POSTGRESQL_MANAGER extends DB_SETTINGS {
     private function prep_query($data, $type='insert') {
         // Instantiate $fields and $placeholders for looping
         $fields = '';
-        $values = '';
+        $placeholders = '';
+        $values = array();
 
         // Loop through $data and build $fields, $placeholders, and $values
         foreach ( $data as $field => $value ) {
             $fields .= "{$field},";
-            $values .= "'$value',";
+            $values[] = $value;
+
+            if ( $type == 'update') {
+                $placeholders .= $field . '=?,';
+            } else {
+                $placeholders .= '?,';
+            }
+
         }
 
         // Normalize $fields and $placeholders for inserting
         $fields = substr($fields, 0, -1);
-        $values= substr($values, 0, -1);
+        $placeholders = substr($placeholders, 0, -1);
 
-        return array( $fields,$values );
+        return array( $fields, $placeholders, $values );
     }
     private function ref_values($array) {
         $refs = array();
