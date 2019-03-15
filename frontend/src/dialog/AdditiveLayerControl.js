@@ -99,7 +99,7 @@ class AdditiveLayerControl{
                                         </div>
                                   </li>
                                   <li class="list-group-item">
-                                        <div id="${OsmBuildings.getButtonId().replace("#","")}" class="image-content cursor overlay" data-id="mdmap" data-name="${this.text[lan].mdmap}">
+                                        <div id="${OsmBuildings.getButtonId().replace("#","")}" class="image-content cursor overlay" data-id="mdmap" data-name="${this.text[lan].mdmap}" title="3D Gebäude, welche erst ab hoher Zoomstufe sichtbar sind">
                                             <div class="pic extra-image"></div>
                                             <div class="name">${this.text[lan].mdmap}</div>
                                         </div>
