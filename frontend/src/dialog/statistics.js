@@ -165,7 +165,7 @@ const statistics = {
                     </table>
                     </div>
                     
-                    <div id="chart_select_container" class="ui form" style="margin-left: 60px">
+                    <div id="chart_select_container" class="ui form" style={"margin-left: 60px", "z-index":100}>
                         <div class="fields">
                             <div class="field">
                                 <label>${this.text[lan].selectChart}:</label>
@@ -237,12 +237,12 @@ const statistics = {
 
                 // Setting dynamic visualisation dimensions
                 container_height=$('.ui-dialog').height() * (1.5 / 3) - 100,
-                container_width=dialog_manager.calculateWidth();
+                container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
             const diagram = $('#statistics_content #statistics_diagramm'),
 
-                chart_width = diagram.width()-2*margin.left-2*margin.right,
+                chart_width = diagram.width()-margin.left-margin.right,
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
             console.log("container height: "+ container_height);
@@ -255,6 +255,7 @@ const statistics = {
             $(".table_element").css({"border":"1px solid black","padding":"5px"});
             $(".even").css({"background-color":"white"});
             $(".uneven").css({"background-color":"gainsboro"});
+
 
 
             //reset the default visualisation style, start drawing
