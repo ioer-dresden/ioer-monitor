@@ -81,27 +81,27 @@ const statistics = {
         this.controller.set();
     },
     controller:{
-      set:function(){
-          $(document).on("click", statistics.selector_toolbar, function () {
-              console.log("click");
-              let callback = function () {
-                  if (Dialoghelper.getAGS_Input()) {
-                      statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
-                      statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
-                      statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                      statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
-                      statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
-                      statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
-                      statistics.open();
-                  }
-              };
-              try {
-                  Dialoghelper.setSwal(callback);
-              } catch (err) {
-                  alert_manager.alertError();
-              }
-          });
-      }
+        set:function(){
+            $(document).on("click", statistics.selector_toolbar, function () {
+                console.log("click");
+                let callback = function () {
+                    if (Dialoghelper.getAGS_Input()) {
+                        statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
+                        statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
+                        statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                        statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
+                        statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
+                        statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
+                        statistics.open();
+                    }
+                };
+                try {
+                    Dialoghelper.setSwal(callback);
+                } catch (err) {
+                    alert_manager.alertError();
+                }
+            });
+        }
     },
     open: function () {
 
@@ -237,12 +237,12 @@ const statistics = {
 
                 // Setting dynamic visualisation dimensions
                 container_height=$('.ui-dialog').height() * (1.5 / 3) - 100,
-                container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
-            $("#statistics_content #statistics_visualisation").height(container_height).width(container_width).css("overflow","hidden");
+                container_width=dialog_manager.calculateWidth();
+            $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
             const diagram = $('#statistics_content #statistics_diagramm'),
 
-                chart_width = diagram.width(),
+                chart_width = diagram.width()-2*margin.left-2*margin.right,
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
             console.log("container height: "+ container_height);
@@ -275,27 +275,34 @@ const statistics = {
 
                 chart_auswahl.dropdown({
                     onChange: function (value) {
-                        if (value === 'valueChart') {
-                            chart.settings.selectedChart='valueChart';
-                            visualisation.empty();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.hide();
+                        switch (value) {
+                            case "valueChart":
+                                chart.settings.selectedChart='valueChart';
+                                visualisation.empty();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.hide();
+                                break;
 
-                        } else if (value === 'densityChart') {
-                            chart.settings.selectedChart='densityChart';
-                            visualisation.empty();
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.show();
-                            tooltip.hide();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
-                        } else if (value==='distributionChart'){
-                            chart.settings.selectedChart='distributionChart';
-                            visualisation.empty();
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.hide();
-                            tooltip.hide();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                            case "densityChart":
+                                chart.settings.selectedChart='densityChart';
+                                visualisation.empty();
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.show();
+                                tooltip.hide();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                break;
+                            case "distributionChart":
+                                chart.settings.selectedChart='distributionChart';
+                                visualisation.empty();
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.hide();
+                                tooltip.hide();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                break;
+                            default:
+                                alert("Error, no chart Type selected!")
+
                         }
                     }
                 });
