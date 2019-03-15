@@ -141,7 +141,7 @@ const statistics = {
                     <table id="statistics_table" >
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].areaCount}</td>
-                            <td class="table_element">${chart.settings.allValuesObjectArray.length}  ${chart.settings.areaType}</td>                         
+                            <td class="table_element">${chart.settings.allValuesObjectArray.length}</td>                         
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].average}</td>
@@ -236,17 +236,19 @@ const statistics = {
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
 
                 // Setting dynamic visualisation dimensions
-                container_height= dialog_manager.calculateHeight()-$("#statistics_header").height()-$("#statistics_table").height()-$("#chart_select_container").height()-margin.top-margin.bottom,
+                container_height=$('.ui-dialog').height() * (1.5 / 3) - 100,
                 container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width).css("overflow","hidden");
 
             const diagram = $('#statistics_content #statistics_diagramm'),
 
-                chart_width = diagram.width() - margin.left - margin.right,
-                chart_height = $('.ui-dialog').height() * (1.5 / 3) - 100,
+                chart_width = diagram.width(),
+                chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
             console.log("container height: "+ container_height);
             console.log("container width: "+container_width);
+            console.log("chart Height: "+chart_height);
+            console.log("char Width: "+ chart_width);
             //Set table css styling
             $(".table #statistics_table").css({    "margin-left":"auto",
                 "margin-right":"auto"});
