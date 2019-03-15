@@ -26,7 +26,6 @@
 @import "table.css";
 @import "feeback.css";
 @import "dev_chart.css";
-@import "statistics.css";
 
 body {
     padding: 0;
@@ -172,6 +171,9 @@ Layer Control
 }
 #layer_control .extra-maps #gewaesser .pic{
     background-image: url("../assets/icon/water.png");
+}
+#layer_control .extra-maps #mdmap .pic{
+    background-image: url("../assets/icon/3d-house.png");
 }
 #layer_control .active{
     border: 3px solid green;
@@ -340,8 +342,7 @@ Legende
 }
 /*Text class styling*/
 .text {
-    fill: white;
-    font-family: sans-serif
+    font-weight: normal;
 }
 
 .backButton{

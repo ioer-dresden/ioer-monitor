@@ -30,6 +30,7 @@ class ScriptLoader{
             "frontend/lib/leaflet/plugin/togeojson.js",
             "frontend/lib/leaflet/plugin/leaflet.filelayer.js",
             "frontend/lib/leaflet/plugin/leaflet-image.js",
+            "frontend/lib/leaflet/plugin/OSMBuildings-Leaflet.js",
             //Semantic UI
             "frontend/lib/semanticUi/semantic.min.js",
             "frontend/lib/semanticUi/components/transition.js",
@@ -82,7 +83,8 @@ class ScriptLoader{
             "frontend/src/menu/farbschema.js",
             "frontend/src/menu/MenuHelper.js",
             //map
-            "frontend/src/map/layer_control.js",
+            "frontend/src/map/OsmBuildings.js",
+            "frontend/src/map/additive_layer.js",
             "frontend/src/map/map_controller.js",
             "frontend/src/map/indikator_json.js",
             "frontend/src/map/indikator_raster.js",
@@ -122,6 +124,7 @@ class ScriptLoader{
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",
             "frontend/src/dialog/dialog.js",
+            "frontend/src/dialog/AdditiveLayerControl.js",
             //export
             "frontend/src/export/ogc_export.js",
             "frontend/src/export/map_link.js",

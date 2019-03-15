@@ -119,7 +119,7 @@ const indikator_json = {
         indikator_json_group.addToMap();
         //create the banner
         map_header.set();
-        if(layer_control.zusatzlayer.getState()){layer_control.zusatzlayer.setForward()}
+        if(additiveLayer.zusatzlayer.getState()){additiveLayer.zusatzlayer.setForward()}
     },
     setPopUp:function(e){
         let text={
@@ -312,7 +312,7 @@ const indikator_json = {
             layer.setStyle(style.getLayerStyle(layer.feature.properties.value));
             $('#thead').show();
             $('#' + ags).removeClass("hover");
-            layer_control.zusatzlayer.setForward();
+            additiveLayer.zusatzlayer.setForward();
             try {
                 let fillcolor = layer.options.fillColor.replace('#', '');
                 $('#legende_' + fillcolor + " i").css({"width": "15px", "height": "10px", "border": ""});

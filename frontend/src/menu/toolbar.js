@@ -143,7 +143,7 @@ const toolbar = {
                         </div>
                         <div class="dropdown_menu" id="dropdown_layer">
                         <div class="w-100" id="map-selection">
-                                <button type="button" class="btn btn_dropdown w-100" id="map_button">Grundkarten</button>
+                                <button type="button" class="btn btn_dropdown w-100" id="${additiveLayer.toolbar_button.replace("#","")}">Grundkarten</button>
                             </div>
                             <div id="layer_conainer">
                                 <span><b>Sichtbarkeit Indikator</b></span>

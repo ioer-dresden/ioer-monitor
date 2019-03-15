@@ -112,7 +112,7 @@ const main_view = {
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh');
         }else {
-            $('#overflow_content').css("height", "90%");
+            $('#overflow_content').css("height", "85%");
         }
         //set the Legende
         legende.close();

@@ -34,7 +34,7 @@ function main(){
                 }
                 else if (indikatorauswahl.getSelectedIndikator()) {
                     indikatorauswahl.setIndicator(indikatorauswahl.getSelectedIndikator());
-                    layer_control.init();
+                    additiveLayer.init();
                 }
                 else {
                     main_view.initializeFirstView();
