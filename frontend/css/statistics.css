@@ -131,6 +131,10 @@
     height: 100%;
 }
 
+#statistics_content #statistics_diagramm{
+    position: absolute;
+}
+
  #statistics_container_diagramm{
     position: absolute;
 }
@@ -150,7 +154,7 @@
     background-color: white;
     display: none;
     padding: 5px;
-    position: relative;
+    position: absolute;
     font-weight: bold;
     text-align: center;
     border-radius: 6px;

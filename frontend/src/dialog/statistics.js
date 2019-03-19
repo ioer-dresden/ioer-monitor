@@ -83,7 +83,6 @@ const statistics = {
     controller:{
         set:function(){
             $(document).on("click", statistics.selector_toolbar, function () {
-                console.log("click");
                 let callback = function () {
                     if (Dialoghelper.getAGS_Input()) {
                         statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
@@ -187,11 +186,11 @@ const statistics = {
                         </div>
                     </div>
                     <div id="statistics_container_diagramm" class="container_diagramm">
-                        <div id="statistics_diagramm">
+                        <div id="statistics_diagramm";">
                             <svg id="statistics_visualisation"></svg>
+                            <div id="tooltip"></div>
+                            <div id="intervalInfo"></div>
                         </div>
-                        <div id="tooltip"></div>
-                        <div id="intervalInfo"></div>
                     </div>
                 </div>
             </div>
@@ -238,6 +237,7 @@ const statistics = {
                 // Setting dynamic visualisation dimensions
                 container_height=$('.ui-dialog').height() * (1.5 / 3) - 100,
                 container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
+
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
             const diagram = $('#statistics_content #statistics_diagramm'),
@@ -245,10 +245,6 @@ const statistics = {
                 chart_width = diagram.width()-margin.left-margin.right,
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
-            console.log("container height: "+ container_height);
-            console.log("container width: "+container_width);
-            console.log("chart Height: "+chart_height);
-            console.log("char Width: "+ chart_width);
             //Set table css styling
             $(".table #statistics_table").css({    "margin-left":"auto",
                 "margin-right":"auto"});
@@ -316,9 +312,6 @@ const statistics = {
                 classCountInput.hide();
                 classCountInput.on('change', function(e) {
                     let inputClassCount=$("#classCountInputField").val();
-                    console.log("ClassCount! "+inputClassCount);
-                    console.log("Data length: "+chart.data.length);
-
 
                     $("#classCountInputField").val(inputClassCount);
                     chart.settings.densityIntervalCount=inputClassCount;
@@ -443,15 +436,15 @@ const statistics = {
 
     calculateStatistics: function (values) {
         let maxValue = Math.max(...values);
-        console.log("Max: " + maxValue);
+
         let minValue = Math.min(...values);
-        console.log("Min: " + minValue);
+
         let averageValue = this.calculateAverage(values);
-        console.log("avg: " + averageValue);
+
         let medianValue = this.calculateMedian(values);
-        console.log("median: " + medianValue);
+
         let stDeviationValue = this.calculateStDeviation(values, averageValue);
-        console.log("stdev: " + stDeviationValue);
+
         return {
             max: this.roundNumber(maxValue),
             min: this.roundNumber(minValue),
@@ -520,7 +513,6 @@ const statistics = {
             sumTillNow = 0,
             distributionFuncObjectArray = [],
             min=sortedObjectArray[0].value;
-        console.log("min: "+sortedObjectArray[0].value);
         for (let num in sortedObjectArray) {
             totalSum += sortedObjectArray[num].value-min;
         }
@@ -575,7 +567,6 @@ const statistics = {
             intervalLowerLimit=intervalUpperLimit;
             densityFunctionObjectArray.push(classObject);
         }
-        console.log("Min Max: "+ max+ " "+min);
         return densityFunctionObjectArray;
     },
 
@@ -662,7 +653,7 @@ const statistics = {
             .on("mouseover", function (d) {
                 let html = d.name + "<br/>" + d[yValue] + " " + indUnit;
                 let x = xScale(d[xValue]),
-                    y = yScale(d[yValue]) - 40
+                    y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
 
@@ -677,7 +668,7 @@ const statistics = {
                 let html = selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit,
                     x = xScale(selectedObject[xValue]),
                     y = yScale(selectedObject[yValue]) - 40;
-                $("#tooltip")
+                tooltip
                     .html(html)
                     .css({"left": x, "top": y});
                 //Adjust Bar color
@@ -815,7 +806,6 @@ const statistics = {
                 return d[xValue]
             }),
             tooltip=$("#tooltip");
-
         let xScale = d3.scaleLinear()
             .domain(d3.extent([minXValue, maxXValue]))
             .range([barWidth/2, chart_width-barWidth/2]);
@@ -1035,7 +1025,6 @@ const statistics = {
             } else {
                 secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
             }
-            console.log(xValue);
             distData.push(firstPoint);
             distData.push(secondPoint);
         }
