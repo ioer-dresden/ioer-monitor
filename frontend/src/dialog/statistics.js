@@ -30,7 +30,7 @@ const statistics = {
             value:"Wert",
             values:"Werte",
             probDensity:"Wahrscheinlichkeitsdichte",
-            cumulativeDistribution:"Verteilungsfunktion",
+            cumulativeDistribution:"Kumulative Verteilung",
             intervalCount:"Anzahl Intervale",
             interval:"Intervall",
             selectChart:"Diagramm wählen"
@@ -377,7 +377,7 @@ const statistics = {
                     // Line graph, distribution Function !!!!!
                     parameters.data=statistics.sortObjectAscending(chart.data, "distFuncValue", "ags");
                     parameters.xAxisName=statistics.text[chart.settings.lan].values;
-                    parameters.yAxisName=statistics.text[chart.settings.lan].probability;
+                    parameters.yAxisName=statistics.text[chart.settings.lan].cumulativeDistribution;
                     parameters.xValue="value";
                     parameters.yValue="distFuncValue";
 
@@ -570,11 +570,12 @@ const statistics = {
         return densityFunctionObjectArray;
     },
 
-    findXYinInterval:function(intervalArray, selectedValue){
+    findSelectedAreaInInterval:function(intervalArray, selectedValue){
 
         let x = 0,
             y = 0,
             name="",
+            deviation=0,
             found=false;
         console.log("settingxY");
         //find the x!
@@ -585,6 +586,7 @@ const statistics = {
                     x = intervalArray[interval].elements[elem].deviation;
                     y= intervalArray[interval].probability;
                     name= intervalArray[interval].elements[elem].name;
+                    deviation= intervalArray[interval].elements[elem].deviation;
                     found=true;
                 }
             if (found){
@@ -592,7 +594,7 @@ const statistics = {
             }
         }
 
-        return {x:x,y:y, name:name};
+        return {x:x,y:y, name:name, deviation:deviation};
 
     },
 
@@ -604,7 +606,7 @@ const statistics = {
             xAxisName = parameters.xAxisName,
             yAxisName = parameters.yAxisName,
             averageName=parameters.averageName,
-            selectedValue = parameters.selectedAGS,
+            selectedAreaAGS = parameters.selectedAGS,
             indUnit = parameters.indUnit,
             mean = parameters.mean,
             stDeviation=parameters.stDeviation,
@@ -619,8 +621,8 @@ const statistics = {
             minValue = d3.min(data, function (d, i) {
                 return d[yValue]
             }),
-            selectedObject = data.find(function (obj) {
-                return obj[xValue] === selectedValue
+            selectedArea = data.find(function (obj) {
+                return obj[xValue] === selectedAreaAGS
             });
         if (minValue >= 0) {
             minValue = 0
@@ -663,7 +665,7 @@ const statistics = {
                 return Math.abs(yScale(d[yValue]) - yScale(0));
             })
             .attr("fill", function (d) {
-                if (d[xValue] === selectedValue) {
+                if (d[xValue] === selectedAreaAGS) {
                     return "red";
                 }
                 return  klassengrenzen.getColor(d[yValue]);
@@ -691,16 +693,16 @@ const statistics = {
             .on("mouseout", function (d) {
                 // change tooltip
 
-                let html = selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit,
-                    x = xScale(selectedObject[xValue]),
-                    y = yScale(selectedObject[yValue]) - 40;
+                let html = selectedArea.name + "<br/>" + selectedArea[yValue] + " " + indUnit,
+                    x = xScale(selectedArea[xValue]),
+                    y = yScale(selectedArea[yValue]) - 40;
                 tooltip
                     .html(html)
                     .css({"left": x, "top": y});
                 //Adjust Bar color
                 let color = "";
                 {
-                    if (d[xValue] === selectedValue) {
+                    if (d[xValue] === selectedAreaAGS) {
                         color = "red";
                     } else color = klassengrenzen.getColor(d[yValue])
                 }
@@ -711,8 +713,8 @@ const statistics = {
 
 // Add initial Tooltip
         tooltip
-            .html(selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit)
-            .css({"left": xScale(selectedObject[xValue]), "top": yScale(selectedObject[yValue]) - 40})
+            .html(selectedArea.name + "<br/>" + selectedArea[yValue] + " " + indUnit)
+            .css({"left": xScale(selectedArea[xValue]), "top": yScale(selectedArea[yValue]) - 40})
             .show();
 
 
@@ -815,7 +817,7 @@ const statistics = {
             indUnit = parameters.indUnit,
             svg = parameters.svg,
             averageName = parameters.averageName,
-            selectedValue = parameters.selectedAGS,
+            selectedAreaAGS = parameters.selectedAGS,
             margins = parameters.margins,
             chart_width = parameters.chart_width,
             chart_height = parameters.chart_height,
@@ -889,7 +891,8 @@ const statistics = {
             .on("mouseout", function () {
                 // change tooltip
                 tooltip
-                    .hide();
+                    .html(selectedArea.name + "<br/>" )
+                    .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y) - 20});
                 d3.select(this).style("fill", function (d) {
                     return klassengrenzen.getColor(d[xValue] + mean)
                 });
@@ -913,25 +916,23 @@ const statistics = {
                     .show()
             });
 
-        /*//Draw the selected area line in Graph
+        //Draw the selected area line in Graph
         // Find the selected region, x,y Values
-        let selectedAreaLineCoordinates=this.findXYinInterval(data, selectedValue);
+        let selectedArea=this.findSelectedAreaInInterval(data, selectedAreaAGS);
         g.append("line")          // attach a line
             .attr("class", "selectedAreaLine")
             .style("stroke", "green")  // colour the line
             .style("stroke-width", barWidth/10 )  // set line width
-            .attr("x1", xScale(selectedAreaLineCoordinates.x))    // x position of the first end of the line
-            .attr("y1", yScale(selectedAreaLineCoordinates.y)+3)      // y position of the first end of the line, 3px corresponds to bar border
-            .attr("x2", xScale(selectedAreaLineCoordinates.x))     // x position of the second end of the line
+            .attr("x1", xScale(selectedArea.x))    // x position of the first end of the line
+            .attr("y1", yScale(selectedArea.y)+3)      // y position of the first end of the line, 3px corresponds to bar border
+            .attr("x2", xScale(selectedArea.x))     // x position of the second end of the line
             .attr("y2", yScale(minYValue)-3);    // y position of the second end of the line, 3px corresponds to bar border
 
 //Text for area line in Graph
-        g.append("text")
-            .attr("x", xScale(selectedAreaLineCoordinates.x)+40)
-            .attr("y",  yScale(selectedAreaLineCoordinates.y))
-            .style("text-anchor", "middle")
-            .text(`${selectedAreaLineCoordinates.name}`);
-*/
+        tooltip
+            .html(selectedArea.name + "<br/>")
+            .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y) - 20})
+            .show();
 
 // Draw the Average line in Graph
         g.append("line")          // attach a line
@@ -953,7 +954,7 @@ const statistics = {
 
 // Draw standard Deviation lines
 // upper stDeviation
-// check if StDeviation does not exceed axis domain
+// check if StDeviation does not exceed axis domain, if not, add the line
         if (stDeviation<maxXValue) {
             g.append("line")          // attach a line
                 .attr("class", "stDeviationLine")
@@ -971,7 +972,7 @@ const statistics = {
                 .text(`+ ${decodeURI('%CF%83')}  `);
         }
 // lower stDeviation
-// check if StDeviation does not exceed axis domain
+// check if StDeviation does not exceed axis domain, if not, add the line
         if(-stDeviation>minXValue) {
             g.append("line")          // attach a line
                 .attr("class", "stDeviationLine")
@@ -1013,7 +1014,7 @@ const statistics = {
                 "translate(" + (chart_width / 2) + " ," +
                 (chart_height + margins.top + 20) + ")")
             .style("text-anchor", "middle")
-            .text(`${xAxisName}`);
+            .text(`${xAxisName}, ${indUnit}`);
 
 // text label for the Y axis
         g.append("text")
@@ -1034,6 +1035,7 @@ const statistics = {
             yAxisName = parameters.yAxisName,
             indUnit = parameters.indUnit,
             mean = parameters.mean,
+            selectedAreaAGS=parameters.selectedAGS,
             averageName=parameters.averageName,
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
@@ -1051,7 +1053,12 @@ const statistics = {
             }),
             minXValue = d3.min(data, function (d, i) {
                 return d[xValue];
-            });
+            }),
+            selectedArea = data.find(function (obj) {
+                return obj.ags === selectedAreaAGS
+            }),
+            tooltip = $("#tooltip");
+        console.log(yAxisName);
         if (minYValue >= 0) {
             minYValue = 0
         }
@@ -1159,6 +1166,24 @@ const statistics = {
                 .text(`- ${decodeURI('%CF%83')}  `);
         }
 
+
+
+        //Draw the selected area line in Graph
+        // Find the selected region, x,y Values
+        g.append("line")          // attach a line
+            .attr("class", "selectedAreaLine")
+            .style("stroke", "green")  // colour the line
+            .style("stroke-width", 2 )  // set line width
+            .attr("x1", xScale(selectedArea.value))    // x position of the first end of the line
+            .attr("y1", yScale(selectedArea.distFuncValue))
+            .attr("x2", xScale(selectedArea.value))     // x position of the second end of the line
+            .attr("y2", yScale(minYValue));
+        console.log("Selected Value x, y: "+selectedArea.value + " ; "+ selectedArea.distFuncValue);
+//Text for area line in Graph
+        tooltip
+            .html(selectedArea.name + "<br/>")
+            .css({"left": xScale(selectedArea.value)-40, "top": yScale(selectedArea.distFuncValue) - 10})
+            .show();
 
         //Initialise both Axis
         let xAxis = d3.axisBottom(xScale)
