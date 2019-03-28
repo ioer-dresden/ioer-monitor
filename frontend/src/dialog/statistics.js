@@ -797,7 +797,10 @@ const statistics = {
             .tickSize(0);
 
 
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
+
         g.append('g')
             .call(xAxis)
             .attr('transform', 'translate(0,' + (yScale(0)) + ')');
@@ -1012,10 +1015,13 @@ const statistics = {
 //Initialise both Axis
 //determine if Axis should have ticks
         let xAxis = d3.axisBottom(xScale)
-            .tickFormat(d3.format(".2r"));
-//.tickSize(2);
+            .tickFormat(d3.format(".2r"))
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
 
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
 
         let X= g.append('g')
             .call(xAxis)
@@ -1205,8 +1211,12 @@ const statistics = {
         //Initialise both Axis
         let xAxis = d3.axisBottom(xScale)
             .tickFormat(d3.format(".2r"))
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) })
             .tickSize(2);
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });;
 
         g.append('g')
             .call(xAxis)
