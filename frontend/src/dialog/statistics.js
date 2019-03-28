@@ -92,6 +92,7 @@ const statistics = {
                         statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
                         statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
                         statistics.open();
+
                     }
                 };
                 try {
@@ -107,13 +108,15 @@ const statistics = {
         let lan = language_manager.getLanguage(),
             geoJSON = this.chart.settings.allValuesJSON,
             chart = this.chart;
+        console.log(geoJSON);
         chart.settings.lan=lan;
         // todo REINIS REFACTOR the getting of Data Values TO init:function(..){....} !!!  Here only the Visualisation Data-, html binding!
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
+        chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
         chart.settings.currentValue = this.getCurrentValue(geoJSON);
         chart.settings.areaCount = this.getAreaCount(geoJSON);
         chart.settings.areaType = this.getAreaType(geoJSON);
-        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray));
+        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
         chart.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
         chart.data = this.getDistributionFunctionValues(chart.data);
         chart.data = this.getDeviationValues(chart.data, this.chart.settings.statistics.average);
@@ -131,7 +134,7 @@ const statistics = {
                         <h6 id="selectedAGS">AGS: ${chart.settings.ags}</h6>
                         <h6 id="timeStamp">${this.text[lan].time}: ${timeStamp}</h6>
                         <h6 id="currentValue">${this.text[lan].indicator}: ${chart.settings.indText}  </h6>
-                        <h6 id="currentValue">${this.text[lan].value}: ${chart.settings.currentValue} ${chart.settings.indUnit}</h6>
+                        <h6 id="currentValue">${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h6>
                     </div>
                     <hr />
                     
@@ -144,22 +147,22 @@ const statistics = {
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].average}</td>
-                            <td class="table_element">${chart.settings.statistics.average}  ${chart.settings.indUnit}</td>
+                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.average)}  ${chart.settings.indUnit}</td>
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].median}</td>
-                            <td class="table_element">${chart.settings.statistics.median}  ${chart.settings.indUnit}</td>                           
+                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].stDev}</td>
-                            <td class="table_element">${chart.settings.statistics.stDeviation}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.stDeviation)}  ${chart.settings.indUnit}</td>                            
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].max}</td>
-                            <td class="table_element">${chart.settings.statistics.max}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.max)}  ${chart.settings.indUnit}</td>                            
                           </tr class="even">                          <tr>
                             <td class="table_element">${this.text[lan].min}</td>
-                            <td class="table_element">${chart.settings.statistics.min}  ${chart.settings.indUnit}</td>
+                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.min)}  ${chart.settings.indUnit}</td>
                           </tr>                          
                     </table>
                     </div>
@@ -212,6 +215,7 @@ const statistics = {
             ind: "",
             indText: "",
             indUnit: "",
+            decimalSpaces:0,
             name: "",
             allValuesJSON: "",
             currentValue: "",
@@ -365,7 +369,7 @@ const statistics = {
                     // Bar graph of Density function!
                     //todo REINIS add the ClassCount selector!!
                     let classCount= chart.settings.densityIntervalCount;
-                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount); // separate indicator values into intervals to display in density chart
+                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount,chart.settings.decimalSpaces); // separate indicator values into intervals to display in density chart
                     parameters.xAxisName=(statistics.text[chart.settings.lan].deviation);
                     parameters.yAxisName=statistics.text[chart.settings.lan].probability;
                     parameters.xValue="intervalMiddle";
@@ -401,9 +405,12 @@ const statistics = {
             // checks if Object has "value_comma" property and it is not empty, then fetches the value
             if (object.hasOwnProperty("value_comma") && object.value_comma !== "") {
                 //create object:
-                let obj = {name: object.gen, value: this.parseFloatWithComma(object.value_comma), ags: object.ags};
+                let obj = {name: object.gen, value: this.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
                 if (typeof obj.value == "number") {
                     valueArray.push(obj);
+                }
+                else {
+                    console.log("The JSON Object either has no value_comma property!!")
                 }
             }
         }
@@ -417,7 +424,7 @@ const statistics = {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
                 if (object["ags"] === this.chart.settings.ags) {
-                    currentValue = this.parseFloatWithComma(object["value_comma"]);
+                    currentValue = this.parseFloatCommaToPoint(object["value_comma"]);
                 }
             }
         }
@@ -430,11 +437,15 @@ const statistics = {
         return geoJSON["features"][0]["properties"]["des"];
     },
 
-    parseFloatWithComma: function (string) {
+    parseFloatCommaToPoint: function (string) {
         return parseFloat(string.replace(',', '.'));
     },
+    parseStringPointToComma:function(input){
+        console.log("parse to comma: "+input.toString().replace('.',','));
+        return input.toString().replace('.',',')
+    },
 
-    calculateStatistics: function (values) {
+    calculateStatistics: function (values, decimal) {
         let maxValue = Math.max(...values);
 
         let minValue = Math.min(...values);
@@ -446,11 +457,11 @@ const statistics = {
         let stDeviationValue = this.calculateStDeviation(values, averageValue);
 
         return {
-            max: this.roundNumber(maxValue),
-            min: this.roundNumber(minValue),
-            average: this.roundNumber(averageValue),
-            median: this.roundNumber(medianValue),
-            stDeviation: this.roundNumber(stDeviationValue)
+            max: this.roundNumber(maxValue,decimal),
+            min: this.roundNumber(minValue, decimal),
+            average: this.roundNumber(averageValue, decimal),
+            median: this.roundNumber(medianValue, decimal),
+            stDeviation: this.roundNumber(stDeviationValue, decimal)
         };
     },
 
@@ -492,8 +503,13 @@ const statistics = {
         return Math.sqrt(squareDiffSum / (count - 1));
 
     },
-    roundNumber: function (number) {
-        return Math.round(parseFloat(number) * 100) / 100
+
+    roundNumber: function (number, decimalSpaces) {
+        return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
+    },
+
+    getDecimalSpaces:function(geoJSON){
+        return parseInt(geoJSON["features"][0]["properties"]["rundung"]);
     },
 
     sortObjectAscending: function (objectArray, key1, key2) {
@@ -537,7 +553,7 @@ const statistics = {
         return deviationArray
     },
 
-    getDensityFunctionIntervalValues: function(data,classCount) {
+    getDensityFunctionIntervalValues: function(data,classCount,decimal) {
         let densityFunctionObjectArray = [];
 
         data = this.sortObjectAscending(data, "deviation", "ags");
@@ -561,11 +577,13 @@ const statistics = {
                 }
             }
             let averageClassValue=Math.round(this.calculateAverage(intervalElementValues) * 1000) / 1000,
-                probability=counter/data.length,
+                probability=counter/data.length*100,  // Probability in PERCENT!
 
-                classObject = {intervalUpperLimit:intervalUpperLimit, intervalLowerLimit:intervalLowerLimit,intervalMiddle:intervalMiddle,  count:counter, probability: probability, intervalAverageValue:averageClassValue, elements:intervalElements};
+                classObject = {intervalUpperLimit:statistics.roundNumber(intervalUpperLimit,decimal), intervalLowerLimit: statistics.roundNumber(intervalLowerLimit, decimal),intervalMiddle:statistics.roundNumber(intervalMiddle,decimal),  count:counter, probability: statistics.roundNumber(probability,decimal+1), intervalAverageValue: statistics.roundNumber(averageClassValue, decimal), elements:intervalElements};
             intervalLowerLimit=intervalUpperLimit;
+            console.log(statistics.roundNumber(intervalUpperLimit,decimal));
             densityFunctionObjectArray.push(classObject);
+            console.log(classObject);
         }
         return densityFunctionObjectArray;
     },
@@ -657,7 +675,6 @@ const statistics = {
                 return xScale(d[xValue]);
             })
             .attr("y", function (d) {
-                let max = Math.max(0, d[yValue]);
                 return yScale(Math.max(0, d[yValue]));
             })
             .attr('width', xScale.bandwidth())
@@ -679,7 +696,7 @@ const statistics = {
                 } else return 0
             })
             .on("mouseover", function (d) {
-                let html = d.name + "<br/>" + d[yValue] + " " + indUnit;
+                let html = d.name + "<br/>" + statistics.parseStringPointToComma(d[yValue]) + " " + indUnit;
                 let x = xScale(d[xValue]),
                     y = yScale(d[yValue]) - 40;
                 //Change Color
@@ -693,7 +710,7 @@ const statistics = {
             .on("mouseout", function (d) {
                 // change tooltip
 
-                let html = selectedArea.name + "<br/>" + selectedArea[yValue] + " " + indUnit,
+                let html = selectedArea.name + "<br/>" + statistics.parseStringPointToComma(selectedArea[yValue]) + " " + indUnit,
                     x = xScale(selectedArea[xValue]),
                     y = yScale(selectedArea[yValue]) - 40;
                 tooltip
@@ -713,7 +730,7 @@ const statistics = {
 
 // Add initial Tooltip
         tooltip
-            .html(selectedArea.name + "<br/>" + selectedArea[yValue] + " " + indUnit)
+            .html(selectedArea.name + "<br/>" + statistics.parseStringPointToComma(selectedArea[yValue]) + " " + indUnit)
             .css({"left": xScale(selectedArea[xValue]), "top": yScale(selectedArea[yValue]) - 40})
             .show();
 
@@ -877,8 +894,8 @@ const statistics = {
                 } else return 0
             })
             .on("mouseover", function (d) {
-                let html = "Interval: " + Math.round(d.intervalLowerLimit * 100) / 100 + " / " + Math.round(d.intervalUpperLimit * 100) / 100 + "<br/>" + yAxisName + ": " + Math.round(d[yValue] * 1000) / 1000,
-                    x = xScale(d[xValue])-barWidth,  // -barWidth to avoid flickering tooltip if parend <div> borders size exceeded
+                let html = "Interval: " + statistics.parseStringPointToComma(d.intervalLowerLimit) + " / " + statistics.parseStringPointToComma(d.intervalUpperLimit) + "<br/>" + yAxisName + ": " + statistics.parseStringPointToComma(d[yValue]+ "%"),
+                    x = xScale(d[xValue])-barWidth,  // -barWidth to avoid flickering tooltip if parent <div> borders size exceeded
                     y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
@@ -892,7 +909,7 @@ const statistics = {
                 // change tooltip
                 tooltip
                     .html(selectedArea.name + "<br/>" )
-                    .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y) - 20});
+                    .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y/2)});
                 d3.select(this).style("fill", function (d) {
                     return klassengrenzen.getColor(d[xValue] + mean)
                 });
@@ -902,7 +919,7 @@ const statistics = {
                     x = xScale(d[xValue]) + 40,
                     y = yScale(d[yValue] / 2);
                 for (let elem in d.elements) {
-                    html += d.elements[elem].name + ": " + d.elements[elem].value + " " + indUnit + "<br/>" + " ";
+                    html += d.elements[elem].name + ": " + statistics.parseStringPointToComma(d.elements[elem].value) + " " + indUnit + "<br/>" + " ";
 
                 }
                 $("#intervalInfo")
@@ -931,7 +948,7 @@ const statistics = {
 //Text for area line in Graph
         tooltip
             .html(selectedArea.name + "<br/>")
-            .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y) - 20})
+            .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y/2)})
             .show();
 
 // Draw the Average line in Graph
@@ -1023,7 +1040,7 @@ const statistics = {
             .attr("x", 0 - (chart_height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text(`${yAxisName}`);
+            .text(`${yAxisName} %`);
 
 
     },
@@ -1179,10 +1196,10 @@ const statistics = {
             .attr("x2", xScale(selectedArea.value))     // x position of the second end of the line
             .attr("y2", yScale(minYValue));
         console.log("Selected Value x, y: "+selectedArea.value + " ; "+ selectedArea.distFuncValue);
-//Text for area line in Graph
+        //Text for area line in Graph
         tooltip
             .html(selectedArea.name + "<br/>")
-            .css({"left": xScale(selectedArea.value)-40, "top": yScale(selectedArea.distFuncValue) - 10})
+            .css({"left": xScale(selectedArea.value)-40, "top": yScale(selectedArea.distFuncValue/2)})
             .show();
 
         //Initialise both Axis
