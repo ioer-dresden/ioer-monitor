@@ -108,7 +108,6 @@ const statistics = {
         let lan = language_manager.getLanguage(),
             geoJSON = this.chart.settings.allValuesJSON,
             chart = this.chart;
-        console.log(geoJSON);
         chart.settings.lan=lan;
         // todo REINIS REFACTOR the getting of Data Values TO init:function(..){....} !!!  Here only the Visualisation Data-, html binding!
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
@@ -127,47 +126,52 @@ const statistics = {
         let html = he.encode(`
              <div class="jq_dialog" id="${this.endpoint_id}">
                 <div class="container">
-                    <div class="header" id="statistics_header">               
-                        <h4>${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
-                        <h2>${chart.settings.indText}</h2>
-                        <h3 id="selectedArea">${chart.settings.name}</h3>
-                        <h6 id="selectedAGS">AGS: ${chart.settings.ags}</h6>
-                        <h6 id="timeStamp">${this.text[lan].time}: ${timeStamp}</h6>
-                        <h6 id="currentValue">${this.text[lan].indicator}: ${chart.settings.indText}  </h6>
-                        <h6 id="currentValue">${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h6>
+                    <div >               
+                        <h4">${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
+                        <h2>${chart.settings.indText} (${timeStamp})</h2>
                     </div>
-                    <hr />
+                    <br/>
+                  <div id="statistics_info_container" style="display:flex">
+                    <div id="area_info" style="display:inline-block"}>
+                        <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
+                        <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
+                    </div>
                     
-                    <div class="table" id="statistics_table"> 
-                    <h4 style="text-align:center;">${this.text[lan].info}</h4>
-                    <table id="statistics_table" >
+                    <div id="statistics_table_container" style="flex:1"}> 
+                    <div align="center">
+                    <h4 style="text-align: center">${this.text[lan].info}</h4>
+                    <table id="statistics_table" align=>
                           <tr class="uneven">
-                            <td class="table_element">${this.text[lan].areaCount}</td>
-                            <td class="table_element">${chart.settings.allValuesObjectArray.length}</td>                         
+                            <td class="table_element" >${this.text[lan].areaCount}</td>
+                            <td class="table_element" align="right">${chart.settings.allValuesObjectArray.length}</td>                         
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].average}</td>
-                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.average)}  ${chart.settings.indUnit}</td>
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.average)}  ${chart.settings.indUnit}</td>
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].median}</td>
-                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
+                            <td class="table_element"align="right">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
                           </tr>
                           <tr class="even">
-                            <td class="table_element">${this.text[lan].stDev}</td>
-                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.stDeviation)}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element" >${this.text[lan].stDev}</td>
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.stDeviation)}  ${chart.settings.indUnit}</td>                            
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].max}</td>
-                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.max)}  ${chart.settings.indUnit}</td>                            
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.max)}  ${chart.settings.indUnit}</td>                            
                           </tr class="even">                          <tr>
                             <td class="table_element">${this.text[lan].min}</td>
-                            <td class="table_element">${this.parseStringPointToComma(chart.settings.statistics.min)}  ${chart.settings.indUnit}</td>
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.min)}  ${chart.settings.indUnit}</td>
                           </tr>                          
                     </table>
                     </div>
+                    </div>
+                  </div>
                     
-                    <div id="chart_select_container" class="ui form" style={"margin-left: 60px", "z-index":100}>
+                    <hr />
+                    
+                    <div id="chart_select_container" class="ui form" style="margin-left: 60px">
                         <div class="fields">
                             <div class="field">
                                 <label>${this.text[lan].selectChart}:</label>
@@ -249,13 +253,14 @@ const statistics = {
                 chart_width = diagram.width()-margin.left-margin.right,
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
+            // TABLE FORMATTING
             //Set table css styling
             $(".table #statistics_table").css({    "margin-left":"auto",
                 "margin-right":"auto"});
             $(".table_element").css({"border":"1px solid black","padding":"5px"});
             $(".even").css({"background-color":"white"});
             $(".uneven").css({"background-color":"gainsboro"});
-
+            console.log($("#statistics_table").width()+ " "+ container_width+ " "+ $("#area_info").width()+ " ---"+$("#statistics_header").width());
 
 
             //reset the default visualisation style, start drawing
@@ -441,7 +446,6 @@ const statistics = {
         return parseFloat(string.replace(',', '.'));
     },
     parseStringPointToComma:function(input){
-        console.log("parse to comma: "+input.toString().replace('.',','));
         return input.toString().replace('.',',')
     },
 
@@ -581,9 +585,7 @@ const statistics = {
 
                 classObject = {intervalUpperLimit:statistics.roundNumber(intervalUpperLimit,decimal), intervalLowerLimit: statistics.roundNumber(intervalLowerLimit, decimal),intervalMiddle:statistics.roundNumber(intervalMiddle,decimal),  count:counter, probability: statistics.roundNumber(probability,decimal+1), intervalAverageValue: statistics.roundNumber(averageClassValue, decimal), elements:intervalElements};
             intervalLowerLimit=intervalUpperLimit;
-            console.log(statistics.roundNumber(intervalUpperLimit,decimal));
             densityFunctionObjectArray.push(classObject);
-            console.log(classObject);
         }
         return densityFunctionObjectArray;
     },
@@ -595,10 +597,8 @@ const statistics = {
             name="",
             deviation=0,
             found=false;
-        console.log("settingxY");
         //find the x!
         for (let interval in intervalArray) {
-            console.log(intervalArray[interval].elements.length);
             for (let elem in intervalArray[interval].elements)
                 if (intervalArray[interval].elements[elem].ags === selectedValue) {
                     x = intervalArray[interval].elements[elem].deviation;
@@ -739,7 +739,8 @@ const statistics = {
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
             .attr("x1", 0)     // x position of the first end of the line
             .attr("y1", yScale(mean))      // y position of the first end of the line
             .attr("x2", chart_width)     // x position of the second end of the line
@@ -958,7 +959,8 @@ const statistics = {
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
             .attr("x1", xScale(0))     // x position of the first end of the line
             .attr("y1", yScale(maxYValue+Math.round(maxYValue/10)))      // y position of the first end of the line
             .attr("x2", xScale(0))     // x position of the second end of the line
@@ -1081,7 +1083,6 @@ const statistics = {
                 return obj.ags === selectedAreaAGS
             }),
             tooltip = $("#tooltip");
-        console.log(yAxisName);
         if (minYValue >= 0) {
             minYValue = 0
         }
@@ -1138,7 +1139,8 @@ const statistics = {
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
             .attr("x1",xScale(mean) )     // x position of the first end of the line
             .attr("y1", yScale(minYValue))      // y position of the first end of the line
             .attr("x2", xScale(mean))     // x position of the second end of the line
@@ -1201,7 +1203,6 @@ const statistics = {
             .attr("y1", yScale(selectedArea.distFuncValue))
             .attr("x2", xScale(selectedArea.value))     // x position of the second end of the line
             .attr("y2", yScale(minYValue));
-        console.log("Selected Value x, y: "+selectedArea.value + " ; "+ selectedArea.distFuncValue);
         //Text for area line in Graph
         tooltip
             .html(selectedArea.name + "<br/>")
