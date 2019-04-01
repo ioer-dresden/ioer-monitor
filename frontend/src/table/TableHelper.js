@@ -85,4 +85,12 @@ class TableHelper{
             this.setStickTableHeader();
         }
     }
+    static resetColspan(){
+        let header = document.getElementById("header_ind_set");
+        let colspan = 5;
+        if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
+            colspan=6;
+        }
+        header.colSpan=colspan;
+    }
 }

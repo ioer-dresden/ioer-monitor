@@ -15,6 +15,7 @@ class TableExpand{
          */
         $time_set = $expand_values['time'];
         $id_org = $expand_values["id"];
+        $header_txt = $expand_values['text'];
         //explode the id
         $id_splitted = explode("|",$id_org);
         $ind_set  = $id_splitted[0];
@@ -55,12 +56,12 @@ class TableExpand{
             //get the object
             $sql = "SELECT i.INDIKATORWERT AS value, i.ID_INDIKATOR as ind, z.EINHEIT as einheit,i.FEHLERCODE as fc, i.HINWEISCODE as hc, i.AGS as ags, z.RUNDUNG_NACHKOMMASTELLEN as rundung,
                               COALESCE((SELECT x.INDIKATORWERT FROM m_indikatorwerte_".$time_set." x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags=i.AGS AND x.INDIKATORWERT <=".$time_set."),0) as grundakt_year,
-                                COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$time_set." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS =i.AGS AND y.INDIKATORWERT <= ".$time_set."),0) as grundakt_month
-                                        FROM m_indikatorwerte_" . $time_set . " i, m_indikatoren z
-                                        Where i.ID_INDIKATOR =  '" . $ind_set . "'
-                                        And z.ID_INDIKATOR = i.ID_INDIKATOR
-                                        And LENGTH(i.AGS) = " . $length_ags . "
-                                        Group by i.AGS";
+                              COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$time_set." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS =i.AGS AND y.INDIKATORWERT <= ".$time_set."),0) as grundakt_month
+                              FROM m_indikatorwerte_" . $time_set . " i, m_indikatoren z
+                              Where i.ID_INDIKATOR =  '" . $ind_set . "'
+                              And z.ID_INDIKATOR = i.ID_INDIKATOR
+                              And LENGTH(i.AGS) = " . $length_ags . "
+                              Group by i.AGS";
 
             $indicator_array = MysqlManager::get_instance()->query($sql);
             $indikator_grundaktualitaet = MysqlTasks::get_instance()->getGrundaktState($this->id);
@@ -72,7 +73,7 @@ class TableExpand{
             # get the FC Codes
             $fc_array = Errors::get_instance()->getCodes();
             //the result JSON
-            $JSON = '{"id":"' . $id_org . '","time":"' . $time_set . '","einheit":"' . $einheit . '","count":"'. $expand_values['count'].'","values":{';
+            $JSON = '{"id":"' . $id_org . '","time":"' . $time_set . '","text":"'.$header_txt.'","einheit":"' . $einheit . '","count":"'. $expand_values['count'].'","values":{';
             foreach ($ags_array as $row_ags) {
                 foreach ($indicator_array as $row_mysql) {
                     if ($row_ags === $row_mysql->ags) {

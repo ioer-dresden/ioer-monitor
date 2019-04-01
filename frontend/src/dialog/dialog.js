@@ -1,5 +1,6 @@
 //This file stores all the jquery Dialogs inside the Page
 //indikatorenvergleich
+//
 function openGebietsprofil(ags,name){
     let $dialogContainer = $('#gebietsprofil_content'),
         $detachedChildren = $dialogContainer.children().detach();
@@ -37,31 +38,6 @@ function openGebietsprofil(ags,name){
             $('.ui-dialog-titlebar-close').removeAttr('id');
         }
     });
-}
-function openStatistik(ags, name, wert){
-    let dialogContainer = $('#objektinformationen_content');
-    dialogContainer.dialog({
-        title: 'Statistik',
-        width: calculateWidth(),
-        height: calculateHeight(),
-        open: function(ev, ui){
-            $('.ui-widget-overlay').addClass('custom-overlay');
-            $.when(getStatistik(ags, name, wert)).done(function(data){dialogContainer.html(data);})
-        }
-    });
-}
-//calculate Width and Height of the setted dialog's
-function calculateWidth(){
-    const width = main_view.getWidth();
-    if($('.right_content').is(':visible') || width >=1280 && width<2000){
-        return width*0.5;
-    }
-    else if(width>2000){
-        return 1200;
-    }
-    else{
-        return width-50;
-    }
 }
 function calculateHeight(){
     const height = main_view.getHeight();

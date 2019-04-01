@@ -30,7 +30,7 @@ const table = {
                     <span title="Tabelle schließen" class="glyphicon glyphicon-remove checker" id="close_checker"></span>
                 </div>
                 <div id="interact_div">
-                    <button type="button" class="btn btn-primary mobile_hidden ${exclude.class_performance}" id="btn_table">
+                    <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
                         <i class="glyphicon glyphicon-chevron-right" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
                     <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
@@ -190,7 +190,7 @@ const table = {
                                         </td>
                                         <td class="val-ags" 
                                             data-name="${value.gen}" 
-                                            data-sort-value="${value_int}" 
+                                            data-text="${value_int}" 
                                             data-val="${value_int}">
                                             ${value_td()}
                                         </td>
@@ -395,44 +395,46 @@ const table = {
         let grey_border = 'grey_border',
             class_expand = expand_panel.class_expand,
             expand_array = expand_panel.getExpandArray(),
-            colspan_th = $('#header_ind_set'),
             first_header_row = $('#first_row_head'),
             second_header_row = $('#second_row_head'),
             table_body = this.getTableBodyObject(),
             footer_brd = $('#tfoot_99'),
             def = $.Deferred();
 
+        TableHelper.resetColspan();
+
         //function
         let getDifferenceValue=function(value_ind,value_ags){
                 return (value_ags-value_ind).toFixed(2);
             },
             getDifferenceDiv=function(value_ind,value_ags){
-            //create the difference view
-            let dif_val = (value_ags-value_ind).toFixed(2),
-                class_glyphicon = 'negativ';
-            if (value_ind<value_ags){
-                class_glyphicon='positiv';
-            }else if(value_ags==value_ind){
-                class_glyphicon='';
-            }
-            return `<div class="dif_val_div">
-                        <b>${dif_val.replace('.',',')}</b>
-                        <span class="glyphicon glyphicon-circle-arrow-right ${class_glyphicon}"></span>
-                    </div>`;
+                //create the difference view
+                let dif_val = (value_ags-value_ind).toFixed(2),
+                    class_glyphicon = 'negativ';
+                if (value_ind<value_ags){
+                    class_glyphicon='positiv';
+                }else if(value_ags==value_ind){
+                    class_glyphicon='';
+                }
+                return `<div class="dif_val_div">
+                            <b>${dif_val.replace('.',',')}</b>
+                            <span class="glyphicon glyphicon-circle-arrow-right ${class_glyphicon}"></span>
+                        </div>`;
             },
             //function to get the order state inside the table, based on the given number
             getExpandValue=function(id,key_set){
-                let return_val;
+                console.log("call expand value",id,key_set);
+                let result = "";
                 $.each(expand_array,function(key,value){
                     if(value.id===id){
-                        if(key_set) {
-                            return_val = value[key_set];
+                        if(key_set && typeof key_set !=="undefined") {
+                            result =  value[key_set];
                         }else{
-                            return_val=value;
+                            result = value;
                         }
                     }
                 });
-                return return_val;
+                return result;
             },
             //function to create the difference div, value ind = expand value
             //get the dufference between the year's
@@ -475,19 +477,26 @@ const table = {
 
             //expand the table---------------------------------------------------------------
             $.each(results,function(key,values_expand){
+                console.log("results",results);
                 let id = values_expand.id,
-                    count =values_expand.count,
+                    count =parseInt(values_expand.count),
                     name = getExpandValue(id,'text'),
                     einheit = values_expand.einheit,
                     time_set = getExpandValue(id,'time'),
                     //the html elements
-                    rowspan_head = parseFloat(colspan_th.attr("colspan"));
+                    obj_brd = getExpandValue(id),
+                    obj_ags = [{ags:"99"}];
+
+                console.log(id,count,name,einheit,time_set);
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if(count===10){
+                    console.log(id);
+                    let colspan_th = $('#header_ind_set'),
+                        rowspan_head = parseFloat(colspan_th.attr("colspan")),
+                        einheit_txt = '('+einheit+')';
                     //expand the header of the table
                     colspan_th.attr("colspan",(rowspan_head+1));
-                    let einheit_txt = '('+einheit+')';
                     if(id==="B00AG"){
                         einheit_txt = einheit;
                     }
@@ -502,9 +511,7 @@ const table = {
                         })
                     });
                     //expand the footer
-                    let obj_brd = getExpandValue(id);
-                    let obj_ags = [{ags:"99"}];
-                    footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
+                    footer_brd.append(`<th id="99_expand_${id}" class="val-ags ${class_expand}"></th>`);
                     //grab the data for brd and bld
                     $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
                         let value_brd = data['values']['99']['value_round'];
@@ -517,7 +524,7 @@ const table = {
                         //append the footer
                         $.each(selection,function(key,value){
                             let obj_ags_bld = [{ags:value}];
-                            $('#tfoot_'+value).append(`<td id="${value}_expand_${id}" class="val-ags ${class_expand}"></td>`);
+                            $('#tfoot_'+value).append(`<th id="${value}_expand_${id}" class="val-ags ${class_expand}"></th>`);
                             $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
                                 let value_bld = data['values'][value]['value_round'];
                                 $(`#${value}_expand_${id}`).text(value_bld);
@@ -526,7 +533,7 @@ const table = {
                     }
                 }
                 //expand with BRD ord BLD as new columns outside the table
-                else if(count==15){
+                else if(count===15){
                     //epand the header
                     let header_text_first_row = "Differenz",
                         header_text_second_row = "Bld-Wert ("+indikatorauswahl.getIndikatorEinheit()+")",
@@ -562,7 +569,7 @@ const table = {
                     $('#table_ags').find('.tfoot').find('tr').each(function(){$(this).append(`<th class="${grey_border} ${class_expand}" colspan="2"></th>`)})
                 }
                 //time shift expand
-                else if(count==20){
+                else if(count===20){
                     let colspan = 1,
                         //calculate the cospan
                         td_grund = '',
@@ -605,9 +612,7 @@ const table = {
                         });
                     });
                     //expand the footer
-                    let obj_brd = getExpandValue(id),
-                        obj_ags = [{ags:"99"}],
-                        key_time_shift = id.replace("|","_");
+                    let key_time_shift = id.replace("|","_");
                     footer_brd.append('<th id="99_expand_'+key_time_shift+'" class="val-ags '+grey_border+' '+class_expand+'"></th>');
                     if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
                         footer_brd.append('<th id="expand_grundakt_footer_99'+key_time_shift+'" class="val-grundakt '+class_expand+'"></th><th id="expand_grundakt_footer_diff_99'+key_time_shift+'" class="val-grundakt '+class_expand+'"></th>');
@@ -673,7 +678,7 @@ const table = {
                     }
                 }
                 //trend values
-                else if(count==30){
+                else if(count===30){
                     //the head
                     first_header_row.append('<th class="'+grey_border+' '+class_expand+' sorter-false expand">'+name+'</th>');
                     second_header_row.append('<th class="'+grey_border+' '+class_expand+' header">'+$('#tabel_header_raumgl').text()+'</th>');
@@ -686,12 +691,9 @@ const table = {
                         });
                     });
                     //expand the footer
-                    let obj_brd = getExpandValue(id);
-                    let obj_ags = [{ags:"99"}];
                     footer_brd.append('<th id="99_expand_'+time_set+'" class="val-ags '+grey_border+' '+class_expand+'"></th>');
                     $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
-                        let data_array = data;
-                        let value_brd = data_array['values']['99']['value_round'];
+                        let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_'+time_set).text(value_brd);
                     });
                     //if finer spatial choice -> expand the table footer above the brd part
@@ -703,17 +705,16 @@ const table = {
                             let obj_ags_bld = [{ags:value}];
                             $('#tfoot_'+value).append('<th id="'+value+'_expand_'+time_set+'" class="val-ags '+grey_border+' '+class_expand+'"></th>');
                             $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
-                                let data_array_bld = data;
-                                let value_bld = data_array_bld['values'][value]['value_round'];
+                                let value_bld = data['values'][value]['value_round'];
                                 $('#'+value+'_expand_'+time_set).text(value_bld);
                             });
                         });
                     }
                 }
                 //indicator expand
-                else if(count==50){
+                else if(count===50){
                     //epand the table header
-                    first_header_row.append('<th rowspan="2" class="'+grey_border+' '+class_expand+' header">'+name+' ('+einheit+')</th>');
+                    first_header_row.append(`<th rowspan="2" class="${grey_border+" "+class_expand+" header"}">${name+" ("+einheit+")"}</th>`);
 
                     //expand the table body
                     $.each(values_expand.values,function(key,value_json) {
@@ -724,12 +725,10 @@ const table = {
                         });
                     });
                     //expand the footer
-                    let obj_brd = getExpandValue(id);
-                    let obj_ags = [{ags:"99"}];
                     footer_brd.append('<th id="99_expand_ind" class="val-ags '+grey_border+' '+class_expand+'"></th>');
                     $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
-                        let data_array =data;
-                        let value_brd = data_array['values']['99']['value_round'];
+                        console.log(data);
+                        let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_ind').text(value_brd);
                     });
                     //if finer spatial choice -> expand the table footer above the brd part
@@ -741,8 +740,8 @@ const table = {
                             let obj_ags_bld = [{ags:value}];
                             $('#tfoot_'+value).append('<th id="'+value+'_expand_ind" class="val-ags '+grey_border+' '+class_expand+'"></th>');
                             $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
-                                let data_array_bld = data;
-                                let value_bld = data_array_bld['values'][value]['value_round'];
+                                console.log(data);
+                                let value_bld = data['values'][value]['value_round'];
                                 $('#'+value+'_expand_ind').text(value_bld);
                             });
                         });

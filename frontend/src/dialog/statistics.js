@@ -87,6 +87,7 @@ const statistics = {
             $(document).on("click", statistics.selector_toolbar, function () {
                 let callback = function () {
                     if (Dialoghelper.getAGS_Input()) {
+                        console.log(Dialoghelper.getAGS_InputName(),Dialoghelper.getAGS_Input());
                         statistics.chart.settings.ags = Dialoghelper.getAGS_Input();
                         statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
                         statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
@@ -202,9 +203,7 @@ const statistics = {
                         </div>
                     </div>
                 </div>
-            </div>
-                                  `);
-
+            </div>`);
 
         /* TO BE INCLUDED TO ENABLE DOWNLOAD OF GRAPH AS PDF PNG
 

@@ -5,7 +5,6 @@ const expand_panel = {
         $elem = $('#tabelle_erweitern');
         return $elem;
     },
-    getContaner:function(){return $('#tabelle_erweitern');},
     getOpenButtonObject:function(){
         $elem = $("#btn_table");
         return $elem;
@@ -132,7 +131,6 @@ const expand_panel = {
             }
             //if not set the note
         }else{
-            console.log("disable time slider");
             helper.disableElement("#"+panel.getZeitschnittAuswahlContainer().attr("id"),"");
         }
         //Kenngroesen
@@ -163,30 +161,30 @@ const expand_panel = {
         //AG
         if(indikatorauswahl.getSelectedIndikator().indexOf("RG") >= 0){
             if(indikatorauswahl.getSelectedIndikatorKategorie() !== 'O') {
-                panel.getABSKenngroesseObject().show()
+                helper.enableElement("#"+panel.getABSKenngroesseObject().attr("id"),"");
             }
         }else{
-            panel.getABSKenngroesseObject().hide();
+            helper.disableElement("#"+panel.getABSKenngroesseObject().attr("id"),exclude.disable_text);
         }
         //Relief
         if(indikatorauswahl.getSelectedIndikatorKategorie() === 'X'){
-            panel.getUebergeordneteKenngroessenObject().hide();
+            helper.disableElement("#"+panel.getUebergeordneteKenngroessenObject().attr("id"),exclude.disable_text);
         }else{
-            panel.getUebergeordneteKenngroessenObject().show();
+            helper.enableElement("#"+panel.getUebergeordneteKenngroessenObject().attr("id"),"");
         }
         //EW not for sst
         if(spatial_extend() === 'stt'){
-            panel.getEinwohnerObject().hide();
+            helper.disableElement("#"+panel.getEinwohnerObject().attr("id"),exclude.disable_text);
         }else{
-            panel.getEinwohnerObject().show();
+            helper.enableElement("#"+panel.getEinwohnerObject().attr("id"),"");
         }
         //Trendfortschreibung--------------------------------------------
         if($.inArray(2025,indikatorauswahl.getAllPossibleYears())!==-1){
-            panel.getTrendfortschreibungauswahlDDMObject().show();
-            panel.getHinweisTrendObject().hide()
+            helper.enableElement("#"+panel.getTrendfortschreibungauswahlDDMObject().attr("id"),exclude.disable_text);
+            helper.enableElement("#"+panel.getHinweisTrendObject().attr("id"),"");
         }else{
-            panel.getTrendfortschreibungauswahlDDMObject().hide();
-            panel.getHinweisTrendObject().show();
+            helper.enableElement("#"+panel.getTrendfortschreibungauswahlDDMObject().attr("id"),"");
+            helper.enableElement("#"+panel.getHinweisTrendObject().attr("id"),exclude.disable_text);
         }
     },
     init:function(){
@@ -307,8 +305,11 @@ const expand_panel = {
         set:function(){
             //bind the on click events
             //Button interaction for open the panel
-            expand_panel.getOpenButtonObject().unbind().click(function(){
-                expand_panel.open();
+            expand_panel
+                .getOpenButtonObject()
+                .unbind()
+                .click(function(){
+                    expand_panel.open();
             });
             //panel button to load the user choice and expand the table
             expand_panel.getButtonLoadExpandObject()

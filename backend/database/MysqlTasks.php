@@ -155,13 +155,14 @@ class MysqlTasks extends MysqlManager {
         //build the sql query
         $sql = "SELECT i.INDIKATORWERT AS value, i.ID_INDIKATOR as ind, z.EINHEIT as einheit,i.FEHLERCODE as fc, i.HINWEISCODE as hc, i.AGS as ags, z.RUNDUNG_NACHKOMMASTELLEN as rundung,
                                 COALESCE((SELECT x.INDIKATORWERT FROM m_indikatorwerte_".$year." x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags=i.AGS AND x.INDIKATORWERT <=".$year."),0) as grundakt_year,
-                                COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$year." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS =i.AGS AND y.INDIKATORWERT <= ".$year."),0) as grundakt_month,
+                                COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$year." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS=i.AGS AND y.INDIKATORWERT <= ".$year."),0) as grundakt_month,
                                 z.MITTLERE_AKTUALITAET_IGNORE as grundakt_state,
                                 z.INDIKATOR_NAME_KURZ as name,
                                 (SELECT FARBWERT_MAX FROM m_zeichenvorschrift WHERE ID_INDIKATOR='".$indikator_id."') as color_max,
                                 (SELECT FARBWERT_MIN FROM m_zeichenvorschrift WHERE ID_INDIKATOR='".$indikator_id."') as color_min
                                 FROM m_indikatorwerte_" . $year . " i, m_indikator_freigabe f, m_indikatoren z
-                                Where f.ID_INDIKATOR = i.ID_INDIKATOR AND f.ID_INDIKATOR =  '" . $indikator_id . "'
+                                Where f.ID_INDIKATOR = i.ID_INDIKATOR 
+                                AND f.ID_INDIKATOR =  '" . $indikator_id . "'
                                 AND f.STATUS_INDIKATOR_FREIGABE = " . $this->berechtigung . "
                                 And z.ID_INDIKATOR = f.ID_INDIKATOR
                                 And LENGTH(i.AGS) = " .(strlen($ags))
