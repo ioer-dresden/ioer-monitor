@@ -33,7 +33,8 @@ const statistics = {
             cumulativeDistribution:"Kumulative Verteilung",
             intervalCount:"Anzahl Intervale",
             interval:"Intervall",
-            selectChart:"Diagramm wählen"
+            selectChart:"Diagramm wählen",
+            download:"Diagramm herunterladen"
 
         },
         en: {
@@ -66,7 +67,8 @@ const statistics = {
             cumulativeDistribution:"Cumulative distribution",
             intervalCount:"Interval count",
             interval:"Interval",
-            selectChart:"Select chart"
+            selectChart:"Select chart",
+            download:"Download Chart"
 
 
         }
@@ -131,15 +133,15 @@ const statistics = {
                         <h2>${chart.settings.indText} (${timeStamp})</h2>
                     </div>
                     <br/>
-                  <div id="statistics_info_container" style="overflow:auto">
-                    <div id="area_info" style="float:left"}>
+                  <div id="statistics_info_container">
+                    <div id="area_info"}>
                         <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
                         <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
                     </div>
                     
-                    <div id="statistics_table_container" style="float:none"  align="center"> 
+                    <div id="statistics_table_container" align="center"> 
                     
-                    <h4 style="text-align: center">${this.text[lan].info}</h4>
+                    <h4 id="table_title">${this.text[lan].info}</h4>
                     <table id="statistics_table" align="center">
                           <tr class="uneven">
                             <td class="table_element" >${this.text[lan].areaCount}</td>
@@ -151,7 +153,7 @@ const statistics = {
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].median}</td>
-                            <td class="table_element"align="right">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
                           </tr>
                           <tr class="even">
                             <td class="table_element" >${this.text[lan].stDev}</td>
@@ -170,9 +172,9 @@ const statistics = {
                     
                     <hr />
                     
-                    <div id="chart_select_container" class="ui form" style="margin-left: 60px">
+                    <div id="chart_select_container" class="ui form">
                         <div class="fields">
-                            <div class="field">
+                            <div class="field" >
                                 <label>${this.text[lan].selectChart}:</label>
                                     <div id="chart_ddm_diagramm" class="ui selection dropdown">
                                         <i class="dropdown icon"></i>    
@@ -185,10 +187,11 @@ const statistics = {
                               
                                     </div>
                                 </div>
-                               <div class="two wide field" id="classCountInput">
+                               <div class="three wide field" id="classCountInput" align="right">
                                    <label>${this.text[lan].intervalCount}:</label>                                
                                    <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
                                </div>
+
                         </div>
                     </div>
                     <div id="statistics_container_diagramm" class="container_diagramm">
@@ -252,15 +255,6 @@ const statistics = {
                 chart_width = diagram.width()-margin.left-margin.right,
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
-            // TABLE FORMATTING
-            //Set table css styling
-            $(".table #statistics_table").css({    "margin-left":"auto",
-                "margin-right":"auto"});
-            $(".table_element").css({"border":"1px solid black","padding":"5px"});
-            $(".even").css({"background-color":"white"});
-            $(".uneven").css({"background-color":"gainsboro"});
-            console.log($("#statistics_table").width()+ " "+ container_width+ " "+ $("#area_info").width()+ " ---"+$("#statistics_header").width());
-
 
             //reset the default visualisation style, start drawing
             chart.settings.selectedChart="valueChart";
