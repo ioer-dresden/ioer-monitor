@@ -263,13 +263,13 @@ const statistics = {
 
                 // Setting dynamic visualisation dimensions
                 container_height=$('.ui-dialog').height() * (2 / 3) - 100,
-                container_width=dialog_manager.calculateWidth()-margin.right-margin.left;
+                container_width=$("#statistics_content .container").width();
 
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
             const diagram = $('#statistics_content #statistics_diagramm'),
 
-                chart_width = diagram.width()-margin.left-margin.right,
+                chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
 
