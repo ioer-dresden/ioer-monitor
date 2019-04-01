@@ -131,16 +131,16 @@ const statistics = {
                         <h2>${chart.settings.indText} (${timeStamp})</h2>
                     </div>
                     <br/>
-                  <div id="statistics_info_container" style="display:flex">
-                    <div id="area_info" style="display:inline-block"}>
+                  <div id="statistics_info_container" style="overflow:auto">
+                    <div id="area_info" style="float:left"}>
                         <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
                         <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
                     </div>
                     
-                    <div id="statistics_table_container" style="flex:1"}> 
-                    <div align="center">
+                    <div id="statistics_table_container" style="float:none"  align="center"> 
+                    
                     <h4 style="text-align: center">${this.text[lan].info}</h4>
-                    <table id="statistics_table" align=>
+                    <table id="statistics_table" align="center">
                           <tr class="uneven">
                             <td class="table_element" >${this.text[lan].areaCount}</td>
                             <td class="table_element" align="right">${chart.settings.allValuesObjectArray.length}</td>                         
@@ -165,7 +165,6 @@ const statistics = {
                             <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.min)}  ${chart.settings.indUnit}</td>
                           </tr>                          
                     </table>
-                    </div>
                     </div>
                   </div>
                     
