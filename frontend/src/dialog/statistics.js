@@ -187,12 +187,12 @@ const statistics = {
                               
                                     </div>
                                 </div>
-                               <div class="three wide field" id="classCountInput" align="right">
-                                   <label>${this.text[lan].intervalCount}:</label>                                
-                                   <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
-                               </div>
 
                         </div>
+                             <div class="inline field" id="classCountInput" align="right">
+                                   <label>${this.text[lan].intervalCount}:</label>                                
+                                   <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
+                             </div>
                     </div>
                     <div id="statistics_container_diagramm" class="container_diagramm">
                         <div id="statistics_diagramm";">
@@ -204,6 +204,23 @@ const statistics = {
                 </div>
             </div>
                                   `);
+
+
+        /* TO BE INCLUDED TO ENABLE DOWNLOAD OF GRAPH AS PDF PNG
+
+                                <div class="field">
+                                <label>${this.text[lan].download}:</label>
+                                    <div id="diagramm_download" class="ui selection dropdown">
+                                        <i class="dropdown icon"></i>
+                                        <div class="text">${this.text[lan].choice}</div>
+                                        <div class="menu">
+                                            <div class="item" data-format="png">PNG</div>
+                                            <div class="item" data-format="pdf">PDF</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+         */
 
         //settings for the manager
         dialog_manager.instructions.endpoint = `${this.endpoint_id}`;
