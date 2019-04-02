@@ -124,7 +124,6 @@ const dev_chart={
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
         this.chart.create();
-
     },
     chart:{
         settings:{

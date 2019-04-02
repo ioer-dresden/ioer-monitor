@@ -47,3 +47,23 @@ function calculateHeight(){
         return height-100;
     }
 }
+class Gebietsprofil{
+    static open(){
+        $.ajax({
+            async:true,
+            url: "backend/dialog/gebietsprofil.php",
+            type: "GET",
+            dataType: "html",
+            data: {
+                'ags': ags,
+                'name': name,
+                'indikator':indikatorauswahl.getSelectedIndikator(),
+                'jahr':zeit_slider.getTimeSet()
+            },
+            success: function (data) {
+                console.log();
+                $('#gebietsprofil_content').html(data);
+            }
+        });
+    }
+}

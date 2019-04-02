@@ -41,7 +41,6 @@ const kennblatt={
             },
             interpretation = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("interpretation"+lang_tag())],
             bemerkungen = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("bemerkungen"+lang_tag())],
-            ebenen = raeumliche_analyseebene.getRange(),
             ogc = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()]["ogc"],
             spatial_extends = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()]["spatial_extends"],
             language = language_manager.getLanguage(),
@@ -145,7 +144,7 @@ const kennblatt={
         //create the html
         let html = he.encode(`
             <h4 id="${this.endpoint_id}" class="dialog jq_dialog">
-                <div class="export">
+                <div class="export mobile_hidden">
                     <button class="btn btn-primary float-right" id="print_btn_kennblatt">
                         <i class="glyphicon glyphicon-print"></i>
                         <span>${header_text[language]["export"]}</span>
@@ -183,9 +182,7 @@ const kennblatt={
         let instructions = {
             endpoint:`${this.endpoint_id}`,
             html:html,
-            title:header_text[language]["header"],
-            modal:true,
-            width:795
+            title:header_text[language]["header"]
         };
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
