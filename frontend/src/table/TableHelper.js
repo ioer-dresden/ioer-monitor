@@ -5,8 +5,9 @@ class TableHelper{
     }
     //check if table is visible
     static isTableOpen(){
-        let state = true;
-        if ($('.right_content').is(':hidden')) {
+        let state = true,
+            elem = document.getElementById('right_content');
+        if (window.getComputedStyle(elem).display==="none" || window.getComputedStyle(elem).visibility==="hidden") {
             state = false;
         }
         return state;
