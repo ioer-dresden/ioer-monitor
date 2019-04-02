@@ -6,7 +6,7 @@ include_once "database/PostgreManager.php";
 include_once "database/PostgreTasks.php";
 include_once "models/Helper.php";
 include "models/Errors.php";
-include 'models/Notes.php';
+include 'models/NOTES.php';
 include 'models/Colors.php';
 include "models/UserLink.php";
 include 'chart/Chart.php';
@@ -188,8 +188,15 @@ try{
     //get the map overlay
     else if($query=="getzusatzlayer"){
         $zusatzlayer = $json_obj['ind']['zusatzlayer'];
-        $overlay = new Overlay($zusatzlayer);
-        echo json_encode($overlay->getJSON());
+        $cache_manager = new CacheManager(substr($zusatzlayer,0,2),2019,$zusatzlayer,"false",0);
+        if (!$cache_manager->check_cached([],[])) {
+            $overlay = new Overlay($zusatzlayer);
+            $json = json_encode(array_merge($overlay->getJSON(),array("state"=>"generated")));
+            $cache_manager->insert($json);
+            echo $json;
+        }else{
+            echo json_encode(array_merge($cache_manager->get_cached(),array("state"=>"cached")));
+        }
     }
     //get the values to Expand the Table by the given values
     else if($query=="gettableexpandvalues"){

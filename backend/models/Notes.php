@@ -1,7 +1,7 @@
 <?php
 include '../database/MysqlTasks.php';
 
-class Notes{
+class NOTES{
     private $notes;
     protected static $instance = NULL;
     public static function get_instance()

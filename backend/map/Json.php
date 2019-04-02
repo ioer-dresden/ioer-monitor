@@ -1,6 +1,6 @@
 <?php
 include_once '../database/PostgreTasks.php';
-include_once '../database/MysqlManager.php';
+include_once '../database/MysqlTasks.php';
 
 class Json
 {
@@ -68,7 +68,7 @@ class Json
 
                             //get the hc text
                             if ($note_id!=0) {
-                                $text_hc = Notes::get_instance()->getNoteText($note_id) . "||" . $note_id;
+                                $text_hc = NOTES::get_instance()->getNoteText($note_id) . "||" . $note_id;
                             } else {
                                 $text_hc = "0";
                             }
@@ -116,7 +116,7 @@ class Json
                 $stat_string_ags = '';
                 foreach ($this->ags_array_user as $value) {
                     $ags_set = substr($value, 0, 2);
-                    $stat_string_ags .= '"' . $ags_set . '":{"gen":"' . PostgreTasks::get_instance()->getAGSName('bld', $ags_set, $this->year) . '","value_ags":"' . number_format(round(MysqlTasks::get_instance()->getIndicatorValueByAGS($this->indicator_id, $value, $this->year), $indicator_rundung), $indicator_rundung, ',', '') . '","ags_grundakt":"' . MysqlTasks::get_instance()->getIndicatorGrundaktualitaet($value, $this->year) . '"},';
+                    $stat_string_ags .= '"' . $ags_set . '":{"gen":"' . PostgreTasks::get_instance()->getAGSName('bld', $ags_set, $this->year_pg) . '","value_ags":"' . number_format(round(MysqlTasks::get_instance()->getIndicatorValueByAGS($this->indicator_id, $value, $this->year), $indicator_rundung), $indicator_rundung, ',', '') . '","ags_grundakt":"' . MysqlTasks::get_instance()->getIndicatorGrundaktualitaet($value, $this->year) . '"},';
                 }
             }
             trim($JSON = '{ "type": "FeatureCollection", "stat":{' . $stat_string_ags . '"wert_brd":"' . number_format(round(MysqlTasks::get_instance()->getIndicatorValueForBRD($this->indicator_id, $this->year), $indicator_rundung), $indicator_rundung, ',', '') . '","grundakt_brd":"' . MysqlTasks::get_instance()->getIndicatorGrundaktualitaet('99', $this->year) . '"},"features": [ ' . $output . ' ]}');
