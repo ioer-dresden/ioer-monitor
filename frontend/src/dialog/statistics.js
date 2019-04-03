@@ -87,7 +87,6 @@ const statistics = {
             $(document).on("click", statistics.selector_toolbar, function () {
                 let callback = function () {
                     if (Dialoghelper.getAGS_Input()) {
-                        console.log(Dialoghelper.getAGS_InputName(),Dialoghelper.getAGS_Input());
                         statistics.chart.settings.ags = Dialoghelper.getAGS_Input().toString();
                         statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
                         statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();

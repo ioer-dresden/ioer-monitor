@@ -215,11 +215,10 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            console.log("get Data");
-            $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
+            /*$.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
                 console.log(data);
-            }));
-            //openGebietsprofil(ags,gen);
+            }));*/
+            openGebietsprofil(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){

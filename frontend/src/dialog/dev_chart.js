@@ -204,7 +204,7 @@ const dev_chart={
                 let i = 0;
                 $.each(array, function (key, val) {
                     let obj = {id: val.id, values: arr[i][0]};
-                    if (array.length == 1) {
+                    if (array.length === 1) {
                         obj = {id: val.id, values: arr[0]};
                     }
                     chart.merge_data.push(obj);
@@ -235,14 +235,14 @@ const dev_chart={
                 if (!chart.settings.state_prognose) {
                     max_date = new Date(current_year + 2, 0, 1);
                 }
-                if (minYear== maxYear) {
+                if (minYear===maxYear) {
                     x.domain(d3.extent([new Date(maxYear - 5, 0, 1), max_date]));
                 } else {
                     x.domain(d3.extent([min_date, max_date]));
                 }
 
                 y.domain(d3.extent([minValue, maxValue]));
-
+                //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + chart_height + ")")
@@ -255,19 +255,19 @@ const dev_chart={
                             return d.getFullYear();
                         }
                     }));
-
+                //set y axis
                 g.append("g")
                     .attr("class", "axis axis--y")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
                         if (chart.settings.ind_vergleich) {
-                            if (d == 0) {
-                                if (array.length== 1) {
+                            if (d=== 0) {
+                                if (array.length===1) {
                                     return data[0].real_value;
                                 } else {
                                     return 'x';
                                 }
                             }
-                            else if (d != minValue || d != maxValue) {
+                            else if (d !== minValue || d !== maxValue) {
                                 return d;
                             }
                         } else {

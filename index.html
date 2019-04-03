@@ -16,16 +16,15 @@
 
 <body>
 <!-- the map content-->
-<div class="bg_load" id="bg_load"></div>
-<div class="wrapper" id="load_wrapper">
-    <div class="inner">
-        <span>L</span>
-        <span>o</span>
-        <span>a</span>
-        <span>d</span>
-        <span>i</span>
-        <span>n</span>
-        <span>g</span>
+<div id="loading_circle">
+    <div class="bg_load" id="bg_load"></div>
+    <div class="wrapper" id="load_wrapper">
+        <div class="inner">
+            <span>L</span>
+            <span>a</span>
+            <span>d</span>
+            <span>e</span>
+        </div>
     </div>
 </div>
 <div id="Modal">
@@ -88,9 +87,8 @@ Scriptloader imports all Scripts into the DOM, the others are needed for IE
     scriptLoader.includeScripts();
     document.addEventListener("DOMContentLoaded", function(event) {
         setTimeout(function(){
-            document.getElementById("bg_load").remove();
-            document.getElementById("load_wrapper").remove();
-        },1000);
+            document.getElementById("loading_circle").remove();
+        },2000);
     });
 </script>
 </body>

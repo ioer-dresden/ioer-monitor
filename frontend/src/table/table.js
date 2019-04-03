@@ -822,7 +822,7 @@ const table = {
             $('.indikatoren_diagramm_ags')
                 .unbind()
                 .click(function() {
-                    statistics.chart.settings.ags=$(this).data('ags');
+                    statistics.chart.settings.ags=$(this).data('ags').toString();
                     statistics.chart.settings.name=name;
                     statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
                     statistics.chart.settings.allValuesJSON  = indikator_json.getJSONFile();

@@ -1,5 +1,4 @@
-//leave function
-//ToDo noch auf EN umschreiben
+//collecteions of alerts using sweet alert for bootstrap: https://sweetalert2.github.io/
 const alert_manager= {
     leaveESCInfo: function (title,message) {
         let _title=function(){
@@ -45,7 +44,7 @@ const alert_manager= {
         setTimeout(function(){
             swal(
                 "Es ist ein Problem aufgetreten",
-                "Bitte versuchen Sie es später nochmal oder kontaktieren Sie uns über das Feedback Formular.",
+                "Bitte leeren Sie ihren Browser-Cache und laden die Anwendung neu oder kontaktieren Sie uns über das Feedback Formular.",
                 "error"
             );
             progressbar.remove();
