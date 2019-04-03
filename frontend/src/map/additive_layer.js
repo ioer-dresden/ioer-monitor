@@ -285,7 +285,7 @@ const additiveLayer={
             progressbar.init();
             progressbar.setHeaderText("Lade Layer");
 
-            $.when(request_manager.getZusatzlayer(_id)).done(function(json){
+            $.when(RequestManager.getZusatzlayer(_id)).done(function(json){
                 layer.addData(json);
                 layer.setStyle(style[_id]);
                 //add a legend entry

@@ -191,7 +191,7 @@ const dev_chart={
                         "compare":chart.settings.ind_vergleich.toString()
                     };
                 $.each(array, function (key, value) {
-                    requests.push(request_manager.getTrendValues(value.id,chart.settings.ags.toString(),settings));
+                    requests.push(RequestManager.getTrendValues(value.id,chart.settings.ags.toString(),settings));
                 });
                 $.when.apply($, requests).done(function () {
                     def.resolve(arguments);

@@ -31,7 +31,7 @@ const indikator_json = {
         }
 
         //info how much geomtries will be created and afterwards stat the creation
-        $.when(request_manager.getCountGeometries(raumgliederung_set)).done(function (x) {
+        $.when(RequestManager.getCountGeometries(raumgliederung_set)).done(function (x) {
                 var interval = setInterval(function () {
                     if (progressbar.getContainer().is(":visible")) {
                         clearInterval(interval);
@@ -41,7 +41,7 @@ const indikator_json = {
                 },10);
         });
 
-        $.when(request_manager.getGeoJSON(ind, time, raumgliederung_set, ags_set,klassenanzahl.getSelection(),klassifzierung.getSelectionId()))
+        $.when(RequestManager.getGeoJSON(ind, time, raumgliederung_set, ags_set,klassenanzahl.getSelection(),klassifzierung.getSelectionId()))
             .done(function(arr){
                 //now we have access to array of data
                 try{
@@ -210,13 +210,16 @@ const indikator_json = {
 
         let bounds = layer.getBounds();
         let popup = L.popup()
-            .setLatLng(bounds.getCenter())
+            .setLatLng(e.latlng)
             .setContent(div)
             .openOn(map);
 
-
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            openGebietsprofil(ags,gen);
+            console.log("get Data");
+            $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
+                console.log(data);
+            }));
+            //openGebietsprofil(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){

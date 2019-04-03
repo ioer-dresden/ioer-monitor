@@ -162,7 +162,7 @@ try{
         header('Content-type: application/json; charset=utf-8');
         echo Helper::get_instance()->escapeJsonString($json);
     }
-    //get all possible years
+    //get all possible years for a given indicator
     else if($query=='getyears'){
         $jahre = array();
         $years = MysqlTasks::get_instance()->getIndicatorPossibleTimeArray($indicator,$modus);
@@ -171,7 +171,7 @@ try{
         }
         echo json_encode($jahre);
     }
-    //check avability
+    //check avability for given indicator parameters
     else if($query=="getavability"){
         $array = array();
             array_push($array, array(
@@ -180,7 +180,7 @@ try{
             );
         echo json_encode($array);
     }
-    //counte the amount of geometries, which will be generated
+    //count the amount of geometries, which will be generated
     else if($query=="countgeometries"){
         $count = PostgreTasks::get_instance()->countGeometries($year,$raumgliederung,$ags_array);
         echo json_encode($count);

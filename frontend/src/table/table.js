@@ -456,7 +456,7 @@ const table = {
         function defCalls(){
             let requests = [];
             $.each(expand_array,function(key,value){
-                requests.push(request_manager.getTableExpandValues(value));
+                requests.push(RequestManager.getTableExpandValues(value));
             });
             $.when.apply($,requests).done(function(){
                 def.resolve(arguments);
@@ -513,7 +513,7 @@ const table = {
                     //expand the footer
                     footer_brd.append(`<th id="99_expand_${id}" class="val-ags ${class_expand}"></th>`);
                     //grab the data for brd and bld
-                    $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
+                    $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_'+id).text(value_brd);
                     });
@@ -525,7 +525,7 @@ const table = {
                         $.each(selection,function(key,value){
                             let obj_ags_bld = [{ags:value}];
                             $('#tfoot_'+value).append(`<th id="${value}_expand_${id}" class="val-ags ${class_expand}"></th>`);
-                            $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
+                            $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
                                 let value_bld = data['values'][value]['value_round'];
                                 $(`#${value}_expand_${id}`).text(value_bld);
                             });
@@ -620,7 +620,7 @@ const table = {
                     if(expand_panel.getDifferenceState()){
                         footer_brd.append('<th id="expand_diff_footer_99'+key_time_shift+'" class="'+class_expand+'"></th>');
                     }
-                    $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
+                    $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
                         let data_array = data;
                         let value_brd = data_array['values']['99']['value_round'];
                         $('#99_expand_'+key_time_shift).text(value_brd);
@@ -654,7 +654,7 @@ const table = {
                             if(expand_panel.getDifferenceState()){
                                 tFoot_append_bld.append('<th id="expand_diff_footer_'+value+'" class="'+class_expand+'"></th>');
                             }
-                            $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
+                            $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
                                 let data_array_bld = data;
                                 let value_bld = data_array_bld['values'][value]['value_round'];
                                 $('#'+value+'_expand_'+key_time_shift).text(value_bld);
@@ -692,7 +692,7 @@ const table = {
                     });
                     //expand the footer
                     footer_brd.append('<th id="99_expand_'+time_set+'" class="val-ags '+grey_border+' '+class_expand+'"></th>');
-                    $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
+                    $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_'+time_set).text(value_brd);
                     });
@@ -704,7 +704,7 @@ const table = {
                         $.each(selection,function(key,value){
                             let obj_ags_bld = [{ags:value}];
                             $('#tfoot_'+value).append('<th id="'+value+'_expand_'+time_set+'" class="val-ags '+grey_border+' '+class_expand+'"></th>');
-                            $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
+                            $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
                                 let value_bld = data['values'][value]['value_round'];
                                 $('#'+value+'_expand_'+time_set).text(value_bld);
                             });
@@ -726,7 +726,7 @@ const table = {
                     });
                     //expand the footer
                     footer_brd.append('<th id="99_expand_ind" class="val-ags '+grey_border+' '+class_expand+'"></th>');
-                    $.when(request_manager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
+                    $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags)).done(function(data){
                         console.log(data);
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_ind').text(value_brd);
@@ -739,7 +739,7 @@ const table = {
                         $.each(selection,function(key,value){
                             let obj_ags_bld = [{ags:value}];
                             $('#tfoot_'+value).append('<th id="'+value+'_expand_ind" class="val-ags '+grey_border+' '+class_expand+'"></th>');
-                            $.when(request_manager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
+                            $.when(RequestManager.getTableExpandValues(obj_brd,obj_ags_bld)).done(function(data){
                                 console.log(data);
                                 let value_bld = data['values'][value]['value_round'];
                                 $('#'+value+'_expand_ind').text(value_bld);

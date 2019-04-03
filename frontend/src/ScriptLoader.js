@@ -10,7 +10,7 @@ class ScriptLoader{
             "frontend/lib/jquery/plugin/he.js",
             //spectrum
             "frontend/lib/spectrum/spectrum.js",
-            //Bootsrap
+            //Bootstrap
             "frontend/lib/bootstrap/bootstrap.min.js",
             "frontend/lib/bootstrap-tour/bootstrap-tour-standalone.js",
             "frontend/lib/bootstrap/bootstrapvalidator.min.js",
@@ -30,7 +30,7 @@ class ScriptLoader{
             "frontend/lib/leaflet/plugin/togeojson.js",
             "frontend/lib/leaflet/plugin/leaflet.filelayer.js",
             "frontend/lib/leaflet/plugin/leaflet-image.js",
-            "frontend/lib/leaflet/plugin/OSMBuildings-Leaflet.js",
+            //"frontend/lib/leaflet/plugin/OSMBuildings-Leaflet.js",
             //Semantic UI
             "frontend/lib/semanticUi/semantic.min.js",
             "frontend/lib/semanticUi/components/transition.js",
@@ -131,7 +131,7 @@ class ScriptLoader{
             "frontend/src/export/map_print.js",
             "frontend/src/export/Export_Helper.js",
             //other elements
-            "frontend/src/request_manager.js",
+            "frontend/src/RequestManager.js",
             "frontend/src/alert_manager.js",
             "frontend/src/config.js",
             "frontend/src/search.js",
@@ -169,7 +169,7 @@ class ScriptLoader{
                     if(!window.location.href.includes("monitor_test")) {
                         let message = error.getErrorMessage(err);
                         alert_manager.alertError();
-                        request_manager.sendMailError(message.name, message.message);
+                        RequestManager.sendMailError(message.name, message.message);
                     }
                 }
             }
