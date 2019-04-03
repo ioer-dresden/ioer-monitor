@@ -55,7 +55,6 @@ const main_view = {
         }
     },
     initSplitterView:function(){
-        console.clear();
         console.warn("init Splitter View");
         const object = this;
         view_state.setViewState("mw");
