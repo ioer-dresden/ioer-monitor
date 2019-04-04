@@ -51,7 +51,7 @@ const map_link={
             $.when(RequestManager.handleLink(setting)).done(function (data) {
                 console.log(data);
                 if(data.state==="get") {
-                    window.location.href = `${urlparamter.getURLMonitor()}?${data.res[0]["array_value"]}`;
+                    window.location.href = `${window.location.href.split('?')[0]}?${data.res[0]["array_value"]}`;
                 }else{
                     alert_manager.alertError();
                 }

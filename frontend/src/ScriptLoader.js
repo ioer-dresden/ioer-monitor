@@ -137,7 +137,7 @@ class ScriptLoader{
             "frontend/src/search.js",
             "frontend/src/webtour.js",
             "frontend/src/track.js",
-            "frontend/src/main.js",
+            "frontend/app.js",
             "frontend/src/ToolLoader.js"
         ];
     }
@@ -158,7 +158,7 @@ class ScriptLoader{
         $.getMultiScripts(loader.scripts).done(function() {
             try {
                 //init the map with all there Functions
-                main.call(this);
+                App.main.call(this);
                 ToolLoader.initTools();
             }catch(err){
                 //IE is not supportet, otherwise there is an real error

@@ -418,7 +418,7 @@ const statistics = {
             // checks if Object has "value_comma" property and it is not empty, then fetches the value
             if (object.hasOwnProperty("value_comma") && object.value_comma !== "") {
                 //create object:
-                let obj = {name: object.gen, value: this.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
+                let obj = {name: object.gen, value: Helper.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
                 if (typeof obj.value == "number") {
                     valueArray.push(obj);
                 }
@@ -437,7 +437,7 @@ const statistics = {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
                 if (object["ags"] === this.chart.settings.ags) {
-                    currentValue = this.parseFloatCommaToPoint(object["value_comma"]);
+                    currentValue = Helper.parseFloatCommaToPoint(object["value_comma"]);
                 }
             }
         }
@@ -449,14 +449,10 @@ const statistics = {
     getAreaType: function (geoJSON) {
         return geoJSON["features"][0]["properties"]["des"];
     },
-
-    parseFloatCommaToPoint: function (string) {
-        return parseFloat(string.replace(',', '.'));
-    },
+    //TODO replace with Helper.dotTocomma(input)
     parseStringPointToComma:function(input){
         return input.toString().replace('.',',')
     },
-
     calculateStatistics: function (values, decimal) {
         let maxValue = Math.max(...values);
 
@@ -476,7 +472,6 @@ const statistics = {
             stDeviation: this.roundNumber(stDeviationValue, decimal)
         };
     },
-
     calculateAverage: function (values) {
         let total = 0;
 
@@ -486,7 +481,6 @@ const statistics = {
         }
         return total / values.length;
     },
-
     calculateMedian(values) {
 
         let median = 0,
@@ -501,7 +495,6 @@ const statistics = {
         }
         return median;
     },
-
     calculateStDeviation: function (values, average) {
 
         let squareDiffSum = null;
@@ -515,15 +508,12 @@ const statistics = {
         return Math.sqrt(squareDiffSum / (count - 1));
 
     },
-
     roundNumber: function (number, decimalSpaces) {
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
-
     getDecimalSpaces:function(geoJSON){
         return parseInt(geoJSON["features"][0]["properties"]["rundung"]);
     },
-
     sortObjectAscending: function (objectArray, key1, key2) {
         return objectArray.sort((function (a, b) {
             return a[key1] - b[key1] || a[key2] - b[key2];

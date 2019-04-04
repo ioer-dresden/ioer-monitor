@@ -31,7 +31,7 @@ const table = {
                 </div>
                 <div id="interact_div">
                     <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
-                        <i class="glyphicon glyphicon-chevron-right" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>erweitern</span></button>
+                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
                     <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />
@@ -40,11 +40,9 @@ const table = {
       `);
     },
     fill:function(){
-        const tableObject = this.getContainer();
-
         //array sorted by name
         let layer_array = _.sortBy(indikator_json_group.getLayerArray(),"gen"),
-            html_table = '<table id="table_ags" class="'+this.table_classes+'">',
+            html_table = `<table id="table_ags" class="${this.table_classes}">`,
             //create the main Table header --private functions
             createTableHeader=function(){
                 let value_text = `Wert (${indikatorauswahl.getIndikatorEinheit()})`,
@@ -58,8 +56,8 @@ const table = {
                     <th colspan="${colspan}" data-sorter="false" class="sorter-false" id="header_ind_set">${indikatorauswahl.getSelectedIndikatorText_Lang()} (${zeit_slider.getTimeSet()})</th>
                     </tr>
                     <tr class="header" id="second_row_head">
-                        <th class="th_head" data-export="false"></th>
-                        <th class="th_head" id="tr_rang" data-export="false">lfd. Nr.</th>
+                        <th class="th_head ${csv_export.ignoreClass}" data-export="false"></th>
+                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">lfd. Nr.</th>
                         <th class="th_head ags sort-arrow" data-export="true">AGS</th>
                         <th class="th_head gebietsname sort-arrow" data-export="true">Gebietsname</th>
                         <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${value_text}</th>`;
@@ -239,31 +237,21 @@ const table = {
 
                                     tfoot_ags += `<tfoot class="tfoot full-width">
                                                 <tr id="tfoot_${ags}">
-                                                    <th></th>
-                                                    <th colspan="2"></th>
-                                                    <th class="td_name">
-                                                        <img data-name="${value.gen}" 
+                                                    <th colspan="4" class="td_name">
+                                                        <img style="margin-left: 10px; margin-right: 10px;"
+                                                             data-name="${value.gen}" 
                                                              data-ags="${ags}" 
                                                              data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                              title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
                                                              class="indikatoren_gebietsprofil" 
                                                              src="frontend/assets/icon/indikatoren.png"/>
-                                                             <p>${name}</p>
+                                                             ${name}
                                                     </th>
                                                     <th class="val-ags" 
                                                         data-name="${value.gen}" 
                                                         data-val="${value_g}" 
                                                         data-ind="${indikatorauswahl.getSelectedIndikator()}">
                                                         ${value_set}
-                                                        <img data-name="Bundesrepublik" 
-                                                             data-ags="${ags}" 
-                                                             data-ind="${indikatorauswahl.getSelectedIndikator()}" 
-                                                             data-wert="${value_set}" 
-                                                             data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                                             title="Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators" 
-                                                             class="indikatoren_diagramm_ags histogramm_ags" 
-                                                             id="diagramm_ags_${ags}" 
-                                                             src="frontend/assets/icon/histogramm.png"/>
                                                         ${img_trend_ind+img_trend}
                                                      </th>`;
                                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
@@ -313,30 +301,20 @@ const table = {
                                           src="${dev_chart.icon.single.path}"/>`,
                             tfoot_brd = `<tfoot class="tfoot full-width">
                                     <tr id="tfoot_99">
-                                        <th></th>
-                                        <th colspan="2"></th>
-                                        <th class="td_name">
-                                            <img data-name="Bundesrepublik" 
+                                        <th colspan="4" class="td_name">
+                                            <img style="margin-left: 10px; margin-right: 10px;"
+                                                 data-name="Bundesrepublik" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                  title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
                                                  class="indikatoren_gebietsprofil" src="frontend/assets/icon/indikatoren.png"/>
-                                                 <p>Bundesrepublik</p>
+                                                 Bundesrepublik
                                         </th>
                                         <th class="val-ags" 
                                             data-name="Bundesrepublik" 
                                             data-val="${value_g}" 
                                             data-ind="${indikatorauswahl.getSelectedIndikator()}">
                                             ${value_g}
-                                            <img data-name="Bundesrepublik" 
-                                                 data-ags="99" 
-                                                 data-ind="${indikatorauswahl.getSelectedIndikator()}" 
-                                                 data-wert="${value_g}" 
-                                                 data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                                 title="Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators" 
-                                                 class="indikatoren_diagramm_ags histogramm_ags" 
-                                                 id="diagramm_ags_99" 
-                                                 src="frontend/assets/icon/histogramm.png"/>
                                             ${img_trend_ind+img_trend}
                                         </th>`;
 
@@ -491,7 +469,6 @@ const table = {
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if(count===10){
-                    console.log(id);
                     let colspan_th = $('#header_ind_set'),
                         rowspan_head = parseFloat(colspan_th.attr("colspan")),
                         einheit_txt = '('+einheit+')';
@@ -578,7 +555,7 @@ const table = {
 
                     if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
                         x = x+2;
-                        td_grund = '<th class="'+class_expand+' header">'+$('#grundakt_head').text()+'</th><th class="'+class_expand+' header">Aktualitäts- Differenz (Jahre,dezimal)</th>';
+                        td_grund = '<th class="'+class_expand+' header">'+$('#grundakt_head').text()+'</th><th class="'+class_expand+' header">Aktualitäts- Differenz</th>';
                     }
                     if(expand_panel.getDifferenceState()){
                         x=x+1;
@@ -634,7 +611,8 @@ const table = {
                         if(expand_panel.getDifferenceState()){
                             //create the difference view
                             let value_ind = parseFloat((value_brd).replace(',', '.'));
-                            let value_ags = parseFloat(footer_brd.find('.val-ags').find('b').text().replace(',', '.'));
+                            let value_ags = parseFloat(footer_brd.find('.val-ags').text().replace(',', '.'));
+                            console.warn(value_ind,value_ags);
                             $('#expand_diff_footer_99'+key_time_shift).html(getDifferenceDiv(value_ind,value_ags));
                         }
                     });
@@ -669,7 +647,7 @@ const table = {
                                 if(expand_panel.getDifferenceState()){
                                     //create the difference view
                                     let value_ind = parseFloat((value_bld).replace(',', '.'));
-                                    let value_ags = parseFloat($('#tfoot_'+value).find('.val-ags').find('b').text().replace(',', '.'));
+                                    let value_ags = parseFloat($('#tfoot_'+value).find('.val-ags').text().replace(',', '.'));
                                     //$('#tfoot_'+value).append('<td class="'+class_expand+'">'+getDifferenceDiv(value_ind,value_ags)+'</td>');
                                     $('#expand_diff_footer_'+value).html(getDifferenceDiv(value_ind,value_ags));
                                 }

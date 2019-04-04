@@ -85,11 +85,6 @@ Scriptloader imports all Scripts into the DOM, the others are needed for IE
 <script>
     const scriptLoader = new ScriptLoader();
     scriptLoader.includeScripts();
-    document.addEventListener("DOMContentLoaded", function(event) {
-        setTimeout(function(){
-            document.getElementById("loading_circle").remove();
-        },2000);
-    });
 </script>
 </body>
 </html>

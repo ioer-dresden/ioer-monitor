@@ -39,14 +39,16 @@ const csv_export = {
                         //push all table header in array
                         // Quelle:https://tableexport.v5.travismclarke.com
                             .then(TableHelper.destroyStickyTableHeader())
+                            .then(TableHelper.destroyTableSorter())
                             .then(function(){let exportTable = table.getDOMObject()
                                                         .tableExport({
                                                             formats: ['csv'],
                                                             headers: true,
-                                                            footers: false,
+                                                            footers: true,
                                                             filename: indikatorauswahl.getSelectedIndikator() + "_" + gebietsauswahl.getSelectionAsString() + "_" + zeit_slider.getTimeSet(),
                                                             trimWhitespace: true,
-                                                            ignoreCols: [0, 1],
+                                                            bootstrap: false,
+                                                            //ignoreCols: [0, 1],
                                                             exportButtons: false,
                                                             ignoreCSS: "." + csv_export.ignoreClass
                                                         });
@@ -57,6 +59,8 @@ const csv_export = {
                                                             clearInterval(interval);
                                                             Export_Helper.downloadFile(exportData.data, exportData.filename, exportData.fileExtension);
                                                             resetLoadIcon();
+                                                            TableHelper.setTableSorter();
+                                                            TableHelper.setStickTableHeader();
                                                             setTimeout(function () {
                                                                 csv_export.state = false;
                                                             }, 1000);

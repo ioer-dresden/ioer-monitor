@@ -191,13 +191,6 @@ const expand_panel = {
         this.create();
         this.fill();
         this.controller.set();
-        //don`t enable function on mobile devices
-        if(main_view.getMobileState()){
-            this.disable();
-        }else{
-            this.enable();
-        }
-
     },
     create:function(){
         $('#tabelle_erweitern').html(`
@@ -287,12 +280,6 @@ const expand_panel = {
                         <span>zurücksetzen</span>
                     </button>
       `);
-    },
-    disable:function(){
-        this.getOpenButtonObject().hide();
-    },
-    enable:function(){
-        this.getOpenButtonObject().show();
     },
     clear:function(){
         this.expandArray = [];
@@ -454,14 +441,17 @@ const expand_panel = {
                         }
                     },
                     onAdd: function (addedValue, addedText, $addedChoice) {
+                        let time_set = parseInt(zeit_slider.getTimeSet());
                         if(addedValue === 'brd'){
-                            expand_panel.expandArray.push({id:addedValue,text:'Gesamte Bundesrepublik ('+zeit_slider.getTimeSet()+')',time:zeit_slider.getTimeSet(),einheit:false, count: 15});
+                            expand_panel.expandArray.push({id:addedValue,text:'Gesamte Bundesrepublik ('+time_set+')',time:time_set,einheit:false, count: 15});
                         }
                         else if(addedValue === 'bld'){
-                            expand_panel.expandArray.push({id:addedValue,text:'Bundesland ('+zeit_slider.getTimeSet()+')',time:zeit_slider.getTimeSet(),einheit:false,count: 15});
+                            expand_panel.expandArray.push({id:addedValue,text:'Bundesland ('+time_set+')',time:time_set,einheit:false,count: 15});
                         }
                         else{
-                            expand_panel.expandArray.push({id:addedValue,text:addedText,time:zeit_slider.getTimeSet(),einheit:false,count: 10});
+                            //workaround für 2018er Werte-> nicht in der DB
+                            if(addedValue==="B00AG" && time_set===2018){time_set=2017;}
+                            expand_panel.expandArray.push({id:addedValue,text:addedText,time:time_set,einheit:false,count: 10});
                         }
                         $(this).blur();
                     },

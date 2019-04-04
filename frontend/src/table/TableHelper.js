@@ -70,6 +70,9 @@ class TableHelper{
     static updateTableSorter(){
         table.getDOMObject().trigger("update");
     }
+    static destroyTableSorter(){
+        table.getDOMObject().trigger("destroy");
+    }
     //create the fixed table header on scroll
     static setStickTableHeader(){
         table.getDOMObject().stickyTableHeaders({
