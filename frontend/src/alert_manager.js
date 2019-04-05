@@ -44,7 +44,7 @@ const alert_manager= {
         setTimeout(function(){
             swal(
                 "Es ist ein Problem aufgetreten",
-                "Bitte leeren Sie ihren Browser-Cache und laden die Anwendung neu oder kontaktieren Sie uns über das Feedback Formular.",
+                "Bitte versuchen Sie es später nochmal oder kontaktieren Sie uns über das Feedback Formular.",
                 "error"
             );
             progressbar.remove();
