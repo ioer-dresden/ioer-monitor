@@ -794,18 +794,20 @@ const table = {
                 .click(function(){
                     let ags = $(this).data('ags'),
                         name = $(this).data('name');
-                    openGebietsprofil(ags,name);
+                    Gebietsprofil.open(ags,name);
                 });
             //development chart button
             $('.indikatoren_diagramm_ags')
                 .unbind()
                 .click(function() {
-                    statistics.chart.settings.ags=$(this).data('ags').toString();
-                    statistics.chart.settings.name=name;
-                    statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
-                    statistics.chart.settings.allValuesJSON  = indikator_json.getJSONFile();
-                    statistics.chart.settings.indText=indikatorauswahl.getSelectedIndikatorText();
-                    statistics.chart.settings.indUnit=indikatorauswahl.getIndikatorEinheit();
+                    statistics.chart.settings = {
+                        ags: $(this).data('ags').toString(),
+                        name: $(this).data('name'),
+                        ind: indikatorauswahl.getSelectedIndikator(),
+                        allValuesJSON: indikator_json.getJSONFile(),
+                        indText: indikatorauswahl.getSelectedIndikatorText(),
+                        indUnit: indikatorauswahl.getIndikatorEinheit()
+                    };
                     statistics.open();
                 });
             //development chart single ind
@@ -819,7 +821,7 @@ const table = {
                         dev_chart.chart.settings.ags = ags;
                         dev_chart.chart.settings.name = name;
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ind_vergleich = false;
+                        dev_chart.chart.settings.ind_vergleich = true;
                         dev_chart.open();
                     });
 
@@ -833,7 +835,7 @@ const table = {
                         dev_chart.chart.settings.ags = ags;
                         dev_chart.chart.settings.name = name;
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ind_vergleich = true;
+                        dev_chart.chart.settings.ind_vergleich = false;
                         dev_chart.open();
                     });
             }

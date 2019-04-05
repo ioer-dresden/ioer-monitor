@@ -1,5 +1,5 @@
 <?php
-session_start(); // Sitzung starten/ wieder aufnehmen
+header('Access-Control-Allow-Origin: *');
 header('Content-type: text/html; charset=utf-8');
 
 include("../database/db_manager.php");
