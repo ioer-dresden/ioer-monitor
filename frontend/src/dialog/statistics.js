@@ -418,7 +418,7 @@ const statistics = {
             // checks if Object has "value_comma" property and it is not empty, then fetches the value
             if (object.hasOwnProperty("value_comma") && object.value_comma !== "") {
                 //create object:
-                let obj = {name: object.gen, value: Helper.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
+                let obj = {name: object.gen, value: helper.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
                 if (typeof obj.value == "number") {
                     valueArray.push(obj);
                 }
@@ -437,7 +437,7 @@ const statistics = {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
                 if (object["ags"] === this.chart.settings.ags) {
-                    currentValue = Helper.parseFloatCommaToPoint(object["value_comma"]);
+                    currentValue = helper.parseFloatCommaToPoint(object["value_comma"]);
                 }
             }
         }
