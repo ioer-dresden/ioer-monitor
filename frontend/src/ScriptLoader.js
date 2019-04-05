@@ -69,6 +69,7 @@ class ScriptLoader{
             "frontend/src/models/base_raumgliederung.js",
             "frontend/src/models/exclude.js",
             "frontend/src/auto_complete.js",
+            "frontend/src/models/MigrationValue.js",
             //menu
             "frontend/src/menu/raeumliche_visualisierung.js",
             "frontend/src/menu/raeumliche_analyseebene.js",
@@ -123,7 +124,7 @@ class ScriptLoader{
             "frontend/src/dialog/kennblatt.js",
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",
-            "frontend/src/dialog/dialog.js",
+            "frontend/src/dialog/Gebietsprofil.js",
             "frontend/src/dialog/AdditiveLayerControl.js",
             //export
             "frontend/src/export/ogc_export.js",

@@ -218,7 +218,7 @@ const indikator_json = {
             /*$.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
                 console.log(data);
             }));*/
-            openGebietsprofil(ags,gen);
+            Gebietsprofil.open(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
