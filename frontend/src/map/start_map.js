@@ -12,7 +12,7 @@ const start_map= {
     },
     set:function(){
         this.state=true;
-        layer_control.remove();
+        additiveLayer.remove();
 
         this.layer = start_map.getLeafletJSON();
         this.layer.addTo(map);
@@ -36,7 +36,7 @@ const start_map= {
             this.layer.removeFrom(map);
         }catch(err){}
         this.state=false;
-        layer_control.init();
+        additiveLayer.init();
         map_header.show();
     }
 };

@@ -31,7 +31,7 @@ const indikator_json = {
         }
 
         //info how much geomtries will be created and afterwards stat the creation
-        $.when(request_manager.getCountGeometries(raumgliederung_set)).done(function (x) {
+        $.when(RequestManager.getCountGeometries(raumgliederung_set)).done(function (x) {
                 var interval = setInterval(function () {
                     if (progressbar.getContainer().is(":visible")) {
                         clearInterval(interval);
@@ -41,7 +41,7 @@ const indikator_json = {
                 },10);
         });
 
-        $.when(request_manager.getGeoJSON(ind, time, raumgliederung_set, ags_set,klassenanzahl.getSelection(),klassifzierung.getSelectionId()))
+        $.when(RequestManager.getGeoJSON(ind, time, raumgliederung_set, ags_set,klassenanzahl.getSelection(),klassifzierung.getSelectionId()))
             .done(function(arr){
                 //now we have access to array of data
                 try{
@@ -119,7 +119,7 @@ const indikator_json = {
         indikator_json_group.addToMap();
         //create the banner
         map_header.set();
-        if(layer_control.zusatzlayer.getState()){layer_control.zusatzlayer.setForward()}
+        if(additiveLayer.zusatzlayer.getState()){additiveLayer.zusatzlayer.setForward()}
     },
     setPopUp:function(e){
         let text={
@@ -210,16 +210,19 @@ const indikator_json = {
 
         let bounds = layer.getBounds();
         let popup = L.popup()
-            .setLatLng(bounds.getCenter())
+            .setLatLng(e.latlng)
             .setContent(div)
             .openOn(map);
 
-
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
+            /*$.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
+                console.log(data);
+            }));*/
             openGebietsprofil(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
+            console.log(ags);
             statistics.chart.settings.ags=ags;
             statistics.chart.settings.name=gen;
             statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
@@ -312,7 +315,7 @@ const indikator_json = {
             layer.setStyle(style.getLayerStyle(layer.feature.properties.value));
             $('#thead').show();
             $('#' + ags).removeClass("hover");
-            layer_control.zusatzlayer.setForward();
+            additiveLayer.zusatzlayer.setForward();
             try {
                 let fillcolor = layer.options.fillColor.replace('#', '');
                 $('#legende_' + fillcolor + " i").css({"width": "15px", "height": "10px", "border": ""});

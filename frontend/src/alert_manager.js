@@ -1,5 +1,4 @@
-//leave function
-//ToDo noch auf EN umschreiben
+//collecteions of alerts using sweet alert for bootstrap: https://sweetalert2.github.io/
 const alert_manager= {
     leaveESCInfo: function (title,message) {
         let _title=function(){

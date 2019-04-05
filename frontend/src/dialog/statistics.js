@@ -1,5 +1,7 @@
 const statistics = {
     endpoint_id: "statistics_content",
+    //toolbar selector
+    selector_toolbar:"#ind_stat",
     text: {
         de: {
             title: "Statistik",
@@ -28,10 +30,11 @@ const statistics = {
             value:"Wert",
             values:"Werte",
             probDensity:"Wahrscheinlichkeitsdichte",
-            cumulativeDistribution:"Verteilungsfunktion",
+            cumulativeDistribution:"Kumulative Verteilung",
             intervalCount:"Anzahl Intervale",
             interval:"Intervall",
-            selectChart:"Diagramm wählen"
+            selectChart:"Diagramm wählen",
+            download:"Diagramm herunterladen"
 
         },
         en: {
@@ -64,12 +67,44 @@ const statistics = {
             cumulativeDistribution:"Cumulative distribution",
             intervalCount:"Interval count",
             interval:"Interval",
-            selectChart:"Select chart"
+            selectChart:"Select chart",
+            download:"Download Chart"
 
 
         }
     },
+    init:function(){
+        //disable element for raster view and enable for gebiete view
+        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
+            helper.disableElement(this.selector_toolbar,exclude.disable_text);
+        }else{
+            helper.enableElement(this.selector_toolbar,$(this.chart_selector_toolbar).data("title"));
+        }
+        this.controller.set();
+    },
+    controller:{
+        set:function(){
+            $(document).on("click", statistics.selector_toolbar, function () {
+                let callback = function () {
+                    if (Dialoghelper.getAGS_Input()) {
+                        statistics.chart.settings.ags = Dialoghelper.getAGS_Input().toString();
+                        statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
+                        statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                        statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
+                        statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
+                        statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
+                        statistics.open();
 
+                    }
+                };
+                try {
+                    Dialoghelper.setSwal(callback);
+                } catch (err) {
+                    alert_manager.alertError();
+                }
+            });
+        }
+    },
     open: function () {
 
         let lan = language_manager.getLanguage(),
@@ -78,10 +113,11 @@ const statistics = {
         chart.settings.lan=lan;
         // todo REINIS REFACTOR the getting of Data Values TO init:function(..){....} !!!  Here only the Visualisation Data-, html binding!
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
+        chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
         chart.settings.currentValue = this.getCurrentValue(geoJSON);
         chart.settings.areaCount = this.getAreaCount(geoJSON);
         chart.settings.areaType = this.getAreaType(geoJSON);
-        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray));
+        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
         chart.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
         chart.data = this.getDistributionFunctionValues(chart.data);
         chart.data = this.getDeviationValues(chart.data, this.chart.settings.statistics.average);
@@ -92,55 +128,53 @@ const statistics = {
         let html = he.encode(`
              <div class="jq_dialog" id="${this.endpoint_id}">
                 <div class="container">
-                    <div class="header" id="statistics_header">               
-                        <h4>${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
-                        <h2>${chart.settings.indText}</h2>
-                        <h3 id="selectedArea">${chart.settings.name}</h3>
-                        <h6 id="selectedAGS">AGS: ${chart.settings.ags}</h6>
-                        <h6 id="timeStamp">${this.text[lan].time}: ${timeStamp}</h6>
-                        <h6 id="currentValue">${this.text[lan].indicator}: ${chart.settings.indText}  </h6>
-                        <h6 id="currentValue">${this.text[lan].value}: ${chart.settings.currentValue} ${chart.settings.indUnit}</h6>
+                    <div >               
+                        <h4">${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
+                        <h2>${chart.settings.indText} (${timeStamp})</h2>
                     </div>
-                    <hr />
-                    <div class="table" id="statistics_table"> 
-                    <h4 style="text-align:center;">${this.text[lan].info}</h4>
-                    <table id="statistics_table" >
+                    <br/>
+                  <div id="statistics_info_container">
+                    <div id="area_info"}>
+                        <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
+                        <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
+                    </div>
+                    
+                    <div id="statistics_table_container" align="center"> 
+                    
+                    <h4 id="table_title">${this.text[lan].info}</h4>
+                    <table id="statistics_table" align="center">
                           <tr class="uneven">
-                            <td class="table_element">${this.text[lan].areaCount}</td>
-                            <td class="table_element">${chart.settings.allValuesObjectArray.length}  ${chart.settings.areaType}</td>
-                           
-                            
+                            <td class="table_element" >${this.text[lan].areaCount}</td>
+                            <td class="table_element" align="right">${chart.settings.allValuesObjectArray.length}</td>                         
                           </tr>
                           <tr class="even">
                             <td class="table_element">${this.text[lan].average}</td>
-                            <td class="table_element">${chart.settings.statistics.average}  ${chart.settings.indUnit}</td>
-                    
-                            
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.average)}  ${chart.settings.indUnit}</td>
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].median}</td>
-                            <td class="table_element">${chart.settings.statistics.median}  ${chart.settings.indUnit}</td>
-                           
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.median)}  ${chart.settings.indUnit}</td>                           
                           </tr>
                           <tr class="even">
-                            <td class="table_element">${this.text[lan].stDev}</td>
-                            <td class="table_element">${chart.settings.statistics.stDeviation}  ${chart.settings.indUnit}</td>
-                            
+                            <td class="table_element" >${this.text[lan].stDev}</td>
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.stDeviation)}  ${chart.settings.indUnit}</td>                            
                           </tr>
                           <tr class="uneven">
                             <td class="table_element">${this.text[lan].max}</td>
-                            <td class="table_element">${chart.settings.statistics.max}  ${chart.settings.indUnit}</td>
-                            
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.max)}  ${chart.settings.indUnit}</td>                            
                           </tr class="even">                          <tr>
                             <td class="table_element">${this.text[lan].min}</td>
-                            <td class="table_element">${chart.settings.statistics.min}  ${chart.settings.indUnit}</td>
-                          </tr>
-                          
+                            <td class="table_element" align="right">${this.parseStringPointToComma(chart.settings.statistics.min)}  ${chart.settings.indUnit}</td>
+                          </tr>                          
                     </table>
                     </div>
-                    <div id="chart_select_container" class="ui form" style="margin-left: 60px">
+                  </div>
+                    
+                    <hr />
+                    
+                    <div id="chart_select_container" class="ui form">
                         <div class="fields">
-                            <div class="field">
+                            <div class="field" >
                                 <label>${this.text[lan].selectChart}:</label>
                                     <div id="chart_ddm_diagramm" class="ui selection dropdown">
                                         <i class="dropdown icon"></i>    
@@ -153,24 +187,38 @@ const statistics = {
                               
                                     </div>
                                 </div>
-                               <div class="two wide field" id="classCountInput">
+
+                        </div>
+                             <div class="inline field" id="classCountInput" align="right">
                                    <label>${this.text[lan].intervalCount}:</label>                                
                                    <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
-                               </div>
-                        </div>
+                             </div>
                     </div>
-                    <div id="container_diagramm" class="container_diagramm">
-                        <div id="diagramm">
-                            <h3 class="Hinweis_diagramm" id="Hinweis_diagramm_empty">${this.text[lan].no_choice}</h3>
-                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}</h3>
-                            <svg id="statistics_visualisation" height="100"></svg>
+                    <div id="statistics_container_diagramm" class="container_diagramm">
+                        <div id="statistics_diagramm";">
+                            <svg id="statistics_visualisation"></svg>
+                            <div id="tooltip"></div>
+                            <div id="intervalInfo"></div>
                         </div>
-                        <div id="tooltip"></div>
-                        <div id="intervalInfo"></div>
                     </div>
                 </div>
-            </div>
-                                  `);
+            </div>`);
+
+        /* TO BE INCLUDED TO ENABLE DOWNLOAD OF GRAPH AS PDF PNG
+
+                                <div class="field">
+                                <label>${this.text[lan].download}:</label>
+                                    <div id="diagramm_download" class="ui selection dropdown">
+                                        <i class="dropdown icon"></i>
+                                        <div class="text">${this.text[lan].choice}</div>
+                                        <div class="menu">
+                                            <div class="item" data-format="png">PNG</div>
+                                            <div class="item" data-format="pdf">PDF</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+         */
 
         //settings for the manager
         dialog_manager.instructions.endpoint = `${this.endpoint_id}`;
@@ -188,6 +236,7 @@ const statistics = {
             ind: "",
             indText: "",
             indUnit: "",
+            decimalSpaces:0,
             name: "",
             allValuesJSON: "",
             currentValue: "",
@@ -207,29 +256,20 @@ const statistics = {
         data: [],
         init: function () {
 
-            // Setting dynamic visualisation dimensions
-            const container_height= dialog_manager.calculateHeight()-$("#statistics_header").height()-$("#statistics_table").height()-$("#chart_select_container").height(),
-                container_width=dialog_manager.calculateWidth();
-            $("#statistics_content #statistics_visualisation").height(container_height);
-            $("#statistics_content #statistics_visualisation").width(container_width);
-
-
-            let svg = d3.select("#statistics_content #statistics_visualisation"),
+            const svg = d3.select("#statistics_content #statistics_visualisation"),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
-                diagram = $('#statistics_content #diagramm'),
 
-                chart_width = diagram.width() - margin.left - margin.right,
-                chart_height = $('.ui-dialog').height() * (1.5 / 3) - 100,
+                // Setting dynamic visualisation dimensions
+                container_height=$('.ui-dialog').height() * (2 / 3) - 100,
+                container_width=$("#statistics_content .container").width();
+
+            $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
+
+            const diagram = $('#statistics_content #statistics_diagramm'),
+
+                chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
+                chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
-            console.log("container height: "+ container_height);
-            console.log("container width: "+container_width);
-            //Set table css styling
-            $(".table #statistics_table").css({    "margin-left":"auto",
-                "margin-right":"auto"});
-            $(".table_element").css({"border":"1px solid black","padding":"5px"});
-            $(".even").css({"background-color":"white"});
-            $(".uneven").css({"background-color":"gainsboro"});
-
 
             //reset the default visualisation style, start drawing
             chart.settings.selectedChart="valueChart";
@@ -249,27 +289,34 @@ const statistics = {
 
                 chart_auswahl.dropdown({
                     onChange: function (value) {
-                        if (value === 'valueChart') {
-                            chart.settings.selectedChart='valueChart';
-                            visualisation.empty();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.hide();
+                        switch (value) {
+                            case "valueChart":
+                                chart.settings.selectedChart='valueChart';
+                                visualisation.empty();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.hide();
+                                break;
 
-                        } else if (value === 'densityChart') {
-                            chart.settings.selectedChart='densityChart';
-                            visualisation.empty();
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.show();
-                            tooltip.hide();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
-                        } else if (value==='distributionChart'){
-                            chart.settings.selectedChart='distributionChart';
-                            visualisation.empty();
-                            chart_auswahl.dropdown("hide");
-                            classCountInput.hide();
-                            tooltip.hide();
-                            chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                            case "densityChart":
+                                chart.settings.selectedChart='densityChart';
+                                visualisation.empty();
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.show();
+                                tooltip.hide();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                break;
+                            case "distributionChart":
+                                chart.settings.selectedChart='distributionChart';
+                                visualisation.empty();
+                                chart_auswahl.dropdown("hide");
+                                classCountInput.hide();
+                                tooltip.hide();
+                                chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
+                                break;
+                            default:
+                                alert("Error, no chart Type selected!")
+
                         }
                     }
                 });
@@ -282,14 +329,8 @@ const statistics = {
                 classCountInput.hide();
                 classCountInput.on('change', function(e) {
                     let inputClassCount=$("#classCountInputField").val();
-                    console.log("ClassCount! "+inputClassCount);
-                    console.log("Data length: "+chart.data.length);
-
 
                     $("#classCountInputField").val(inputClassCount);
-                    console.log("Too much! "+inputClassCount);
-                    console.log(chart_auswahl.attr("class"));
-
                     chart.settings.densityIntervalCount=inputClassCount;
                     visualisation.empty();
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
@@ -316,7 +357,7 @@ const statistics = {
                         averageName:statistics.text[chart.settings.lan].average,
                         xValue:"",
                         yValue:"",
-                        selectedValue:chart.settings.ags,
+                        selectedAGS:chart.settings.ags,
                         indUnit:chart.settings.indUnit,
                         mean:chart.settings.statistics.average,
                         stDeviation:chart.settings.statistics.stDeviation,
@@ -341,7 +382,7 @@ const statistics = {
                     // Bar graph of Density function!
                     //todo REINIS add the ClassCount selector!!
                     let classCount= chart.settings.densityIntervalCount;
-                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount); // separate indicator values into intervals to display in density chart
+                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount,chart.settings.decimalSpaces); // separate indicator values into intervals to display in density chart
                     parameters.xAxisName=(statistics.text[chart.settings.lan].deviation);
                     parameters.yAxisName=statistics.text[chart.settings.lan].probability;
                     parameters.xValue="intervalMiddle";
@@ -353,7 +394,7 @@ const statistics = {
                     // Line graph, distribution Function !!!!!
                     parameters.data=statistics.sortObjectAscending(chart.data, "distFuncValue", "ags");
                     parameters.xAxisName=statistics.text[chart.settings.lan].values;
-                    parameters.yAxisName=statistics.text[chart.settings.lan].probability;
+                    parameters.yAxisName=statistics.text[chart.settings.lan].cumulativeDistribution;
                     parameters.xValue="value";
                     parameters.yValue="distFuncValue";
 
@@ -377,13 +418,17 @@ const statistics = {
             // checks if Object has "value_comma" property and it is not empty, then fetches the value
             if (object.hasOwnProperty("value_comma") && object.value_comma !== "") {
                 //create object:
-                let obj = {name: object.gen, value: this.parseFloatWithComma(object.value_comma), ags: object.ags};
+                let obj = {name: object.gen, value: helper.parseFloatCommaToPoint(object.value_comma), ags: object.ags};
                 if (typeof obj.value == "number") {
                     valueArray.push(obj);
+                }
+                else {
+                    console.log("The JSON Object either has no value_comma property!!")
                 }
             }
         }
         return valueArray;
+
     },
     getCurrentValue: function (geoJSON) {
         let currentValue = null;
@@ -392,43 +437,41 @@ const statistics = {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
                 if (object["ags"] === this.chart.settings.ags) {
-                    currentValue = this.parseFloatWithComma(object["value_comma"]);
+                    currentValue = helper.parseFloatCommaToPoint(object["value_comma"]);
                 }
             }
         }
         return currentValue;
     },
-
     getAreaCount: function (geoJSON) {
         return Object.keys(geoJSON["features"]).length
     },
     getAreaType: function (geoJSON) {
         return geoJSON["features"][0]["properties"]["des"];
     },
-
-    parseFloatWithComma: function (string) {
-        return parseFloat(string.replace(',', '.'));
+    //TODO replace with Helper.dotTocomma(input)
+    parseStringPointToComma:function(input){
+        return input.toString().replace('.',',')
     },
-    calculateStatistics: function (values) {
+    calculateStatistics: function (values, decimal) {
         let maxValue = Math.max(...values);
-        console.log("Max: " + maxValue);
+
         let minValue = Math.min(...values);
-        console.log("Min: " + minValue);
+
         let averageValue = this.calculateAverage(values);
-        console.log("avg: " + averageValue);
+
         let medianValue = this.calculateMedian(values);
-        console.log("median: " + medianValue);
+
         let stDeviationValue = this.calculateStDeviation(values, averageValue);
-        console.log("stdev: " + stDeviationValue);
+
         return {
-            max: this.roundNumber(maxValue),
-            min: this.roundNumber(minValue),
-            average: this.roundNumber(averageValue),
-            median: this.roundNumber(medianValue),
-            stDeviation: this.roundNumber(stDeviationValue)
+            max: this.roundNumber(maxValue,decimal),
+            min: this.roundNumber(minValue, decimal),
+            average: this.roundNumber(averageValue, decimal),
+            median: this.roundNumber(medianValue, decimal),
+            stDeviation: this.roundNumber(stDeviationValue, decimal)
         };
     },
-
     calculateAverage: function (values) {
         let total = 0;
 
@@ -438,7 +481,6 @@ const statistics = {
         }
         return total / values.length;
     },
-
     calculateMedian(values) {
 
         let median = 0,
@@ -453,7 +495,6 @@ const statistics = {
         }
         return median;
     },
-
     calculateStDeviation: function (values, average) {
 
         let squareDiffSum = null;
@@ -463,19 +504,20 @@ const statistics = {
             let sqr = diff * diff;
             squareDiffSum = squareDiffSum + sqr;
         }
-        let stDeviation = Math.sqrt(squareDiffSum / (count - 1));
-        return stDeviation;
+
+        return Math.sqrt(squareDiffSum / (count - 1));
 
     },
-    roundNumber: function (number) {
-        return Math.round(parseFloat(number) * 100) / 100
+    roundNumber: function (number, decimalSpaces) {
+        return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
-
+    getDecimalSpaces:function(geoJSON){
+        return parseInt(geoJSON["features"][0]["properties"]["rundung"]);
+    },
     sortObjectAscending: function (objectArray, key1, key2) {
-        let sortedData = objectArray.sort((function (a, b) {
+        return objectArray.sort((function (a, b) {
             return a[key1] - b[key1] || a[key2] - b[key2];
         }));
-        return sortedData;
     },
     getOnlyValues: function (objectArray) {
         let valueArray = [];
@@ -489,7 +531,6 @@ const statistics = {
             sumTillNow = 0,
             distributionFuncObjectArray = [],
             min=sortedObjectArray[0].value;
-        console.log("min: "+sortedObjectArray[0].value);
         for (let num in sortedObjectArray) {
             totalSum += sortedObjectArray[num].value-min;
         }
@@ -514,7 +555,7 @@ const statistics = {
         return deviationArray
     },
 
-    getDensityFunctionIntervalValues: function(data,classCount) {
+    getDensityFunctionIntervalValues: function(data,classCount,decimal) {
         let densityFunctionObjectArray = [];
 
         data = this.sortObjectAscending(data, "deviation", "ags");
@@ -526,43 +567,69 @@ const statistics = {
         for (let i = 0; i < classCount; i++) {
             let counter = 0,
                 intervalElementValues=[],
-                intervalElements=[];
-            intervalUpperLimit = intervalLowerLimit + classSize;
-            intervalMiddle=intervalLowerLimit+(intervalUpperLimit-intervalLowerLimit)/2;
+                intervalElements=[],
+                intervalUpperLimit = intervalLowerLimit + classSize,
+                intervalMiddle=intervalLowerLimit+(intervalUpperLimit-intervalLowerLimit)/2;
             for (let elem in data) {
                 if (data[elem].deviation >= intervalLowerLimit && data[elem].deviation <= intervalUpperLimit) {
                     counter++;
-                    let element={name:data[elem].name, value:data[elem].value, deviation:data[elem].deviation};
+                    let element={name:data[elem].name, ags:data[elem].ags, value:data[elem].value, deviation:data[elem].deviation};
                     intervalElementValues.push(data[elem].deviation);
                     intervalElements.push(element);
                 }
             }
             let averageClassValue=Math.round(this.calculateAverage(intervalElementValues) * 1000) / 1000,
-                probability=counter/data.length,
+                probability=counter/data.length*100,  // Probability in PERCENT!
 
-                classObject = {intervalUpperLimit:intervalUpperLimit, intervalLowerLimit:intervalLowerLimit,intervalMiddle:intervalMiddle,  count:counter, probability: probability, intervalAverageValue:averageClassValue, elements:intervalElements};
+                classObject = {intervalUpperLimit:statistics.roundNumber(intervalUpperLimit,decimal), intervalLowerLimit: statistics.roundNumber(intervalLowerLimit, decimal),intervalMiddle:statistics.roundNumber(intervalMiddle,decimal),  count:counter, probability: statistics.roundNumber(probability,decimal+1), intervalAverageValue: statistics.roundNumber(averageClassValue, decimal), elements:intervalElements};
             intervalLowerLimit=intervalUpperLimit;
             densityFunctionObjectArray.push(classObject);
         }
-        console.log("Min Max: "+ max+ " "+min);
         return densityFunctionObjectArray;
     },
 
+    findSelectedAreaInInterval:function(intervalArray, selectedValue){
+
+        let x = 0,
+            y = 0,
+            name="",
+            deviation=0,
+            found=false;
+        //find the x!
+        for (let interval in intervalArray) {
+            for (let elem in intervalArray[interval].elements)
+                if (intervalArray[interval].elements[elem].ags === selectedValue) {
+                    x = intervalArray[interval].elements[elem].deviation;
+                    y= intervalArray[interval].probability;
+                    name= intervalArray[interval].elements[elem].name;
+                    deviation= intervalArray[interval].elements[elem].deviation;
+                    found=true;
+                }
+            if (found){
+                break;
+            }
+        }
+
+        return {x:x,y:y, name:name, deviation:deviation};
+
+    },
+
     drawOrderedValuesChart: function (parameters) {
+        const tooltip = $("#tooltip");
         let data = parameters.data,
             xValue = parameters.xValue,
             yValue = parameters.yValue,
             xAxisName = parameters.xAxisName,
             yAxisName = parameters.yAxisName,
             averageName=parameters.averageName,
-            selectedValue = parameters.selectedValue,
+            selectedAreaAGS = parameters.selectedAGS,
             indUnit = parameters.indUnit,
             mean = parameters.mean,
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
             margins = parameters.margins,
-            chart_width = parameters.chart_width-margins.left-margins.right,
-            chart_height = parameters.chart_height-margins.top-margins.bottom,
+            chart_width = parameters.chart_width,
+            chart_height = parameters.chart_height,
 
             maxValue = d3.max(data, function (d, i) {
                 return d[yValue];
@@ -570,8 +637,8 @@ const statistics = {
             minValue = d3.min(data, function (d, i) {
                 return d[yValue]
             }),
-            selectedObject = data.find(function (obj) {
-                return obj[xValue] === selectedValue
+            selectedArea = data.find(function (obj) {
+                return obj[xValue] === selectedAreaAGS
             });
         if (minValue >= 0) {
             minValue = 0
@@ -606,7 +673,6 @@ const statistics = {
                 return xScale(d[xValue]);
             })
             .attr("y", function (d) {
-                let max = Math.max(0, d[yValue]);
                 return yScale(Math.max(0, d[yValue]));
             })
             .attr('width', xScale.bandwidth())
@@ -614,7 +680,7 @@ const statistics = {
                 return Math.abs(yScale(d[yValue]) - yScale(0));
             })
             .attr("fill", function (d) {
-                if (d[xValue] === selectedValue) {
+                if (d[xValue] === selectedAreaAGS) {
                     return "red";
                 }
                 return  klassengrenzen.getColor(d[yValue]);
@@ -628,13 +694,13 @@ const statistics = {
                 } else return 0
             })
             .on("mouseover", function (d) {
-                let html = d.name + "<br/>" + d[yValue] + " " + indUnit;
+                let html = d.name + "<br/>" + statistics.parseStringPointToComma(d[yValue]) + " " + indUnit;
                 let x = xScale(d[xValue]),
                     y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
 
-                $('#tooltip')
+                tooltip
                     .html(html)
                     .css({"left": x, "top": y})
                     .show();
@@ -642,16 +708,16 @@ const statistics = {
             .on("mouseout", function (d) {
                 // change tooltip
 
-                let html = selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit,
-                    x = xScale(selectedObject[xValue]),
-                    y = yScale(selectedObject[yValue]) - 40;
-                $("#tooltip")
+                let html = selectedArea.name + "<br/>" + statistics.parseStringPointToComma(selectedArea[yValue]) + " " + indUnit,
+                    x = xScale(selectedArea[xValue]),
+                    y = yScale(selectedArea[yValue]) - 40;
+                tooltip
                     .html(html)
                     .css({"left": x, "top": y});
                 //Adjust Bar color
                 let color = "";
                 {
-                    if (d[xValue] === selectedValue) {
+                    if (d[xValue] === selectedAreaAGS) {
                         color = "red";
                     } else color = klassengrenzen.getColor(d[yValue])
                 }
@@ -661,9 +727,9 @@ const statistics = {
             });
 
 // Add initial Tooltip
-        $("#tooltip")
-            .html(selectedObject.name + "<br/>" + selectedObject[yValue] + " " + indUnit)
-            .css({"left": xScale(selectedObject[xValue]), "top": yScale(selectedObject[yValue]) - 40})
+        tooltip
+            .html(selectedArea.name + "<br/>" + statistics.parseStringPointToComma(selectedArea[yValue]) + " " + indUnit)
+            .css({"left": xScale(selectedArea[xValue]), "top": yScale(selectedArea[yValue]) - 40})
             .show();
 
 
@@ -671,10 +737,11 @@ const statistics = {
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
-            .attr("x1", -5)     // x position of the first end of the line
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
+            .attr("x1", 0)     // x position of the first end of the line
             .attr("y1", yScale(mean))      // y position of the first end of the line
-            .attr("x2", chart_width + 5)     // x position of the second end of the line
+            .attr("x2", chart_width)     // x position of the second end of the line
             .attr("y2", yScale(mean));    // y position of the second end of the line
 //Text for AverageLine
         g.append("text")
@@ -691,9 +758,9 @@ const statistics = {
                 .attr("class", "stDeviationLine")
                 .style("stroke", "black")  // colour the line
                 .style("stroke-dasharray", ("3, 3,15,3"))
-                .attr("x1", -5)     // x position of the first end of the line
+                .attr("x1", 0)     // x position of the first end of the line
                 .attr("y1", yScale(mean+stDeviation))      // y position of the first end of the line
-                .attr("x2", chart_width + 5)     // x position of the second end of the line
+                .attr("x2", chart_width )     // x position of the second end of the line
                 .attr("y2", yScale(mean+stDeviation));    // y position of the second end of the line
             // text label for the upper stDeviation
             g.append("text")
@@ -710,9 +777,9 @@ const statistics = {
                 .style("stroke", "black")  // colour the line
                 .style("stroke-dasharray", ("3, 3,15,3"))
                 .attr("x1", -5)     // x position of the first end of the line
-                .attr("x1", -5)     // x position of the first end of the line
+                .attr("x1", 0)     // x position of the first end of the line
                 .attr("y1", yScale(mean-stDeviation))      // y position of the first end of the line
-                .attr("x2", chart_width + 5)     // x position of the second end of the line
+                .attr("x2", chart_width)     // x position of the second end of the line
                 .attr("y2", yScale(mean-stDeviation));    // y position of the second end of the line
             // text label for the upper stDeviation
             g.append("text")
@@ -729,7 +796,10 @@ const statistics = {
             .tickSize(0);
 
 
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
+
         g.append('g')
             .call(xAxis)
             .attr('transform', 'translate(0,' + (yScale(0)) + ')');
@@ -761,36 +831,37 @@ const statistics = {
             yValue = parameters.yValue,
             xAxisName = parameters.xAxisName,
             yAxisName = parameters.yAxisName,
-            mean=parameters.mean,
-            stDeviation=parameters.stDeviation,
-            indUnit=parameters.indUnit,
+            mean = parameters.mean,
+            stDeviation = parameters.stDeviation,
+            indUnit = parameters.indUnit,
             svg = parameters.svg,
-            averageName=parameters.averageName,
+            averageName = parameters.averageName,
+            selectedAreaAGS = parameters.selectedAGS,
             margins = parameters.margins,
-            chart_width = parameters.chart_width-margins.left-margins.right,
-            chart_height = parameters.chart_height-margins.top-margins.bottom,
-            barWidth=chart_width / data.length,
+            chart_width = parameters.chart_width,
+            chart_height = parameters.chart_height,
+            barWidth = chart_width / data.length,
 
             maxYValue = d3.max(data, function (d) {
                 return d[yValue];
             }),
             minYValue = 0, // minimum Y value should always be 0
 
-            maxXValue=d3.max(data,function(d){
+            maxXValue = d3.max(data, function (d) {
                 return d[xValue]
             }),
-            minXValue=d3.min(data,function(d){
+            minXValue = d3.min(data, function (d) {
                 return d[xValue]
-            });
-
+            }),
+            tooltip = $("#tooltip");
         let xScale = d3.scaleLinear()
             .domain(d3.extent([minXValue, maxXValue]))
-            .range([barWidth/2, chart_width-barWidth/2]);
+            .range([barWidth / 2, chart_width - barWidth / 2]);
 
         // drawing the yAxis 1/10 longer than max Value, to facilitate space for Average, stDeviation texts
         let yScale = d3.scaleLinear()
             .range([chart_height, 0])
-            .domain(d3.extent([minYValue, maxYValue+Math.round(maxYValue/10)]))
+            .domain(d3.extent([minYValue, maxYValue + Math.round(maxYValue / 10)]))
             .nice();
 
         // sets the Start of Chart to the right Position, creates container for chart
@@ -803,17 +874,19 @@ const statistics = {
             .data(data)
             .enter()
             .append("rect")
-            .attr('x', function (d,i) {
-                return i*barWidth;
+            .attr('x', function (d, i) {
+                return i * barWidth;
             })
             .attr("y", function (d) {
                 return yScale(Math.max(0, d[yValue]));
             })
-            .attr('width',barWidth)
+            .attr('width', barWidth)
             .attr('height', function (d) {
                 return Math.abs(yScale(d[yValue]) - yScale(0));
             })
-            .attr("fill", function(d){return klassengrenzen.getColor(d[xValue]+mean)})
+            .attr("fill", function (d) {
+                return klassengrenzen.getColor(d[xValue] + mean)
+            })
             .attr('stroke', 'white')
             .attr('stroke-width', function (d) {
                 if (barWidth > 30) {
@@ -823,42 +896,69 @@ const statistics = {
                 } else return 0
             })
             .on("mouseover", function (d) {
-                let html ="Interval: "+ Math.round(d.intervalLowerLimit*100)/100 + " / "+ Math.round(d.intervalUpperLimit*100)/100+"<br/>" +yAxisName+ ": "+ Math.round(d[yValue]*1000)/1000 ,
-                    x = xScale(d[xValue]),
+                let html = "Interval: " + statistics.parseStringPointToComma(d.intervalLowerLimit) + " / " + statistics.parseStringPointToComma(d.intervalUpperLimit) + "<br/>" + yAxisName + ": " + statistics.parseStringPointToComma(d[yValue]+ "%"),
+                    x = xScale(d[xValue])-barWidth,  // -barWidth to avoid flickering tooltip if parent <div> borders size exceeded
                     y = yScale(d[yValue]) - 40;
                 //Change Color
                 d3.select(this).style("fill", "green");
 
-                $('#tooltip')
+                tooltip
                     .html(html)
                     .css({"left": x, "top": y})
                     .show();
             })
             .on("mouseout", function () {
                 // change tooltip
-                $("#tooltip")
-                    .hide();
-                d3.select(this).style("fill", function(d){return klassengrenzen.getColor(d[xValue]+mean)});
+                tooltip
+                    .html(selectedArea.name + "<br/>" )
+                    .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y/2)});
+                d3.select(this).style("fill", function (d) {
+                    return klassengrenzen.getColor(d[xValue] + mean)
+                });
             })
-            .on('click', function(d){ // onClick on a Bar rectangle opens a list of all included areas w/ their corresponding values
-                let html="",
-                    x = xScale(d[xValue])+40,
-                    y = yScale(d[yValue]/2);
-                for (let elem in d.elements){
-                    html += d.elements[elem].name + ": "+d.elements[elem].value+ " " +indUnit+ "<br/>"+ " ";
+            .on('click', function (d) { // onClick on a Bar rectangle opens a list of all included areas w/ their corresponding values
+                let html = "",
+                    x = xScale(d[xValue]) + 40,
+                    y = yScale(d[yValue] / 2);
+                for (let elem in d.elements) {
+                    html += d.elements[elem].name + ": " + statistics.parseStringPointToComma(d.elements[elem].value) + " " + indUnit + "<br/>" + " ";
 
                 }
                 $("#intervalInfo")
                     .html(html)
-                    .css({"left": x, "top": y, "max-height":chart_height-y+margins.top+margins.bottom, "overflow":"auto"})
+                    .css({
+                        "left": x,
+                        "top": y,
+                        "max-height": chart_height - y + margins.top + margins.bottom,
+                        "overflow": "auto"
+                    })
                     .show()
             });
+
+        //Draw the selected area line in Graph
+        // Find the selected region, x,y Values
+        let selectedArea=this.findSelectedAreaInInterval(data, selectedAreaAGS);
+        g.append("line")          // attach a line
+            .attr("class", "selectedAreaLine")
+            .style("stroke", "green")  // colour the line
+            .style("stroke-width", barWidth/10 )  // set line width
+            .attr("x1", xScale(selectedArea.x))    // x position of the first end of the line
+            .attr("y1", yScale(selectedArea.y)+3)      // y position of the first end of the line, 3px corresponds to bar border
+            .attr("x2", xScale(selectedArea.x))     // x position of the second end of the line
+            .attr("y2", yScale(minYValue)-3);    // y position of the second end of the line, 3px corresponds to bar border
+
+//Text for area line in Graph
+        tooltip
+            .html(selectedArea.name + "<br/>")
+            .css({"left": xScale(selectedArea.x)-40, "top": yScale(selectedArea.y/2)})
+            .show();
 
 // Draw the Average line in Graph
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
             .attr("x1", xScale(0))     // x position of the first end of the line
             .attr("y1", yScale(maxYValue+Math.round(maxYValue/10)))      // y position of the first end of the line
             .attr("x2", xScale(0))     // x position of the second end of the line
@@ -872,9 +972,9 @@ const statistics = {
             .text(`${averageName} ${decodeURI('%CE%BC')}`);
 
 
-        // Draw standard Deviation lines
-        // upper stDeviation
-        // check if StDeviation does not exceed axis domain
+// Draw standard Deviation lines
+// upper stDeviation
+// check if StDeviation does not exceed axis domain, if not, add the line
         if (stDeviation<maxXValue) {
             g.append("line")          // attach a line
                 .attr("class", "stDeviationLine")
@@ -891,8 +991,8 @@ const statistics = {
                 .style("text-anchor", "middle")
                 .text(`+ ${decodeURI('%CF%83')}  `);
         }
-        // lower stDeviation
-        // check if StDeviation does not exceed axis domain
+// lower stDeviation
+// check if StDeviation does not exceed axis domain, if not, add the line
         if(-stDeviation>minXValue) {
             g.append("line")          // attach a line
                 .attr("class", "stDeviationLine")
@@ -912,13 +1012,16 @@ const statistics = {
 
 
 
-        //Initialise both Axis
-        //determine if Axis should have ticks
+//Initialise both Axis
+//determine if Axis should have ticks
         let xAxis = d3.axisBottom(xScale)
-            .tickFormat(d3.format(".2r"));
-        //.tickSize(2);
+            .tickFormat(d3.format(".2r"))
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
 
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });
 
         let X= g.append('g')
             .call(xAxis)
@@ -934,7 +1037,7 @@ const statistics = {
                 "translate(" + (chart_width / 2) + " ," +
                 (chart_height + margins.top + 20) + ")")
             .style("text-anchor", "middle")
-            .text(`${xAxisName}`);
+            .text(`${xAxisName}, ${indUnit}`);
 
 // text label for the Y axis
         g.append("text")
@@ -943,7 +1046,7 @@ const statistics = {
             .attr("x", 0 - (chart_height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text(`${yAxisName}`);
+            .text(`${yAxisName} %`);
 
 
     },
@@ -955,12 +1058,13 @@ const statistics = {
             yAxisName = parameters.yAxisName,
             indUnit = parameters.indUnit,
             mean = parameters.mean,
+            selectedAreaAGS=parameters.selectedAGS,
             averageName=parameters.averageName,
             stDeviation=parameters.stDeviation,
             svg = parameters.svg,
             margins = parameters.margins,
-            chart_width = parameters.chart_width-margins.left-margins.right,
-            chart_height = parameters.chart_height-margins.top-margins.bottom,
+            chart_width = parameters.chart_width,
+            chart_height = parameters.chart_height,
             maxYValue = d3.max(data, function (d, i) {
                 return d[yValue];
             }),
@@ -972,7 +1076,11 @@ const statistics = {
             }),
             minXValue = d3.min(data, function (d, i) {
                 return d[xValue];
-            });
+            }),
+            selectedArea = data.find(function (obj) {
+                return obj.ags === selectedAreaAGS
+            }),
+            tooltip = $("#tooltip");
         if (minYValue >= 0) {
             minYValue = 0
         }
@@ -998,11 +1106,10 @@ const statistics = {
             let firstPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]},
                 secondPoint={};
             if (i === data.length - 1) {
-                 secondPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]}
+                secondPoint = {[xValue]: data[i][xValue], [yValue]: data[i][yValue]}
             } else {
-                 secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
+                secondPoint = {[xValue]: data[i + 1][xValue], [yValue]: data[i][yValue]};
             }
-            console.log(xValue);
             distData.push(firstPoint);
             distData.push(secondPoint);
         }
@@ -1030,7 +1137,8 @@ const statistics = {
         g.append("line")          // attach a line
             .attr("class", "meanLine")
             .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", 2)
+            .style("stroke-dasharray", ("10, 3,5,3"))
             .attr("x1",xScale(mean) )     // x position of the first end of the line
             .attr("y1", yScale(minYValue))      // y position of the first end of the line
             .attr("x2", xScale(mean))     // x position of the second end of the line
@@ -1082,11 +1190,32 @@ const statistics = {
         }
 
 
+
+        //Draw the selected area line in Graph
+        // Find the selected region, x,y Values
+        g.append("line")          // attach a line
+            .attr("class", "selectedAreaLine")
+            .style("stroke", "green")  // colour the line
+            .style("stroke-width", 2 )  // set line width
+            .attr("x1", xScale(selectedArea.value))    // x position of the first end of the line
+            .attr("y1", yScale(selectedArea.distFuncValue))
+            .attr("x2", xScale(selectedArea.value))     // x position of the second end of the line
+            .attr("y2", yScale(minYValue));
+        //Text for area line in Graph
+        tooltip
+            .html(selectedArea.name + "<br/>")
+            .css({"left": xScale(selectedArea.value)-40, "top": yScale(selectedArea.distFuncValue/2)})
+            .show();
+
         //Initialise both Axis
         let xAxis = d3.axisBottom(xScale)
             .tickFormat(d3.format(".2r"))
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) })
             .tickSize(2);
-        let yAxis = d3.axisLeft(yScale);
+        let yAxis = d3.axisLeft(yScale)
+            .tickFormat(function(d, i) {
+                return statistics.parseStringPointToComma(d) });;
 
         g.append('g')
             .call(xAxis)
@@ -1112,7 +1241,6 @@ const statistics = {
             .text(`${yAxisName}`);
     }
 };
-
 
 
 

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/chart/Chart.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chart/Chart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/MYSQL_MANAGER.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/MYSQL_MANAGER.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/MYSQL_TASKREPOSITORY.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/MYSQL_TASKREPOSITORY.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/POSTGRESQL_MANAGER.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/POSTGRESQL_MANAGER.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/database/POSTGRESQL_TASKRESPOSITORY.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/POSTGRESQL_TASKRESPOSITORY.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/map/CacheManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/map/CacheManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/map/Classify.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/map/Classify.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/map/Json.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/map/Json.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/map/Overlay.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/map/Overlay.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Colors.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Colors.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Errors.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Errors.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Helper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/NOTES.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/NOTES.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Search.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Search.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/query.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/query.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/table/TableExpand.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/table/TableExpand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/assets/logo_5cm.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/print_map.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/print_map.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/statistics.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/table.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/table.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/data/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/data/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/data/language.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/data/language.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/fonts/glyphicons-halflings-regular.svg" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/fonts/glyphicons-halflings-regular.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/spectrum/spectrum.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/spectrum/spectrum.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/lib/spectrum/spectrum.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/lib/spectrum/spectrum.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/alert_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/alert_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/dev_chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/dev_chart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/dialog_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/dialog_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/feedback.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/feedback.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/kennblatt.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/kennblatt.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/statistics.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/export/map_print.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/export/map_print.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/export/ogc_export.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/export/ogc_export.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/language_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/language_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/grundakt_layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/grundakt_layer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_json.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_json.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_json_group.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_json_group.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_raster.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_raster.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_raster_group.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_raster_group.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/layer_control.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/layer_control.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/legende.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/legende.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/map_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/map_controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/map_header.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/map_header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/start_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/start_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/center_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/center_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/file_loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/file_loader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/glaetten.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/glaetten.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/lupe.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/lupe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/measurement.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/measurement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/raster_split.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/raster_split.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/zoom_in.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/zoom_in.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/tools/zoom_out.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/tools/zoom_out.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/farbliche_darstellungsart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/farbliche_darstellungsart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/farbschema.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/farbschema.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/indikatorauswahl.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/indikatorauswahl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/klassenanzahl.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/klassenanzahl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/klassifzierung.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/klassifzierung.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/raeumliche_visualisierung.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/raeumliche_visualisierung.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/raumgliederung.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/raumgliederung.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/menu/toolbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/toolbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/models/error.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/models/error.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/models/klassengrenzen.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/models/klassengrenzen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/models/pips.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/models/pips.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/models/styles.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/models/styles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/models/view_state.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/models/view_state.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/request_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/request_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/script_loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/script_loader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/search.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/search.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/slider/opacity_slider.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/slider/opacity_slider.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/slider/rasterweite_slider.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/slider/rasterweite_slider.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/slider/zeit_slider.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/slider/zeit_slider.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/table/csv_export.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/table/csv_export.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/table/expand_panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/table/expand_panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/table/filter_panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/table/filter_panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/table/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/table/table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/track.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/track.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/urlparamter.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/urlparamter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/left_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/left_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/main_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/main_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/modal_layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/modal_layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/panner.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/panner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/progressbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/progressbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/view/right_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/view/right_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/webtour.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/webtour.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/info/screenshots/S12RG_gem.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/info/screenshots/gebiete.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/info/screenshots/raster_slider.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/info/screenshots/responsive.jpg" beforeDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/backend/dialog/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/table/table.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="13821">
+              <caret line="827" selection-start-line="827" selection-end-line="827" />
+              <folding>
+                <element signature="n#!!block;n#fill#0;n#fill#0;n#!!block;n#table#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="222" column="45" selection-start-line="222" selection-start-column="45" selection-end-line="222" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/frontend/css/main.css" />
+        <option value="$PROJECT_DIR$/frontend/css/statistics.css" />
+        <option value="$PROJECT_DIR$/frontend/src/dialog/dialog.js" />
+        <option value="$PROJECT_DIR$/frontend/src/table/table.js" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="master" type="b2602c69:ProjectViewProjectNode" />
+              <item name="master" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Entwicklung\Monitor\code\master\frontend\src\dialog" />
+      <recent name="C:\Users\user\Entwicklung\Monitor\code\master\frontend\css" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="" />
+      <created>1552486493710</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1552486493710</updated>
+      <workItem from="1552486494932" duration="336000" />
+      <workItem from="1552486980823" duration="13000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="349000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Statistic" order="10" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/frontend/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/css/statistics.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dialog.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/table/table.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13821">
+          <caret line="827" selection-start-line="827" selection-end-line="827" />
+          <folding>
+            <element signature="n#!!block;n#fill#0;n#fill#0;n#!!block;n#table#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="222" column="45" selection-start-line="222" selection-start-column="45" selection-end-line="222" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

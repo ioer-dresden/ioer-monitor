@@ -1,6 +1,4 @@
 <?php
-include_once "../database/MYSQL_TASKREPOSITORY.php";
-include_once "../database/MYSQL_MANAGER.php";
 
 class TableExpand{
     public function __construct($indicator_id,$time,$raumgliederung) {
@@ -29,7 +27,7 @@ class TableExpand{
             $length_ags = strlen($ags_array[0]);
 
              //get all the bld values in an array
-            $bldArray = POSTGRESQL_MANAGER::get_instance()->query("SELECT gen, ags FROM vg250_bld_2016_grob");
+            $bldArray = PostgreManager::get_instance()->query("SELECT gen, ags FROM vg250_bld_2016_grob");
 
             //set the ABS IND
             if($ind_set==='ABS'){
@@ -62,12 +60,9 @@ class TableExpand{
                                         And LENGTH(i.AGS) = " . $length_ags . "
                                         Group by i.AGS";
 
-            $indicator_array = MYSQL_MANAGER::get_instance()->query($sql);
-            $indikator_grundaktualitaet = MYSQL_TASKREPOSITORY::get_instance()->getGrundaktState($this->id);
+            $indicator_array = MysqlManager::get_instance()->query($sql);
+            $indikator_grundaktualitaet = MysqlTasks::get_instance()->getGrundaktState($this->id);
             $einheit =$indicator_array[0]->einheit;
-            if($ind_set==='B00AG'){
-                $einheit= '(*) Werte 2015';
-            }
 
             # get the FC Codes
             $fc_array = Errors::get_instance()->getCodes();
@@ -79,7 +74,6 @@ class TableExpand{
                         $valueInd = $row_mysql->value;
                         $rundung = $row_mysql->rundung;
                         $value_comma = number_format(round($valueInd, $rundung), $rundung, ',', '');
-                        $valueID = $row_mysql->ind;
                         $fc_id = $row_mysql->fc;
                         $note_id  = $row_mysql->hc;
                         $ags = $row_mysql->ags;
