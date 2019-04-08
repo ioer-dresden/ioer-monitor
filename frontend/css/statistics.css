@@ -107,3 +107,6 @@ path.plot {
 #chart_select_container{
     margin-left: 10%
 }
+#intervalCountInputField{
+    width:60px
+}

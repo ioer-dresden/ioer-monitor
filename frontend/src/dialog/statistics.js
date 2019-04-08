@@ -84,17 +84,13 @@ const statistics = {
     },
     controller:{
         set:function(){
+            const chart=statistics.chart;
+
             $(document).on("click", statistics.selector_toolbar, function () {
                 let callback = function () {
+                    // set the behavior on Icon click
                     if (Dialoghelper.getAGS_Input()) {
-                        statistics.chart.settings.ags = Dialoghelper.getAGS_Input().toString();
-                        statistics.chart.settings.name = Dialoghelper.getAGS_InputName();
-                        statistics.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
-                        statistics.chart.settings.indText = indikatorauswahl.getSelectedIndikatorText();
-                        statistics.chart.settings.indUnit = indikatorauswahl.getIndikatorEinheit();
                         statistics.open();
-
                     }
                 };
                 try {
@@ -107,25 +103,27 @@ const statistics = {
     },
     open: function () {
 
-        let lan = language_manager.getLanguage(),
-            geoJSON = this.chart.settings.allValuesJSON,
-            chart = this.chart;
-        chart.settings.lan=lan;
-        // todo REINIS REFACTOR the getting of Data Values TO init:function(..){....} !!!  Here only the Visualisation Data-, html binding!
+        const chart = this.chart,
+              geoJSON=chart.settings.allValuesJSON,
+              timeStamp = zeit_slider.getTimeSet();
+        //set the Language
+        chart.settings.lan=language_manager.getLanguage();
+        const lan = chart.settings.lan;
+
+
+        //set all the local and derived parameters needed for visualisation
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
         chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
-        chart.settings.currentValue = this.getCurrentValue(geoJSON);
+        chart.settings.currentValue = this.getCurrentValue(geoJSON,chart.settings.ags);
         chart.settings.areaCount = this.getAreaCount(geoJSON);
-        chart.settings.areaType = this.getAreaType(geoJSON);
         chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
-        chart.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
-        chart.data = this.getDistributionFunctionValues(chart.data);
-        chart.data = this.getDeviationValues(chart.data, this.chart.settings.statistics.average);
-        chart.settings.densityIntervalCount=Math.round(chart.data.length/4);
+        chart.settings.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
+        chart.settings.data = this.getDistributionFunctionValues(chart.settings.data);
+        chart.settings.data = this.getDeviationValues(chart.settings.data, this.chart.settings.statistics.average);
+        chart.settings.densityIntervalCount=Math.round(chart.settings.data.length/4);
 
-        const timeStamp = zeit_slider.getTimeSet();
 
-        let html = he.encode(`
+        const html = he.encode(`
              <div class="jq_dialog" id="${this.endpoint_id}">
                 <div class="container">
                     <div >               
@@ -189,9 +187,9 @@ const statistics = {
                                 </div>
 
                         </div>
-                             <div class="inline field" id="classCountInput" align="right">
+                             <div class="inline field" id="intervalCountInput" align="right">
                                    <label>${this.text[lan].intervalCount}:</label>                                
-                                   <input type="text" id="classCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
+                                   <input type="text" id="intervalCountInputField" class="form-control" placeholder="${chart.settings.densityIntervalCount}" >
                              </div>
                     </div>
                     <div id="statistics_container_diagramm" class="container_diagramm">
@@ -240,10 +238,10 @@ const statistics = {
             name: "",
             allValuesJSON: "",
             currentValue: "",
-            allValuesObjectArray: {},
+            allValuesObjectArray: [],
+            data: [],
             densityIntervalCount:25,
             areaCount: "",
-            areaType: {},
             selectedChart:"valueChart",
             statistics: {
                 min: ",",
@@ -253,21 +251,22 @@ const statistics = {
                 stDeviation: ""
             }
         },
-        data: [],
+
         init: function () {
 
-            const svg = d3.select("#statistics_content #statistics_visualisation"),
+            let svg = d3.select("#statistics_content #statistics_visualisation"),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
 
                 // Setting dynamic visualisation dimensions
                 container_height=$('.ui-dialog').height() * (2 / 3) - 100,
                 container_width=$("#statistics_content .container").width();
+            if (container_height<100){
+                container_height=200;  // um bei Waagerechtem Smartphonedisplay eine vernünftige Visualisierungsgröße zu setzen
+            }
 
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
-            const diagram = $('#statistics_content #statistics_diagramm'),
-
-                chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
+                const chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
 
@@ -280,13 +279,14 @@ const statistics = {
         },
         controller: {
             setInteractiveElemenents:function(svg, chart_width, chart_height, margin){
-                //set up the dropdown menu
+
                 let chart_auswahl = $('#chart_ddm_diagramm'),
                     chart=statistics.chart,
-                    classCountInput=$("#classCountInput"),
+                    intervalCountInput=$("#intervalCountInput"),
+                    intervalCountInputField=$("#intervalCountInputField"),
                     tooltip= $("#tooltip"),
                     visualisation=$("#statistics_visualisation");
-
+                //set up the Visualisation dropdown menu
                 chart_auswahl.dropdown({
                     onChange: function (value) {
                         switch (value) {
@@ -295,14 +295,14 @@ const statistics = {
                                 visualisation.empty();
                                 chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                                 chart_auswahl.dropdown("hide");
-                                classCountInput.hide();
+                                intervalCountInput.hide();
                                 break;
 
                             case "densityChart":
                                 chart.settings.selectedChart='densityChart';
                                 visualisation.empty();
                                 chart_auswahl.dropdown("hide");
-                                classCountInput.show();
+                                intervalCountInput.show();
                                 tooltip.hide();
                                 chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                                 break;
@@ -310,7 +310,7 @@ const statistics = {
                                 chart.settings.selectedChart='distributionChart';
                                 visualisation.empty();
                                 chart_auswahl.dropdown("hide");
-                                classCountInput.hide();
+                                intervalCountInput.hide();
                                 tooltip.hide();
                                 chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                                 break;
@@ -321,17 +321,16 @@ const statistics = {
                     }
                 });
                 setTimeout(function(){
-                    chart_auswahl.dropdown("hide");
+                    chart_auswahl.dropdown("hide"); // Workaround: Hides the initial Dropdown menu choice list
                 },500);
 
-                // Set the classCount input field css.properties
-                $("#classCountInputField").css({"width":"60px"});
-                classCountInput.hide();
-                classCountInput.on('change', function(e) {
-                    let inputClassCount=$("#classCountInputField").val();
+                intervalCountInputField.css({"width":"60px"});
+                intervalCountInput.hide();
+                intervalCountInput.on('change', function(e) {
+                    let inputIntervalCount=intervalCountInputField.val();
 
-                    $("#classCountInputField").val(inputClassCount);
-                    chart.settings.densityIntervalCount=inputClassCount;
+                    intervalCountInputField.val(inputIntervalCount);
+                    chart.settings.densityIntervalCount=inputIntervalCount;
                     visualisation.empty();
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                 });
@@ -349,7 +348,6 @@ const statistics = {
             },
 
             showVisualisation: function (selection, svg, chart_width, chart_height, margin) {
-
                 let chart = statistics.chart,
                     parameters={data:[],
                         xAxisName:"",
@@ -369,20 +367,18 @@ const statistics = {
 
                 if (selection === "valueChart") {
                     // Bar graph of Values Ascending!!!!!
-                    parameters.data=statistics.sortObjectAscending(chart.data, "value", "ags"); // Sort the data according to indicator value
+                    parameters.data=statistics.sortObjectAscending(chart.settings.data, "value", "ags"); // Sort the data according to indicator value
                     parameters.xAxisName=statistics.text[chart.settings.lan].areas;
                     parameters.yAxisName=statistics.text[chart.settings.lan].values;
                     parameters.xValue="ags";
                     parameters.yValue="value";
-
                     statistics.drawOrderedValuesChart(parameters);
 
                 }
                 else if(selection=== "densityChart"){
                     // Bar graph of Density function!
-                    //todo REINIS add the ClassCount selector!!
                     let classCount= chart.settings.densityIntervalCount;
-                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.data,classCount,chart.settings.decimalSpaces); // separate indicator values into intervals to display in density chart
+                    parameters.data=statistics.getDensityFunctionIntervalValues(chart.settings.data,classCount,chart.settings.decimalSpaces); // separate indicator values into intervals to display in density chart
                     parameters.xAxisName=(statistics.text[chart.settings.lan].deviation);
                     parameters.yAxisName=statistics.text[chart.settings.lan].probability;
                     parameters.xValue="intervalMiddle";
@@ -392,13 +388,13 @@ const statistics = {
 
                 else if(selection==="distributionChart"){
                     // Line graph, distribution Function !!!!!
-                    parameters.data=statistics.sortObjectAscending(chart.data, "distFuncValue", "ags");
+                    parameters.data=statistics.sortObjectAscending(chart.settings.data, "distFuncValue", "ags");
                     parameters.xAxisName=statistics.text[chart.settings.lan].values;
                     parameters.yAxisName=statistics.text[chart.settings.lan].cumulativeDistribution;
                     parameters.xValue="value";
                     parameters.yValue="distFuncValue";
 
-                    statistics.drawLineGraph(parameters)
+                    statistics.drawCumulativeDistributionGraph(parameters)
                 }
 
 
@@ -430,13 +426,13 @@ const statistics = {
         return valueArray;
 
     },
-    getCurrentValue: function (geoJSON) {
+    getCurrentValue: function (geoJSON, ags) {
         let currentValue = null;
         // check if geoJSON has value "ags", and finds the corresponding value
         for (let elem in this.chart.settings.allValuesJSON["features"]) {
             let object = geoJSON["features"][elem]["properties"];
             if (object.hasOwnProperty("ags")) {
-                if (object["ags"] === this.chart.settings.ags) {
+                if (object["ags"] === ags) {
                     currentValue = helper.parseFloatCommaToPoint(object["value_comma"]);
                 }
             }
@@ -446,10 +442,7 @@ const statistics = {
     getAreaCount: function (geoJSON) {
         return Object.keys(geoJSON["features"]).length
     },
-    getAreaType: function (geoJSON) {
-        return geoJSON["features"][0]["properties"]["des"];
-    },
-    //TODO replace with Helper.dotTocomma(input)
+
     parseStringPointToComma:function(input){
         return input.toString().replace('.',',')
     },
@@ -508,11 +501,11 @@ const statistics = {
         return Math.sqrt(squareDiffSum / (count - 1));
 
     },
-    roundNumber: function (number, decimalSpaces) {
-        return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
-    },
     getDecimalSpaces:function(geoJSON){
         return parseInt(geoJSON["features"][0]["properties"]["rundung"]);
+    },
+    roundNumber: function (number, decimalSpaces) {
+        return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
     sortObjectAscending: function (objectArray, key1, key2) {
         return objectArray.sort((function (a, b) {
@@ -555,16 +548,16 @@ const statistics = {
         return deviationArray
     },
 
-    getDensityFunctionIntervalValues: function(data,classCount,decimal) {
+    getDensityFunctionIntervalValues: function(data,intervalCount,decimal) {
         let densityFunctionObjectArray = [];
 
         data = this.sortObjectAscending(data, "deviation", "ags");
         let min = data[0].deviation,
             max = data[data.length-1].deviation,
             difference = max - min,
-            classSize = difference / classCount,
+            classSize = difference / intervalCount,
             intervalLowerLimit = min;
-        for (let i = 0; i < classCount; i++) {
+        for (let i = 0; i < intervalCount; i++) {
             let counter = 0,
                 intervalElementValues=[],
                 intervalElements=[],
@@ -588,17 +581,16 @@ const statistics = {
         return densityFunctionObjectArray;
     },
 
-    findSelectedAreaInInterval:function(intervalArray, selectedValue){
+    findSelectedAreaInInterval:function(intervalArray, selectedAgs){
 
         let x = 0,
             y = 0,
             name="",
             deviation=0,
             found=false;
-        //find the x!
         for (let interval in intervalArray) {
             for (let elem in intervalArray[interval].elements)
-                if (intervalArray[interval].elements[elem].ags === selectedValue) {
+                if (intervalArray[interval].elements[elem].ags === selectedAgs) {
                     x = intervalArray[interval].elements[elem].deviation;
                     y= intervalArray[interval].probability;
                     name= intervalArray[interval].elements[elem].name;
@@ -1050,7 +1042,7 @@ const statistics = {
 
 
     },
-    drawLineGraph: function (parameters) {
+    drawCumulativeDistributionGraph: function (parameters) {
         let data = parameters.data,
             xValue = parameters.xValue,
             yValue = parameters.yValue,
