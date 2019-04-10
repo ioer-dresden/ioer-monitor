@@ -118,6 +118,7 @@ try{
                         '","basic_actuality_state":"' . $grundakt_state .
                         '","significant":"' . $significant .
                         '","atkis":"' . $row_ind->DATENGRUNDLAGE_ATKIS.
+                        '","rundung":"'.$row_ind->RUNDUNG_NACHKOMMASTELLEN.
                         '","ogc":{' .
                             '"wfs":"' . $row_ind->WFS.
                             '","wcs":"' . $row_ind->WCS.

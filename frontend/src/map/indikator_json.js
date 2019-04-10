@@ -9,9 +9,6 @@ const indikator_json = {
     getJSONFile:function(){
         return this.json_file;
     },
-    getAGSCount:function(){
-        return this.ags_count;
-    },
     init:function(raumgl, callback) {
         const object = this;
         let ind = indikatorauswahl.getSelectedIndikator(),
@@ -166,7 +163,7 @@ const indikator_json = {
                               <img title="${text[lan].stat_title}" 
                                 src="frontend/assets/icon/histogramm.png"/>
                          </div>`,
-            indikatorwertentwicklung = `<div class="mobile_hidden dev_chart_trend oneTime ${exclude.class_performance} cursor w-100" 
+            indikatorwertentwicklung = `<div class="dev_chart_trend oneTime ${exclude.class_performance} cursor w-100" 
                                              id="pop_up_diagramm_ind_ags_${id_popup}">
                                             <b class="float-right w-75">${text[lan].trend}</b>
                                             <img data-title="${text[lan].trend_title}" 
@@ -174,7 +171,7 @@ const indikator_json = {
                                                 style="margin-right: 1.3vh;" 
                                                 src="${dev_chart.icon.single.path}"/>
                                         </div>`,
-            entwicklungsdiagramm = `<div class="mobile_hidden dev_chart_compare ${exclude.class_performance} oneTime cursor w-100" 
+            entwicklungsdiagramm = `<div class="hidden dev_chart_compare ${exclude.class_performance} oneTime cursor w-100" 
                                             id="pop_up_diagramm_entwicklung_ags_${id_popup}" >
                                             <b class="wordbreak float-right w-75">${text[lan].compare}</b>
                                             <img data-title="${text[lan].compare}" 

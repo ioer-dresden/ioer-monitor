@@ -217,7 +217,7 @@ const statistics = {
             geoJSON=chart.settings.allValuesJSON;
 
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
-        chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
+        chart.settings.decimalSpaces= this.getDecimalSpaces();
         chart.settings.currentValue = this.getCurrentValue(geoJSON,chart.settings.ags);
         chart.settings.areaCount = this.getAreaCount(geoJSON);
         chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
@@ -502,7 +502,7 @@ const statistics = {
 
     },
     getDecimalSpaces:function(geoJSON){
-        return parseInt(geoJSON["features"][0]["properties"]["rundung"]);
+        return parseInt(indikatorauswahl.getIndikatorInfo(false,"rundung"));
     },
     roundNumber: function (number, decimalSpaces) {
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
