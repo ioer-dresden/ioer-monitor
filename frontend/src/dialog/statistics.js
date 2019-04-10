@@ -84,7 +84,6 @@ const statistics = {
     },
     controller:{
         set:function(){
-            const chart=statistics.chart;
 
             $(document).on("click", statistics.selector_toolbar, function () {
                 let callback = function () {
@@ -103,25 +102,11 @@ const statistics = {
     },
     open: function () {
 
+        this.populateChartSettingsWithValues(); // Gets all the necessary values for chart.settings
+
         const chart = this.chart,
-              geoJSON=chart.settings.allValuesJSON,
-              timeStamp = zeit_slider.getTimeSet();
-        //set the Language
-        chart.settings.lan=language_manager.getLanguage();
-        const lan = chart.settings.lan;
-
-
-        //set all the local and derived parameters needed for visualisation
-        chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
-        chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
-        chart.settings.currentValue = this.getCurrentValue(geoJSON,chart.settings.ags);
-        chart.settings.areaCount = this.getAreaCount(geoJSON);
-        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
-        chart.settings.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
-        chart.settings.data = this.getDistributionFunctionValues(chart.settings.data);
-        chart.settings.data = this.getDeviationValues(chart.settings.data, this.chart.settings.statistics.average);
-        chart.settings.densityIntervalCount=Math.round(chart.settings.data.length/4);
-
+            timeStamp = zeit_slider.getTimeSet(),
+            lan = chart.settings.lan;
 
         const html = he.encode(`
              <div class="jq_dialog" id="${this.endpoint_id}">
@@ -227,6 +212,21 @@ const statistics = {
 
 
     },
+    populateChartSettingsWithValues:function(){
+        const chart=this.chart,
+            geoJSON=chart.settings.allValuesJSON;
+
+        chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
+        chart.settings.decimalSpaces= this.getDecimalSpaces(geoJSON);
+        chart.settings.currentValue = this.getCurrentValue(geoJSON,chart.settings.ags);
+        chart.settings.areaCount = this.getAreaCount(geoJSON);
+        chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
+        chart.settings.data=this.sortObjectAscending(chart.settings.allValuesObjectArray,"value","ags");
+        chart.settings.data = this.getDistributionFunctionValues(chart.settings.data);
+        chart.settings.data = this.getDeviationValues(chart.settings.data, this.chart.settings.statistics.average);
+        chart.settings.densityIntervalCount=Math.round(chart.settings.data.length/4);
+        chart.settings.lan=language_manager.getLanguage();
+    },
     chart: {
         settings: {
             lan:"",
@@ -266,7 +266,7 @@ const statistics = {
 
             $("#statistics_content #statistics_visualisation").height(container_height).width(container_width);
 
-                const chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
+            const chart_width = container_width-margin.right-10, // -10px needed to NOT cover the last few px of graph axis
                 chart_height =container_height-2*margin.top-2*margin.bottom,
                 chart= statistics.chart;
 
@@ -689,6 +689,10 @@ const statistics = {
                 let html = d.name + "<br/>" + statistics.parseStringPointToComma(d[yValue]) + " " + indUnit;
                 let x = xScale(d[xValue]),
                     y = yScale(d[yValue]) - 40;
+                if (d[yValue]<=0){
+                    y=yScale(0)-40;
+                }
+                console.log("yValue: "+ y);
                 //Change Color
                 d3.select(this).style("fill", "green");
 
