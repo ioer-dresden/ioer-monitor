@@ -215,11 +215,8 @@ const statistics = {
             geoJSON=chart.settings.allValuesJSON; // GeoJSON is initially set in ./src/map/indikator_json.js
 
         chart.settings.allValuesObjectArray = this.getAllValues(geoJSON);
-
         chart.settings.decimalSpaces= statistics.getDecimalSpaces(geoJSON);
-
         chart.settings.decimalSpaces= this.getDecimalSpaces();
-
         chart.settings.currentValue = this.getCurrentValue(geoJSON,chart.settings.ags);
         chart.settings.areaCount = this.getAreaCount(geoJSON);
         chart.settings.statistics = this.calculateStatistics(statistics.getOnlyValues(this.chart.settings.allValuesObjectArray), chart.settings.decimalSpaces);
@@ -279,15 +276,16 @@ const statistics = {
             chart.controller.setInteractiveElemenents(svg, chart_width, chart_height, margin);
 
         },
-        controller: {
+        controller: { // controls the drawing of Chart and corresponding Menus
 
-            setInteractiveElemenents:function(svg, chart_width, chart_height, margin){
+            setInteractiveElemenents:function(svg, chart_width, chart_height, margin){ // Sets the Menus and controls the drawing of Chart based on Menu choices
                 let chart_auswahl = $('#chart_ddm_diagramm'),
                     chart=statistics.chart,
                     intervalCountInput=$("#intervalCountInput"),
                     intervalCountInputField=$("#intervalCountInputField"),
                     tooltip= $("#tooltip"),
                     visualisation=$("#statistics_visualisation");
+
                 //set up the Visualisation dropdown menu
                 chart_auswahl.dropdown({
                     onChange: function (value) {
@@ -322,10 +320,11 @@ const statistics = {
                         }
                     }
                 });
-                setTimeout(function(){
-                    chart_auswahl.dropdown("hide"); // Workaround: Hides the initial Dropdown menu choice list
+                setTimeout(function(){  // Workaround: Hides the initial Dropdown menu choice list
+                    chart_auswahl.dropdown("hide");
                 },500);
 
+                // sets the intervalCountInput behaviour
                 intervalCountInputField.css({"width":"60px"});
                 intervalCountInput.hide();
                 intervalCountInput.on('change', function(e) {
@@ -337,7 +336,7 @@ const statistics = {
                     chart.controller.showVisualisation(chart.settings.selectedChart, svg, chart_width, chart_height, margin);
                 });
                 $("body").mouseup(function(e)
-                {
+                { // sets the IntervalInfo Tooltip behaviour
                     let intervalInfo = $("#intervalInfo");
                     // if the target of the click isn't the container nor a descendant of the container
                     if (!intervalInfo.is(e.target) && intervalInfo.has(e.target).length === 0)
@@ -348,7 +347,7 @@ const statistics = {
 
             },
 
-            showVisualisation: function (selection, svg, chart_width, chart_height, margin) {
+            showVisualisation: function (selection, svg, chart_width, chart_height, margin) { // passes the right Parameters to the relevant Chart Visualisation Method, based on Chart-Select Menu choice
                 let chart = statistics.chart,
                     parameters={data:[],
                         xAxisName:"",
@@ -398,11 +397,10 @@ const statistics = {
                     this.drawCumulativeDistributionGraph(parameters)
                 }
 
-
-
                 else {console.log("No graphical option chosen!")}
-
             },
+
+            // Methods to draw the relevant Graph!
             drawOrderedValuesChart: function (parameters) {
                 const tooltip = $("#tooltip");
                 let data = parameters.data,
@@ -432,8 +430,6 @@ const statistics = {
                 if (minValue >= 0) {
                     minValue = 0
                 }
-                console.log("Selected AGS: "+ selectedAreaAGS);
-
 
                 // Setting the scales for chart
                 let xScale = d3.scaleBand()
@@ -483,14 +479,13 @@ const statistics = {
                             return 1
                         } else return 0
                     })
-                    .on("mouseover", function (d) {
+                    .on("mouseover", function (d) { // Show Tooltip with Value
                         let html = d.name + "<br/>" + statistics.parseStringPointToComma(d[yValue]) + " " + indUnit;
                         let x = xScale(d[xValue]),
                             y = yScale(d[yValue]) - 40;
                         if (d[yValue]<=0){
                             y=yScale(0)-40;
                         }
-                        console.log("yValue: "+ y);
                         //Change Color
                         d3.select(this).style("fill", "green");
 
@@ -649,7 +644,6 @@ const statistics = {
                     }),
                     tooltip = $("#tooltip");
 
-                console.log("Selected AGS DEnsity: "+selectedAreaAGS)
                 let xScale = d3.scaleLinear()
                     .domain(d3.extent([minXValue, maxXValue]))
                     .range([barWidth / 2, chart_width - barWidth / 2]);
@@ -733,10 +727,10 @@ const statistics = {
 
                 //Draw the selected area line in Graph
                 // Find the selected region, x,y Values
-                let selectedArea=this.findSelectedAreaInInterval(data, selectedAreaAGS);
+                let selectedArea=statistics.findSelectedAreaInInterval(data, selectedAreaAGS);
                 g.append("line")          // attach a line
                     .attr("class", "selectedAreaLine")
-                    .style("stroke", "green")  // colour the line
+                    .style("stroke", "red")  // colour the line
                     .style("stroke-width", barWidth/10 )  // set line width
                     .attr("x1", xScale(selectedArea.x))    // x position of the first end of the line
                     .attr("y1", yScale(selectedArea.y)+3)      // y position of the first end of the line, 3px corresponds to bar border
@@ -989,7 +983,7 @@ const statistics = {
                 // Find the selected region, x,y Values
                 g.append("line")          // attach a line
                     .attr("class", "selectedAreaLine")
-                    .style("stroke", "green")  // colour the line
+                    .style("stroke", "red")  // colour the line
                     .style("stroke-width", 2 )  // set line width
                     .attr("x1", xScale(selectedArea.value))    // x position of the first end of the line
                     .attr("y1", yScale(selectedArea.distFuncValue))
@@ -1213,7 +1207,7 @@ const statistics = {
         return densityFunctionObjectArray;
     },
 
-    findSelectedAreaInInterval:function(intervalArray, selectedAgs){
+    findSelectedAreaInInterval:function(intervalArray, selectedAgs){ // Finds the selected Area in one of the Intervals
 
         let x = 0,
             y = 0,

@@ -212,10 +212,9 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
-                console.log(data);
-            }));
-            //Gebietsprofil.open(ags,gen);
+            Gebietsprofil.parameters.ags=ags;
+            Gebietsprofil.parameters.name=gen;
+            Gebietsprofil.open(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
