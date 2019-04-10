@@ -26,7 +26,6 @@ class Gebietsprofil{
                 };
                 dialog_manager.setInstruction(instructions);
                 dialog_manager.create();
-                this.controller.set();
             }
         });
     }
