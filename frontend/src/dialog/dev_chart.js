@@ -281,7 +281,7 @@ const dev_chart={
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
                     parseTime(data);
-                    //setMigrationValue(data);
+                    setMigrationValue(data);
                     appendData(data, data[0].color.toString());
                     createCircle(data, data[0].color.toString());
                     setLegende(data, data[0].color.toString());
@@ -333,7 +333,6 @@ const dev_chart={
                     try{
                         let min = parseInt(migrationValues[id][ags_s]["min"]),
                             max = parseInt(migrationValues[id][ags_s]["max"]);
-                        console.log(year,max,min);
                         if(year<=max && year>=min){
                             values.set(year,data[x])
                         }
@@ -342,19 +341,18 @@ const dev_chart={
                 //map to array for d3
                 for(var [key,value] of values){
                     uncertain_val.push(value);
+                    g.append("line")
+                        .attr("x1", x(value.date))  //<<== change your code here
+                        .attr("y1", 0)
+                        .attr("x2", x(value.date))  //<<== and here
+                        .attr("y2", chart_height)
+                        .style("stroke-width", 10)
+                        .style("stroke", "#d3d3d3")
+                        .style("fill", "none");
                 }
-                //append the data
-                g.append("path")
-                    .data(uncertain_val)
-                    .attr("class", "path_line")
-                    .attr('stroke', "grey")
-                    .attr('stroke-width',20)
-                    .attr("fill", "none")
-                    .attr("id","uncertain")
-                    .attr("d", line(uncertain_val));
-                if(!legende_set){
-                    legende_set=true;
-                    setLegende({name:"Migrationseffekte"},"grey")
+                if(!legende_set) {
+                    legende_set = true;
+                    setLegende({name: "Migrationseffekte"}, "#d3d3d3");
                 }
             }
             function setLegende(data, color) {
