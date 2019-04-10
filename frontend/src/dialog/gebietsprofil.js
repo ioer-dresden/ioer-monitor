@@ -1,5 +1,5 @@
-
-const Gebietsprofil={
+//klein da keine Klasse
+const gebietsprofil={
     parameters:{
         endpoint_id: "statistics_content",
         ags:"",

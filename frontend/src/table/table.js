@@ -794,7 +794,7 @@ const table = {
                 .click(function(){
                     let ags = $(this).data('ags'),
                         name = $(this).data('name');
-                    Gebietsprofil.open(ags,name);
+                    gebietsprofil.open(ags,name);
                 });
             //development chart button
             $('.indikatoren_diagramm_ags')
