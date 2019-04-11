@@ -21,6 +21,7 @@ const start_map= {
         map_header.hide();
 
         $('.kennblatt').hide();
+        $('#slider_zeit_container').hide();
         legende.close();
         $('#drop_kat').slideDown();
         //if menu is ready show it
@@ -38,5 +39,6 @@ const start_map= {
         this.state=false;
         additiveLayer.init();
         map_header.show();
+        $('#slider_zeit_container').show();
     }
 };

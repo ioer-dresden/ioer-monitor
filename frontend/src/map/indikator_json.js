@@ -9,9 +9,6 @@ const indikator_json = {
     getJSONFile:function(){
         return this.json_file;
     },
-    getAGSCount:function(){
-        return this.ags_count;
-    },
     init:function(raumgl, callback) {
         const object = this;
         let ind = indikatorauswahl.getSelectedIndikator(),
@@ -215,14 +212,10 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            /*$.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){
-                console.log(data);
-            }));*/
             Gebietsprofil.open(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
-            console.log(ags);
             statistics.chart.settings.ags=ags;
             statistics.chart.settings.name=gen;
             statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
