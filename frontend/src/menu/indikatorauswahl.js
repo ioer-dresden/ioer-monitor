@@ -230,7 +230,6 @@ const indikatorauswahl ={
         $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
     },
     getIndikatorInfo:function(indicator_id,key_name){
-        console.log(indicator_id,key_name);
         let val_found = null,
             id = indicator_id;
         if(typeof id==="undefined" || !id){

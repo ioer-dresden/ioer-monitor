@@ -146,7 +146,8 @@ const dev_chart={
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
                 chart_width = diagram.width() - margin.left - margin.right,
                 chart_height = 400 - (array.length * 30),
-                margin_top = 0;
+                margin_top = 0,
+                migration_set = false;
 
             //let chart_height = $('.ui-dialog').height()*(1.5/3);
             let x = d3.scaleTime().range([0, chart_width]),
@@ -225,8 +226,8 @@ const dev_chart={
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = (helper.getMaxArray(data, "value")+.5).toFixed(1),
-                    minValue = (helper.getMinArray(data, "value")-.5).toFixed(1),
+                    maxValue = parseInt(helper.getMaxArray(data, "value")+1),
+                    minValue = parseInt(helper.getMinArray(data, "value")-1),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
@@ -240,7 +241,6 @@ const dev_chart={
                 } else {
                     x.domain(d3.extent([min_date, max_date]));
                 }
-
                 y.domain(d3.extent([minValue, maxValue]));
                 //set x axis
                 g.append("g")
@@ -281,10 +281,14 @@ const dev_chart={
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
                     parseTime(data);
-                    setMigrationValue(data);
-                    appendData(data, data[0].color.toString());
-                    createCircle(data, data[0].color.toString());
-                    setLegende(data, data[0].color.toString());
+                    try {
+                        setMigrationValue(data);
+                    }catch(error){console.info("no migration values")}
+                    setTimeout(function(){
+                        appendData(data, data[0].color.toString());
+                        createCircle(data, data[0].color.toString());
+                        setLegende(data, data[0].color.toString());
+                    },100);
                 });
             }
 
@@ -299,7 +303,6 @@ const dev_chart={
                             .attr('stroke', color)
                             .attr("stroke-dasharray",_dash_array)
                             .attr("fill", "none")
-                            .attr("id","ind-path")
                             .attr("d", line(array));
                 };
                 $.each(data,function(key,value){
@@ -317,15 +320,11 @@ const dev_chart={
                     });
                     set(values_future,("1,3"));
                 }
-                //create the uncertainty visualisation
-
             }
             //create the migration value
-            var legende_set = false;
             function setMigrationValue(data){
-                console.log(data,migrationValues);
-                let values =new Map(),
-                    uncertain_val =[];
+                //console.log(data,migrationValues);
+                let values =new Map();
                 for(let x=0; x<=data.length-1; x++) {
                     let id = data[x].id,
                         year = parseInt(data[x].year),
@@ -338,44 +337,60 @@ const dev_chart={
                         }
                     }catch(err){}
                 }
-                //map to array for d3
-                for(var [key,value] of values){
-                    uncertain_val.push(value);
-                    g.append("line")
-                        .attr("x1", x(value.date))  //<<== change your code here
-                        .attr("y1", 0)
-                        .attr("x2", x(value.date))  //<<== and here
-                        .attr("y2", chart_height)
-                        .style("stroke-width", 10)
-                        .style("stroke", "#d3d3d3")
-                        .style("fill", "none");
-                }
-                if(!legende_set) {
-                    legende_set = true;
+                let last_elem = Array.from(values.values()).pop().date,
+                    first_elem =values.values().next().value.date,
+                    id="migration_effekt",
+                    width=function(){
+                        let sum = x(last_elem)-x(first_elem);
+                        if(sum===0) {
+                            return 10;
+                        }else{
+                            return sum;
+                            }
+                        };
+                g.append('rect')
+                    .attr("x",x(first_elem)-5.5)
+                    .attr("y",0)
+                    .attr("width",width())
+                    .attr("height",chart_height)
+                    .attr("id",id)
+                    .attr("fill","#d3d3d3");
+
+                if(!migration_set) {
                     setLegende({name: "Migrationseffekte"}, "#d3d3d3");
+                    migration_set=true;
                 }
             }
-            function setLegende(data, color) {
+            //function to set the legende, margin is a object like margin.left = 50x
+            function setLegende(data, color,_margin) {
                 var title = function(){
                     if(data.length >0){
-                        return data[0].name+" in "+data[0].einheit;
-                    }else {
-                        return data.name;
-                    }
-                };
+                            return data[0].name+" in "+data[0].einheit;
+                        }else {
+                            return data.name;
+                        }
+                    },
+                    margin_set = function(){
+                        if(_margin){
+                            return _margin.left;
+                        }else{
+                            return margin.left;
+                        }
+                    };
                 legend.append('g')
                     .append("rect")
-                    .attr("x", margin.left)
+                    .attr("x", margin_set())
                     .attr("y", chart_height + 50 + margin_top)
                     .attr("width", 10)
                     .attr("height", 10)
                     .style("fill", color);
 
                 legend.append("text")
-                    .attr("x", margin.left + 30)
+                    .attr("class","chart_legend")
+                    .attr("x", margin_set() + 30)
                     .attr("y", chart_height + 60 + margin_top)
                     .attr("height", 30)
-                    .attr("width", chart_width)
+                    .attr("width", (chart_width*0.7))
                     .style("fill", color)
                     .text(title());
 

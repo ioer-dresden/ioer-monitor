@@ -41,6 +41,7 @@ const alert_manager= {
         },500);
     },
     alertError:function(){
+        $('#loading_circle').remove();
         setTimeout(function(){
             swal(
                 "Es ist ein Problem aufgetreten",
