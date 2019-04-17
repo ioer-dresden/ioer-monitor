@@ -1,5 +1,5 @@
 
-#area_info_container {
+#area_info_content container {
     width:90%;
     height:90%;
     overflow: auto;
@@ -21,7 +21,7 @@
     hyphens: auto;
   }
 
-#downloadButton{
+.downloadButton{
     width:120px;
     margin-left: auto;
     padding: 10px 25px;
@@ -34,6 +34,5 @@
     background-color: #4CAF50;
     border: none;
     border-radius: 15px;
-    box-shadow: 0 6px #999;
 }
 

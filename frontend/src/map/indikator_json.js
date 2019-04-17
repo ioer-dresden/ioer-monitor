@@ -212,18 +212,14 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-
-            Area_info.parameters.ags=ags;
-            Area_info.parameters.name=gen;
-            Area_info.open(ags,gen);
-
+            area_info.open(ags,gen);
     });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
             statistics.chart.settings.ags=ags;
             statistics.chart.settings.name=gen;
             statistics.chart.settings.ind=indikatorauswahl.getSelectedIndikator();
-            statistics.chart.settings.allValuesJSON  = indikator_json.getJSONFile();
+            statistics.chart.settings.allValuesJSON = indikator_json.getJSONFile();
             statistics.chart.settings.indText=indikatorauswahl.getSelectedIndikatorText();
             statistics.chart.settings.indUnit=indikatorauswahl.getIndikatorEinheit();
             statistics.open();
