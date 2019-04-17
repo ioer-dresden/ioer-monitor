@@ -146,7 +146,20 @@ class ScriptLoader{
         const loader = this;
         $.getMultiScripts = function(arr) {
             var _arr = $.map(arr, function(scr) {
-                return $.getScript(  scr);
+                return $.getScript(  scr,function(){
+                    //script loaded
+                }).fail(function(){
+                    $('#loading_circle').remove();
+                    setTimeout(function(){
+                        swal({
+                            title:"Es ist ein Problem aufgetreten",
+                            text:`Bitte laden Sie die Anwendung über <b class="cursor" style="color:blue;" id="force_reload" onclick="location.reload(true)">STRG-F5</b> oder kontaktieren Sie uns über das Feedback Formular.`,
+                            type:"error",
+                            html:true
+                    });
+                        progressbar.remove();
+                    },500);
+                });
             });
 
             _arr.push($.Deferred(function( deferred ){

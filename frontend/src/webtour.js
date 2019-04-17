@@ -226,6 +226,7 @@ const webTour={
                 {
                     element:"#indikatoren_gebietsprofil12060",
                     title: "Area_info",
+
                     content: "Werteübersicht dieser Gebietseinheit für alle Indikatoren (mit Vergleich zu übergeordneten Raumeinheiten und mittleren Grundaktualitäten)",
                     placement: "left",
                     onShown: function(){
