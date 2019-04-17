@@ -212,9 +212,9 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            Gebietsprofil.parameters.ags=ags;
-            Gebietsprofil.parameters.name=gen;
-            Gebietsprofil.open(ags,gen);
+            Area_info.parameters.ags=ags;
+            Area_info.parameters.name=gen;
+            Area_info.open(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
