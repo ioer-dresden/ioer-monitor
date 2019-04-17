@@ -8,6 +8,8 @@ class ScriptLoader{
             "frontend/lib/jquery/plugin/jquery.progressTimer.js",
             "frontend/lib/jquery/plugin/jquery.splitter.js",
             "frontend/lib/jquery/plugin/he.js",
+            // Data Tables
+            "frontend/lib/dataTables/datatables.min.js",
             //spectrum
             "frontend/lib/spectrum/spectrum.js",
             //Bootstrap
@@ -124,7 +126,7 @@ class ScriptLoader{
             "frontend/src/dialog/kennblatt.js",
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",
-            "frontend/src/dialog/Area_info.js",
+            "frontend/src/dialog/area_info.js",
             "frontend/src/dialog/AdditiveLayerControl.js",
             //export
             "frontend/src/export/ogc_export.js",
