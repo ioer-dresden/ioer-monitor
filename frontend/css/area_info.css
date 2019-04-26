@@ -1,0 +1,38 @@
+
+#area_info_content container {
+    width:90%;
+    height:90%;
+    overflow: auto;
+}
+
+.flex{
+    display:flex;
+    align-items: center;
+    flex-flow: row wrap;
+
+}
+
+.flexElement{
+    margin-top: 0;
+    margin-bottom:0;
+    white-space: pre;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+.downloadButton{
+    width:120px;
+    margin-left: auto;
+    padding: 10px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+}
+
