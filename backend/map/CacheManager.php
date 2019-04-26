@@ -13,7 +13,8 @@ class CacheManager{
             $this->klassenanzahl = $klassenanzahl;
     }
     public function check_cached($ags_array,$colors){
-        if($this->spatial_extend==="gem") {
+        if($this->spatial_extend==="gem"
+            || $this->spatial_extend==="stt") {
             $state = false;
             if (count((array)$colors) == 0
                 and count($ags_array) == 0) {
