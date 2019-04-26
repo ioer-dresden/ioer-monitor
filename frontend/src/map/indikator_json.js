@@ -47,6 +47,8 @@ const indikator_json = {
                     object.json_file = arr
                 }
 
+                console.log(object.json_file);
+
                 if (farbliche_darstellungsart.getSelectionId() === "auto"
                     //error handling, if first view and no classes are set
                     || typeof klassengrenzen.getKlassen().length==="undefined") {
