@@ -36,4 +36,18 @@
     border-radius: 15px;
     margin-left: auto;
 }
+#comparison_ddm{
+}
+
+#firstHeaderRow th{
+    border-bottom: 0;
+}
+#secondHeaderRow th div{
+    min-height: 10px;
+    white-space: nowrap;
+}
+#dataTable{
+    text-align:right;
+}
+
 

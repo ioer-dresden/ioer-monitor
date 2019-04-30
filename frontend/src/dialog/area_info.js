@@ -9,7 +9,7 @@ const area_info={
         time:0
     },
 
-    text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.prepareDataForTable() )
+    text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
         de:{
             title:"Gebietsprofil",
             time: "Zeitpunkt",
@@ -46,12 +46,13 @@ const area_info={
                                                                                                              // -- ACHTUNG!! Has to be the same as the column names defined in function area_info.prepareDataForTAble() !
 
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-                data= area_info.prepareDataForTable(data,area_info.parameters.lan);
+                data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 area_info.parameters.data=data;
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.initDropdown(area_info.parameters,area_info.text);
                 area_info.drawTable(data,area_info.parameters.lan,area_info.text,columnList);
+                area_info.prepareDataForTable(data);
             })
         );
 
@@ -105,7 +106,7 @@ const area_info={
     },
 
 
-    prepareDataForTable:function(data,lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
+    extractRelevantDataFromJSON:function(data, lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
         let tableData=[];
         for (let index in data){
             let catalogIndex = toString(Object.keys(data[index]));
@@ -127,9 +128,12 @@ const area_info={
                         indicatorName=indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"ind_name");
                         indicatorText=indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"info");
                     }
-                    else{
+                    else if (lan=="en"){
                         indicatorName=indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"ind_name_en");
                         indicatorText=indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"info_en");
+                    }
+                    else{
+                        console.log("Language not recognised! Area_info.js")
                     }
                     let tableRow={
                         category:categoryName,
@@ -159,6 +163,14 @@ const area_info={
         return tableData;
 
     },
+
+    // TODO REINIS CONTINUE HERE, create stringified, concatenated data fields
+    prepareDataForTable:function(data){   // stringifies the fields, adds units to some of the fields (value, valueDRD...)
+        for (let row in data) {
+            data[row]["value"] = data[row]["value"] + " " + data[row]["unit"];
+            console.log(data[row]["value"]);
+            }
+        },
 
     selectColumnsForTable:function(data, columnList){
         let newTableColumns=[];
@@ -195,22 +207,32 @@ const area_info={
             <hr />
             <table id="dataTable" class="display" width="90%">
                     <thead>
-                <tr>
-                <th>${text[parameters.lan].category}</th>
-                <th>${text[parameters.lan].indicator}</th>
-                <th>${text[parameters.lan].value}</th>
-                <th>${text[parameters.lan].relevanceYear}</th>
-                <th>${text[parameters.lan].comparison}
-                    <div id="comparison_ddm" class="ui selection dropdown">
-                        <i class="dropdown icon"></i>    
-                        <div class="text">${text[parameters.lan].germany}</div>                    
-                        <div class="menu">
-                           <div class="item" data-value="germany">${text[parameters.lan].germany}</div>
-                           <div class="item" data-value="region">${text[parameters.lan].region}</div>
-                        </div>
-                     </div>
-                </th>
-                <th>${text[parameters.lan].difference}</th>
+                    <tr id="firstHeaderRow">
+                    <th>${text[parameters.lan].category}</th>
+                    <th>${text[parameters.lan].indicator}</th>
+                    <th>${text[parameters.lan].value}</th>
+                    <th>${text[parameters.lan].relevanceYear}</th>
+                    <th>${text[parameters.lan].comparison}</th>
+                    <th class="composite">${text[parameters.lan].difference}</th>
+                </tr>
+                
+                <tr id="secondHeaderRow">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>   
+                        <div id="comparison_ddm" class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="text">${text[parameters.lan].germany}</div>
+                            <div class="menu">
+                                <div class="item" data-value="germany">${text[parameters.lan].germany}</div>
+                                <div class="item" data-value="region">${text[parameters.lan].region}</div>
+                            </div>
+                        </div>                     
+                    </th>
+                    <th></th>
+                    
                 </tr>
         </thead>
 </table>
@@ -227,24 +249,52 @@ const area_info={
     },
 
     drawTable:function(data, lan, text, columnList){
-        data=area_info.selectColumnsForTable(data,columnList);  // getting only the data required for the Table
-        /*let tableColumns= [];
-        for (let columnName in columnList){     // getting the column Names
-            console.log("Got Column in DrawTable: "+ columnList[columnName]);
-            tableColumns.push({title:text[lan][columnList[columnName]]});
-            console.log("Added Column: "+ text[lan][columnList[columnName]]);
-        }
-        */
+        let tableData=area_info.selectColumnsForTable(data,columnList),  // getting only the data required for the Table
+            language=area_info.getDataTablesLanguage(lan);
+
         $("#dataTable").DataTable(
             {
-                destroy:true,
-                data:data,
-                "ordering": false,  // disable the ordering of columns
+                destroy:true,   // destroys the old table before redrawing. Not the most efficient way, though. Consider using dataTables.api
+                responsive: true,
+                data:tableData,
+                "ordering": false,  // disable the ordering of rows
                 "createdRow": function ( row, data, index ) {   // formatting the row at draw time! difference Row @ runtime
-                }
-
+                },
+                "language":language,
+                "pageLength": 25,
             }
-        )
+        );
+    },
+
+
+    getDataTablesLanguage:function(lan){   // returns the DataTables interface translations
+        let language={};  // get the language translations @: http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/
+        switch (lan) {
+            case "de":
+                console.log("Deutsch sein!!!")
+                language={
+                    search: "Suchen",
+                    lengthMenu:    "_MENU_ Einträge anzeigen",
+                    info:           "_START_ bis _END_ von _TOTAL_ Einträgen",
+                    infoEmpty:      "Keine Daten vorhanden",
+                    infoFiltered:   "(gefiltert von _MAX_ Einträgen)",
+                    infoPostFix:    "",
+                    loadingRecords: "Wird geladen ..",
+                    zeroRecords:    "Keine Einträge vorhanden",
+                    paginate: {
+                        first:      "Erste",
+                        previous:   "Zurück",
+                        next:       "Nächste",
+                        last:       "Letzte",
+
+                    },
+                };
+                break;
+            default:
+                console.log("Untermenschlich!!");
+                break;
+        }
+        return language;
     },
 
     roundNumber:function(indicatorId,number){
