@@ -225,8 +225,8 @@ const dev_chart={
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = (helper.getMaxArray(data, "value")+.5).toFixed(1),
-                    minValue = (helper.getMinArray(data, "value")-.5).toFixed(1),
+                    maxValue = parseInt(helper.getMaxArray(data, "value")+1),
+                    minValue = parseInt(helper.getMinArray(data, "value")-1),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
@@ -281,9 +281,9 @@ const dev_chart={
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
                     parseTime(data);
-                    try {
+                    /*try {
                         setMigrationValue(data);
-                    }catch(error){console.info("no migration values")}
+                    }catch(error){console.info("no migration values")}*/
                     appendData(data, data[0].color.toString());
                     createCircle(data, data[0].color.toString());
                     setLegende(data, data[0].color.toString());
@@ -323,11 +323,9 @@ const dev_chart={
 
             }
             //create the migration value
-            var legende_set = false;
             function setMigrationValue(data){
                 //console.log(data,migrationValues);
-                let values =new Map(),
-                    uncertain_val =[];
+                let values =new Map();
                 for(let x=0; x<=data.length-1; x++) {
                     let id = data[x].id,
                         year = parseInt(data[x].year),
@@ -340,29 +338,26 @@ const dev_chart={
                         }
                     }catch(err){}
                 }
-                //map to array for d3
-                for(var [key,value] of values){
-                    uncertain_val.push(value);
-                    /*g.append("line")
-                        .attr("x1", x(value.date))  //<<== change your code here
-                        .attr("y1", 0)
-                        .attr("x2", x(value.date))  //<<== and here
-                        .attr("y2", chart_height)
-                        .style("stroke-width", 10)
-                        .style("stroke", "#d3d3d3")
-                        .style("fill", "none");*/
-                }
                 let last_elem = Array.from(values.values()).pop().date,
-                    first_elem =values.values().next().value.date;
+                    first_elem =values.values().next().value.date,
+                    id="migration_effekt",
+                    width=function(){
+                        let sum = x(last_elem)-x(first_elem);
+                        if(sum===0) {
+                            return 10;
+                        }else{
+                            return sum;
+                            }
+                        };
                 g.append('rect')
-                    .attr("x",x(first_elem))
+                    .attr("x",x(first_elem)-5.5)
                     .attr("y",0)
-                    .attr("width",(x(last_elem)-x(first_elem)))
+                    .attr("width",width())
                     .attr("height",chart_height)
-                    .attr("id","migration_effekt")
+                    .attr("id",id)
                     .attr("fill","#d3d3d3");
-                if(!legende_set) {
-                    legende_set = true;
+
+                if($(`#${id}`).length >0) {
                     setLegende({name: "Migrationseffekte"}, "#d3d3d3",{left:x(first_elem)});
                 }
             }

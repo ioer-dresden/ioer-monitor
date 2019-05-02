@@ -13,16 +13,21 @@ class CacheManager{
             $this->klassenanzahl = $klassenanzahl;
     }
     public function check_cached($ags_array,$colors){
-        $state = false;
-        if(count((array)$colors)==0
-            and count($ags_array)==0) {
-            $sql = "SELECT * FROM " . $this->table_name . " where INDIKATOR_ID = '" . $this->indicator_id . "' and TIME = " . $this->year . " and RAUMGLIEDERUNG ='" . $this->spatial_extend . "' and klassifizierung='" . $this->klassifizierung . "' and klassenanzahl=" . $this->klassenanzahl;
-            $rs = PostgreManager::get_instance()->query($sql);
-            if (!empty($rs)) {
-                $state = true;
+        if($this->spatial_extend==="gem"
+            || $this->spatial_extend==="stt") {
+            $state = false;
+            if (count((array)$colors) == 0
+                and count($ags_array) == 0) {
+                $sql = "SELECT * FROM " . $this->table_name . " where INDIKATOR_ID = '" . $this->indicator_id . "' and TIME = " . $this->year . " and RAUMGLIEDERUNG ='" . $this->spatial_extend . "' and klassifizierung='" . $this->klassifizierung . "' and klassenanzahl=" . $this->klassenanzahl;
+                $rs = PostgreManager::get_instance()->query($sql);
+                if (!empty($rs)) {
+                    $state = true;
+                }
             }
+            return $state;
+        }else{
+            return false;
         }
-        return $state;
     }
     public function insert($json){
             date_default_timezone_set('Europe/Berlin');

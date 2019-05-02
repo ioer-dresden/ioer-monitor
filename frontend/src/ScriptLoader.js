@@ -8,6 +8,8 @@ class ScriptLoader{
             "frontend/lib/jquery/plugin/jquery.progressTimer.js",
             "frontend/lib/jquery/plugin/jquery.splitter.js",
             "frontend/lib/jquery/plugin/he.js",
+            // Data Tables
+            "frontend/lib/dataTables/datatables.min.js",
             //spectrum
             "frontend/lib/spectrum/spectrum.js",
             //Bootstrap
@@ -148,17 +150,6 @@ class ScriptLoader{
             var _arr = $.map(arr, function(scr) {
                 return $.getScript(  scr,function(){
                     //script loaded
-                }).fail(function(){
-                    $('#loading_circle').remove();
-                    setTimeout(function(){
-                        swal({
-                            title:"Es ist ein Problem aufgetreten",
-                            text:`Bitte laden Sie die Anwendung über <b class="cursor" style="color:blue;" id="force_reload" onclick="location.reload(true)">STRG-F5</b> oder kontaktieren Sie uns über das Feedback Formular.`,
-                            type:"error",
-                            html:true
-                    });
-                        progressbar.remove();
-                    },500);
                 });
             });
 
@@ -171,6 +162,7 @@ class ScriptLoader{
 
         $.getMultiScripts(loader.scripts).done(function() {
             try {
+                localStorage.setItem("rel","false");
                 //init the map with all there Functions
                 App.main.call(this);
                 ToolLoader.initTools();
@@ -179,11 +171,15 @@ class ScriptLoader{
                 if(helper.checkIE()){
                     alert_manager.alertIE();
                 }else{
-                    console.log(err);
-                    if(!window.location.href.includes("monitor_test")) {
+                    //reload only one time
+                    if(localStorage.getItem("rel")==="false") {
+                        window.location.reload(true);
+                        localStorage.setItem("rel", "true");
+                    }else{
                         let message = error.getErrorMessage(err);
                         alert_manager.alertError();
                         RequestManager.sendMailError(message.name, message.message);
+                        localStorage.setItem("rel","false");
                     }
                 }
             }

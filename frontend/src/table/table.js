@@ -204,6 +204,7 @@ const table = {
                     value_g = false,
                     grundakt_val = false;
 
+                //the footer part for the corresponding bld
                 let ags_footer = function(){
                         //ags_values
                         if (typeof raumgliederung.getSelectionId() !=='undefined') {
@@ -221,7 +222,7 @@ const table = {
                                                       data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
                                                       title="Veränderung der Indikatorwerte für die Gebietseinheit" 
                                                       style="margin-left: .5vh;"
-                                                      class="indsingle_entwicklungsdiagr" 
+                                                      class="indsingle_entwicklungsdiagr mobile_hidden" 
                                                       id="indikatoren_diagramm_ags${ags}" 
                                                       src="${dev_chart.icon.multiple.path}" />`,
                                         img_trend_ind = `<img data-name="${value.gen}" 
@@ -230,7 +231,7 @@ const table = {
                                                           data-wert="${value_set}" 
                                                           data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
                                                           title="Veränderung des Indikatorwertes für die Gebietseinheit" 
-                                                          class="ind_entwicklungsdiagr" 
+                                                          class="ind_entwicklungsdiagr mobile_hidden" 
                                                           id="indikatoren_diagramm_ags_ind${ags}"
                                                           style="margin-left: .5vh;" 
                                                           src="${dev_chart.icon.single.path}"/>`;
@@ -285,7 +286,7 @@ const table = {
                                       data-wert="${value_g}" 
                                       data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
                                       title="Veränderung der Indikatorwerte für die Gebietseinheit" 
-                                      class="indsingle_entwicklungsdiagr ${exclude.class_performance}" 
+                                      class="indsingle_entwicklungsdiagr mobile_hidden" 
                                       id="indikatoren_diagramm_ags99" 
                                       style="margin-left: .5vh;" 
                                       src="${dev_chart.icon.multiple.path}" />`,
@@ -295,7 +296,7 @@ const table = {
                                           data-wert="${value_g}" 
                                           data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
                                           title="Veränderung des Indikatorwertes für die Gebietseinheit" 
-                                          class="ind_entwicklungsdiagr ${exclude.class_performance}" 
+                                          class="ind_entwicklungsdiagr mobile_hidden" 
                                           id="indikatoren_diagramm_ags_ind99" 
                                           style="margin-left: .5vh;" 
                                           src="${dev_chart.icon.single.path}"/>`,
@@ -340,14 +341,6 @@ const table = {
 
         if(view_state.getViewState()==='mw'){
             main_view.resizeSplitter(table.getWidth());
-        }
-        //hide images on responsive devices
-        if(view_state.getViewState()==='responsive'){
-            $('.indsingle_entwicklungsdiagr').hide();
-            $('.ind_entwicklungsdiagr').hide();
-        }else{
-            $('.indsingle_entwicklungsdiagr').show();
-            $('.ind_entwicklungsdiagr').show();
         }
         //init the panels to filter or expand the table
         expand_panel.init();
@@ -811,34 +804,34 @@ const table = {
                     statistics.open();
                 });
             //development chart single ind
-            if(exclude.checkPerformanceAreas()) {
-                $('.ind_entwicklungsdiagr')
-                    .unbind()
-                    .click(function () {
-                        let ags = $(this).data('ags');
-                        let name = $(this).data('name');
-                        let ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ags = ags;
-                        dev_chart.chart.settings.name = name;
-                        dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ind_vergleich = true;
-                        dev_chart.open();
-                    });
 
-                //development chart single indicator
-                $('.indsingle_entwicklungsdiagr')
-                    .unbind()
-                    .click(function () {
-                        let ags = $(this).data('ags');
-                        let name = $(this).data('name');
-                        let ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ags = ags;
-                        dev_chart.chart.settings.name = name;
-                        dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                        dev_chart.chart.settings.ind_vergleich = false;
-                        dev_chart.open();
-                    });
-            }
+            $('.ind_entwicklungsdiagr')
+                .unbind()
+                .click(function () {
+                    let ags = $(this).data('ags');
+                    let name = $(this).data('name');
+                    let ind = indikatorauswahl.getSelectedIndikator();
+                    console.log("click");
+                    dev_chart.chart.settings.ags = ags;
+                    dev_chart.chart.settings.name = name;
+                    dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                    dev_chart.chart.settings.ind_vergleich = true;
+                    dev_chart.open();
+                });
+
+            //development chart single indicator
+            $('.indsingle_entwicklungsdiagr')
+                .unbind()
+                .click(function () {
+                    let ags = $(this).data('ags');
+                    let name = $(this).data('name');
+                    let ind = indikatorauswahl.getSelectedIndikator();
+                    dev_chart.chart.settings.ags = ags;
+                    dev_chart.chart.settings.name = name;
+                    dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                    dev_chart.chart.settings.ind_vergleich = false;
+                    dev_chart.open();
+                });
 
             //Live Search in Table
             $('#search_input_table')

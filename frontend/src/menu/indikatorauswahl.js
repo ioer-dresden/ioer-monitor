@@ -230,15 +230,10 @@ const indikatorauswahl ={
         $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
     },
     getIndikatorInfo:function(indicator_id,key_name){
-        console.log(indicator_id,key_name);
-        let val_found = null,
-            id = indicator_id;
-        if(typeof id==="undefined" || !id){
-            id = this.getSelectedIndikator();
-        }
+        let val_found = null;
         $.each(this.getPossebilities(),function(cat_key,cat_value){
             $.each(cat_value.indicators, function (key, value) {
-                if(key===id){
+                if(key===indicator_id){
                     val_found = value[key_name];
                 }
             });
