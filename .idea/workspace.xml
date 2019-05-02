@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/database/MysqlManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database/MysqlManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/map/CacheManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/map/CacheManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/Gebietsprofil.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/loading.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/loading.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/css/statistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/statistics.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/data/Entwicklungsgraph_Migration.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/data/migrationsgraph.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/ScriptLoader.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/ScriptLoader.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/alert_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/alert_manager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/Gebietsprofil.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/Gebietsprofil.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/dev_chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/dev_chart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/dialog/statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/dialog/statistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/menu/indikatorauswahl.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/indikatorauswahl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/table/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/table/table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/webtour.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/webtour.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-    </list>
+    <list default="true" id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/backend/dialog/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -208,12 +188,12 @@
       <updated>1552486493710</updated>
       <workItem from="1552486494932" duration="336000" />
       <workItem from="1552486980823" duration="13000" />
-      <workItem from="1556799300021" duration="4955000" />
+      <workItem from="1556799300021" duration="4993000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5304000" />
+    <option name="totallyTimeSpent" value="5342000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
