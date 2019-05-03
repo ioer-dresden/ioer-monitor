@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="" />
+    <list default="true" id="b134d00f-e2bd-434b-8afe-a4f100f825e8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_json.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_json.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/map/indikator_json_group.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/map/indikator_json_group.js" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/backend/dialog/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/table/table.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-468">
-              <caret line="822" column="45" lean-forward="true" selection-start-line="822" selection-start-column="45" selection-end-line="822" selection-end-column="45" />
+            <state relative-caret-position="17">
+              <caret line="822" column="45" selection-start-line="822" selection-start-column="45" selection-end-line="822" selection-end-column="45" />
               <folding>
                 <element signature="n#!!block;n#expand#0;n#expand#0;n#!!block;n#table#0;n#!!top" />
               </folding>
@@ -24,9 +28,45 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/menu/toolbar.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="569">
+              <caret line="391" column="79" lean-forward="true" selection-start-line="391" selection-start-column="79" selection-end-line="391" selection-end-column="79" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/urlparamter.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/table/TableSelection.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" column="46" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json_group.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="32" column="26" lean-forward="true" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dev_chart.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
+            <state relative-caret-position="3995">
               <caret line="235" column="61" selection-start-line="235" selection-start-column="61" selection-end-line="235" selection-end-column="61" />
             </state>
           </provider>
@@ -35,17 +75,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
+            <state relative-caret-position="2482">
               <caret line="146" column="75" selection-start-line="146" selection-start-column="75" selection-end-line="146" selection-end-column="75" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="214" column="25" selection-start-line="214" selection-start-column="12" selection-end-line="214" selection-end-column="25" />
+            <state relative-caret-position="581">
+              <caret line="302" column="57" selection-start-line="302" selection-start-column="57" selection-end-line="302" selection-end-column="57" />
+              <folding>
+                <element signature="n#!!block;n#setPopUp#0;n#setPopUp#0;n#!!block;n#indikator_json#0;n#!!top" />
+                <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#b#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#!!block;n#setMarker#0;n#setMarker#0;n#!!block;n#indikator_json#0;n#!!top" />
+                <element signature="n#!!block;n#setStyle#0;n#setStyle#0;n#!!block;n#indikator_json#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -62,7 +112,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/ScriptLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
+            <state relative-caret-position="2193">
               <caret line="129" column="38" selection-start-line="129" selection-start-column="38" selection-end-line="129" selection-end-column="38" />
             </state>
           </provider>
@@ -85,12 +135,15 @@
         <option value="$PROJECT_DIR$/frontend/css/main.css" />
         <option value="$PROJECT_DIR$/frontend/css/statistics.css" />
         <option value="$PROJECT_DIR$/frontend/src/dialog/dialog.js" />
-        <option value="$PROJECT_DIR$/frontend/src/map/indikator_json.js" />
         <option value="$PROJECT_DIR$/frontend/src/dialog/Gebietsprofil.js" />
         <option value="$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js" />
         <option value="$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js" />
         <option value="$PROJECT_DIR$/frontend/src/dialog/dev_chart.js" />
         <option value="$PROJECT_DIR$/frontend/src/table/table.js" />
+        <option value="$PROJECT_DIR$/frontend/src/urlparamter.js" />
+        <option value="$PROJECT_DIR$/frontend/src/table/TableSelection.js" />
+        <option value="$PROJECT_DIR$/frontend/src/map/indikator_json_group.js" />
+        <option value="$PROJECT_DIR$/frontend/src/map/indikator_json.js" />
       </list>
     </option>
   </component>
@@ -147,6 +200,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="menu" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="master" type="b2602c69:ProjectViewProjectNode" />
+              <item name="master" type="462c0819:PsiDirectoryNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="table" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -189,17 +249,18 @@
       <workItem from="1552486494932" duration="336000" />
       <workItem from="1552486980823" duration="13000" />
       <workItem from="1556799300021" duration="4993000" />
+      <workItem from="1556873475113" duration="5042000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5342000" />
+    <option name="totallyTimeSpent" value="10384000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25799572" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -239,24 +300,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dialog.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dialog.js" />
+    <entry file="file://$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="48" selection-end-column="1" />
+        <state relative-caret-position="493">
+          <caret line="107" column="63" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/ScriptLoader.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/table/table.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="129" column="38" selection-start-line="129" selection-start-column="38" selection-end-line="129" selection-end-column="38" />
+        <state relative-caret-position="17">
+          <caret line="822" column="45" selection-start-line="822" selection-start-column="45" selection-end-line="822" selection-end-column="45" />
+          <folding>
+            <element signature="n#!!block;n#expand#0;n#expand#0;n#!!block;n#table#0;n#!!top" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dev_chart.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="214" column="25" selection-start-line="214" selection-start-column="12" selection-end-line="214" selection-end-column="25" />
+        <state relative-caret-position="3995">
+          <caret line="235" column="61" selection-start-line="235" selection-start-column="61" selection-end-line="235" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2482">
+          <caret line="146" column="75" selection-start-line="146" selection-start-column="75" selection-end-line="146" selection-end-column="75" />
         </state>
       </provider>
     </entry>
@@ -267,33 +339,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/menu/raeumliche_analyseebene.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/ScriptLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="107" column="63" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
+        <state relative-caret-position="2193">
+          <caret line="129" column="38" selection-start-line="129" selection-start-column="38" selection-end-line="129" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/menu/gebietsauswahl.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/menu/toolbar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="146" column="75" selection-start-line="146" selection-start-column="75" selection-end-line="146" selection-end-column="75" />
+        <state relative-caret-position="569">
+          <caret line="391" column="79" lean-forward="true" selection-start-line="391" selection-start-column="79" selection-end-line="391" selection-end-column="79" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/dialog/dev_chart.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/urlparamter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="235" column="61" selection-start-line="235" selection-start-column="61" selection-end-line="235" selection-end-column="61" />
+        <state relative-caret-position="85">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/table/table.js">
+    <entry file="file://$PROJECT_DIR$/frontend/src/table/TableSelection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-468">
-          <caret line="822" column="45" lean-forward="true" selection-start-line="822" selection-start-column="45" selection-end-line="822" selection-end-column="45" />
+        <state relative-caret-position="459">
+          <caret line="27" column="46" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json_group.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="26" lean-forward="true" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/map/indikator_json.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="581">
+          <caret line="302" column="57" selection-start-line="302" selection-start-column="57" selection-end-line="302" selection-end-column="57" />
           <folding>
-            <element signature="n#!!block;n#expand#0;n#expand#0;n#!!block;n#table#0;n#!!top" />
+            <element signature="n#!!block;n#setPopUp#0;n#setPopUp#0;n#!!block;n#indikator_json#0;n#!!top" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#b#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#!!block;n#setMarker#0;n#setMarker#0;n#!!block;n#indikator_json#0;n#!!top" />
+            <element signature="n#!!block;n#setStyle#0;n#setStyle#0;n#!!block;n#indikator_json#0;n#!!top" />
           </folding>
         </state>
       </provider>

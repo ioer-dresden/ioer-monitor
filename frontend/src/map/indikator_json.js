@@ -300,7 +300,7 @@ const indikator_json = {
     resetHighlight: function(e) {
         let layer = e.target,
             ags = layer.feature.properties.ags,
-            ags_selection = table.selection,
+            ags_selection = TableSelection.getSelection(),
             test_select = function(){
                 return $.inArray(ags, ags_selection) >= 0;
             };

@@ -23,12 +23,15 @@ const indikator_json_group = {
     resetHightlight:function(){
         try {
             let ags_selection = TableSelection.getSelection();
+            console.log(ags_selection);
             jsongroup.eachLayer(function (layer) {
                 layer.eachLayer(function (layer) {
                     let ags = layer.feature.properties.ags,
                         test_select = function(){
-                            return $.inArray(ags, ags_selection) >= 0;
+                        console.log(ags.toString(),ags_selection,$.inArray(ags, ags_selection));
+                            return $.inArray(ags.toString(), ags_selection) > 0;
                         };
+                    console.log(test_select());
                     if(!test_select()) {
                         layer.setStyle(style.getLayerStyle(layer.feature.properties.value));
                     }
