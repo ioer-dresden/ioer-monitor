@@ -15,6 +15,12 @@ const indikator_json_group = {
                         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                             layer.bringToFront();
                         }
+                        let fillcolor = layer.options.fillColor.replace('#', '');
+                        $('#legende_' + fillcolor + " i").css({
+                            "width": "20px",
+                            "height": "15px",
+                            "border": "2px solid " + farbschema.getColorHexActive()
+                        });
                     }
                 });
             });
@@ -23,18 +29,17 @@ const indikator_json_group = {
     resetHightlight:function(){
         try {
             let ags_selection = TableSelection.getSelection();
-            console.log(ags_selection);
             jsongroup.eachLayer(function (layer) {
                 layer.eachLayer(function (layer) {
                     let ags = layer.feature.properties.ags,
                         test_select = function(){
-                        console.log(ags.toString(),ags_selection,$.inArray(ags, ags_selection));
-                            return $.inArray(ags.toString(), ags_selection) > 0;
+                            return $.inArray(ags.toString(), ags_selection) >= 0;
                         };
-                    console.log(test_select());
                     if(!test_select()) {
                         layer.setStyle(style.getLayerStyle(layer.feature.properties.value));
                     }
+                    let fillcolor = layer.options.fillColor.replace('#', '');
+                    $('#legende_' + fillcolor + " i").css({"width": "15px", "height": "10px", "border": ""});
                 });
             });
         }catch(err){}
