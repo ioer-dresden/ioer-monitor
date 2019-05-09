@@ -42,17 +42,14 @@ const area_info={
 
     open:function(ags,gen){
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
-        let columnList=["category","indicator", "value", "relevanceYear","defaultComparisonValue", "defaultDifference"]; // list of data columns that should be displayed in the Table - used to sort the data
-                                                                                                             // -- ACHTUNG!! Has to be the same as the column names defined in function area_info.prepareDataForTAble() !
 
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
-                //data= area_info.prepareDataForTable(data);
                 area_info.parameters.data=data;
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
-                area_info.initDropdown(area_info.parameters,area_info.text,columnList);
-                area_info.drawTable(area_info.parameters.data,area_info.parameters.lan,area_info.text,columnList);
+                area_info.initDropdown(area_info.parameters);
+                area_info.drawTable(area_info.parameters);
 
             })
         );
@@ -60,7 +57,7 @@ const area_info={
 
 
     },
-    initDropdown:function(parameters, text, columnList){  // controls the dropdown menu
+    initDropdown:function(parameters){  // controls the dropdown menu
         const comparison_dropdown=$("#comparison_ddm");
         comparison_dropdown.dropdown({
             onChange: function (value) {
@@ -71,7 +68,7 @@ const area_info={
                             parameters.data[row].defaultDifference=parameters.data[row].differenceToBRD;
                             parameters.data.defaultComparisonYear=parameters.data[row].relevanceYearBRD;
                         }
-                        area_info.drawTable(parameters.data,parameters.lan, text, columnList);
+                        area_info.drawTable(parameters);
                         comparison_dropdown.dropdown("hide");
                         console.log("Redrawing table: Germany" );
                         break;
@@ -82,7 +79,7 @@ const area_info={
                             parameters.data[row].defaultDifference=parameters.data[row].differenceToKreis;
                             parameters.data.defaultComparisonYear=parameters.data[row].relevanceYearKreis;
                         }
-                        area_info.drawTable(parameters.data,parameters.lan, text, columnList);
+                        area_info.drawTable(parameters);
                         comparison_dropdown.dropdown("hide");
                         console.log("Redrawing table: Kreis" );
                         break;
@@ -102,7 +99,9 @@ const area_info={
             name:"",
             data:[],
             lan:"",
-            time:0};
+            time:0,
+            columnList:["category","indicator", "value", "relevanceYear","defaultComparisonValue", "defaultDifference"]
+        };
 
 
         parameters.ags=ags;
@@ -239,10 +238,9 @@ const area_info={
         dialog_manager.create();
     },
 
-    drawTable:function(rawData, lan, text, columnList){
-        let tableData=area_info.selectColumnsForTable(rawData,columnList),  // getting only the data required for the Table
-            language=area_info.getDataTablesLanguage(lan);
-        console.log("Size of data: "+ rawData.length);
+    drawTable:function(parameters){
+        let tableData=area_info.selectColumnsForTable(parameters.data,parameters.columnList),  // getting only the data required for the Table
+            language=area_info.getDataTablesLanguage(parameters.lan);
 
         $("#dataTable").DataTable(
             {
@@ -252,39 +250,54 @@ const area_info={
                 "ordering": false,  // disable the ordering of rows
                 "language":language,
                 "pageLength": 25,
-                "columnDefs": [
+                "createdRow": function( row, data, dataIndex){
+                    if( data[0] != " "){
+                        $(row).css( "background-color", "darkgrey" );  // Changing the background color of first Cells of each Category. (nicer would ne $(row).addClass("grayBackground") - but this did not work for some reason....)
+                        }
+                    },
+                "columnDefs": [    // THE COLUMNS GET FORMATTED HERE!!
+                    {
+                        targets:0,
+                        className: "dt-head-center"
+                    },
+                    {
+                        targets:1,
+                        className: "dt-head-center"
+                    },
                     {
                       "targets": 2,
-                        className:"dt-body-nowrap",
+                        className:"dt-body-nowrap dt-head-center",
                       "render":function(data,type,row,meta){
-                          return data + " "+ rawData[meta.row]["unit"]
+                          return data + " "+ parameters.data[meta.row]["unit"]
                       }
                     },
                     {
                         "targets":3,
+                        className:"dt-head-center",
                         "render":function(data,type,row,meta){
-                            return data + " / "+ rawData[meta.row]["relevanceMonth"]
+                            return data + " / "+ parameters.data[meta.row]["relevanceMonth"]
                         }
                     },
                     {
                       "targets": 4,
+                        classname:"dt-head-center",
                       "render":function(data,type,row,meta){
-                          return data+ " "+ rawData[meta.row]["unit"]+ " (" + rawData[meta.row]["defaultComparisonYear"]+")"
+                          return data+ " "+ parameters.data[meta.row]["unit"]+ " (" + parameters.data[meta.row]["defaultComparisonYear"]+")"
                       }
                     },
                     {
                     "targets": 5,
 
-                        className:"dt_body_nowrap",
+                        className:"dt-nowrap dt-body-left dt-head-center",
                     "render": function ( data, type, row, meta ) {
                         if (data<0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-down red nowrapSpan"></span> '+ data + rawData[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-down red nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
                         else if(data>0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-up green nowrapSpan"></span> '+ data + rawData[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-up green nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
                         else {
-                            return '<span class="glyphicon glyphicon-circle-arrow-right blue nowrapSpan"></span> '+ data + rawData[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-right blue nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
 
                     }

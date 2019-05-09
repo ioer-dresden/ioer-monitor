@@ -36,20 +36,11 @@
     border-radius: 15px;
     margin-left: auto;
 }
-#comparison_ddm{
 
-}
-
-#firstHeaderRow th{
+ th #firstHeaderRow{
     border-bottom: 0;
 }
-#secondHeaderRow th div{
-    min-height: 10px;
-    white-space: nowrap;
-}
-#dataTable{
-    text-align:right;
-}
+
 .green{
     color: #0ea432;
 }
@@ -60,14 +51,10 @@
     color: #0d71bb;
 }
 
-.nowrapSpan{
-    white-space: nowrap;
-}
-
 .change-height-of-dropdown {
     min-height: auto !important;
     height: 1em;
-    min-width: 80px !important;
 }
+
 
 
