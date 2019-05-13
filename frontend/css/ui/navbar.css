@@ -28,7 +28,7 @@
     height: 50px;
     left:0;
     width: 50px;
-    background: white url(../assets/kopf.png) no-repeat center;
+    background: white url(../../assets/kopf.png) no-repeat center;
 }
 .navbar .help{
     margin-right: 10px;

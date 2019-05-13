@@ -30,7 +30,7 @@
     top: 40px;
 }
 #print_container .print_map_content .print_header .logo{
-    background-image: url("../assets/kopf_v2.png");
+    background-image: url("../../assets/kopf_v2.png");
     background-repeat: no-repeat;
     background-position: center;
     width: 100%;

@@ -210,7 +210,7 @@
 .toolbar #content .dropdown_menu .btn_container .full_screen{
     width: 32px;
     height: 32px;
-    background: var(--main-color) url(../assets/icon/fullscreen-symbol.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/fullscreen-symbol.png) no-repeat center center;
     margin-left: 7px;
 }
 .toolbar #content #dropdown_werkzeug ul li {
@@ -227,19 +227,19 @@
     margin-left: 7px;
 }
 .toolbar #content #dropdown_werkzeug .btn_container #measure {
-    background: var(--main-color) url(../assets/icon/ruler.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/ruler.png) no-repeat center center;
 }
 .toolbar #content #dropdown_werkzeug .btn_container #lupe {
-    background: var(--main-color) url(../assets/icon/lupe.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/lupe.png) no-repeat center center;
 }
 .toolbar #content #dropdown_werkzeug #import {
-    background: var(--main-color) url(../assets/icon/import.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/import.png) no-repeat center center;
 }
 #content #dropdown_werkzeug #import .leaflet-control-filelayer{
     opacity: 0 !important;
 }
 .toolbar #content .dropdown_menu #btn_glaetten{
-    background: var(--main-color) url(../assets/icon/smooth.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/smooth.png) no-repeat center center;
 }
 .toolbar #content #dropdown_analyse ul li{
     float: left;
@@ -250,18 +250,18 @@
     margin-left: 7px;
 }
 .toolbar #content #dropdown_analyse #dev_chart{
-    background: white url(../assets/icon/trend.png) no-repeat center center;
+    background: white url(../../assets/icon/trend.png) no-repeat center center;
 }
 .toolbar #content #dropdown_analyse #dev_chart_compare{
-    background: white url(../assets/icon/trend_compare.png) no-repeat center center;
+    background: white url(../../assets/icon/trend_compare.png) no-repeat center center;
 }
 .toolbar #content #dropdown_analyse #ind_compare{
-    background: var(--main-color) url(../assets/icon/split.png) no-repeat center center;
+    background: var(--main-color) url(../../assets/icon/split.png) no-repeat center center;
     height:40px;
     margin-bottom: 5px;
 }
 .toolbar #content #dropdown_analyse #ind_stat{
-    background: white url(../assets/icon/histogramm32.png) no-repeat center center;
+    background: white url(../../assets/icon/histogramm32.png) no-repeat center center;
 }
 /*
 color schema

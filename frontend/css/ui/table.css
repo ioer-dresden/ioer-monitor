@@ -22,7 +22,7 @@
 .right_content .table_page_header #interact_div #print_table{
     width: 30px;
     height: 30px;
-    background: white url(../assets/icon/print_dark.png) no-repeat center center;
+    background: white url(../../assets/icon/print_dark.png) no-repeat center center;
     float: right;
     margin-right: 10px;
     cursor: pointer;
@@ -30,7 +30,7 @@
 .right_content  .table_page_header #interact_div #csv_export{
     width: 30px;
     height: 30px;
-    background: white url(../assets/icon/csv-down.png) no-repeat center center;
+    background: white url(../../assets/icon/csv-down.png) no-repeat center center;
     float: right;
     margin-right: 10px;
     cursor: pointer;
@@ -72,17 +72,17 @@
 }
 .right_content .scrollable-area #table_ags #thead .sort-arrow
 {
-    background: lightgray url(../assets/icon/bg.gif) no-repeat center right;
+    background: lightgray url(../../assets/icon/bg.gif) no-repeat center right;
     padding-right: 20px;
     cursor: pointer;
 }
 .right_content .scrollable-area #table_ags #thead .tablesorter-headerAsc
 {
-    background: lightgray url(../assets/icon/asc.gif) no-repeat center right;
+    background: lightgray url(../../assets/icon/asc.gif) no-repeat center right;
 }
 .right_content .scrollable-area #table_ags #thead .tablesorter-headerDesc
 {
-    background: lightgray url(../assets/icon/desc.gif) no-repeat center right;
+    background: lightgray url(../../assets/icon/desc.gif) no-repeat center right;
 }
 .right_content .scrollable-area #table_ags #thead .tablesorter-headerDesc, .tablesorter-headerAsc
 {
@@ -157,7 +157,7 @@ tabelle filtern
 .right_content .filter{
     width: 35px;
     height: 35px;
-    background: white url(../assets/icon/filter.png) no-repeat center center;
+    background: white url(../../assets/icon/filter.png) no-repeat center center;
     float: right;
     margin-right: 10px;
     cursor: pointer;

@@ -128,6 +128,7 @@ class ScriptLoader{
             "frontend/src/dialog/statistics.js",
             "frontend/src/dialog/Gebietsprofil.js",
             "frontend/src/dialog/AdditiveLayerControl.js",
+            "frontend/src/dialog/area_info.js",
             //export
             "frontend/src/export/ogc_export.js",
             "frontend/src/export/map_link.js",
