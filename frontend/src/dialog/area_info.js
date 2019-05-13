@@ -4,6 +4,8 @@ const area_info={
         endpoint_id: "",
         ags:"",
         name:"",
+        spatialUnit:"",
+        parentSpatialUnits:"",
         data:[],
         lan:"",
         time:0
@@ -22,7 +24,7 @@ const area_info={
             comparison:"Wergleich mit: ",
             germany:"Deutschland",
             region:"Kreis",
-            difference:"Differenz zu"
+            difference:"Differenz"
         },
         en:{
             title:"Area information",
@@ -36,7 +38,7 @@ const area_info={
             comparison:"Comparison with:",
             germany: "Germany",
             region: "District",
-            difference:"Difference to"
+            difference:"Difference"
         }
     },
 
@@ -45,7 +47,9 @@ const area_info={
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
         console.log("Getting parameter");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-            console.log("Getting data");
+                console.log("Getting data "+ Object.keys(data)[1]);
+                area_info.parameters.parentSpatialUnits= data["spatial_info"]["spatial_info"];
+                console.log("spatial_info: "+ (Object.values(area_info.parameters.parentSpatialUnits)));
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 console.log("Data da");
                 area_info.parameters.data=data;
@@ -54,8 +58,6 @@ const area_info={
                 area_info.initDropdown(area_info.parameters);
                 area_info.drawTable(area_info.parameters);
             console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
-            console.log(raeumliche_analyseebene.getSpatialExtentNameById(raeumliche_analyseebene.getSelectionId()));
-
             })
         );
 
@@ -101,8 +103,8 @@ const area_info={
         let parameters={
             endpoint_id:"area_info_content",
             ags:"",
-            //spatialUnit:"",
-            //parentSpatialUnit:"",
+            spatialUnit:"",
+            parentSpatialUnits:"",
             name:"",
             data:[],
             lan:"",
@@ -111,7 +113,7 @@ const area_info={
         };
         parameters.ags=ags;
         parameters.name=gen;
-        //parameters.spatialUnit=raeumliche_analyseebene.getSelectionId();
+        parameters.spatialUnit=raeumliche_analyseebene.getSelectionId();
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
         return parameters;
@@ -120,6 +122,7 @@ const area_info={
 
     extractRelevantDataFromJSON:function(data, lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
         let tableData=[];
+        data=data["values"];
         for (let index in data){
             for (let category in data[index]) {
                 let categoryName=" ";
@@ -169,7 +172,6 @@ const area_info={
                     };
                     categoryName=" ";
                     tableData.push(tableRow);
-                    //console.log("Helooo.....  "+Object.keys(data[index][category]["values"][indicator]))
                 }
             }
 
@@ -201,10 +203,10 @@ const area_info={
                         <div class="flex" >             
                         <h2 class="flexElement">${text[parameters.lan].indicatorValues}</h2>
                         <h2 class="flexElement"> ${parameters.name}</h2>
-                        <h3 class="flexElement" style="color: slategray"> (AGS: ${parameters.ags})</h3>
+                        <h3 class="flexElement" > (AGS: ${parameters.ags})</h3>
                         </div> 
                     
-                    <h3 class="flexElement"> ${text[parameters.lan].time}: ${parameters.time}</h3>
+                    <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}</h3>
                     </div>
                     <div title="Tabelle als CSV exportieren" id="area_info_csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren">
                     </div>                              
