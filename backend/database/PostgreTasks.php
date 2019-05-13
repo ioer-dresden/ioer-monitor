@@ -87,11 +87,10 @@ class PostgreTasks extends PostgreManager
         return $value_return;
     }
     function getAGSName($raumgliederung,$ags,$year){
-        if(intval($year)==2017){
+        if(intval($year)==2018){
             $year= 2016;
         }
         $sql ="select gen from vg250_".$raumgliederung."_".$year."_grob where ags ='".$ags."'";
-
         $rs = $this->query($sql);
         return $rs[0]->gen;
     }

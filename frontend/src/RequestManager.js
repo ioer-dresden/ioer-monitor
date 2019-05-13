@@ -92,7 +92,7 @@ class RequestManager{
     }
     static getSpatialOverview(indicator_id,ags){
         let json = JSON.parse(`{"ind":{"id":"${indicator_id}","ags":"${ags}","time":"${zeit_slider.getTimeSet()}"},"query":"getvaluesags"}`);
-        return this.sendRequestPHP({"file":json,"query":"getvaluesags","type":"POST","debug":true})
+        return this.sendRequestPHP({"file":json,"query":"getvaluesags","type":"POST","debug":false});
     }
     static sendMailFeedback(name, sender, message){
         let json = {
@@ -120,6 +120,7 @@ class RequestManager{
         return this.sendRequestFlask(json)
     }
     static sendRequestPHP(json){
+        console.log(json);
         const manager = this;
         call= $.ajax({
             async: true,
@@ -165,7 +166,7 @@ class RequestManager{
     }
     static onError( thrownError,function_name,url) {
         if (thrownError !== "abort") {
-            console.error(thrownError);
+            console.error(thrownError,function_name,url);
             /*let message= error.getErrorMessage(`${thrownError} in function: ${function_name}`);
             progressbar.remove();
             alert_manager.alertError();

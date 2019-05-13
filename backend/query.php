@@ -236,6 +236,9 @@ try{
         $values=MysqlTasks::get_instance()->getAllIndicatorValuesInAGS($year,$ags,true,true);
         $keys = array();
         $result = array();
+        $bld = PostgreTasks::get_instance()->getAGSName("bld",substr($ags,0,2),$year);
+        $krs = PostgreTasks::get_instance()->getAGSName("krs",substr($ags,0,5),$year);
+
         foreach(MysqlTasks::get_instance()->getAllCategoriesGebiete() as $k){array_push($keys,array("cat_id"=>$k->ID_THEMA_KAT,"cat_name"=>$k->THEMA_KAT_NAME,"cat_name_en"=>$k->THEMA_KAT_NAME_EN));}
         //create the cat keys
         foreach($keys as $key=>$val){
@@ -254,7 +257,14 @@ try{
                 )
             ));
         }
-        echo json_encode($result);
+
+        echo json_encode(array("values"=>$result,
+            "spatial_info"=>
+                array(
+                    "spatial_info"=>array(
+                        "bld_name"=>$bld,
+                        "krs_name"=>$krs
+                    ))));
     }
     else if($query=="maplink"){
         $setting = $json_obj["setting"];
