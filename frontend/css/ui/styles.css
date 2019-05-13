@@ -156,3 +156,10 @@
     margin-top: 1px;
     margin-bottom: 1px;
 }
+/*arrow up bzw. down*/
+.positiv{
+    transform: rotate(-40deg);
+}
+.negativ{
+    transform: rotate(40deg);
+}

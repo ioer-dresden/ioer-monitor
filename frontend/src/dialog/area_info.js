@@ -12,7 +12,7 @@ const area_info={
     text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
         de:{
             title:"Gebietsprofil",
-            time: "Zeitpunkt",
+            time: "Zeitschnitt",
             indicatorValues:"Alle Indikatorwerte für: ",
             download:"Herunterladen als .csv",
             category:"Kategorie",
@@ -22,7 +22,7 @@ const area_info={
             comparison:"Wergleich mit: ",
             germany:"Deutschland",
             region:"Kreis",
-            difference:"Differenz"
+            difference:"Differenz zu"
         },
         en:{
             title:"Area information",
@@ -35,21 +35,26 @@ const area_info={
             relevanceYear:"Topicality",
             comparison:"Comparison with:",
             germany: "Germany",
-            region: "Kreis",
-            difference:"Difference"
+            region: "District",
+            difference:"Difference to"
         }
     },
 
     open:function(ags,gen){
+        console.log("Starting");
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
-
+        console.log("Getting parameter");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
+            console.log("Getting data");
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
+                console.log("Data da");
                 area_info.parameters.data=data;
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.initDropdown(area_info.parameters);
                 area_info.drawTable(area_info.parameters);
+            console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
+            console.log(raeumliche_analyseebene.getSpatialExtentNameById(raeumliche_analyseebene.getSelectionId()));
 
             })
         );
@@ -96,16 +101,17 @@ const area_info={
         let parameters={
             endpoint_id:"area_info_content",
             ags:"",
+            //spatialUnit:"",
+            //parentSpatialUnit:"",
             name:"",
             data:[],
             lan:"",
             time:0,
-            columnList:["category","indicator", "value", "relevanceYear","defaultComparisonValue", "defaultDifference"]
+            columnList:["category","indicator", "value", "relevanceYear","defaultComparisonValue", "defaultDifference"] // Columns that will be displayed
         };
-
-
         parameters.ags=ags;
         parameters.name=gen;
+        //parameters.spatialUnit=raeumliche_analyseebene.getSelectionId();
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
         return parameters;
@@ -163,6 +169,7 @@ const area_info={
                     };
                     categoryName=" ";
                     tableData.push(tableRow);
+                    //console.log("Helooo.....  "+Object.keys(data[index][category]["values"][indicator]))
                 }
             }
 
@@ -199,9 +206,8 @@ const area_info={
                     
                     <h3 class="flexElement"> ${text[parameters.lan].time}: ${parameters.time}</h3>
                     </div>
-                    <button class="downloadButton">
-                        ${text[parameters.lan].download}
-                    </button>                                    
+                    <div title="Tabelle als CSV exportieren" id="area_info_csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren">
+                    </div>                              
             </div>
             <br/>
             <hr />
@@ -257,30 +263,26 @@ const area_info={
                     },
                 "columnDefs": [    // THE COLUMNS GET FORMATTED HERE!!
                     {
-                        targets:0,
-                        className: "dt-head-center"
+                        targets:0
                     },
                     {
-                        targets:1,
-                        className: "dt-head-center"
+                        targets:1
                     },
                     {
                       "targets": 2,
-                        className:"dt-body-nowrap dt-head-center",
+                        className:"dt-body-nowrap",
                       "render":function(data,type,row,meta){
                           return data + " "+ parameters.data[meta.row]["unit"]
                       }
                     },
                     {
                         "targets":3,
-                        className:"dt-head-center",
                         "render":function(data,type,row,meta){
                             return data + " / "+ parameters.data[meta.row]["relevanceMonth"]
                         }
                     },
                     {
                       "targets": 4,
-                        classname:"dt-head-center",
                       "render":function(data,type,row,meta){
                           return data+ " "+ parameters.data[meta.row]["unit"]+ " (" + parameters.data[meta.row]["defaultComparisonYear"]+")"
                       }
@@ -288,16 +290,16 @@ const area_info={
                     {
                     "targets": 5,
 
-                        className:"dt-nowrap dt-body-left dt-head-center",
+                        className:"dt-nowrap dt-body-left",
                     "render": function ( data, type, row, meta ) {
                         if (data<0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-down red nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor negativ"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
                         else if(data>0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-up green nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor positiv"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
                         else {
-                            return '<span class="glyphicon glyphicon-circle-arrow-right blue nowrapSpan"></span> '+ data + " " + parameters.data[meta.row]["unit"];
+                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor"></span> '+ data + " " + parameters.data[meta.row]["unit"];
                         }
 
                     }
@@ -336,6 +338,11 @@ const area_info={
         }
         return language;
     },
+
+    downloadCSV:function() {     // TODO
+
+    },
+
 
     roundNumber:function(indicatorId,number){
         let decimalSpaces=indikatorauswahl.getIndikatorInfo(indicatorId,"rundung");

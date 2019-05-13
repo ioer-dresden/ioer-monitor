@@ -21,39 +21,27 @@
     hyphens: auto;
   }
 
-.downloadButton{
-    width:120px;
-    padding: 10px 25px;
-
-    font-size: 24px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: #fff;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 15px;
-    margin-left: auto;
-}
 
  th #firstHeaderRow{
     border-bottom: 0;
 }
 
-.green{
-    color: #0ea432;
-}
-.red{
-    color: #9f3a38;
-}
-.blue{
-    color: #0d71bb;
+.mainColor {
+    color: var(--main-color);
 }
 
 .change-height-of-dropdown {
     min-height: auto !important;
     height: 1em;
+}
+#area_info_csv_export {
+width: 30px;
+height: 30px;
+background: white url(../../assets/icon/csv-down.png) no-repeat center center;
+float: right;
+margin-right: 10px;
+cursor: pointer;
+margin-left: auto;
 }
 
 

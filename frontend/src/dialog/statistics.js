@@ -394,7 +394,7 @@ const statistics = {
                     parameters.xValue="value";
                     parameters.yValue="distFuncValue";
 
-                    this.drawCumulativeDistributionGraph(parameters)
+                    this.drawCumulativeDistributionChart(parameters)
                 }
 
                 else {console.log("No graphical option chosen!")}
@@ -838,7 +838,7 @@ const statistics = {
 
 
             },
-            drawCumulativeDistributionGraph: function (parameters) {
+            drawCumulativeDistributionChart: function (parameters) {
                 let data = parameters.data,
                     xValue = parameters.xValue,
                     yValue = parameters.yValue,
@@ -1127,7 +1127,7 @@ const statistics = {
         return Math.sqrt(squareDiffSum / (count - 1));
 
     },
-    getDecimalSpaces:function(geoJSON){
+    getDecimalSpaces:function(){
         return parseInt(indikatorauswahl.getIndikatorInfo(false,"rundung"));
     },
     roundNumber: function (number, decimalSpaces) {

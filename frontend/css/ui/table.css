@@ -142,12 +142,6 @@
 .right_content .scrollable-area #table_ags tr .dif_val_div b{
     margin-left: 1vh;
 }
-.right_content .scrollable-area #table_ags tr .dif_val_div .positiv{
-    transform: rotate(-40deg);
-}
-.right_content .scrollable-area #table_ags tr .dif_val_div .negativ{
-    transform: rotate(40deg);
-}
 .right_content .scrollable-area #table_ags .grey_border{
     border-left: 6px solid grey !important;
 }
