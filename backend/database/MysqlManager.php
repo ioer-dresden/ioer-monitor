@@ -5,6 +5,7 @@ class MysqlManager extends DbSettings {
 
     protected static $instance = NULL;
     public $berechtigung = 3;
+
     public function __construct() {
 
         $settings = DbSettings::getSettings_mysql();

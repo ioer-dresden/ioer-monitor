@@ -208,6 +208,7 @@ const table = {
                         //ags_values
                         if (typeof raumgliederung.getSelectionId() !=='undefined') {
                             let tfoot_ags='';
+                            console.log(ags_ind_array);
                             $.each(ags_ind_array, function (key, value) {
                                 $.each(value, function (key_found, value_found) {
                                     let value_set = value_found.value_ags,
