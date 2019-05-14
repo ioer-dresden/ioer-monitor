@@ -726,7 +726,7 @@ const statistics = {
                     });
 
                 //Draw the selected area line in Graph
-                // Find the selected region, x,y Values
+                // Find the selected district, x,y Values
                 let selectedArea=statistics.findSelectedAreaInInterval(data, selectedAreaAGS);
                 g.append("line")          // attach a line
                     .attr("class", "selectedAreaLine")
@@ -980,7 +980,7 @@ const statistics = {
 
 
                 //Draw the selected area line in Graph
-                // Find the selected region, x,y Values
+                // Find the selected district, x,y Values
                 g.append("line")          // attach a line
                     .attr("class", "selectedAreaLine")
                     .style("stroke", "red")  // colour the line
