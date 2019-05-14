@@ -16,18 +16,18 @@
 @import url("../lib/sweetalert/sweetalert.css");
 @import url("../lib/spectrum/spectrum.css");
 /*modules*/
-@import "styles.css";
-@import "responsive.css";
-@import "autocomplete.css";
-@import "print_map.css";
-@import "toolbar.css";
-@import "navbar.css";
-@import "map.css";
-@import "table.css";
-@import "feeback.css";
-@import "dev_chart.css";
-@import "statistics.css";
-@import "loading.css";
+@import "ui/styles.css";
+@import "ui/responsive.css";
+@import "ui/autocomplete.css";
+@import "ui/print_map.css";
+@import "ui/toolbar.css";
+@import "ui/navbar.css";
+@import "ui/map.css";
+@import "ui/table.css";
+@import "ui/feeback.css";
+@import "ui/dev_chart.css";
+@import "ui/statistics.css";
+@import "ui/loading.css";
 
 
 body {

@@ -85,17 +85,17 @@ Tools
     box-shadow: 0 0 3px gray;
 }
 .vergleich{
-    background: var(--main-color) url(../assets/icon/split.png) no-repeat center;
+    background: var(--main-color) url(../../assets/icon/split.png) no-repeat center;
 }
 .germany {
-    background: var(--main-color) url(../assets/icon/germany.png) no-repeat center;
+    background: var(--main-color) url(../../assets/icon/germany.png) no-repeat center;
 }
 .zoomIn {
-    background: var(--main-color) url(../assets/icon/plus.png) no-repeat center;
+    background: var(--main-color) url(../../assets/icon/plus.png) no-repeat center;
 }
 .zoomOut {
-    background: var(--main-color) url(../assets/icon/minus.png) no-repeat center;
+    background: var(--main-color) url(../../assets/icon/minus.png) no-repeat center;
 }
 .locate{
-    background: var(--main-color) url(../assets/icon/marker.png) no-repeat center;
+    background: var(--main-color) url(../../assets/icon/marker.png) no-repeat center;
 }

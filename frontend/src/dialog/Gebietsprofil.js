@@ -12,7 +12,6 @@ class Gebietsprofil{
                 'jahr':zeit_slider.getTimeSet()
             },
             success: function (data) {
-                console.log();
                 $('#gebietsprofil_content').html(data);
                 let html = he.encode(`
                     <h4 id="${this.endpoint_id}" class="dialog jq_dialog">

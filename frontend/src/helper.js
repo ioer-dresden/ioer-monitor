@@ -46,6 +46,9 @@ const helper={
     },
     enableElement:function(_elem,title){
         let elem = $(_elem);
+        if(elem.attr("id")==="panRight"){
+            console.log(elem);
+        }
         elem
             .removeClass('disabled')
             .prop('disabled',false)

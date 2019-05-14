@@ -14,7 +14,8 @@ class CacheManager{
     }
     public function check_cached($ags_array,$colors){
         if($this->spatial_extend==="gem"
-            || $this->spatial_extend==="stt") {
+            || $this->spatial_extend==="stt"
+            || $this->spatial_extend==="vwg") {
             $state = false;
             if (count((array)$colors) == 0
                 and count($ags_array) == 0) {

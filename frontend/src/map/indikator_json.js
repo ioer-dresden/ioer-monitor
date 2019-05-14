@@ -1,7 +1,6 @@
 const indikator_json = {
-    json_layer : '',
-    json_file:'',
-    hover:true,
+    json_layer : false,
+    json_file:false,
     ags_count:false,
     getJSONLayer:function(){
         return this.json_layer;
@@ -46,6 +45,8 @@ const indikator_json = {
                 }catch(err){
                     object.json_file = arr
                 }
+
+                console.log(object.json_file);
 
                 if (farbliche_darstellungsart.getSelectionId() === "auto"
                     //error handling, if first view and no classes are set
