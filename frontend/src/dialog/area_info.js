@@ -8,7 +8,8 @@ const area_info={
         parentSpatialUnits:"",
         data:[],
         lan:"",
-        time:0
+        time:0,
+        relevance:""
     },
 
     text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
@@ -21,10 +22,10 @@ const area_info={
             indicator:"Indikator",
             value:"Wert",
             relevanceYear:"Aktualität",
-            comparison:"Wergleich mit: ",
+            comparison:"Vergleich mit ",
             germany:"Deutschland",
-            region:"Kreis",
-            difference:"Differenz"
+            district:"Kreis",
+            difference:"Differenz zu"
         },
         en:{
             title:"Area information",
@@ -35,10 +36,10 @@ const area_info={
             indicator:"Indicator",
             value:"Value",
             relevanceYear:"Topicality",
-            comparison:"Comparison with:",
+            comparison:"Comparison to ",
             germany: "Germany",
-            region: "District",
-            difference:"Difference"
+            district: "District",
+            difference:"Difference to"
         }
     },
 
@@ -47,21 +48,23 @@ const area_info={
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
         console.log("Getting parameter");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-                console.log("Getting data "+ Object.keys(data)[1]);
+                console.log("Getting data "+ " JSON Object level keys: " +Object.keys(data)  +" Keys inside spatial_info Object: " + Object.keys(data["spatial_info"]));
                 area_info.parameters.parentSpatialUnits= data["spatial_info"]["spatial_info"];
-                console.log("spatial_info: "+ (Object.values(area_info.parameters.parentSpatialUnits)));
+            console.log("Data keys: "+ Object.keys(data["values"]));
+
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
-                console.log("Data da");
                 area_info.parameters.data=data;
+                area_info.parameters.relevance=data[0].relevanceYear + " / " + data[0].relevanceMonth; // getting the relevance/topicality (Aktualität) from Data
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
-                area_info.initDropdown(area_info.parameters);
+                area_info.initDropdown(area_info.parameters, area_info.text);
+            console.log("spatial_info: "+ area_info.parameters.relevance);
                 area_info.drawTable(area_info.parameters);
             console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
             })
         );
     },
-    initDropdown:function(parameters){  // controls the dropdown menu
+    initDropdown:function(parameters, text){  // controls the dropdown menu
         const comparison_dropdown=$("#comparison_ddm");
         comparison_dropdown.dropdown({
             onChange: function (value) {
@@ -74,10 +77,11 @@ const area_info={
                         }
                         area_info.drawTable(parameters);
                         comparison_dropdown.dropdown("hide");
+                        $("#tableHeaderDifferenceTo").text(text[parameters.lan].difference+" " +text[parameters.lan].germany);
                         console.log("Redrawing table: Germany" );
                         break;
 
-                    case "region":
+                    case "district":
                         for (let row in parameters.data){
                             parameters.data[row].defaultComparisonValue=parameters.data[row].valueKreis;
                             parameters.data[row].defaultDifference=parameters.data[row].differenceToKreis;
@@ -85,6 +89,7 @@ const area_info={
                         }
                         area_info.drawTable(parameters);
                         comparison_dropdown.dropdown("hide");
+                        $("#tableHeaderDifferenceTo").text(text[parameters.lan].difference+" " +parameters.parentSpatialUnits["krs_name"]);
                         console.log("Redrawing table: Kreis" );
                         break;
                     default:
@@ -106,7 +111,8 @@ const area_info={
             data:[],
             lan:"",
             time:0,
-            columnList:["category","indicator", "value", "relevanceYear","defaultComparisonValue", "defaultDifference"] // Columns that will be displayed
+            relevance:"",
+            columnList:["category","indicator", "value", "defaultComparisonValue"] // Columns that will be displayed
         };
         parameters.ags=ags;
         parameters.name=gen;
@@ -192,7 +198,11 @@ const area_info={
         return newTableColumns;
     },
 
-    writeHTML:function(parameters, text){
+    writeHTML:function(parameters, text){ // writes the HTML for the Dialog Window
+         // Decide if dropdown menu should be shown and format the corresponding Table Header Elements
+        let headerHTML=area_info.getTableHeaderHTML(parameters,text);
+
+        // Encoding the HTLM
         return he.encode(`
         <div class="jq_dialog" id="${parameters.endpoint_id}">
             <div class="flex" id="area_info_container">
@@ -204,6 +214,7 @@ const area_info={
                         </div> 
                     
                     <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}</h3>
+                    <h3 class="flexElement">${text[parameters.lan].relevanceYear}: ${parameters.relevance}</h3>
                     </div>
                     <div title="Tabelle als CSV exportieren" id="area_info_csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren">
                     </div>                              
@@ -212,27 +223,43 @@ const area_info={
             <hr />
             <table id="dataTable" class="display" width="90%">
                     <thead>
-                    <tr id="firstHeaderRow">
-                    <th>${text[parameters.lan].category}</th>
-                    <th>${text[parameters.lan].indicator}</th>
-                    <th>${text[parameters.lan].value}</th>
-                    <th>${text[parameters.lan].relevanceYear}</th>
-                                      <th> <div> ${text[parameters.lan].comparison} </div>  
-                        <div id="comparison_ddm" class="ui selection dropdown change-height-of-dropdown">
-                            <i class="dropdown icon"></i>
-                            <div class="text">${text[parameters.lan].germany}</div>
-                            <div class="menu">
-                                <div class="item" data-value="germany">${text[parameters.lan].germany}</div>
-                                <div class="item" data-value="region">${text[parameters.lan].region}</div>
-                            </div>
-                        </div>                     
-                    </th>
-                    <th class="composite">${text[parameters.lan].difference}</th>
-                </tr>
-        </thead>
-</table>
+                    ${headerHTML}
+                    </thead>
+            </table>
         </div>
         `);
+    },
+
+    getTableHeaderHTML:function(parameters, text){
+        let headerHTML=`<tr id=\"firstHeaderRow\"> 
+                           <th>${text[parameters.lan].category}</th> 
+                           <th>${text[parameters.lan].indicator}</th> 
+                           <th>${text[parameters.lan].value}</th> 
+`;
+        let comparisonHTML="";
+        if (parameters.spatialUnit=== "vwg" || parameters.spatialUnit==="gem"){
+            console.log("Got a small area!: " +parameters.spatialUnit);
+            comparisonHTML=`
+                <th> <div> ${text[parameters.lan].comparison} </div>  
+                    <div id="comparison_ddm" class="ui selection dropdown change-height-of-dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="text">${text[parameters.lan].germany}</div>
+                        <div class="menu" id="area_info_ddm">
+                            <div class="item" data-value="germany">${text[parameters.lan].germany}</div>
+                            <div class="item" data-value="district">${text[parameters.lan].district} ${parameters.parentSpatialUnits["krs_name"]}</div>
+                        </div>
+                    </div>                     
+                </th>
+                `
+        }
+        else{
+
+            console.log("Or else!! "+ parameters.spatialUnit);
+            comparisonHTML=`
+                <th> ${text[parameters.lan].comparison} ${text[parameters.lan].germany}</th>
+                `
+        }
+        return headerHTML+comparisonHTML
     },
 
     createDialogWindow:function(parameters, html, text){
@@ -275,34 +302,12 @@ const area_info={
                       }
                     },
                     {
-                        "targets":3,
-                        "render":function(data,type,row,meta){
-                            return data + " / "+ parameters.data[meta.row]["relevanceMonth"]
-                        }
-                    },
-                    {
-                      "targets": 4,
+                      "targets": 3,
+                        className:"dt-body-nowrap",
                       "render":function(data,type,row,meta){
                           return data+ " "+ parameters.data[meta.row]["unit"]+ " (" + parameters.data[meta.row]["defaultComparisonYear"]+")"
                       }
-                    },
-                    {
-                    "targets": 5,
-
-                        className:"dt-nowrap dt-body-left",
-                    "render": function ( data, type, row, meta ) {
-                        if (data<0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor negativ"></span> '+ data + " " + parameters.data[meta.row]["unit"];
-                        }
-                        else if(data>0){
-                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor positiv"></span> '+ data + " " + parameters.data[meta.row]["unit"];
-                        }
-                        else {
-                            return '<span class="glyphicon glyphicon-circle-arrow-right mainColor"></span> '+ data + " " + parameters.data[meta.row]["unit"];
-                        }
-
-                    }
-                } ]
+                    }]
             }
         );
     },
