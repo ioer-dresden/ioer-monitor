@@ -164,7 +164,7 @@ const indikator_json = {
                               <img title="${text[lan].stat_title}" 
                                 src="frontend/assets/icon/histogramm.png"/>
                          </div>`,
-            indikatorwertentwicklung = `<div class="mobile_hidden dev_chart_trend oneTime ${exclude.class_performance} cursor w-100" 
+            indikatorwertentwicklung = `<div class="dev_popup mobile_hidden dev_chart_trend oneTime ${exclude.class_performance} cursor w-100" 
                                              id="pop_up_diagramm_ind_ags_${id_popup}">
                                             <b class="float-right w-75">${text[lan].trend}</b>
                                             <img data-title="${text[lan].trend_title}" 
@@ -172,7 +172,7 @@ const indikator_json = {
                                                 style="margin-right: 1.3vh;" 
                                                 src="${dev_chart.icon.single.path}"/>
                                         </div>`,
-            entwicklungsdiagramm = `<div class="mobile_hidden dev_chart_compare ${exclude.class_performance} oneTime cursor w-100" 
+            entwicklungsdiagramm = `<div class="dev_popup mobile_hidden dev_chart_compare ${exclude.class_performance} oneTime cursor w-100" 
                                             id="pop_up_diagramm_entwicklung_ags_${id_popup}" >
                                             <b class="wordbreak float-right w-75">${text[lan].compare}</b>
                                             <img data-title="${text[lan].compare}" 
@@ -248,6 +248,10 @@ const indikator_json = {
         }else{
             helper.enableElement(`#pop_up_diagramm_entwicklung_ags_${id_popup}`,$(`#pop_up_diagramm_entwicklung_ags_${id_popup}`).data("title"));
             helper.enableElement(`#pop_up_diagramm_ind_ags_${id_popup}`,$(`#pop_up_diagramm_ind_ags_${id_popup}`).data("title"));
+        }
+        //disable chart for single time shift
+        if(zeit_slider.getTimes().length===1){
+            helper.disableElement(".dev_popup",exclude.disable_text);
         }
     },
     closePopUp:function(){

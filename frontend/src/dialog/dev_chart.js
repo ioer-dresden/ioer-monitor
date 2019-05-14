@@ -281,12 +281,11 @@ const dev_chart={
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
                     abstractData(data);
-                    /*try {
+                    try {
                         setMigrationValue(data);
                     }catch(error){
                         console.info("no migration values");
-                    }*/
-                    setMigrationValue(data);
+                    }
                     setTimeout(function(){
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
@@ -373,7 +372,7 @@ const dev_chart={
                     .attr("fill","url(#linear-gradient)");
 
                 if(!migration_set) {
-                    setLegende({name: "Beeinflusst durch Migration"}, "grey");
+                    setLegende({name: "beeinflusst durch Datenmodellmigration"}, "grey");
                     migration_set=true;
                 }
             }
