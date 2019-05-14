@@ -338,16 +338,42 @@ const dev_chart={
                 let min = migrationValues[id][ags_s]["min"],
                     max = migrationValues[id][ags_s]["max"];
 
+
+                let linearGradient = svg.append("defs")
+                    .append("linearGradient")
+                    .attr("id", "linear-gradient");
+
+                linearGradient.append("stop")
+                    .attr("offset", "0%")
+                    .attr("stop-color", "#ffffff");
+
+                linearGradient.append("stop")
+                    .attr("offset", "25%")
+                    .attr("stop-color", "#E6E6E6");
+
+                linearGradient.append("stop")
+                    .attr("offset", "50%")
+                    .attr("stop-color", "#d3d3d3");
+
+                linearGradient.append("stop")
+                    .attr("offset", "75%")
+                    .attr("stop-color", "#E6E6E6");
+
+                linearGradient.append("stop")
+                    .attr("offset", "100%")
+                    .attr("stop-color", "#ffffff");
+
                 g.append('rect')
                     .attr("x",x(parseTime(`01/${min}`)))
                     .attr("y",0)
                     .attr("width",x(parseTime(`1/${max}`))-x(parseTime(`1/${min}`)))
                     .attr("height",chart_height)
                     .attr("id",id)
-                    .attr("fill","#d3d3d3");
+                    .attr("style","background")
+                    .attr("fill","url(#linear-gradient)");
 
                 if(!migration_set) {
-                    setLegende({name: "Migrationseffekte"}, "#d3d3d3");
+                    setLegende({name: "Beeinflusst durch Migration"}, "grey");
                     migration_set=true;
                 }
             }

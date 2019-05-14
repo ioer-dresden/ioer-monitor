@@ -213,7 +213,7 @@ const indikator_json = {
             .openOn(map);
 
         $(document).on('click','#pop_up_gebietsprofil_'+id_popup,function(){
-            area_info.open(ags,gen);
+            Gebietsprofil.open(ags,gen);
         });
 
         $(document).on('click','#pop_up_diagramm_ags_'+id_popup,function(){
