@@ -126,7 +126,6 @@ class ScriptLoader{
             "frontend/src/dialog/kennblatt.js",
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",
-            "frontend/src/dialog/Gebietsprofil.js",
             "frontend/src/dialog/AdditiveLayerControl.js",
             "frontend/src/dialog/area_info.js",
             //export
