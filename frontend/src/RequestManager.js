@@ -120,7 +120,6 @@ class RequestManager{
         return this.sendRequestFlask(json)
     }
     static sendRequestPHP(json){
-        console.log(json);
         const manager = this;
         call= $.ajax({
             async: true,

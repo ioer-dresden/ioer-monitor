@@ -280,10 +280,13 @@ const dev_chart={
             function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
-                    parseTime(data);
-                    try {
+                    abstractData(data);
+                    /*try {
                         setMigrationValue(data);
-                    }catch(error){console.info("no migration values")}
+                    }catch(error){
+                        console.info("no migration values");
+                    }*/
+                    setMigrationValue(data);
                     setTimeout(function(){
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
@@ -323,35 +326,22 @@ const dev_chart={
             }
             //create the migration value
             function setMigrationValue(data){
-                //console.log(data,migrationValues);
-                let values =new Map();
+                let ags_s = ags.toString().substr(0,2),
+                    id=null,
+                    year=null;
+
                 for(let x=0; x<=data.length-1; x++) {
-                    let id = data[x].id,
-                        year = parseInt(data[x].year),
-                        ags_s = ags.toString().substr(0,2);
-                    try{
-                        let min = parseInt(migrationValues[id][ags_s]["min"]),
-                            max = parseInt(migrationValues[id][ags_s]["max"]);
-                        if(year<=max && year>=min){
-                            values.set(year,data[x])
-                        }
-                    }catch(err){}
+                        id = data[x].id;
+                        year = parseInt(data[x].year);
                 }
-                let last_elem = Array.from(values.values()).pop().date,
-                    first_elem =values.values().next().value.date,
-                    id="migration_effekt",
-                    width=function(){
-                        let sum = x(last_elem)-x(first_elem);
-                        if(sum===0) {
-                            return 10;
-                        }else{
-                            return sum;
-                            }
-                        };
+
+                let min = migrationValues[id][ags_s]["min"],
+                    max = migrationValues[id][ags_s]["max"];
+
                 g.append('rect')
-                    .attr("x",x(first_elem)-5.5)
+                    .attr("x",x(parseTime(`01/${min}`)))
                     .attr("y",0)
-                    .attr("width",width())
+                    .attr("width",x(parseTime(`1/${max}`))-x(parseTime(`1/${min}`)))
                     .attr("height",chart_height)
                     .attr("id",id)
                     .attr("fill","#d3d3d3");
@@ -494,9 +484,12 @@ const dev_chart={
                     });
                 }
             }
-            function parseTime(data) {
+            function parseTime(_string){
+                console.log(_string);
                 let parseTime = d3.timeParse("%m/%Y");
-                // format the data
+                return parseTime(_string);
+            }
+            function abstractData(data) {
                 data.forEach(function (d) {
                     d.date = parseTime(d.date);
                     d.value = +d.value;

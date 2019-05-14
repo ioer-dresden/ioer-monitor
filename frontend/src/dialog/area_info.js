@@ -60,9 +60,6 @@ const area_info={
             console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
             })
         );
-
-
-
     },
     initDropdown:function(parameters){  // controls the dropdown menu
         const comparison_dropdown=$("#comparison_ddm");
