@@ -11,7 +11,6 @@ const area_info={
         time:0,
         relevance:""
     },
-
     text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
         de:{
             title:"Gebietsprofil",
@@ -57,14 +56,14 @@ const area_info={
                 area_info.parameters.relevance=data[0].relevanceYear + " / " + data[0].relevanceMonth; // getting the relevance/topicality (Aktualität) from Data
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
-                area_info.initDropdown(area_info.parameters, area_info.text);
+                area_info.init(area_info.parameters, area_info.text);
             console.log("spatial_info: "+ area_info.parameters.relevance);
                 area_info.drawTable(area_info.parameters);
             console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
             })
         );
     },
-    initDropdown:function(parameters, text){  // controls the dropdown menu
+    init:function(parameters, text){  // controls the dropdown menu
         const comparison_dropdown=$("#comparison_ddm");
         comparison_dropdown.dropdown({
             onChange: function (value) {
@@ -97,8 +96,13 @@ const area_info={
 
                 }
             }
-        })
-
+        });
+        //init csv download
+        $("#area_info_csv_export")
+            .unbind()
+            .click(function(){
+                csv_export.exportTable("dataTable");
+            });
     },
 
     getAllParameters:function(ags,gen){ // fills the Parameter Object with variables
@@ -231,7 +235,7 @@ const area_info={
     },
 
     getTableHeaderHTML:function(parameters, text){
-        let headerHTML=`<tr id=\"firstHeaderRow\"> 
+        let headerHTML=`<tr id="firstHeaderRow"> 
                            <th>${text[parameters.lan].category}</th> 
                            <th>${text[parameters.lan].indicator}</th> 
                            <th>${text[parameters.lan].value}</th> 
@@ -281,7 +285,7 @@ const area_info={
                 data:tableData,
                 "ordering": false,  // disable the ordering of rows
                 "language":language,
-                "pageLength": 25,
+                paging: false, //kerngruppe wants no paging
                 "createdRow": function( row, data, dataIndex){
                     if( data[0] != " "){
                         $(row).css( "background-color", "darkgrey" );  // Changing the background color of first Cells of each Category. (nicer would ne $(row).addClass("grayBackground") - but this did not work for some reason....)
@@ -311,8 +315,6 @@ const area_info={
             }
         );
     },
-
-
     getDataTablesLanguage:function(lan){   // returns the DataTables interface translations
         let language={};  // get the language translations @: http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/
         switch (lan) {
@@ -342,16 +344,9 @@ const area_info={
         }
         return language;
     },
-
-    downloadCSV:function() {     // TODO
-
-    },
-
-
     roundNumber:function(indicatorId,number){
         let decimalSpaces=indikatorauswahl.getIndikatorInfo(indicatorId,"rundung");
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
-    },
-
+    }
 };
 
