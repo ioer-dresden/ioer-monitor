@@ -14,7 +14,6 @@ class PostgreTasks extends PostgreManager
     }
     function getGeometry($year,$spatial_extend,$ags_array){
         $digit = '';
-        $sql = '';
         $geom = "x.the_geom ";
         $krs_col ="";
         $sql_join_krs = "";
@@ -28,10 +27,10 @@ class PostgreTasks extends PostgreManager
         }
         if (count($ags_array) == 0) {
             // Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
-            $sql = "select x.gid, x.ags, x.des, replace(x.gen, '''','') as gen, st_asgeojson(transform(" .
+            $sql = "select x.ags, x.des, replace(x.gen, '''','') as gen, st_asgeojson(transform(" .
                 pg_escape_string($geom) . ",4326)) AS geojson ".$krs_col." from  vg250_" . $spatial_extend . "_" . $year . "_grob x".$sql_join_krs." where x.ags is not null";
         } else {
-            $sql = "select x.gid, x.ags, x.des, replace(x.gen, '''','') as gen, st_asgeojson(transform(" .
+            $sql = "select x.ags, x.des, replace(x.gen, '''','') as gen, st_asgeojson(transform(" .
                 pg_escape_string($geom) . ",4326)) AS geojson ".$krs_col." from  vg250_" . $spatial_extend . "_" . $year . "_grob x ".$sql_join_krs." where CAST(x.ags AS TEXT) Like'" . $ags_array[0] . "";
 
             foreach ($ags_array as $value) {
