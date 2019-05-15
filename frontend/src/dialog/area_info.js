@@ -101,7 +101,7 @@ const area_info={
         $("#area_info_csv_export")
             .unbind()
             .click(function(){
-                csv_export.exportTable("dataTable");
+                Export_Helper.exportTable("dataTable");
             });
     },
 
