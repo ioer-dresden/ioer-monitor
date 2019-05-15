@@ -53,7 +53,7 @@ const area_info={
 
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 area_info.parameters.data=data;
-                area_info.parameters.relevance=data[0].relevanceYear + " / " + data[0].relevanceMonth; // getting the relevance/topicality (Aktualität) from Data
+                area_info.parameters.relevance=data[1].relevanceYear + " / " + data[1].relevanceMonth; // getting the relevance/topicality (Aktualität) from Data. All the Years are the same. Taking out from random data row
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.init(area_info.parameters, area_info.text);
@@ -132,14 +132,41 @@ const area_info={
         data=data["values"];
         for (let index in data){
             for (let category in data[index]) {
-                let categoryName=" ";
+                let categoryName = " ";
 
-                if (lan=="de" ){ // check for Language!!!
-                    categoryName=data[index][category]["cat_name"];
+                if (lan == "de") { // check for Language!!!
+                    categoryName = data[index][category]["cat_name"];
+                } else {
+                    categoryName = data[index][category]["car_name_en"];
                 }
-                else{
-                    categoryName=data[index][category]["car_name_en"];
+                console.log("Content of Category's values: " + data[index][category]["values"]);
+                if (data[index][category]["values"] != "") {
+                    let firstRowOfNewCategory = {  // Should only display the Category Name, all other entries should be empty in the table
+                        category: categoryName,
+                        id: "",
+                        indicator: "",
+                        indicatorText: "",
+                        value: "", // Value gets rounded based on the Indicator decimal spaces
+                        unit: "",
+                        relevanceYear: "",
+                        relevanceMonth: "",
+                        relevanceYearBRD: "",
+                        relevanceMonthBRD: "",
+                        valueBRD: "",  // Value gets rounded based on the Indicator decimal spaces
+                        differenceToBRD: "",  // Value gets rounded based on the Indicator decimal spaces
+                        relevanceYearKreis: "",
+                        relevanceMonthKreis: "",
+                        valueKreis: "",
+                        differenceToKreis: "",
+                        defaultComparisonValue: "",
+                        defaultDifference: "",
+                        defaultComparisonYear: ""
+                    };
+                    tableData.push(firstRowOfNewCategory);
                 }
+
+
+
                 for (let indicator in data[index][category]["values"]){
                     indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"name");
                     let indicatorId=data[index][category]["values"][indicator]["id"],
@@ -157,7 +184,7 @@ const area_info={
                         console.log("Language not recognised! Area_info.js")
                     }
                     let tableRow={
-                        category:categoryName,
+                        category:" ",
                         id:indicatorId,
                         indicator:indicatorName,
                         indicatorText:indicatorText,
@@ -177,7 +204,6 @@ const area_info={
                         defaultDifference:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["diff_brd"]),
                         defaultComparisonYear:data[index][category]["values"][indicator]["grundakt_year_brd"]
                     };
-                    categoryName=" ";
                     tableData.push(tableRow);
                 }
             }
@@ -309,7 +335,12 @@ const area_info={
                       "targets": 3,
                         className:"dt-body-nowrap",
                       "render":function(data,type,row,meta){
-                          return data+ " "+ parameters.data[meta.row]["unit"]+ " (" + parameters.data[meta.row]["defaultComparisonYear"]+")"
+                          if (data !="") {
+                              return data + " " + parameters.data[meta.row]["unit"] + " (" + parameters.data[meta.row]["defaultComparisonYear"] + ")"
+                          }
+                          else {
+                              return ""
+                          }
                       }
                     }]
             }
