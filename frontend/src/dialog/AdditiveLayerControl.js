@@ -98,13 +98,6 @@ class AdditiveLayerControl{
                                             <div class="name">${this.text[lan].gemeindegrenzen}</div>
                                         </div>
                                   </li>
-                                  <!-- OSM 3D Buildings
-                                  <li class="list-group-item">
-                                        <div id="${OsmBuildings.getButtonId().replace("#","")}" class="image-content cursor overlay" data-id="mdmap" data-name="${this.text[lan].mdmap}" title="3D Gebäude, welche erst ab hoher Zoomstufe sichtbar sind">
-                                            <div class="pic extra-image"></div>
-                                            <div class="name">${this.text[lan].mdmap}</div>
-                                        </div>
-                                  </li>-->
                             </ul>
                         </div>
                         <div class="col-sm-6 right">

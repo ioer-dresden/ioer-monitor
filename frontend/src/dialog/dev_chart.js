@@ -334,8 +334,8 @@ const dev_chart={
                         year = parseInt(data[x].year);
                 }
 
-                let min = migrationValues[id][ags_s]["min"],
-                    max = migrationValues[id][ags_s]["max"];
+                let min = parseTime(`01/${migrationValues[id][ags_s]["min"]}`),
+                    max = parseTime(`01/${migrationValues[id][ags_s]["max"]}`);
 
 
                 let linearGradient = svg.append("defs")
@@ -363,38 +363,28 @@ const dev_chart={
                     .attr("stop-color", "#ffffff");
 
                 g.append('rect')
-                    .attr("x",x(parseTime(`01/${min}`)))
+                    .attr("x",x(min))
                     .attr("y",0)
-                    .attr("width",x(parseTime(`1/${max}`))-x(parseTime(`1/${min}`)))
+                    .attr("width",x(max)-x(min))
                     .attr("height",chart_height)
                     .attr("id",id)
                     .attr("style","background")
                     .attr("fill","url(#linear-gradient)");
 
-                if(!migration_set) {
-                    setLegende({name: "beeinflusst durch Datenmodellmigration"}, "grey");
-                    migration_set=true;
-                }
+                g.append('text')
+                    .attr("class","migration-text")
+                    .attr("x", x(max) + 5)
+                    .attr("y", chart_height-5)
+                    .attr("height", 30)
+                    .attr("width", (chart_width*0.7))
+                    .style("fill", "grey")
+                    .text("ggf. beeinflusst durch Datenmodellmigration");
             }
             //function to set the legende, margin is a object like margin.left = 50x
-            function setLegende(data, color,_margin) {
-                var title = function(){
-                    if(data.length >0){
-                            return data[0].name+" in "+data[0].einheit;
-                        }else {
-                            return data.name;
-                        }
-                    },
-                    margin_set = function(){
-                        if(_margin){
-                            return _margin.left;
-                        }else{
-                            return margin.left;
-                        }
-                    };
+            function setLegende(data, color) {
                 legend.append('g')
                     .append("rect")
-                    .attr("x", margin_set())
+                    .attr("x", margin.left)
                     .attr("y", chart_height + 50 + margin_top)
                     .attr("width", 10)
                     .attr("height", 10)
@@ -402,12 +392,12 @@ const dev_chart={
 
                 legend.append("text")
                     .attr("class","chart_legend")
-                    .attr("x", margin_set() + 30)
+                    .attr("x", margin.left + 30)
                     .attr("y", chart_height + 60 + margin_top)
                     .attr("height", 30)
                     .attr("width", (chart_width*0.7))
                     .style("fill", color)
-                    .text(title());
+                    .text(data[0].name+" in "+data[0].einheit);
 
                 margin_top += 20;
             }
