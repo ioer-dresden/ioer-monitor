@@ -36,10 +36,11 @@ const csv_export = {
                             };
                         $.when(setLoadIcon())
                             .then(csv_export.state = true)
-                            .then(TableHelper.destroyStickyTableHeader())
                         //push all table header in array
                         // Quelle:https://tableexport.v5.travismclarke.com
-                            .then(function(){let exportTable = table.getDOMObject()
+                            .then(function(){
+                                TableHelper.destroyStickyTableHeader()
+                                let exportTable = table.getDOMObject()
                                                         .tableExport({
                                                             formats: ['csv'],
                                                             headers: true,
@@ -58,13 +59,13 @@ const csv_export = {
                                                             clearInterval(interval);
                                                             Export_Helper.downloadFile(exportData.data, exportData.filename, exportData.fileExtension);
                                                             resetLoadIcon();
+                                                            TableHelper.setStickTableHeader()
                                                             setTimeout(function () {
                                                                 csv_export.state = false;
                                                             }, 1000);
                                                         }
                                                     }, 500);}
-                            )
-                            .then(TableHelper.setStickTableHeader());
+                            );
                     });
             }else{
                 helper.disableElement("#"+csv_button.attr("id"),"Anzahl der Tabellenzeilen zu hoch");
