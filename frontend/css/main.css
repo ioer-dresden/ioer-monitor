@@ -15,7 +15,6 @@
 @import url("../lib/d3/animate.min.css");
 @import url("../lib/sweetalert/sweetalert.css");
 @import url("../lib/spectrum/spectrum.css");
-@import url("../lib/qunit/qunit-2.6.2.css");
 @import url("../lib/dataTables/datatables.min.css");
 /*modules*/
 @import "ui/styles.css";

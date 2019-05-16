@@ -36,10 +36,8 @@ const csv_export = {
                             };
                         $.when(setLoadIcon())
                             .then(csv_export.state = true)
-                        //push all table header in array
-                        // Quelle:https://tableexport.v5.travismclarke.com
                             .then(function(){
-                                TableHelper.destroyStickyTableHeader()
+                                TableHelper.destroyStickyTableHeader();
                                 let exportTable = table.getDOMObject()
                                                         .tableExport({
                                                             formats: ['csv'],
@@ -59,7 +57,7 @@ const csv_export = {
                                                             clearInterval(interval);
                                                             Export_Helper.downloadFile(exportData.data, exportData.filename, exportData.fileExtension);
                                                             resetLoadIcon();
-                                                            TableHelper.setStickTableHeader()
+                                                            TableHelper.setStickTableHeader();
                                                             setTimeout(function () {
                                                                 csv_export.state = false;
                                                             }, 1000);
