@@ -325,53 +325,54 @@ const dev_chart={
             }
             //create the migration value
             function setMigrationValue(data){
-                let ags_s = ags.toString().substr(0,2),
-                    id=null,
-                    year=null;
-
-                for(let x=0; x<=data.length-1; x++) {
-                        id = data[x].id;
-                        year = parseInt(data[x].year);
-                }
-
-                let min = parseTime(`01/${migrationValues[id][ags_s]["min"]}`),
-                    max = parseTime(`01/${migrationValues[id][ags_s]["max"]}`);
-
-
-                let linearGradient = svg.append("defs")
-                    .append("linearGradient")
-                    .attr("id", "linear-gradient");
-
-                linearGradient.append("stop")
-                    .attr("offset", "0%")
-                    .attr("stop-color", "#ffffff");
-
-                linearGradient.append("stop")
-                    .attr("offset", "25%")
-                    .attr("stop-color", "#E6E6E6");
-
-                linearGradient.append("stop")
-                    .attr("offset", "50%")
-                    .attr("stop-color", "#d3d3d3");
-
-                linearGradient.append("stop")
-                    .attr("offset", "75%")
-                    .attr("stop-color", "#E6E6E6");
-
-                linearGradient.append("stop")
-                    .attr("offset", "100%")
-                    .attr("stop-color", "#ffffff");
-
-                g.append('rect')
-                    .attr("x",x(min))
-                    .attr("y",0)
-                    .attr("width",x(max)-x(min))
-                    .attr("height",chart_height)
-                    .attr("id",id)
-                    .attr("style","background")
-                    .attr("fill","url(#linear-gradient)");
-
                 if(!migration_set) {
+                    let ags_s = ags.toString().substr(0,2),
+                        id=null,
+                        year=null;
+
+                    for(let x=0; x<=data.length-1; x++) {
+                            id = data[x].id;
+                            year = parseInt(data[x].year);
+                    }
+
+                    let min = parseTime(`01/${migrationValues[id][ags_s]["min"]}`),
+                        max = parseTime(`01/${migrationValues[id][ags_s]["max"]}`);
+
+
+                    let linearGradient = svg.append("defs")
+                        .append("linearGradient")
+                        .attr("id", "linear-gradient");
+
+                    linearGradient.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", "#ffffff");
+
+                    linearGradient.append("stop")
+                        .attr("offset", "25%")
+                        .attr("stop-color", "#E6E6E6");
+
+                    linearGradient.append("stop")
+                        .attr("offset", "50%")
+                        .attr("stop-color", "#d3d3d3");
+
+                    linearGradient.append("stop")
+                        .attr("offset", "75%")
+                        .attr("stop-color", "#E6E6E6");
+
+                    linearGradient.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", "#ffffff");
+
+                    g.append('rect')
+                        .attr("x",x(min))
+                        .attr("y",0)
+                        .attr("width",x(max)-x(min))
+                        .attr("height",chart_height)
+                        .attr("id",id)
+                        .attr("style","background")
+                        .attr("fill","url(#linear-gradient)");
+
+
                     setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{left:x(min)});
                     migration_set=true;
                 }
