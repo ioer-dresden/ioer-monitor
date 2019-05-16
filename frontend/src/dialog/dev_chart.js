@@ -510,7 +510,6 @@ const dev_chart={
                 }
             }
             function parseTime(_string){
-                console.log(_string);
                 let parseTime = d3.timeParse("%m/%Y");
                 return parseTime(_string);
             }

@@ -55,7 +55,6 @@ const main_view = {
         }
     },
     initSplitterView:function(){
-        console.warn("init Splitter View");
         const object = this;
         view_state.setViewState("mw");
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete"){
