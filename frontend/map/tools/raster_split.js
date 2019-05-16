@@ -410,9 +410,11 @@ const raster_split={
                                     clearInterval(interval);
                                     btn_show_info.show();
                                     let sideByside = L.control.sideBySide(indikator_raster.raster_layer.addTo(map), null);
+                                    //bind function to get slider position in x pixel
                                     object.setController(sideByside);
                                     if (!object.getState()) {
-                                        sideByside.addTo(map);
+                                        sideByside
+                                            .addTo(map);
                                         object.dialog.openDialog();
                                         object.getButtonObject().css('background-color', farbschema.getColorHexActive());
                                     }

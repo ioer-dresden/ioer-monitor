@@ -19,7 +19,7 @@ const csv_export = {
                 }
             };
 
-            if(TableHelper.countTableRows()<=2500) {
+            if(TableHelper.countTableRows()<=1000) {
                 helper.enableElement("#"+csv_button.attr("id"),csv_button.data("title"));
                 csv_button
                     .unbind()

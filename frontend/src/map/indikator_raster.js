@@ -55,8 +55,6 @@ const indikator_raster = {
                         id:"indicator_raster"
                     });
 
-                console.log(_seite);
-
                 if (_seite) {
                     //removeRasterBySide(_seite);
                     indikator_raster_group.clean(_seite);
@@ -194,9 +192,20 @@ const indikator_raster = {
                                 '<span>Gemeindewert: </span>' + gem_stat);
                             popup.setLatLng(e.latlng);
 
-                            if (!$('.map').hasClass('devider_move')) {
-                                layer.addTo(map).bringToFront();
-                                map.openPopup(popup);
+                            //prevent onlick for devider
+                            switch(raster_split.getState()){
+                                case true:
+                                    let split_pos = Math.round(parseFloat($('.leaflet-sbs-divider').css("left").replace("px","")));
+                                    if(X !== split_pos){
+                                        layer.addTo(map).bringToFront();
+                                        map.openPopup(popup);
+                                    }
+                                    break;
+                                case false:
+                                    layer.addTo(map).bringToFront();
+                                    map.openPopup(popup);
+                                    break;
+
                             }
 
                             map.on('popupclose', function (e) {
