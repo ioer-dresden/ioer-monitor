@@ -149,7 +149,6 @@ class ScriptLoader{
         $.getMultiScripts = function(arr) {
             var _arr = $.map(arr, function(scr) {
                 return $.getScript(  scr,function(){
-                    //script loaded
                 });
             });
 

@@ -18,6 +18,7 @@ const indikator_json = {
         progressbar.init();
         indikator_raster_group.clean();
         indikator_json_group.clean();
+        grundakt_layer.remove();
 
         if (raumgl) {
             raumgliederung_set = raumgl;

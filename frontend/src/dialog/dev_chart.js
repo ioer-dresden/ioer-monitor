@@ -371,20 +371,30 @@ const dev_chart={
                     .attr("style","background")
                     .attr("fill","url(#linear-gradient)");
 
-                g.append('text')
-                    .attr("class","migration-text")
-                    .attr("x", x(max) + 5)
-                    .attr("y", chart_height-5)
-                    .attr("height", 30)
-                    .attr("width", (chart_width*0.7))
-                    .style("fill", "grey")
-                    .text("ggf. beeinflusst durch Datenmodellmigration");
+                if(!migration_set) {
+                    setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{left:x(min)});
+                    migration_set=true;
+                }
             }
             //function to set the legende, margin is a object like margin.left = 50x
-            function setLegende(data, color) {
+            function setLegende(data, color,_margin) {
+                var title = function(){
+                        if(data.length >0){
+                            return data[0].name+" in "+data[0].einheit;
+                        }else {
+                            return data.name;
+                        }
+                    },
+                    margin_set = function(){
+                        if(_margin){
+                            return _margin.left;
+                        }else{
+                            return margin.left;
+                        }
+                    };
                 legend.append('g')
                     .append("rect")
-                    .attr("x", margin.left)
+                    .attr("x", margin_set())
                     .attr("y", chart_height + 50 + margin_top)
                     .attr("width", 10)
                     .attr("height", 10)
@@ -392,12 +402,12 @@ const dev_chart={
 
                 legend.append("text")
                     .attr("class","chart_legend")
-                    .attr("x", margin.left + 30)
+                    .attr("x", margin_set() + 30)
                     .attr("y", chart_height + 60 + margin_top)
                     .attr("height", 30)
                     .attr("width", (chart_width*0.7))
                     .style("fill", color)
-                    .text(data[0].name+" in "+data[0].einheit);
+                    .text(title());
 
                 margin_top += 20;
             }
