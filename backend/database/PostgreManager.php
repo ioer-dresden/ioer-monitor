@@ -1,7 +1,7 @@
 <?php
 require_once('DbSettings.php');
 
-class PostgreManager extends DbSettings {
+class PostgreManager{
 
     protected static $instance = NULL;
 

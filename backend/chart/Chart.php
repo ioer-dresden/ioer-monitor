@@ -98,17 +98,4 @@ class Chart{
         }
         return $res;
     }
-
-    //export the class
-    public function toJSON(){
-        $array = [];
-        array_push($array,array(
-            "ags"=>$this->ags,
-            "indicator_id"=>$this->indicator_id,
-            "all_points"=>$this->all_points,
-            "compare"=>$this->compare,
-            "forecast"=>$this->forecast
-        ));
-        return json_encode($array);
-    }
 }

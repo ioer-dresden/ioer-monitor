@@ -372,7 +372,6 @@ const dev_chart={
                         .attr("style","background")
                         .attr("fill","url(#linear-gradient)");
 
-
                     setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{left:x(min)});
                     migration_set=true;
                 }

@@ -129,9 +129,6 @@ class RequestManager{
             data: {
                 values: JSON.stringify(json.file)
             },
-            error:function(xhr, ajaxOptions, thrownError){
-                manager.onError( thrownError,json.query,this.url);
-            },
             success:function(data){
                 if(json.debug){
                     console.log(this.url,this.data,JSON.stringify(data));
@@ -148,7 +145,6 @@ class RequestManager{
             url: 'https://monitor.ioer.de/monitor_api/'+json.endpoint,
             data: json.data,
             error:function(xhr, ajaxOptions, thrownError){
-                manager.onError( thrownError,json.query,this.url);
                 alert_manager.alertError();
             },
             success:function(data){
@@ -162,18 +158,6 @@ class RequestManager{
     }
     static cancel(){
         call.abort();
-    }
-    static onError( thrownError,function_name,url) {
-        if (thrownError !== "abort") {
-            console.error(thrownError,function_name,url);
-            /*let message= error.getErrorMessage(`${thrownError} in function: ${function_name}`);
-            progressbar.remove();
-            alert_manager.alertError();
-            if(!window.location.href.includes("monitor_test")) {
-                this.sendMailError(message.name, message.message);
-            }
-           */
-        }
     }
     static getRasterMap(time,ind,_raumgliederung,klassifizierung,klassenanzahl,darstellung_map,_seite) {
         return $.ajax({
