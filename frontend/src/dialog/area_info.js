@@ -5,11 +5,12 @@ const area_info={
         ags:"",
         name:"",
         spatialUnit:"",
-        parentSpatialUnits:"",
+        parentSpatialUnits:[],
         data:[],
         lan:"",
         time:0,
-        relevance:""
+        relevance:"",
+        columnList:[]
     },
     text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
         de:{
@@ -23,6 +24,7 @@ const area_info={
             relevanceYear:"Aktualität",
             comparison:"Vergleich mit ",
             germany:"Deutschland",
+            state:"Bundesland",
             district:"Kreis",
             difference:"Differenz zu"
         },
@@ -37,6 +39,7 @@ const area_info={
             relevanceYear:"Topicality",
             comparison:"Comparison to ",
             germany: "Germany",
+            state:"State",
             district: "District",
             difference:"Difference to"
         }
@@ -47,56 +50,21 @@ const area_info={
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
         console.log("Getting parameter");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-                console.log("Getting data "+ " JSON Object level keys: " +Object.keys(data)  +" Keys inside spatial_info Object: " + Object.keys(data["spatial_info"]));
-                area_info.parameters.parentSpatialUnits= data["spatial_info"]["spatial_info"];
-            console.log("Data keys: "+ Object.keys(data["values"]));
-
+            //console.log(data);
+            //console.log("Parent ebene: "+ Object.keys(data["spatial_info"]));
+                area_info.parameters.parentSpatialUnits= data["spatial_info"];
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 area_info.parameters.data=data;
-                area_info.parameters.relevance=data[1].relevanceYear + " / " + data[1].relevanceMonth; // getting the relevance/topicality (Aktualität) from Data. All the Years are the same. Taking out from random data row
+                area_info.parameters.relevance=data[1].relevanceMonth  + " / " + data[1].relevanceYear; // getting the relevance/topicality (Aktualität) from Data. All the Years are the same. Taking out from random data row
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.init(area_info.parameters, area_info.text);
-            console.log("spatial_info: "+ area_info.parameters.relevance);
                 area_info.drawTable(area_info.parameters);
-            console.log("Ebene: "+ raeumliche_analyseebene.getSelectionId());
+                console.info( area_info.parameters.parentSpatialUnits)
             })
         );
     },
-    init:function(parameters, text){  // controls the dropdown menu
-        const comparison_dropdown=$("#comparison_ddm");
-        comparison_dropdown.dropdown({
-            onChange: function (value) {
-                switch (value) {
-                    case "germany":
-                        for (let row in parameters.data){
-                            parameters.data[row].defaultComparisonValue=parameters.data[row].valueBRD;
-                            parameters.data[row].defaultDifference=parameters.data[row].differenceToBRD;
-                            parameters.data.defaultComparisonYear=parameters.data[row].relevanceYearBRD;
-                        }
-                        area_info.drawTable(parameters);
-                        comparison_dropdown.dropdown("hide");
-                        $("#tableHeaderDifferenceTo").text(text[parameters.lan].difference+" " +text[parameters.lan].germany);
-                        console.log("Redrawing table: Germany" );
-                        break;
-
-                    case "district":
-                        for (let row in parameters.data){
-                            parameters.data[row].defaultComparisonValue=parameters.data[row].valueKreis;
-                            parameters.data[row].defaultDifference=parameters.data[row].differenceToKreis;
-                            parameters.data.defaultComparisonYear=parameters.data[row].relevanceYearKreis;
-                        }
-                        area_info.drawTable(parameters);
-                        comparison_dropdown.dropdown("hide");
-                        $("#tableHeaderDifferenceTo").text(text[parameters.lan].difference+" " +parameters.parentSpatialUnits["krs_name"]);
-                        console.log("Redrawing table: Kreis" );
-                        break;
-                    default:
-                        alert("Error, no chart Type selected!")
-
-                }
-            }
-        });
+    init:function(){  // set the .csv export
         //init csv download
         $("#area_info_csv_export")
             .unbind()
@@ -116,16 +84,28 @@ const area_info={
             lan:"",
             time:0,
             relevance:"",
-            columnList:["category","indicator", "value", "defaultComparisonValue"] // Columns that will be displayed
+            columnList:[]
         };
         parameters.ags=ags;
         parameters.name=gen;
         parameters.spatialUnit=raeumliche_analyseebene.getSelectionId();
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
+        parameters.columnList=this.getColumnList(parameters.spatialUnit);
         return parameters;
     },
 
+    getColumnList:function(spatialUnit){  // Determining columns that will get displayed
+        let columnList=["category","indicator", "value","unit","valueBRD","unit"];
+        if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
+            columnList.push("valueBundesland","unit");
+        }
+        else if (spatialUnit=="vwg" || spatialUnit== "gem"){
+            columnList.push("valueBundesland","unit","valueKreis","unit")
+        }
+        console.log("ColumnList: "+columnList);
+        return columnList;
+    },
 
     extractRelevantDataFromJSON:function(data, lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
         let tableData=[];
@@ -139,7 +119,6 @@ const area_info={
                 } else {
                     categoryName = data[index][category]["car_name_en"];
                 }
-                console.log("Content of Category's values: " + data[index][category]["values"]);
                 if (data[index][category]["values"] != "") {
                     let firstRowOfNewCategory = {  // Should only display the Category Name, all other entries should be empty in the table
                         category: categoryName,
@@ -154,13 +133,13 @@ const area_info={
                         relevanceMonthBRD: "",
                         valueBRD: "",  // Value gets rounded based on the Indicator decimal spaces
                         differenceToBRD: "",  // Value gets rounded based on the Indicator decimal spaces
+                        relevanceYearBundesland: "",
+                        relevanceMonthBundesland: "",
+                        valueBundesland: "",
                         relevanceYearKreis: "",
                         relevanceMonthKreis: "",
                         valueKreis: "",
                         differenceToKreis: "",
-                        defaultComparisonValue: "",
-                        defaultDifference: "",
-                        defaultComparisonYear: ""
                     };
                     tableData.push(firstRowOfNewCategory);
                 }
@@ -183,6 +162,8 @@ const area_info={
                     else{
                         console.log("Language not recognised! Area_info.js")
                     }
+
+                    //console.log("keys in JSON: "+ Object.keys(data[index][category]["values"][indicator]));
                     let tableRow={
                         category:" ",
                         id:indicatorId,
@@ -196,14 +177,25 @@ const area_info={
                         relevanceMonthBRD:data[index][category]["values"][indicator]["grundakt_month_brd"],
                         valueBRD:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["value_brd"]),  // Value gets rounded based on the Indicator decimal spaces
                         differenceToBRD:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["diff_brd"]),  // Value gets rounded based on the Indicator decimal spaces
-                        relevanceYearKreis:data[index][category]["values"][indicator]["grundakt_year_krs"],
-                        relevanceMonthKreis:data[index][category]["values"][indicator]["grundakt_month_krs"],
-                        valueKreis:this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_krs"]),
-                        differenceToKreis:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["diff_krs"]),
-                        defaultComparisonValue:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["value_brd"]),
-                        defaultDifference:this.roundNumber(indicatorId,data[index][category]["values"][indicator]["diff_brd"]),
-                        defaultComparisonYear:data[index][category]["values"][indicator]["grundakt_year_brd"]
                     };
+                    // adding the Values that only appear on the smaller regions
+                    if (data[index][category]["values"][indicator].hasOwnProperty("value_bld")){
+                            console.log("Has Bundesland");
+                        tableRow.valueBundesland=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_bld"]);
+                        tableRow.relevanceYearBundesland=data[index][category]["values"][indicator]["grundakt_year_bld"];
+                        tableRow.relevanceMonthBundesland=data[index][category]["values"][indicator]["grundakt_month_bld"];
+                        tableRow.differenceBundesland= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_bld"])
+                    };
+                    if (data[index][category]["values"][indicator].hasOwnProperty("value_krs")){
+                        console.log("Has Kreis");
+                        tableRow.valueKreis=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_bld"]);
+                        tableRow.relevanceYearKreis=data[index][category]["values"][indicator]["grundakt_year_bld"];
+                        tableRow.relevanceMonthKreis=data[index][category]["values"][indicator]["grundakt_month_bld"];
+                        tableRow.differenceKreis= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_bld"])
+                    }
+
+
+
                     tableData.push(tableRow);
                 }
             }
@@ -226,6 +218,27 @@ const area_info={
 
         }
         return newTableColumns;
+    },
+
+    getColumnDefsForDataTables:function(columnList){ // Format the columns for Data Tables here! (For options: https://datatables.net/reference/option/columnDefs)
+        let columnDefs=[];
+            for (let i =0;i<columnList.length;i++){
+                let alignment="";
+                console.log("writing column defs: column"+ columnList[i]);
+                if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
+                    alignment="dt-body-left dt-head-left"
+                }
+                else {
+                    console.log("Right Align!"+ columnList[i])
+                    alignment= "dt-body-right dt-head-left"
+                }
+                let def={
+                    targets:i,
+                    className: alignment
+            }
+                columnDefs.push(def);
+        }
+            return columnDefs;
     },
 
     writeHTML:function(parameters, text){ // writes the HTML for the Dialog Window
@@ -261,35 +274,40 @@ const area_info={
     },
 
     getTableHeaderHTML:function(parameters, text){
-        let headerHTML=`<tr id="firstHeaderRow"> 
-                           <th>${text[parameters.lan].category}</th> 
-                           <th>${text[parameters.lan].indicator}</th> 
-                           <th>${text[parameters.lan].value}</th> 
-`;
-        let comparisonHTML="";
-        if (parameters.spatialUnit=== "vwg" || parameters.spatialUnit==="gem"){
-            console.log("Got a small area!: " +parameters.spatialUnit);
-            comparisonHTML=`
-                <th> <div> ${text[parameters.lan].comparison} </div>  
-                    <div id="comparison_ddm" class="ui selection dropdown change-height-of-dropdown">
-                        <i class="dropdown icon"></i>
-                        <div class="text">${text[parameters.lan].germany}</div>
-                        <div class="menu" id="area_info_ddm">
-                            <div class="item" data-value="germany">${text[parameters.lan].germany}</div>
-                            <div class="item" data-value="district">${text[parameters.lan].district} ${parameters.parentSpatialUnits["krs_name"]}</div>
-                        </div>
-                    </div>                     
-                </th>
-                `
+        let headerFirstRow=`<tr id="firstHeaderRow">`,
+            headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
+                                    // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w empty placeholders
+        for (let columnHeader in parameters.columnList){
+            headerSecondRow+=`<th> </th>`;
+            switch (parameters.columnList[columnHeader]){
+                case "category":
+                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].category}</th> `;
+                    break;
+                case "indicator":
+                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
+                    break;
+                case "value":
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value}</th> `;
+                    break;
+                case "unit":
+                    console.log("indUnit!");
+                    break;
+                case "valueBRD":
+                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].germany}</th> `;
+                    break;
+                case "valueBundesland":
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]}</th> `;
+                    break;
+                case "valueKreis":
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]}</th> `;
+                    break;
+                default:
+                    headerFirstRow+="";
+            }
         }
-        else{
-
-            console.log("Or else!! "+ parameters.spatialUnit);
-            comparisonHTML=`
-                <th> ${text[parameters.lan].comparison} ${text[parameters.lan].germany}</th>
-                `
-        }
-        return headerHTML+comparisonHTML
+        headerFirstRow+=`</tr>`;
+        headerSecondRow+=`</tr>`;
+        return headerFirstRow+headerSecondRow;
     },
 
     createDialogWindow:function(parameters, html, text){
@@ -301,8 +319,10 @@ const area_info={
     },
 
     drawTable:function(parameters){
-        let tableData=area_info.selectColumnsForTable(parameters.data,parameters.columnList),  // getting only the data required for the Table
-            language=area_info.getDataTablesLanguage(parameters.lan);
+        let columnList=parameters.columnList,
+            tableData=area_info.selectColumnsForTable(parameters.data,columnList),  // getting only the data required for the Table
+            language=area_info.getDataTablesLanguage(parameters.lan),
+            columnDefs= area_info.getColumnDefsForDataTables(columnList);
 
         $("#dataTable").DataTable(
             {
@@ -314,35 +334,10 @@ const area_info={
                 paging: false, //kerngruppe wants no paging
                 "createdRow": function( row, data, dataIndex){
                     if( data[0] != " "){
-                        $(row).css( "background-color", "darkgrey" );  // Changing the background color of first Cells of each Category. (nicer would ne $(row).addClass("grayBackground") - but this did not work for some reason....)
+                        $(row).css( "background-color", "darkgrey" );  // Changing the background color of first Cells of each Category. (nicer would ne $(row).addClass("grayBackground") - but this did not work for some reason....conflict w/ Bootstrap??)
                         }
                     },
-                "columnDefs": [    // THE COLUMNS GET FORMATTED HERE!!
-                    {
-                        targets:0
-                    },
-                    {
-                        targets:1
-                    },
-                    {
-                      "targets": 2,
-                        className:"dt-body-nowrap",
-                      "render":function(data,type,row,meta){
-                          return data + " "+ parameters.data[meta.row]["unit"]
-                      }
-                    },
-                    {
-                      "targets": 3,
-                        className:"dt-body-nowrap",
-                      "render":function(data,type,row,meta){
-                          if (data !="") {
-                              return data + " " + parameters.data[meta.row]["unit"] + " (" + parameters.data[meta.row]["defaultComparisonYear"] + ")"
-                          }
-                          else {
-                              return ""
-                          }
-                      }
-                    }]
+                "columnDefs":columnDefs
             }
         );
     },
