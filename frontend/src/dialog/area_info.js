@@ -48,12 +48,8 @@ const area_info={
     },
 
     open:function(ags,gen){
-        console.log("Starting");
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
-        console.log("Getting parameter");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-            //console.log(data);
-            //console.log("Parent ebene: "+ Object.keys(data["spatial_info"]));
                 area_info.parameters.parentSpatialUnits= data["spatial_info"];
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 area_info.parameters.data=data;
@@ -62,11 +58,10 @@ const area_info={
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.init(area_info.parameters, area_info.text);
                 area_info.drawTable(area_info.parameters);
-                console.info( area_info.parameters.parentSpatialUnits)
             })
         );
     },
-    init:function(){  // set the .csv export
+    init:function(){  // set the .csv export on click
         //init csv download
         $("#area_info_csv_export")
             .unbind()
@@ -97,7 +92,7 @@ const area_info={
         return parameters;
     },
 
-    getColumnList:function(spatialUnit){  // Determining columns that will get displayed
+    getColumnList:function(spatialUnit){  // Determining which columns and in what order will get displayed
         let columnList=["category","indicator", "value","unit"];
         if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
             columnList.push("valueBundesland","unit");
@@ -106,7 +101,6 @@ const area_info={
             columnList.push("valueKreis","unit","valueBundesland","unit")
         }
         columnList.push("valueBRD","unit");
-        console.log("ColumnList: "+columnList);
         return columnList;
     },
 
@@ -163,10 +157,9 @@ const area_info={
                         indicatorText=indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"info_en");
                     }
                     else{
-                        console.log("Language not recognised! Area_info.js")
+                        alert("Language not recognised! Area_info.js")
                     }
 
-                    //console.log("keys in JSON: "+ Object.keys(data[index][category]["values"][indicator]));
                     let tableRow={
                         category:" ",
                         id:indicatorId,
@@ -183,21 +176,29 @@ const area_info={
                     };
                     // adding the Values that only appear on the smaller regions
                     if (data[index][category]["values"][indicator].hasOwnProperty("value_bld")){
-                            console.log("Has Bundesland");
                         tableRow.valueBundesland=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_bld"]);
                         tableRow.relevanceYearBundesland=data[index][category]["values"][indicator]["grundakt_year_bld"];
                         tableRow.relevanceMonthBundesland=data[index][category]["values"][indicator]["grundakt_month_bld"];
                         tableRow.differenceBundesland= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_bld"])
                     };
                     if (data[index][category]["values"][indicator].hasOwnProperty("value_krs")){
-                        console.log("Has Kreis");
                         tableRow.valueKreis=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_krs"]);
                         tableRow.relevanceYearKreis=data[index][category]["values"][indicator]["grundakt_year_krs"];
                         tableRow.relevanceMonthKreis=data[index][category]["values"][indicator]["grundakt_month_krs"];
                         tableRow.differenceKreis= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_krs"])
                     }
 
+                    if (lan!="en"){  // Formating decimal sign if language not english- dot to comma.
+                        try {
+                            tableRow.value = helper.dotTocomma(tableRow.value);
+                            tableRow.valueBRD = helper.dotTocomma(tableRow.valueBRD);
+                            tableRow.valueBundesland = helper.dotTocomma(tableRow.valueBundesland);
+                            tableRow.valueKreis = helper.dotTocomma(tableRow.valueKreis);
+                        }
+                        catch(error){
 
+                        }
+                    }
 
                     tableData.push(tableRow);
                 }
@@ -227,12 +228,10 @@ const area_info={
         let columnDefs=[];
             for (let i =0;i<columnList.length;i++){
                 let alignment="";
-                console.log("writing column defs: column"+ columnList[i]);
                 if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
                     alignment="dt-body-left dt-head-left"
                 }
                 else {
-                    console.log("Right Align!"+ columnList[i])
                     alignment= "dt-body-right dt-head-left"
                 }
                 let def={
@@ -245,8 +244,7 @@ const area_info={
     },
 
     writeHTML:function(parameters, text){ // writes the HTML for the Dialog Window
-         // Decide if dropdown menu should be shown and format the corresponding Table Header Elements
-        let headerHTML=area_info.getTableHeaderHTML(parameters,text);
+        let headerHTML=area_info.getTableHeaderHTML(parameters,text); // format the Table headers
 
         // Encoding the HTLM
         return he.encode(`
@@ -279,30 +277,29 @@ const area_info={
     getTableHeaderHTML:function(parameters, text){
         let headerFirstRow=`<tr id="firstHeaderRow">`,
             headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
-                                    // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w empty placeholders
+                                    // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w/ empty placeholders
         for (let columnHeader in parameters.columnList){
-            headerSecondRow+=`<th class="noPaddingsForTableHeader"> </th>`;
+            headerSecondRow+=`<th class="noPaddingNoBorder"> </th>`;
             switch (parameters.columnList[columnHeader]){
                 case "category":
-                    headerFirstRow+=`<th class="noPaddingsForTableHeader">${text[parameters.lan].category}</th> `;
+                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].category}</th> `;
                     break;
                 case "indicator":
-                    headerFirstRow+=`<th class="noPaddingsForTableHeader">${text[parameters.lan].indicator}</th> `;
+                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
                     break;
                 case "unit":
-                    console.log("indUnit!");
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
+                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";

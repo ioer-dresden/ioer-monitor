@@ -44,7 +44,7 @@ cursor: pointer;
 margin-left: auto;
 }
 
-.noPaddingsForTableHeader{
+.noPaddingNoBorder{
     padding:0px !important;
     border-bottom:0px !important}
 
