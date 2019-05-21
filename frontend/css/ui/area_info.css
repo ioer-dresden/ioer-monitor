@@ -44,8 +44,8 @@ cursor: pointer;
 margin-left: auto;
 }
 
-table.dataTable thead th.noPaddingNoBorder{
-    padding:0px 5px !important;
-    border-bottom:0px solid #111 !important}
+.noPaddingsForTableHeader{
+    padding:0px !important;
+    border-bottom:0px !important}
 
 

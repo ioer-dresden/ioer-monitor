@@ -188,10 +188,10 @@ const area_info={
                     };
                     if (data[index][category]["values"][indicator].hasOwnProperty("value_krs")){
                         console.log("Has Kreis");
-                        tableRow.valueKreis=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_bld"]);
-                        tableRow.relevanceYearKreis=data[index][category]["values"][indicator]["grundakt_year_bld"];
-                        tableRow.relevanceMonthKreis=data[index][category]["values"][indicator]["grundakt_month_bld"];
-                        tableRow.differenceKreis= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_bld"])
+                        tableRow.valueKreis=this.roundNumber(indicatorId, data[index][category]["values"][indicator]["value_krs"]);
+                        tableRow.relevanceYearKreis=data[index][category]["values"][indicator]["grundakt_year_krs"];
+                        tableRow.relevanceMonthKreis=data[index][category]["values"][indicator]["grundakt_month_krs"];
+                        tableRow.differenceKreis= this.roundNumber(indicatorId, data[index][category]["values"][indicator]["diff_krs"])
                     }
 
 
@@ -253,7 +253,7 @@ const area_info={
                         <div class="flex" >             
                         <h2 class="flexElement">${text[parameters.lan].indicatorValues}</h2>
                         <h2 class="flexElement"> ${parameters.name}</h2>
-                        <h3 class="flexElement" > (AGS: ${parameters.ags})</h3>
+                        <h2 class="flexElement" > (AGS: ${parameters.ags})</h2>
                         </div> 
                     
                     <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}</h3>
@@ -278,28 +278,28 @@ const area_info={
             headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
                                     // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w empty placeholders
         for (let columnHeader in parameters.columnList){
-            headerSecondRow+=`<th> </th>`;
+            headerSecondRow+=`<th class="noPaddingsForTableHeader"> </th>`;
             switch (parameters.columnList[columnHeader]){
                 case "category":
-                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].category}</th> `;
+                    headerFirstRow+=`<th class="noPaddingsForTableHeader">${text[parameters.lan].category}</th> `;
                     break;
                 case "indicator":
-                    headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
+                    headerFirstRow+=`<th class="noPaddingsForTableHeader">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value}</th> `;
                     break;
                 case "unit":
                     console.log("indUnit!");
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].germany}</th> `;
+                    headerFirstRow+= `<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].comparison} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";
