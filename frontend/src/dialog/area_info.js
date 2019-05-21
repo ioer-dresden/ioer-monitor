@@ -8,8 +8,7 @@ const area_info={
         parentSpatialUnits:[],
         data:[],
         lan:"",
-        time:0,
-        relevance:"",
+        time:"",
         columnList:[]
     },
     text:{ // Translation         ACHTUNG! The translation entry keys have to have the same name as the corresponding table column names ( see function area.info.extractRelevantDataFromJSON() )
@@ -21,7 +20,7 @@ const area_info={
             category:"Kategorie",
             indicator:"Indikator",
             value:"Wert",
-            relevanceYear:"Aktualität",
+            relevance:"Aktualität",
             comparison:"Vergleich mit ",
             germany:"Deutschland",
             state:"Bundesland",
@@ -37,7 +36,7 @@ const area_info={
             category:"Category",
             indicator:"Indicator",
             value:"Value",
-            relevanceYear:"Topicality",
+            relevance:"Topicality",
             comparison:"Comparison to ",
             germany: "Germany",
             state:"State",
@@ -53,7 +52,6 @@ const area_info={
                 area_info.parameters.parentSpatialUnits= data["spatial_info"];
                 data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
                 area_info.parameters.data=data;
-                area_info.parameters.relevance=data[1].relevanceMonth  + " / " + data[1].relevanceYear; // getting the relevance/topicality (Aktualität) from Data. All the Years are the same. Taking out from random data row
                 let html= area_info.writeHTML(area_info.parameters,area_info.text);
                 area_info.createDialogWindow(area_info.parameters,html,area_info.text);
                 area_info.init(area_info.parameters, area_info.text);
@@ -80,7 +78,6 @@ const area_info={
             data:[],
             lan:"",
             time:0,
-            relevance:"",
             columnList:[]
         };
         parameters.ags=ags;
@@ -144,7 +141,7 @@ const area_info={
 
 
                 for (let indicator in data[index][category]["values"]){
-                    indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"name");
+                    console.log("Index: "+indicator+ "  Indikator: " +indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"ind_name")+ "  Aktualität: " +data[index][category]["values"][indicator]["grundakt_year"]);
                     let indicatorId=data[index][category]["values"][indicator]["id"],
                         indicatorName="",
                         indicatorText="";
@@ -190,11 +187,11 @@ const area_info={
 
                     if (lan!="en"){  // Formating decimal sign if language not english- dot to comma.
                         try {
-                            tableRow.value = helper.dotTocomma(tableRow.value);
-                            tableRow.valueBRD = helper.dotTocomma(tableRow.valueBRD);
-                            tableRow.valueBundesland = helper.dotTocomma(tableRow.valueBundesland);
-                            tableRow.valueKreis = helper.dotTocomma(tableRow.valueKreis);
-                        }
+                        tableRow.value = helper.dotTocomma(tableRow.value);
+                        tableRow.valueBRD = helper.dotTocomma(tableRow.valueBRD);
+                        tableRow.valueBundesland = helper.dotTocomma(tableRow.valueBundesland);
+                        tableRow.valueKreis = helper.dotTocomma(tableRow.valueKreis);
+                    }
                         catch(error){
 
                         }
@@ -229,10 +226,10 @@ const area_info={
             for (let i =0;i<columnList.length;i++){
                 let alignment="";
                 if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
-                    alignment="dt-body-left dt-head-left"
+                    alignment="dt-body-left"
                 }
                 else {
-                    alignment= "dt-body-right dt-head-left"
+                    alignment= "dt-body-right"
                 }
                 let def={
                     targets:i,
@@ -244,8 +241,8 @@ const area_info={
     },
 
     writeHTML:function(parameters, text){ // writes the HTML for the Dialog Window
-        let headerHTML=area_info.getTableHeaderHTML(parameters,text); // format the Table headers
-
+        let headerHTML=area_info.getTableHeaderHTML(parameters,text), // format the Table header
+            relevance=area_info.formatRelevance(parameters.data[1].relevanceYear, parameters.data[1].relevanceMonth, text, parameters.lan);
         // Encoding the HTLM
         return he.encode(`
         <div class="jq_dialog" id="${parameters.endpoint_id}">
@@ -257,8 +254,7 @@ const area_info={
                         <h2 class="flexElement" > (AGS: ${parameters.ags})</h2>
                         </div> 
                     
-                    <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}</h3>
-                    <h3 class="flexElement">${text[parameters.lan].relevanceYear}: ${parameters.relevance}</h3>
+                    <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}  ${relevance}</h3>
                     </div>
                     <div title="Tabelle als CSV exportieren" id="area_info_csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren">
                     </div>                              
@@ -274,6 +270,14 @@ const area_info={
         `);
     },
 
+    formatRelevance:function(relevanceYear, relevanceMonth, text, lan){ // Checks if the "Grundaktualität" exists for the chosen administrative units. Applies to "Gemeindeverbände": sometimes they do not have a "Grundaktualität" attribute.
+        if (relevanceYear !="" && relevanceMonth!="" && relevanceYear !="0" && relevanceMonth!="0"){
+            return `( ${text[lan].relevance}: ${relevanceMonth}/${relevanceYear} )`
+        }
+        else {
+            return "";
+        }
+    },
     getTableHeaderHTML:function(parameters, text){
         let headerFirstRow=`<tr id="firstHeaderRow">`,
             headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
@@ -288,18 +292,18 @@ const area_info={
                     headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
                     break;
                 case "unit":
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
+                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";
@@ -341,13 +345,13 @@ const area_info={
             }
         );
     },
-    getDataTablesLanguage:function(lan){   // returns the DataTables interface translations
+    getDataTablesLanguage:function(lan){   // returns the DataTables interface translations. To add more languages, add the translations as another "case" language Object
         let language={};  // get the language translations @: http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/
         switch (lan) {
             case "de":
 
                 language={
-                    search: "Suchen",
+                    search: "Indikatorsuche",
                     lengthMenu:    "_MENU_ Einträge anzeigen",
                     info:           "_START_ bis _END_ von _TOTAL_ Einträgen",
                     infoEmpty:      "Keine Daten vorhanden",
@@ -365,7 +369,7 @@ const area_info={
                 };
                 break;
             default:
-                console.log("Untermenschlich!!");
+                console.log("Language other than German! Default is English");
                 break;
         }
         return language;
