@@ -26,7 +26,8 @@ const area_info={
             germany:"Deutschland",
             state:"Bundesland",
             district:"Kreis",
-            difference:"Differenz zu"
+            difference:"Differenz zu",
+            for:"für"
         },
         en:{
             title:"Area information",
@@ -41,7 +42,8 @@ const area_info={
             germany: "Germany",
             state:"State",
             district: "District",
-            difference:"Difference to"
+            difference:"Difference to",
+            for:"for"
         }
     },
 
@@ -96,13 +98,14 @@ const area_info={
     },
 
     getColumnList:function(spatialUnit){  // Determining columns that will get displayed
-        let columnList=["category","indicator", "value","unit","valueBRD","unit"];
+        let columnList=["category","indicator", "value","unit"];
         if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
             columnList.push("valueBundesland","unit");
         }
         else if (spatialUnit=="vwg" || spatialUnit== "gem"){
-            columnList.push("valueBundesland","unit","valueKreis","unit")
+            columnList.push("valueKreis","unit","valueBundesland","unit")
         }
+        columnList.push("valueBRD","unit");
         console.log("ColumnList: "+columnList);
         return columnList;
     },
@@ -287,19 +290,19 @@ const area_info={
                     headerFirstRow+=`<th class="noPaddingsForTableHeader">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
                     break;
                 case "unit":
                     console.log("indUnit!");
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
+                    headerFirstRow+= `<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].comparison} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingsForTableHeader">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";
