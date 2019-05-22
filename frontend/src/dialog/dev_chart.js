@@ -619,8 +619,8 @@ const dev_chart={
                     .dropdown({
                         onChange: function (value, text, $choice) {
                             let container = $('#visualisation'),
-                                width = container.width(),
-                                height = container.height();
+                                width = 842,
+                                height = 595;
                             //workaround for firefox Bug
                             container.attr("height",height).attr("width",width);
                             $(this).dropdown("hide");

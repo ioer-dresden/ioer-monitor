@@ -36,7 +36,7 @@ const indikator_json_group = {
                             return $.inArray(ags.toString(), ags_selection) >= 0;
                         };
                     if(!test_select()) {
-                        layer.setStyle(style.getLayerStyle(layer.feature.properties.value));
+                        layer.setStyle(style.getLayerStyle(layer.feature.properties.value)).bringToBack();
                     }
                     let fillcolor = layer.options.fillColor.replace('#', '');
                     $('#legende_' + fillcolor + " i").css({"width": "15px", "height": "10px", "border": ""});

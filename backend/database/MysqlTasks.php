@@ -60,6 +60,7 @@ class MysqlTasks extends MysqlManager {
        $length_ags = strlen($ags);
        $sql_bld = "";
         $sql_krs = "";
+        $grundakt_query = "";
         $sql_brd = "";
         //create the subquery for brd
         $sql_brd="IFNULL((SELECT x.INDIKATORWERT FROM m_indikatorwerte_".$year." x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags='99' AND x.INDIKATORWERT <=".$year."),0) as grundakt_year_brd,

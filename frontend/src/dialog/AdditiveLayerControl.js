@@ -133,11 +133,8 @@ class AdditiveLayerControl{
         dialog_manager.instructions.title=this.text[lan].title;
         dialog_manager.instructions.modal=false;
         dialog_manager.create();
+
         try {
-            //set 3d maps selected
-            if(OsmBuildings.getState()){
-                $(OsmBuildings.getButtonId()).addClass('active');
-            }
             $('.base_layers').each(function(){
                 if($(this).data("id")===additiveLayer.baselayer.getParameter()){
                     $(this).addClass("active");
