@@ -88,9 +88,11 @@ const dev_chart={
                                     <label>
                                         <input type="checkbox" value="" id="alle_stpkt">${this.text[lan].pnt}
                                     </label>
+                                    <!--Disabled: Kerngruppenbeschluss am 23.05.19
                                     <label id="prognose_container">
                                         <input type="checkbox" value="" id="prognose">${this.text[lan].trend}
                                     </label>
+                                    -->
                                 </div>
                             </div>
                         </div>
@@ -289,7 +291,7 @@ const dev_chart={
                     setTimeout(function(){
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
-                        setLegende(data, data[0].color.toString());
+                        setLegende(data, data[0].color.toString(),{class:"chart_legend"});
                     },100);
                 });
             }
@@ -369,15 +371,16 @@ const dev_chart={
                         .attr("width",x(max)-x(min))
                         .attr("height",chart_height)
                         .attr("id",id)
+                        .attr("class","migration-band")
                         .attr("style","background")
                         .attr("fill","url(#linear-gradient)");
 
-                    setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{left:x(min)});
+                    setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{class:"migration-band"});
                     migration_set=true;
                 }
             }
             //function to set the legende, margin is a object like margin.left = 50x
-            function setLegende(data, color,_margin) {
+            function setLegende(data, color,_settings) {
                 var title = function(){
                         if(data.length >0){
                             return data[0].name+" in "+data[0].einheit;
@@ -386,14 +389,15 @@ const dev_chart={
                         }
                     },
                     margin_set = function(){
-                        if(_margin){
-                            return _margin.left;
+                        if(_settings.left){
+                            return _settings.left;
                         }else{
                             return margin.left;
                         }
                     };
                 legend.append('g')
                     .append("rect")
+                    .attr("class",_settings.class)
                     .attr("x", margin_set())
                     .attr("y", chart_height + 50 + margin_top)
                     .attr("width", 10)
@@ -401,7 +405,7 @@ const dev_chart={
                     .style("fill", color);
 
                 legend.append("text")
-                    .attr("class","chart_legend")
+                    .attr("class",_settings.class)
                     .attr("x", margin_set() + 30)
                     .attr("y", chart_height + 60 + margin_top)
                     .attr("height", 30)
@@ -615,20 +619,44 @@ const dev_chart={
                             chart.init();
                         }
                     });
+                //export
                 download
                     .dropdown({
                         onChange: function (value, text, $choice) {
                             let container = $('#visualisation'),
                                 width = 842,
-                                height = 595;
+                                height = 595,
+                                migrationClass=$(".migration-band"),
+                                _export = function(){
+                                    if (value === 'png') {
+                                        Export_Helper.svgString2Image(width, height, '.container_diagramm #diagramm svg', Export_Helper.saveIMAGE);
+                                    } else if (value === 'pdf') {
+                                        Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg',{header:"Indikatorentwicklung für "+chart.settings.name,sub_header:""},Export_Helper.savePDF);
+                                    }
+                            };
                             //workaround for firefox Bug
                             container.attr("height",height).attr("width",width);
                             $(this).dropdown("hide");
-                            if (value === 'png') {
-                                Export_Helper.svgString2Image(width, height, '.container_diagramm #diagramm svg', Export_Helper.saveIMAGE);
-                            } else if (value === 'pdf') {
-                                Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg',{header:"Indikatorentwicklung für "+chart.settings.name,sub_header:""},Export_Helper.savePDF);
-                            }
+                            //ask user if he wants to export the migration band
+                            swal({
+                                title:"Möchten Sie die Datenmodellmigration in den Export integrieren ?",
+                                type: "info",
+                                showCloseButton: true,
+                                showCancelButton: true,
+                                confirmButtonText:"Ja",
+                                cancelButtonText:"Nein",
+                                customClass:"lightGrey-gradient"
+                            },
+                                function (isConfirm) {
+                                    if (isConfirm) {
+                                        _export();
+                                    }else{
+                                        migrationClass.hide();
+                                        _export();
+                                        migrationClass.show();
+
+                                    }
+                                });
                         }
                     });
                 setTimeout(function(){
@@ -650,7 +678,7 @@ const dev_chart={
     },
     controller:{
         set:function(){
-                //call on select inside the toolbar
+                //DOM events for the chart
                 $(document).on("click", dev_chart.chart_selector_toolbar, function () {
                     let callback = function () {
                         if(Dialoghelper.getAGS_Input()) {

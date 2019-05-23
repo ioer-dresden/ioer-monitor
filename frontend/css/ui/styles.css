@@ -73,11 +73,14 @@
 }
 /*sweet alert*/
 .sweet-alert{
-    z-index: 3000 !important;
+    z-index: 3000000 !important;
 }
 /*colors*/
 .text-black{
     color:black !important;
+}
+.lightGrey-gradient{
+    background: linear-gradient(90deg, white, white,#E6E6E6,#d3d3d3);
 }
 /*width*/
 .w-100{

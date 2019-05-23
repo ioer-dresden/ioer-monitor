@@ -4,7 +4,6 @@
 .toolbar #content #overflow_content{
     overflow-y: auto;
     overflow-x: hidden;
-    height: 99%;
 }
 .toolbar #btn_reset {
     background-color: grey !important;
@@ -200,6 +199,7 @@
 .toolbar #slider_zeit_container {
     margin-top: 10px;
     width:100%;
+    margin-bottom: 40px;
 }
 .toolbar #slider_zeit_container #zeit_slider{
     margin: 20px;

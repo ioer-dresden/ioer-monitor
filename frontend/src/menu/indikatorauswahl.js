@@ -346,7 +346,7 @@ const indikatorauswahl ={
                 .dropdown({
                     onShow:function(){
                         let click = 0;
-                        if(main_view.getHeight()<= 800) {
+                        if(main_view.getHeight()<= 1000) {
                             $('.link_kat')
                                 .unbind()
                                 .click(function () {
