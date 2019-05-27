@@ -312,6 +312,7 @@ const area_info={
         //setting up the dialog Window
         dialog_manager.instructions.endpoint = `${parameters.endpoint_id}`;
         dialog_manager.instructions.html = html;
+        dialog_manager.instructions.width = main_view.getMobileState() ? main_view.getWidth():main_view.getWidth()*0.75;
         dialog_manager.instructions.title = text[parameters.lan].title;
         dialog_manager.create();
     },
