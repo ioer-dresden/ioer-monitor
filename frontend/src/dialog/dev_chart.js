@@ -118,6 +118,7 @@ const dev_chart={
             html:html,
             title:dev_chart.text[lan].title[this.chart.settings.ind_vergleich],
             modal:false,
+            width: main_view.getMobileState() ? main_view.getWidth():main_view.getWidth()*0.75,
             close:function(){
                 dev_chart.chart.settings.state_stueztpnt=false;
                 dev_chart.chart.settings.state_prognose=false;
