@@ -85,7 +85,6 @@ const main_view = {
         }
         //set the slider width
         $('.content').css("overflow-y","");
-        $('#overflow_content').css("height","99%");
         //reset the bootom padding of the time slider
         indikatorauswahl.fill();
         indikatorauswahl.getDOMObject()
@@ -103,13 +102,10 @@ const main_view = {
         view_state.setViewState("responsive");
         main_view.getWidth();
         if(main_view.getWidth()<=500 || main_view.getHeight() <=700) {
-            $('#overflow_content').css("height", "");
             $('.content')
                 .css("overflow-y","auto");
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh');
-        }else {
-            $('#overflow_content').css("height", "85%");
         }
         //set the Legende
         legende.close();

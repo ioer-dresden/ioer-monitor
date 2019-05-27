@@ -62,7 +62,7 @@
 .ui-slider-handle{
     background:var(--active-color) !important;;
 }
-.ui-dialog { z-index: 99999 !important ;}
+.ui-dialog { z-index: 1500 !important ;}
 .ui-widget-header
 {
     background: var(--main-color) !important;

@@ -255,17 +255,6 @@ const indikator_json = {
             map.closePopup();
         }catch(err){}
     },
-    /*/
-    Set a Marker on the map with Lat Lon and Title f.eg. used inside the geographic search to tick the result inside the map
-     */
-    setMarker:function(lat,lng,title){
-        if(!title){
-            title = "<b>"+lat+" "+lon+"</b>"
-        }
-        let icon = L.icon({iconUrl:"frontend/assets/icon/marker-icon.png",shadowUrl:"frontend/assets/icon/marker-shadow.png"});
-        let popup =L.popup().setLatLng([lat,lng]).setContent(title).openOn(map);
-        map.setView(new L.LatLng(lat, lng),urlparamter.getUrlParameter('zoom'));
-    },
     setStyle:function(feature) {
         //the error Code
         let fc = feature.properties.fc;

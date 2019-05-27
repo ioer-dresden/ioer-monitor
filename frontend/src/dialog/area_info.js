@@ -47,27 +47,20 @@ const area_info={
     },
 
     open:function(ags,gen){
+        //singelton
+        const object = area_info;
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-                area_info.parameters.parentSpatialUnits= data["spatial_info"];
-                data= area_info.extractRelevantDataFromJSON(data,area_info.parameters.lan);
-                area_info.parameters.data=data;
-                let html= area_info.writeHTML(area_info.parameters,area_info.text);
-                area_info.createDialogWindow(area_info.parameters,html,area_info.text);
-                area_info.init(area_info.parameters, area_info.text);
-                area_info.drawTable(area_info.parameters);
+                object.parameters.parentSpatialUnits= data["spatial_info"];
+                data= object.extractRelevantDataFromJSON(data,object.parameters.lan);
+                object.parameters.data=data;
+                let html= object.writeHTML(object.parameters,area_info.text);
+                object.createDialogWindow(area_info.parameters,html,area_info.text);
+                object.drawTable(object.parameters);
+                object.controller.set();
             })
         );
     },
-    init:function(){  // set the .csv export on click
-        //init csv download
-        $("#area_info_csv_export")
-            .unbind()
-            .click(function(){
-                Export_Helper.exportTable("dataTable");
-            });
-    },
-
     getAllParameters:function(ags,gen){ // fills the Parameter Object with variables
         let parameters={
             endpoint_id:"area_info_content",
@@ -137,8 +130,6 @@ const area_info={
                     };
                     tableData.push(firstRowOfNewCategory);
                 }
-
-
 
                 for (let indicator in data[index][category]["values"]){
                     console.log("Index: "+indicator+ "  Indikator: " +indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"ind_name")+ "  Aktualität: " +data[index][category]["values"][indicator]["grundakt_year"]);
@@ -234,7 +225,7 @@ const area_info={
                 let def={
                     targets:i,
                     className: alignment
-            }
+            };
                 columnDefs.push(def);
         }
             return columnDefs;
@@ -377,6 +368,15 @@ const area_info={
     roundNumber:function(indicatorId,number){
         let decimalSpaces=indikatorauswahl.getIndikatorInfo(indicatorId,"rundung");
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
+    },
+    controller:{
+        set:function(){
+            $("#area_info_csv_export")
+                .unbind()
+                .click(function(){
+                    Export_Helper.exportTable("dataTable");
+                });
+        }
     }
 };
 

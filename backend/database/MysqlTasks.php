@@ -2,15 +2,7 @@
 require_once("MysqlManager.php");
 
 class MysqlTasks extends MysqlManager {
-    protected static $instance = NULL;
-    //singelton pattern ->Creates exactly one instance of an object.
-    public static function get_instance()
-    {
-        if ( NULL === self::$instance )
-            self::$instance = new self;
 
-        return self::$instance;
-    }
     //Query all the existing categories for `gebiete`
     public function getAllCategoriesGebiete(){
         $sql= $sql_kategorie = "SELECT * FROM m_thematische_kategorien, m_them_kategorie_freigabe

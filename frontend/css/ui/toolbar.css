@@ -4,6 +4,7 @@
 .toolbar #content #overflow_content{
     overflow-y: auto;
     overflow-x: hidden;
+    height: 99%;
 }
 .toolbar #btn_reset {
     background-color: grey !important;

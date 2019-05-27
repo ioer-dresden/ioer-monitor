@@ -3,15 +3,6 @@ require_once('PostgreManager.php');
 
 class PostgreTasks extends PostgreManager
 {
-    protected static $instance = NULL;
-    private $berechtigung = 3;
-    public static function get_instance()
-    {
-        if ( NULL === self::$instance )
-            self::$instance = new self;
-
-        return self::$instance;
-    }
     function getGeometry($year,$spatial_extend,$ags_array){
         $digit = '';
         $geom = "x.the_geom ";
@@ -46,7 +37,7 @@ class PostgreTasks extends PostgreManager
         return $this->query($sql . $digit);
     }
     function countGeometries($year,$raumgl,$ags_array){
-        $year_pg = MysqlTasks::get_instance()->getPostGreYear($year);
+        $year_pg = DBFactory::getMySQLTask()->getPostGreYear($year);
         $query= "select COUNT(AGS) from vg250_".$raumgl."_".$year_pg."_grob";
         if (count($ags_array) > 0) {
             $sql_pg = "select COUNT(AGS) from  vg250_" . $raumgl . "_" . $year_pg . "_grob where AGS Like'" . $ags_array[0] . "";

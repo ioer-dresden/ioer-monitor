@@ -97,10 +97,10 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=700) {
+                if(main_view.getHeight()>=600) {
                     menu.responsive=false;
                     html += `<div id="kat_item_${cat_id}"
-                                  title="${main_view.getHeight() >= 800 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
+                                  title="${main_view.getHeight() >= 1000 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
                                   class="ui left pointing dropdown link item link_kat" 
                                   data-value="${cat_id}"
                                   style="${background_color}">

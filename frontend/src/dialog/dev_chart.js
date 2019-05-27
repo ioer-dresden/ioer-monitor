@@ -182,9 +182,6 @@ const dev_chart={
                     return y(d.value);
                 });
 
-            let legend = svg.append("g")
-                .attr("class", "legend");
-
             let def = $.Deferred();
 
             //create the call
@@ -206,6 +203,7 @@ const dev_chart={
             defCalls().done(function (arr) {
                 chart.merge_data = [];
                 let i = 0;
+                console.log(MapHelper.getBldName(ags));
                 $.each(array, function (key, val) {
                     let obj = {id: val.id, values: arr[i][0]};
                     if (array.length === 1) {
@@ -247,6 +245,7 @@ const dev_chart={
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
+                    .style("font-size", "15px")
                     .attr("transform", "translate(0," + chart_height + ")")
                     .call(d3.axisBottom(x).scale(x).ticks(10).tickFormat(function(d){
                         if(chart.settings.state_prognose){
@@ -260,6 +259,7 @@ const dev_chart={
                 //set y axis
                 g.append("g")
                     .attr("class", "axis axis--y")
+                    .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
                         if (chart.settings.ind_vergleich) {
                             if (d=== 0) {
@@ -291,7 +291,7 @@ const dev_chart={
                     setTimeout(function(){
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
-                        setLegende(data, data[0].color.toString(),{class:"chart_legend"});
+                        setLegende(data, data[0].color.toString());
                     },100);
                 });
             }
@@ -330,7 +330,8 @@ const dev_chart={
                 if(!migration_set) {
                     let ags_s = ags.toString().substr(0,2),
                         id=null,
-                        year=null;
+                        year=null,
+                        class_band="migration-band";
 
                     for(let x=0; x<=data.length-1; x++) {
                             id = data[x].id;
@@ -340,6 +341,8 @@ const dev_chart={
                     let min = parseTime(`01/${migrationValues[id][ags_s]["min"]}`),
                         max = parseTime(`01/${migrationValues[id][ags_s]["max"]}`);
 
+                    //if min or max is null exit function
+                    if (min == null || max==null){return;}
 
                     let linearGradient = svg.append("defs")
                         .append("linearGradient")
@@ -371,47 +374,63 @@ const dev_chart={
                         .attr("width",x(max)-x(min))
                         .attr("height",chart_height)
                         .attr("id",id)
-                        .attr("class","migration-band")
+                        .attr("class",class_band)
                         .attr("style","background")
                         .attr("fill","url(#linear-gradient)");
 
-                    setLegende({name: "ggf. beeinflusst durch Datenmodellmigration"}, "grey",{class:"migration-band"});
+                    //create the legende
+                    let legend_migration = svg.append("g")
+                        .attr("class",`${class_band} ${class_band}`);
+
+                    legend_migration.append('g')
+                        .append("rect")
+                        .attr("x", margin.left)
+                        .attr("y", chart_height + 60 + margin_top)
+                        .attr("width", 5)
+                        .attr("height", 5)
+                        .style("fill", "grey");
+
+                    legend_migration.append("text")
+                        .attr("x", margin.left + 30)
+                        .attr("y", chart_height + 70 + margin_top)
+                        .attr("height", 20)
+                        .attr("width", (chart_width*0.7))
+                        .style("fill", "grey")
+                        .text(`ggf. beeinflusst durch Datenmodellmigration in ${MapHelper.getBldName(ags)}`);
+
+                    legend_migration.append('g')
+                        .append("rect")
+                        .attr("x", margin.left)
+                        .attr("y", chart_height + 80 + margin_top)
+                        .attr("width", chart_width)
+                        .attr("height", 1)
+                        .style("fill", "grey");
+
                     migration_set=true;
                 }
             }
             //function to set the legende, margin is a object like margin.left = 50x
-            function setLegende(data, color,_settings) {
-                var title = function(){
-                        if(data.length >0){
-                            return data[0].name+" in "+data[0].einheit;
-                        }else {
-                            return data.name;
-                        }
-                    },
-                    margin_set = function(){
-                        if(_settings.left){
-                            return _settings.left;
-                        }else{
-                            return margin.left;
-                        }
-                    };
+            function setLegende(data, color) {
+                let legend = svg.append("g")
+                    .attr("class", "legend"),
+                    marginTop = margin_top+40;
+
                 legend.append('g')
                     .append("rect")
-                    .attr("class",_settings.class)
-                    .attr("x", margin_set())
-                    .attr("y", chart_height + 50 + margin_top)
+                    .attr("x", margin.left)
+                    .attr("y", chart_height + 70 + marginTop)
                     .attr("width", 10)
                     .attr("height", 10)
                     .style("fill", color);
 
                 legend.append("text")
-                    .attr("class",_settings.class)
-                    .attr("x", margin_set() + 30)
-                    .attr("y", chart_height + 60 + margin_top)
-                    .attr("height", 30)
-                    .attr("width", (chart_width*0.7))
+                    .attr("x", margin.left + 30)
+                    .attr("y", chart_height + 80 + marginTop)
+                    .attr("height", 40)
+                    .attr("width", (chart_width))
+                    .style("font-size", "20px")
                     .style("fill", color)
-                    .text(title());
+                    .text(data[0].name+" in "+data[0].einheit);
 
                 margin_top += 20;
             }
@@ -624,7 +643,7 @@ const dev_chart={
                     .dropdown({
                         onChange: function (value, text, $choice) {
                             let container = $('#visualisation'),
-                                width = 842,
+                                width = 650,
                                 height = 595,
                                 migrationClass=$(".migration-band"),
                                 _export = function(){
