@@ -75,7 +75,11 @@ const area_info={
         };
         parameters.ags=ags;
         parameters.name=gen;
-        parameters.spatialUnit=raeumliche_analyseebene.getSelectionId();
+        parameters.spatialUnit=raumgliederung.getSelectionId();
+        console.log("raumliche_amnalyseebene: "+ raeumliche_analyseebene.getSelectionId());
+        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungId());
+        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungText());
+        console.log("raumgliederung ID: "+ raumgliederung.getSelectionId());
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
         parameters.columnList=this.getColumnList(parameters.spatialUnit);
@@ -132,7 +136,6 @@ const area_info={
                 }
 
                 for (let indicator in data[index][category]["values"]){
-                    console.log("Index: "+indicator+ "  Indikator: " +indikatorauswahl.getIndikatorInfo(data[index][category]["values"][indicator]["id"],"ind_name")+ "  Aktualität: " +data[index][category]["values"][indicator]["grundakt_year"]);
                     let indicatorId=data[index][category]["values"][indicator]["id"],
                         indicatorName="",
                         indicatorText="";
