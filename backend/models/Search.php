@@ -80,7 +80,7 @@ class Search{
 
 
         $query_krs = "select gid, ags, gen,des, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_krs_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%".$searchTerm."%')";
-        $erg_krs = POSTGRESQL_MANAGER::get_instance()->query($query_krs);
+        $erg_krs = DBFactory::getPostgreSQLManager()->query($query_krs);
         if (empty((array)$erg_bld)) {
             foreach($erg_krs as $row){
                 $coordinates = str_replace(array('POINT(',')'),array('',''),$row->center);
