@@ -81,7 +81,7 @@ class ScriptLoader{
             "frontend/src/menu/klassifzierung.js",
             "frontend/src/menu/klassenanzahl.js",
             "frontend/src/menu/farbliche_darstellungsart.js",
-            "frontend/src/menu/navbar.js",
+            "frontend/src/menu/NavBar.js",
             "frontend/src/menu/farbschema.js",
             "frontend/src/menu/MenuHelper.js",
             //map
