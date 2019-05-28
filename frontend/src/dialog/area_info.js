@@ -26,8 +26,7 @@ const area_info={
             state:"Bundesland",
             district:"Kreis",
             difference:"Differenz zu",
-            for:"für",
-            unit:"Einheit"
+            for:"für"
         },
         en:{
             title:"Area information",
@@ -43,8 +42,7 @@ const area_info={
             state:"State",
             district: "District",
             difference:"Difference to",
-            for:"for",
-            unit:"Unit"
+            for:"for"
         }
     },
 
@@ -78,6 +76,10 @@ const area_info={
         parameters.ags=ags;
         parameters.name=gen;
         parameters.spatialUnit=raumgliederung.getSelectionId();
+        console.log("raumliche_amnalyseebene: "+ raeumliche_analyseebene.getSelectionId());
+        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungId());
+        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungText());
+        console.log("raumgliederung ID: "+ raumgliederung.getSelectionId());
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
         parameters.columnList=this.getColumnList(parameters.spatialUnit);
@@ -85,12 +87,12 @@ const area_info={
     },
 
     getColumnList:function(spatialUnit){  // Determining which columns and in what order will get displayed
-        let columnList=["category","indicator", "value"];
+        let columnList=["category","indicator", "value","unit"];
         if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
-            columnList.push("valueBundesland");
+            columnList.push("valueBundesland","unit");
         }
         else if (spatialUnit=="vwg" || spatialUnit== "gem"){
-            columnList.push("valueKreis","valueBundesland")
+            columnList.push("valueKreis","unit","valueBundesland","unit")
         }
         columnList.push("valueBRD","unit");
         return columnList;
@@ -213,6 +215,25 @@ const area_info={
         return newTableColumns;
     },
 
+    getColumnDefsForDataTables:function(columnList){ // Format the columns for Data Tables here! (For options: https://datatables.net/reference/option/columnDefs)
+        let columnDefs=[];
+            for (let i =0;i<columnList.length;i++){
+                let alignment="";
+                if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
+                    alignment="dt-body-left"
+                }
+                else {
+                    alignment= "dt-body-right"
+                }
+                let def={
+                    targets:i,
+                    className: alignment
+            };
+                columnDefs.push(def);
+        }
+            return columnDefs;
+    },
+
     writeHTML:function(parameters, text){ // writes the HTML for the Dialog Window
         let headerHTML=area_info.getTableHeaderHTML(parameters,text), // format the Table header
             relevance=area_info.formatRelevance(parameters.data[1].relevanceYear, parameters.data[1].relevanceMonth, text, parameters.lan);
@@ -252,9 +273,11 @@ const area_info={
         }
     },
     getTableHeaderHTML:function(parameters, text){
-        let headerFirstRow=`<tr id="firstHeaderRow">`;
-
+        let headerFirstRow=`<tr id="firstHeaderRow">`,
+            headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
+                                    // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w/ empty placeholders
         for (let columnHeader in parameters.columnList){
+            headerSecondRow+=`<th class="noPaddingNoBorder"> </th>`;
             switch (parameters.columnList[columnHeader]){
                 case "category":
                     headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].category}</th> `;
@@ -263,26 +286,26 @@ const area_info={
                     headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
                     break;
                 case "unit":
-                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].unit}</th> `;
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
+                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";
             }
         }
         headerFirstRow+=`</tr>`;
-        return headerFirstRow;
+        headerSecondRow+=`</tr>`;
+        return headerFirstRow+headerSecondRow;
     },
 
     createDialogWindow:function(parameters, html, text){
@@ -317,26 +340,6 @@ const area_info={
             }
         );
     },
-
-    getColumnDefsForDataTables:function(columnList){ // Format the columns for Data Tables here! (For options: https://datatables.net/reference/option/columnDefs)
-        let columnDefs=[];
-        for (let i =0;i<columnList.length;i++){
-            let alignment="";
-            if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
-                alignment="dt-body-left"
-            }
-            else {
-                alignment= "dt-body-right"
-            }
-            let def={
-                targets:i,
-                className: alignment
-            };
-            columnDefs.push(def);
-        }
-        return columnDefs;
-    },
-
     getDataTablesLanguage:function(lan){   // returns the DataTables interface translations. To add more languages, add the translations as another "case" language Object
         let language={};  // get the language translations @: http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/
         switch (lan) {
