@@ -15,6 +15,7 @@
 @import url("../lib/d3/animate.min.css");
 @import url("../lib/sweetalert/sweetalert.css");
 @import url("../lib/spectrum/spectrum.css");
+@import url("../lib/dataTables/datatables.min.css");
 /*modules*/
 @import "ui/styles.css";
 @import "ui/responsive.css";
@@ -28,6 +29,7 @@
 @import "ui/dev_chart.css";
 @import "ui/statistics.css";
 @import "ui/loading.css";
+@import "ui/area_info.css";
 
 
 body {

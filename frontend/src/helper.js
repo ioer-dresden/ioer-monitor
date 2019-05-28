@@ -27,7 +27,7 @@ const helper={
     uniqueArray:function(list) {
         var result = [];
         $.each(list, function(i, e) {
-            if ($.inArray(e, result) == -1) result.push(e);
+            if ($.inArray(e, result) === -1) result.push(e);
         });
         return result;
     },
@@ -46,9 +46,6 @@ const helper={
     },
     enableElement:function(_elem,title){
         let elem = $(_elem);
-        if(elem.attr("id")==="panRight"){
-            console.log(elem);
-        }
         elem
             .removeClass('disabled')
             .prop('disabled',false)

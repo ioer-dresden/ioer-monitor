@@ -97,6 +97,13 @@ const zeit_slider={
                 map.dragging.enable();
             });
         pips.set(slider,jahre);
+
+        //disable chart for single time shift
+        if(zeit_slider.getTimes().length===1){
+            slider.slider('disable');
+        }else{
+            slider.slider('enable');
+        }
     },
     show:function(){
         this.getContainerDOMObject().show();
@@ -106,5 +113,8 @@ const zeit_slider={
     },
     getTimeSet:function(){
         return parseInt(urlparamter.getUrlParameter(this.parameter));
+    },
+    getTimes:function(){
+      return this.jahre;
     }
 };

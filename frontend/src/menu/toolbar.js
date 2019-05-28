@@ -47,6 +47,12 @@ const toolbar = {
                             </div>
                             <div class="results"></div>
                         </div>
+                        <!-- TimeSlider-->
+                        <div class="slider_container_time bottom_elements" id="slider_zeit_container">
+                                    <span><b>Zeitschnitt</b></span>
+                                    <hr class="hr"/>
+                                    <div class="zeit_slider" id="zeit_slider"></div>
+                        </div>
                         <!---Indicator choice--------------->
                         <div class="dropdown_choice">
                             <div class="hh_sf" id="indikator_auswahl">
@@ -64,11 +70,6 @@ const toolbar = {
                                     <i class="dropdown icon"></i>
                                     <div class="default text" id="ind_choice_info">Bitte wählen Sie einen Indikator</div>
                                     <div  id="kat_auswahl" class="menu"></div>
-                                </div>
-                                <div class="slider_container_time bottom_elements" id="slider_zeit_container">
-                                    <span><b>Zeitschnitt</b></span>
-                                    <hr class="hr"/>
-                                    <div class="zeit_slider" id="zeit_slider"></div>
                                 </div>
                                 <button class="btn btn-primary btn_dropdown kennblatt" onclick="kennblatt.open();">Kennblatt</button>
                             </div>
@@ -369,9 +370,7 @@ const toolbar = {
                         }
                     });
                     //set the height og the overflow content inside the menu bar
-                    if(main_view.getHeight() <= 1000
-                        && view_state.getViewState() ==='mw'
-                        && toolbar.pinned.length >0) {
+                    if(main_view.getHeight() <= 1000) {
                         let height = toolbar.getHeight() - $('#no_overflow').height() - 60;
                         $('#overflow_content').css("max-height",height+50);
                     }

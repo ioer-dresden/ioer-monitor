@@ -44,9 +44,7 @@ const panner = {
         set:function(){
             //bind the click functionality
             panner.getObject()
-                .unbind()
                 .click(function(){
-                    console.log("click");
                     if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete") {
                         right_view.open();
                     }

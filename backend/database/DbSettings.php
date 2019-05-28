@@ -2,7 +2,7 @@
 class DbSettings
 {
     var $settings;
-    function getSettings_mysql()
+    static function getSettings_mysql()
     {
         $settings['dbhost'] = '127.0.0.1';
         $settings['dbname'] = 'monitor_svg';
@@ -11,7 +11,7 @@ class DbSettings
 
         return $settings;
     }
-    function getSettings_postgre(){
+    static function getSettings_postgre(){
         $settings['dbhost'] = 'localhost';
         $settings['dbname'] = 'monitor_geodat';
         $settings['dbusername'] = 'monitor_svg_admin';

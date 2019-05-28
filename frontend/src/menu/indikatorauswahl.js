@@ -97,10 +97,10 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=700) {
+                if(main_view.getHeight()>=600) {
                     menu.responsive=false;
                     html += `<div id="kat_item_${cat_id}"
-                                  title="${main_view.getHeight() >= 800 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
+                                  title="${main_view.getHeight() >= 1000 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
                                   class="ui left pointing dropdown link item link_kat" 
                                   data-value="${cat_id}"
                                   style="${background_color}">
@@ -170,7 +170,7 @@ const indikatorauswahl ={
         $.when(RequestManager.getAvabilityIndicator(ind)).done(function(data){
             $.each(data,function(key,value) {
                 if(value.ind === ind) {
-                    if(value.avability==false){
+                    if(value.ava_statbility==false){
                         alert_manager.alertNotAsRaster();
                         return false;
                     }else{
@@ -230,10 +230,14 @@ const indikatorauswahl ={
         $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
     },
     getIndikatorInfo:function(indicator_id,key_name){
-        let val_found = null;
+        let val_found = null,
+            id = indicator_id;
+        if(typeof id==="undefined" || !id){
+            id = this.getSelectedIndikator();
+        }
         $.each(this.getPossebilities(),function(cat_key,cat_value){
             $.each(cat_value.indicators, function (key, value) {
-                if(key===indicator_id){
+                if(key===id){
                     val_found = value[key_name];
                 }
             });
@@ -342,7 +346,7 @@ const indikatorauswahl ={
                 .dropdown({
                     onShow:function(){
                         let click = 0;
-                        if(main_view.getHeight()<= 800) {
+                        if(main_view.getHeight()<= 1000) {
                             $('.link_kat')
                                 .unbind()
                                 .click(function () {

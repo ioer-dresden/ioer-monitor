@@ -32,7 +32,6 @@ class ScriptLoader{
             "frontend/lib/leaflet/plugin/togeojson.js",
             "frontend/lib/leaflet/plugin/leaflet.filelayer.js",
             "frontend/lib/leaflet/plugin/leaflet-image.js",
-            //"frontend/lib/leaflet/plugin/OSMBuildings-Leaflet.js",
             //Semantic UI
             "frontend/lib/semanticUi/semantic.min.js",
             "frontend/lib/semanticUi/components/transition.js",
@@ -86,7 +85,6 @@ class ScriptLoader{
             "frontend/src/menu/farbschema.js",
             "frontend/src/menu/MenuHelper.js",
             //map
-            "frontend/src/map/OsmBuildings.js",
             "frontend/src/map/additive_layer.js",
             "frontend/src/map/map_controller.js",
             "frontend/src/map/indikator_json.js",
@@ -126,8 +124,8 @@ class ScriptLoader{
             "frontend/src/dialog/kennblatt.js",
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",
-            "frontend/src/dialog/Gebietsprofil.js",
             "frontend/src/dialog/AdditiveLayerControl.js",
+            "frontend/src/dialog/area_info.js",
             //export
             "frontend/src/export/ogc_export.js",
             "frontend/src/export/map_link.js",
@@ -149,7 +147,6 @@ class ScriptLoader{
         $.getMultiScripts = function(arr) {
             var _arr = $.map(arr, function(scr) {
                 return $.getScript(  scr,function(){
-                    //script loaded
                 });
             });
 
