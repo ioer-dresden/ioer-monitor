@@ -2,6 +2,16 @@ const indikator_json = {
     json_layer : false,
     json_file:false,
     ags_count:false,
+    text:{
+      de:{
+          loading:"Lade",
+          areas:"Gebiete"
+      },
+      en:{
+          loading:"Loading",
+          areas:"areas"
+      }
+    },
     getJSONLayer:function(){
         return this.json_layer;
     },
@@ -33,7 +43,7 @@ const indikator_json = {
                     if (progressbar.getContainer().is(":visible")) {
                         clearInterval(interval);
                         indikator_json.ags_count = x[0].count;
-                        progressbar.setHeaderText("Lade " + x[0].count + " Gebiete");
+                        progressbar.setHeaderText(indikator_json.text[language_manager.getLanguage()].loading + " " + x[0].count + " " + indikator_json.text[language_manager.getLanguage()].areas);
                     }
                 },10);
         });
