@@ -211,15 +211,12 @@
       "de": "Tabelle erweitern",
       "en": "Expand table",
       "type": "#",
-      "selector": "span",
-      "callback": [
-        "setTimeout(function(){expand_panel.fill();},1000)"
-      ]
+      "selector": "span"
     },
     "tabel_header_raumgl": {
       "type": "#",
       "callback": [
-        "setTimeout(function(){table.fill();},1000)"
+        "setTimeout(function(){table.initTableHTML();},1000)"
       ]
     },
     "filter_table": {
