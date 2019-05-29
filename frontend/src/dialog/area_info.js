@@ -322,7 +322,7 @@ const area_info={
         let columnDefs=[];
         for (let i =0;i<columnList.length;i++){
             let alignment="";
-            if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
+            if (columnList[i]=="indicator" || columnList[i]== "category"){
                 alignment="dt-body-left"
             }
             else {

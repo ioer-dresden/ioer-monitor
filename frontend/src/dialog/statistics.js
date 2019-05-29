@@ -34,7 +34,8 @@ const statistics = {
             intervalCount:"Anzahl Intervale",
             interval:"Intervall",
             selectChart:"Diagramm wählen",
-            download:"Diagramm herunterladen"
+            download:"Diagramm herunterladen",
+            key:"Schlüssel"
 
         },
         en: {
@@ -68,7 +69,8 @@ const statistics = {
             intervalCount:"Interval count",
             interval:"Interval",
             selectChart:"Select chart",
-            download:"Download Chart"
+            download:"Download Chart",
+            key:"Key"
 
 
         }
@@ -100,7 +102,7 @@ const statistics = {
                     <br/>
                   <div id="statistics_info_container">
                     <div id="area_info"}>
-                        <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
+                        <h3 id="selectedArea">${chart.settings.name} (${this.text[lan].key}: ${chart.settings.ags})</h3>
                         <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
                     </div>
                     
