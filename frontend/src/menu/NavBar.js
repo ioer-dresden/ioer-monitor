@@ -1,10 +1,7 @@
-const navbar={
-    getDomObject:function(){
-        $elem = $('#navbar');
-        return $elem;
-    },
-    init:function(){
-      let html = `<div class="navbar-default navbar">
+@@ -0,0 +1,68 @@
+    class NavBar{
+        constructor(){
+            this.html =  `<div class="navbar-default navbar">
           <div class="navbar-primary">
               <nav class="navbar navbar-static-top" role="navigation">
                   <div class="navbar-header w-100">
@@ -26,43 +23,47 @@ const navbar={
               </nav>
           </div>
       </div>`;
-     this.getDomObject().append(html);
-      //bind the language Click
-      this.controller.set();
-    },
-    controller:{
-      set:function(){
-          const help_content = $("#help-content");
-          $('#language')
-              .unbind()
-              .click(function(){
-              language_manager.setLanguage($(this).data("value"));
-              language_manager.setElements();
+            NavBar.getContainer().append(this.html);
+            NavBarController.set();
+        }
+        static getContainer() {
+            $elem = $('#navbar');
+            return $elem;
+        }
+    }
+
+class NavBarController{
+    static set(){
+        const help_content = $("#help-content");
+        $('#language')
+            .unbind()
+            .click(function(){
+                language_manager.setLanguage($(this).data("value"));
+                language_manager.setElements();
                 if($(this).data("value")==="en"){
                     $(this)
                         .data('value',"de")
                         .find('i')
                         .removeClass("gb uk")
                         .addClass("de");
-                    navbar.getDomObject().find('.navbar-text').text('Monitor of Settlement and Open Space Development');
+                    NavBar.getContainer().find('.navbar-text').text('Monitor of Settlement and Open Space Development');
                 }else{
                     $(this)
                         .data('value',"en")
                         .find("i")
                         .removeClass("de")
                         .addClass("gb uk");
-                    navbar.getDomObject().find('.navbar-text').text('Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)');
+                    NavBar.getContainer().find('.navbar-text').text('Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)');
                 }
-          });
-          $("#nav_click")
-              //for mobile devices, without hover
-              .click(function(){
-                 if(help_content.is(":visible")){
-                     help_content.hide();
-                 }else{
-                     help_content.show();
-                 }
-              });
-      }
+            });
+        $("#nav_click")
+        //for mobile devices, without hover
+            .click(function(){
+                if(help_content.is(":visible")){
+                    help_content.hide();
+                }else{
+                    help_content.show();
+                }
+            });
     }
-};
+}
