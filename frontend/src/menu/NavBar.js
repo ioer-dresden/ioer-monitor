@@ -1,4 +1,3 @@
-@@ -0,0 +1,68 @@
     class NavBar{
         constructor(){
             this.html =  `<div class="navbar-default navbar">
