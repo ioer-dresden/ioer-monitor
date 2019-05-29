@@ -29,10 +29,7 @@ class App{
             .then(toolbar.init())
             .then(table.init())
             .then(map_controller.set())
-            .then(function(){
-                const navbar = new NavBar();
-                Object.freeze(navbar);
-            })
+            .then(navbar.init())
             .then(search.init())
             .then(raeumliche_visualisierung.init())
             .then(webTour.init())
