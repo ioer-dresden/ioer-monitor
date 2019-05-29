@@ -1,11 +1,12 @@
-    class NavBar{
-        constructor(){
-            this.html =  `<div class="navbar-default navbar">
+class NavBar{
+    constructor(){
+        this.html =  `<div class="navbar-default navbar">
           <div class="navbar-primary">
               <nav class="navbar navbar-static-top" role="navigation">
                   <div class="navbar-header w-100">
                       <a class="navbar-brand" href="https://www.ioer.de" target="_blank"/>
-                      <a class="float-left navbar-header-text mobile_hidden" href="http://www.ioer-monitor.de"><p>Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)</p></a>
+                      <a class="float-left navbar-header-text mobile_hidden" href="http://www.ioer-monitor.de"><p id="nav-title">Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)</p></a>
+                      <div class="navbar-text float-right language" id="language"><i class="gb uk flag"></i></div>
                        <div id="nav_click" class="h-100">
                            <div class="navbar-text float-right help" id="help">
                                 <p>Hilfe</p>
@@ -16,20 +17,19 @@
                                     </div>
                                 </div>
                             </div>
-                           <!--<div class="navbar-text float-right language" id="language"><i class="gb uk flag"></i></div>-->
                       </div>
                   </div>
               </nav>
           </div>
       </div>`;
-            NavBar.getContainer().append(this.html);
-            NavBarController.set();
-        }
-        static getContainer() {
-            $elem = $('#navbar');
-            return $elem;
-        }
+        NavBar.getContainer().append(this.html);
+        NavBarController.set();
     }
+    static getContainer() {
+        $elem = $('#navbar');
+        return $elem;
+    }
+}
 
 class NavBarController{
     static set(){
@@ -45,14 +45,14 @@ class NavBarController{
                         .find('i')
                         .removeClass("gb uk")
                         .addClass("de");
-                    NavBar.getContainer().find('.navbar-text').text('Monitor of Settlement and Open Space Development');
+                    NavBar.getContainer().find('#nav-title').text('Monitor of Settlement and Open Space Development');
                 }else{
                     $(this)
                         .data('value',"en")
                         .find("i")
                         .removeClass("de")
                         .addClass("gb uk");
-                    NavBar.getContainer().find('.navbar-text').text('Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)');
+                    NavBar.getContainer().find('#nav-title').text('Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)');
                 }
             });
         $("#nav_click")

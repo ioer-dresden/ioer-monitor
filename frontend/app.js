@@ -13,23 +13,12 @@ class App{
                 main_view.initializeFirstView();
             }
         };
-        //load the config data
-        $.when($.ajax({
-            async:true,
-            url:"frontend/data/config.json",
-            dataType:"json",
-            cache:false,
-            success:function(data){
-                config.setData(data);
-                config.checkVersion();
-            }
-        }))
-        //set the menu data
-            .then(panner.init())
+            $.when(panner.init())
             .then(toolbar.init())
             .then(table.init())
             .then(map_controller.set())
             .then(function(){
+                //Singelton pattern
                 const navbar = new NavBar();
                 Object.freeze(navbar);
             })

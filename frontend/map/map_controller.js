@@ -5,7 +5,7 @@ var map= L.map('map',{
 
 const map_controller={
   set:function(){
-      map.on('moveend',         function () {
+  map.on('moveend',function () {
 
           let centerPoint = map.getSize().divideBy(2),
               targetLatLng = map.containerPointToLatLng(centerPoint);

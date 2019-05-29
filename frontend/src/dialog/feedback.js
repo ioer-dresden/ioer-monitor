@@ -140,15 +140,15 @@ const feedback={
             });
         },
         send:function(){
-            let send = 'true',
-                selector = $("#reg_form"),
+            let selector = $("#reg_form"),
                 // Use Ajax to submit form data
                 name = selector.find("#name").val(),
                 email = selector.find("#email").val(),
-                message = selector.find("#message").val(),
-                url = 'https://monitor.ioer.de/monitor_api/email/';
+                message = selector.find("#message").val();
 
-            RequestManager.sendMailFeedback(name,email,message);
+            $.when(RequestManager.sendMailFeedback(name,email,message)).done(function(data){
+               console.info(data);
+            });
             //close the dialog
             dialog_manager.content.remove();
         }

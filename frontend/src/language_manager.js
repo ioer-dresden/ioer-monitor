@@ -17,7 +17,7 @@ const language_manager={
             dataType:"json",
             cache:false,
             success:function(_data){
-                manager.language_json=data;
+                manager.language_json=_data;
                 manager.language_data = _data;
                 $.each(_data,function(key,value){
                     let id = key;
