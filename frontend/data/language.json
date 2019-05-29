@@ -252,6 +252,12 @@
       "en":"Note:",
       "type":"."
     },
+    "time_checkbox": {
+      "de": "Alle Zeiten auswählen",
+      "en": "Select all timespans",
+      "type": "#",
+      "selector": "label"
+    },
     "hinweis_time_expand_linear":{
       "de":" Anzeige von zusätzlichen Zeitschnitten und weiteren Kenngrößen nur bei Deaktivierung der Trendfortschreibung.",
       "en":" Display of additional time cuts and other parameters only if the trend update is deactivated.",
@@ -268,7 +274,10 @@
       "de":"Bitte wählen.....",
       "en":"Please choose....",
       "type":"#",
-      "selector":".default"
+      "selector":".default",
+      "callback": [
+        "setTimeout(function(){expand_panel.setIndikatorauswahlDdm()},500)"
+      ]
     },
     "time_expand_conatier":{
       "de":"Zeitschnitte anfügen",

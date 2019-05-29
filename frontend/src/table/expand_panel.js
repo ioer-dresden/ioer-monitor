@@ -100,15 +100,18 @@ const expand_panel = {
     close: function(){
         this.getDOMObject().hide("slow",function() {});
     },
+    setIndikatorauswahlDdm:function(){ // Reinis: separated this function from expand_panel.fill(), to enable callback for Language support @ language.json
+        indikatorauswahl.cloneMenu('kat_auswahl_table','link_kat_table','left',false,true);
+        this.getIndikatorauswahlDDMObject().addClass('indicator_ddm');
+        this.getIndikatorauswahlDDMObject().find(`#${indikatorauswahl.getSelectedIndikator()}_item`).addClass("disabled");
+    },
     fill: function(){
         const panel = this;
         let jahreArray = indikatorauswahl.getFilteredPossibleYears(),
             ind_differences_hide = ["S12RG","S11RG","S40RG"];
         panel.clear();
         //DDM Indikatoren
-        indikatorauswahl.cloneMenu('kat_auswahl_table','link_kat_table','left',false,true);
-        panel.getIndikatorauswahlDDMObject().addClass('indicator_ddm');
-        panel.getIndikatorauswahlDDMObject().find(`#${indikatorauswahl.getSelectedIndikator()}_item`).addClass("disabled");
+        this.setIndikatorauswahlDdm();
         //if table was expand
         //DDM Time
         if($.inArray(indikatorauswahl.getSelectedIndikator(),ind_differences_hide)!== -1){
@@ -223,7 +226,7 @@ const expand_panel = {
                                 <div class="default text">Bitte wählen.....</div>
                                 <div  id="zeit_auswahl_table" class="menu"></div>
                             </div>
-                            <div class="ui toggle checkbox">
+                            <div class="ui toggle checkbox" id="time_checkbox">
                                 <input type="checkbox" id="selectall">
                                 <label>Alle Zeiten auswählen</label>
                             </div>
