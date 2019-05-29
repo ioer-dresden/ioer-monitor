@@ -14,8 +14,8 @@ const panner = {
       $('#Modal').append(`
         <div id="panRight" 
             class="panner tablebackground checker cursor ${exclude.class_gebiete}" 
-            data-scroll-modifier='1' data-title="öffnen Sie die Tabellenansicht" 
-            title="öffnen Sie die Tabellenansicht"></div>
+            data-scroll-modifier='1' data-title="Öffnen Sie die Tabellenansicht" 
+            title="Öffnen Sie die Tabellenansicht"></div>
       `);
     },
     init:function(){

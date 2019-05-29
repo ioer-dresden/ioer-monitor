@@ -11,6 +11,7 @@ const geolocate={
     init:function(){
         geolocate.locateElement.onAdd = function (map) {
             var div = L.DomUtil.create('div');
+            div.id="geolocate_id";
             div.title = "Meinen Standort bestimmen";
             div.innerHTML = `<div id="${geolocate.selector_id.replace("#","")}" class="locate btn_map cursor"></div>`;
 

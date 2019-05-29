@@ -11,6 +11,12 @@
         "attr":"placeholder",
         "type":"#"
       },
+    "slider_zeit_container": {
+      "de":"Zeitschnitt",
+      "en":"Time",
+      "selector": "b",
+      "type":"#"
+    },
       "indikator_auswahl":{
         "de":"Indikator",
         "en":"Indicator",
@@ -459,6 +465,46 @@
         "type":"#",
         "attr":"title"
       }
+    },
+  "map": {
+    "zoom_in_id": {
+      "de":"In die Karte hineinzoomen",
+      "en":"Zoom in",
+      "type":"#",
+      "attr":"title"
+    },
+    "zoom_out_id": {
+      "de":"Aus der Karte herauszoomen",
+      "en":"Zoom out",
+      "type":"#",
+      "attr":"title"
+    },
+    "geolocate_id": {
+      "de":"Meinen Standort bestimmen",
+      "en":"My location",
+      "type":"#",
+      "attr":"title"
+    },
+    "center_map_id": {
+      "de":"Zoom auf die gesamte Ausdehnung anpassen",
+      "en":"Zoom to map extent",
+      "type":"#",
+      "attr":"title"
     }
+  },
+  "Modal":{
+  "panRight": {
+    "de": "Öffnen Sie die Tabellenansicht",
+    "en": "Open the table view",
+    "type": "#",
+    "attr": "title"
+  },
+    "legende_button": {
+      "de": "Öffne Legende",
+      "en": "Open the Legend",
+      "type": "#",
+      "attr": "title"
+    }
+}
 
 }
