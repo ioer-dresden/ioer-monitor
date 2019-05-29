@@ -57,6 +57,10 @@
         "type":"#",
         "callback":["raeumliche_analyseebene.fill()","map_header.set()"]
       },
+      "grenzen_choice": {
+        "type":"#",
+        "callback":["gebietsauswahl.init()"]
+      },
       "default_text_ddm_grob":{
         "de":"Bitte Wählen..",
         "en":"Please choose..",
@@ -69,6 +73,16 @@
         "type":"#",
         "callback":["raumgliederung.fill()","map_header.set()"]
       },
+      "please_select_ddm_option": {
+        "de":"Bitte Wählen..",
+        "en":"Please choose..",
+        "type":"#"
+      },
+    "reset_ddm_option": {
+      "de":"Auswahl zurücksetzen",
+      "en":"Reset",
+      "type":"#"
+    },
       "spatial_range_raster":{
         "de":"Rasterweite in m",
         "en":"Grid dimensions in m:",
@@ -86,6 +100,12 @@
         "en":"Map design",
         "type":"#",
         "selector":"span"
+      },
+      "dropdown_layer":{
+        "de":"Grundkarten",
+        "en":"Base maps",
+        "type":"#",
+        "selector":"button"
       },
       "layer_conainer":{
         "de":"Sichtbarkeit Indikator",
