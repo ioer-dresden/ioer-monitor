@@ -1,4 +1,12 @@
 const progressbar ={
+    text:{
+        de:{
+            abort:"Abbrechen"
+        },
+        en:{
+            abort:"Abort"
+        }
+    },
     active: false,
     abort:true,
     getContainer:function(){return $('#progress_div');},
@@ -8,7 +16,7 @@ const progressbar ={
         if(this.active===false) {
             let abort=function(){
               if (object.abort){
-                  return `<button type="button" class="btn btn-primary" id="abort_btn">Abbrechen</button>`;
+                  return `<button type="button" class="btn btn-primary" id="abort_btn"> ${progressbar.text[language_manager.getLanguage()].abort}</button>`;
               }
             };
             $('body').append(`<div id="progress_div"><h2 id="progress_header"></h2><div class="progress"></div><hr/>${abort()}</div>`);
