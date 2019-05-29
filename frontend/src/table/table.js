@@ -1,4 +1,18 @@
 const table = {
+    text:{  // Geändert durch Reini: Übersetzungen in die Klasse dazugenommen
+        de:{
+            value:"Wert",
+            no:"lfd. Nr.",
+            ags:"AGS",
+            regionName:"Gebietsname",
+        },
+        en:{
+            value:"Value",
+            no:"No.",
+            ags:"Key",
+            regionName:"Region name",
+        }
+    },
     td_classes : 'collapsing',
     table_classes : 'tablesorter',
     excludedAreas:['Gemeindefreies Gebiet'],
@@ -31,7 +45,7 @@ const table = {
                 </div>
                 <div id="interact_div">
                     <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
-                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>erweitern</span></button>
+                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>Tabelle erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
                     <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />
@@ -45,8 +59,9 @@ const table = {
             html_table = `<table id="table_ags" class="${this.table_classes}">`,
             //create the main Table header --private functions
             createTableHeader=function(){
-                let value_text = `Wert (${indikatorauswahl.getIndikatorEinheit()})`,
-                    colspan = 5;
+                let colspan = 5,
+                    lan=language_manager.getLanguage();
+                console.log("Language: "+ lan);
                 if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
                     colspan=6;
                 }
@@ -57,10 +72,10 @@ const table = {
                     </tr>
                     <tr class="header" id="second_row_head">
                         <th class="th_head ${csv_export.ignoreClass}" data-export="false"></th>
-                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">lfd. Nr.</th>
-                        <th class="th_head ags sort-arrow" data-export="true">AGS</th>
-                        <th class="th_head gebietsname sort-arrow" data-export="true">Gebietsname</th>
-                        <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${value_text}</th>`;
+                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">${table.text[lan].no}</th>
+                        <th class="th_head ags sort-arrow" data-export="true">${table.text[lan].ags}</th>
+                        <th class="th_head gebietsname sort-arrow" data-export="true">${table.text[lan].regionName}</th>
+                        <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${table.text[lan].value} ${indikatorauswahl.getIndikatorEinheit()}</th>`;
 
                 if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
                     html += '<th class="th_head grundakt_head" id="grundakt_head">Mittlere Grund- aktualität</th>';

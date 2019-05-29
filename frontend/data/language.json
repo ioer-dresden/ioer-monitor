@@ -206,13 +206,47 @@
         "type":"#"
       }
   },
-  "table_page":{
-    "btn_table":{
-      "de":"Tabelle erweitern",
-      "en":"Expand table",
+  "table_page": {
+    "btn_table": {
+      "de": "Tabelle erweitern",
+      "en": "Expand table",
+      "type": "#",
+      "selector": "span",
+      "callback": [
+        "setTimeout(function(){expand_panel.fill();},1000)"
+      ]
+    },
+    "tabel_header_raumgl": {
+      "type": "#",
+      "callback": [
+        "setTimeout(function(){table.fill();},1000)"
+      ]
+    },
+    "filter_table": {
+      "de":"Tabelle filtern",
+      "en":"Filter table",
       "type":"#",
-      "selector":"span",
-      "callback":["setTimeout(function(){expand_panel.fill();},1000)"]
+      "attr": "title"
+    },
+    "csv_export": {
+      "de": "Tabelle als CSV exportieren",
+      "en": "Export the table as CSV",
+      "type": "#",
+      "attr": "data-title"
+    },
+    "table_close": {
+      "de": "Tabelle schliessen",
+      "en": "Close Table",
+      "type": "#",
+      "attr": "title",
+      "selector": "span"
+    },
+
+    "search_input_table":{
+      "de":"Suche nach Orten",
+      "en":"Search for a place",
+      "type":"#",
+      "attr": "placeholder"
     }
   },
   "tabelle_erweitern":{
@@ -411,5 +445,14 @@
         "type":"#",
         "callback":["setTimeout(function(){legende.fillContent();},1000)"]
       }
-  }
+  },
+    "area_info_content": {
+      "area_info_csv_export": {
+        "de":"Tabelle als CSV eportieren",
+        "en":"Export table as CSV",
+        "type":"#",
+        "attr":"title"
+      }
+    }
+
 }
