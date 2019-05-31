@@ -170,8 +170,9 @@ const indikatorauswahl ={
         $.when(RequestManager.getAvabilityIndicator(ind)).done(function(data){
             $.each(data,function(key,value) {
                 if(value.ind === ind) {
-                    if(value.ava_statbility==false){
+                    if(value.avability===false){
                         alert_manager.alertNotAsRaster();
+                        console.log(ind,value.ind,value.avability);
                         return false;
                     }else{
                         if(!ind){

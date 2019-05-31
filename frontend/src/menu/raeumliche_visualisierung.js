@@ -21,6 +21,7 @@ const raeumliche_visualisierung = {
         }
     },
     setRaster:function(){
+        console.warn("set Raster View");
         this.upateParameter('raster');
         main_view.restoreView();
         right_view.close();

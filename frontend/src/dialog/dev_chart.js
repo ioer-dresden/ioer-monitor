@@ -2,6 +2,7 @@ const dev_chart={
     chart_compare_selector_toolbar:"#dev_chart_compare",
     chart_selector_toolbar:"#dev_chart",
     endpoint_id:"entwicklungsdiagramm_content",
+    imigration:false,
     text:{
         de:{
             title:{
@@ -119,6 +120,7 @@ const dev_chart={
             title:dev_chart.text[lan].title[this.chart.settings.ind_vergleich],
             modal:false,
             width: main_view.getMobileState() ? main_view.getWidth():main_view.getWidth()*0.75,
+            height: toolbar.getHeight(),
             close:function(){
                 dev_chart.chart.settings.state_stueztpnt=false;
                 dev_chart.chart.settings.state_prognose=false;
@@ -204,7 +206,7 @@ const dev_chart={
             defCalls().done(function (arr) {
                 chart.merge_data = [];
                 let i = 0;
-                console.log(MapHelper.getBldName(ags));
+
                 $.each(array, function (key, val) {
                     let obj = {id: val.id, values: arr[i][0]};
                     if (array.length === 1) {
@@ -287,7 +289,7 @@ const dev_chart={
                     try {
                         setMigrationValue(data);
                     }catch(error){
-                        console.info("no migration values");
+                        dev_chart.imigration = false;
                     }
                     setTimeout(function(){
                         appendData(data, data[0].color.toString());
@@ -329,6 +331,7 @@ const dev_chart={
             //create the migration value
             function setMigrationValue(data){
                 if(!migration_set) {
+                    dev_chart.imigration = true;
                     let ags_s = ags.toString().substr(0,2),
                         id=null,
                         year=null,
@@ -644,8 +647,8 @@ const dev_chart={
                     .dropdown({
                         onChange: function (value, text, $choice) {
                             let container = $('#visualisation'),
-                                width = 650,
-                                height = 595,
+                                width = container.width()-50,
+                                height = container.height(),
                                 migrationClass=$(".migration-band"),
                                 _export = function(){
                                     if (value === 'png') {
@@ -657,26 +660,30 @@ const dev_chart={
                             //workaround for firefox Bug
                             container.attr("height",height).attr("width",width);
                             $(this).dropdown("hide");
-                            //ask user if he wants to export the migration band
-                            swal({
-                                title:"Möchten Sie die Datenmodellmigration in den Export integrieren ?",
-                                type: "info",
-                                showCloseButton: true,
-                                showCancelButton: true,
-                                confirmButtonText:"Ja",
-                                cancelButtonText:"Nein",
-                                customClass:"lightGrey-gradient"
-                            },
-                                function (isConfirm) {
-                                    if (isConfirm) {
-                                        _export();
-                                    }else{
-                                        migrationClass.hide();
-                                        _export();
-                                        migrationClass.show();
+                            //ask user if he wants to export the migration band if avaliable
+                            if(dev_chart.imigration) {
+                                swal({
+                                        title: "Möchten Sie auch das Unsicherheitsband exportieren ?",
+                                        type: "info",
+                                        showCloseButton: true,
+                                        showCancelButton: true,
+                                        confirmButtonText: "Ja",
+                                        cancelButtonText: "Nein",
+                                        customClass: "lightGrey-gradient"
+                                    },
+                                    function (isConfirm) {
+                                        if (isConfirm) {
+                                            _export();
+                                        } else {
+                                            migrationClass.hide();
+                                            _export();
+                                            migrationClass.show();
 
-                                    }
-                                });
+                                        }
+                                    });
+                            }else{
+                                _export();
+                            }
                         }
                     });
                 setTimeout(function(){

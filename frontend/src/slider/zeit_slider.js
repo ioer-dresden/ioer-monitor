@@ -24,13 +24,13 @@ const zeit_slider={
 
         //show the time container
         object.jahre= jahre;
-
+        console.log(jahre.length);
         if(!time_param){
             object.setParameter(jahre[value_set]);
         }
         //time param is set
         else{
-            if(jahre.length == 1){
+            if(jahre.length=== 1){
                 object.updateParam(jahre[value_set]);
                 helper.disableElement("#"+object.getContainerDOMObject().attr("id"),`Der Indikator steht nur für den Zeitschnitt ${zeit_slider.getTimeSet()} zur Verfügung.`);
             }
