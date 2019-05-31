@@ -1,7 +1,5 @@
 # user stuff
-backend/database/access.php
-backend/database/DB_SETTINGS.php
-backend/database/db_manager.php
+backend/database/DbSettings.php
 backend/dialog/
 backend/sora/
 
