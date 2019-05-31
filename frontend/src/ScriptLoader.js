@@ -103,7 +103,6 @@ class ScriptLoader{
             "frontend/src/map/tools/raster_split.js",
             "frontend/src/map/tools/zoom_in.js",
             "frontend/src/map/tools/zoom_out.js",
-            "frontend/src/map/tools/file_loader.js",
             "frontend/src/map/tools/center_map.js",
             "frontend/src/map/tools/geolocate.js",
             //table
@@ -139,7 +138,7 @@ class ScriptLoader{
             "frontend/src/webtour.js",
             "frontend/src/track.js",
             "frontend/app.js",
-            "frontend/src/ToolLoader.js"
+            "frontend/src/map/tools/ToolLoader.js"
         ];
     }
     includeScripts(){

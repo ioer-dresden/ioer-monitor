@@ -24,7 +24,6 @@ const zeit_slider={
 
         //show the time container
         object.jahre= jahre;
-        console.log(jahre.length);
         if(!time_param){
             object.setParameter(jahre[value_set]);
         }
@@ -32,15 +31,13 @@ const zeit_slider={
         else{
             if(jahre.length=== 1){
                 object.updateParam(jahre[value_set]);
-                helper.disableElement("#"+object.getContainerDOMObject().attr("id"),`Der Indikator steht nur für den Zeitschnitt ${zeit_slider.getTimeSet()} zur Verfügung.`);
             }
-            else if($.inArray(parseInt(time_param),jahre)!= -1){
+            else if($.inArray(parseInt(time_param),jahre)!== -1){
                 object.updateParam(jahre[$.inArray(parseInt(time_param),jahre)]);
                 value_set = $.inArray(parseInt(time_param),jahre);
-                helper.enableElement("#"+object.getContainerDOMObject().attr("id"),``);
             }
             else{
-                if($.inArray(parseInt(time_param),jahre) == -1){
+                if($.inArray(parseInt(time_param),jahre) === -1){
                     object.updateParam(jahre[value_set]);
                     alert_manager.alertNotInTimeShift();
                 }
@@ -100,8 +97,10 @@ const zeit_slider={
 
         //disable chart for single time shift
         if(zeit_slider.getTimes().length===1){
+            helper.disableElement("#"+object.getContainerDOMObject().attr("id"),`Der Indikator steht nur für den Zeitschnitt ${zeit_slider.getTimeSet()} zur Verfügung.`);
             slider.slider('disable');
         }else{
+            helper.enableElement("#"+object.getContainerDOMObject().attr("id"),"");
             slider.slider('enable');
         }
     },

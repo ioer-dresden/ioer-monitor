@@ -233,19 +233,13 @@ const toolbar = {
                             <ul class="tools">
                                 <li><div class="btn_container">
                                     <div id="measure" class="image cursor"></div>
-                                    <div class="btn_txt" id="measure_btn">Messen</div>
+                                    <div class="btn_txt" id="measure_btn" title="führen Sie Messungen durch">Messen</div>
                                 </div>
                                 </li>
                                 <li>
                                     <div class="btn_container">
-                                        <div id="lupe" class="image cursor"></div>
+                                        <div id="lupe" class="image cursor" title="Lupe um die darunter liegende Grundkarte hervorzuheben"></div>
                                         <div class="btn_txt" id="lupe_btn">Lupe</div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="btn_container">
-                                        <div id="import" class="image cursor"></div>
-                                        <div class="btn_txt" id="import_btn">Import</div>
                                     </div>
                                 </li>
                                  <li>

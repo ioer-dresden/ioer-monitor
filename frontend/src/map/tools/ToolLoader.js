@@ -1,6 +1,5 @@
 let tools=['lupe.init()',
     'measurement.init()',
-    'file_loader.init()',
     'center_map.init()',
     'zoom_out.init()',
     'zoom_in.init()',
