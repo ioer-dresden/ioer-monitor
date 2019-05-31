@@ -15,7 +15,7 @@ Durch das Bereitstellen von Informationen zur Siedlungs- und Verkehrsflächenent
 
 ## Dokumentation
 
-Unter der [**Seite**](https://ioer-dresden.github.io/monitor-doku/){:target="_blank"} ist die Dokumentation der Anwendung verfügbar.
+Unter der [**Seite**](https://ioer-dresden.github.io/monitor-doku/) ist die Dokumentation der Anwendung verfügbar.
 
 ## Screenshots
 ![Responsive](info/screenshots/responsive.jpg)
