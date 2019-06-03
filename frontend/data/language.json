@@ -1,5 +1,12 @@
 {
   "toolbar": {
+      "pin mobile_hidden": {
+        "de":"Menü anheften",
+        "en": "Pin the menu",
+        "type": ".",
+        "selector": "i",
+        "attr": "title"
+      },
       "menu_name": {
         "de": "Menü",
         "en": "Menu",
@@ -78,6 +85,18 @@
         "en":"Please choose..",
         "type":"#"
       },
+    "clear_gebietsauswahl": {
+      "de": "Auswahl leeren",
+      "en": "Clear selection",
+      "type": "#",
+      "attr": "title"
+    },
+    "clear_farbwahl": {
+      "de": "Auswahl leeren",
+      "en": "Clear selection",
+      "type": "#",
+      "attr": "title"
+    },
     "reset_ddm_option": {
       "de":"Auswahl zurücksetzen",
       "en":"Reset",
@@ -101,6 +120,11 @@
         "type":"#",
         "selector":"span"
       },
+    "create_color_schema": {
+      "de": "Erstellen",
+      "en": "Set",
+      "type": "#"
+    },
       "dropdown_layer":{
         "de":"Grundkarten",
         "en":"Base maps",
@@ -130,6 +154,12 @@
         "selector":"span",
         "type":"#"
       },
+    "Klassenanzahn": {
+      "de": "Anzahl der Klassen wählen",
+      "en": "Choose number of classes",
+      "type": "#",
+      "attr": "title"
+    },
       "klassifizierung":{
         "de":"Klassifizierung",
         "en":"Classification",
@@ -186,6 +216,50 @@
         "en":"Import",
         "type":"#"
       },
+      "btn_glaetten":{
+        "de":"Glätten",
+        "en":"Smooth",
+        "type":"#"
+      },
+      "btn_glaetten":{
+        "de":"Steht nur für die räumliche Gliederung- Raster zur Verfügung",
+        "en":"Only available for the Raster- spatial subdivision",
+        "type":"#",
+        "attr": "title"
+      },
+      "dev_chart":{
+        "de":"Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes",
+        "en":"Analyze the temporal evolution of an indicator value",
+        "type":"#",
+        "attr": "title"
+      },
+      "dev_chart_txt":{
+        "de": "Werte- entwicklung",
+        "en": "Value development",
+        "type": "#"
+      },
+      "dev_chart_compare":{
+        "de":"Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte",
+        "en":"Analyze the temporal evolution of multiple indicator values",
+        "type":"#",
+        "attr": "title"
+      },
+    "dev_chart_compare_txt":{
+      "de": "Entwicklungs- vergleich",
+      "en": "Development comparison",
+      "type": "#"
+    },
+    "map_compare_txt":{
+      "de": "Karten- vergleich",
+      "en": "Map comparison",
+      "type": "#"
+    },
+      "ind_compare":{
+        "de":"Steht nur für die Räumliche Gliederung-Raster zur Verfügung",
+        "en":"Only available for the Raster- spatial subdivision",
+        "type":"#",
+        "attr": "title"
+      },
       "dropdown_ogc":{
         "de":"Einbinden in eigenes GIS als",
         "en":"Integration into own GIS as",
@@ -200,7 +274,7 @@
       },
       "save_map_link":{
         "de":"Dauerhaftes Speichern der Karte auf dem IÖR-Server",
-        "en":"Permanently save the card to the IÖR-Server",
+        "en":"Permanently save the map to the IÖR-Server",
         "type":"#",
         "selector":"b"
       },
@@ -405,11 +479,17 @@
     }
   },
   "btn-group-map": {
+
+    "legende_button": {
+      "de": "Öffne Legende",
+      "en": "Open the Legend",
+      "type": "#",
+      "attr": "title"
+    },
     "legende_button":{
-        "de": "Legende",
-        "en": "Legend",
-        "type": "#",
-        "selector": "span"
+      "de": "Legende",
+      "en": "Legend",
+      "type": "#"
     },
     "map_button": {
       "de": "Karten",
@@ -476,6 +556,11 @@
         "en":"On and hide the basic update in the map window (click here)",
         "type":"#",
         "callback":["setTimeout(function(){legende.fillContent();},1000)"]
+      },
+      "legende_button":{
+        "de": "Legende",
+        "en": "Legend",
+        "type": "#"
       }
   },
     "area_info_content": {
@@ -519,9 +604,15 @@
     "type": "#",
     "attr": "title"
   },
-    "legende_button": {
-      "de": "Öffne Legende",
-      "en": "Open the Legend",
+    "help": {
+      "de": "Hilfe",
+      "en": "Help",
+      "type": "#",
+      "selector": "p"
+    },
+    "webtour": {
+      "de": "Unternehmen Sie eine Tour durch die Funktionalitäten des IÖR-Monitors",
+      "en": "Take a tour of the functionalities of the IÖR monitor",
       "type": "#",
       "attr": "title"
     }

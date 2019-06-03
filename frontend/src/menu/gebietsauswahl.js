@@ -56,7 +56,13 @@ const gebietsauswahl = {
                 object.setParamter('');
             }
             //create parameter AGS_ARRAY if not set
+            try {
             $('#grenzen_choice').text(gebietsauswahl.text[language_manager.getLanguage()].regionSelect + ": " + raeumliche_analyseebene.getSelectionText().replace("- nur", ""));
+            console.log("How does it look???")
+            }
+            catch (error){
+                console.log("Error: "+ error);
+            }
             this.controller.set();
         }else{
             raumgliederung.init();
