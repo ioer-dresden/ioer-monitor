@@ -16,6 +16,7 @@ const indikator_json = {
             ags_set = gebietsauswahl.getSelection();
 
         progressbar.init();
+        //clean if a raster map was set before
         indikator_raster_group.clean();
         indikator_json_group.clean();
 

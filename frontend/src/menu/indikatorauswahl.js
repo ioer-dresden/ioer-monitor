@@ -200,7 +200,7 @@ const indikatorauswahl ={
         }
         $('#ind_choice_info').css({"color": "black", "font-weight": "bold"});
         $('.kennblatt').show();
-        //reset the first init layer
+        //reset the first init layer if still visualized
         if(start_map.getState()){
             start_map.remove();
         }
