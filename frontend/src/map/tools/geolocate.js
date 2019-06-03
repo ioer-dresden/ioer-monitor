@@ -1,12 +1,10 @@
 const geolocate={
     text:{
         de:{
-            getLocation:"Meinen Standort bestimmen",
             youAreIn:"Sie befinden sich innerhalb von",
             mFromThisPoint:"m ausgehend von diesem Punkt"
         },
         en:{
-            getLocation:"Show my location",
             youAreIn:"You are within",
             mFromThisPoint: "of this point"
         }
@@ -24,7 +22,7 @@ const geolocate={
         geolocate.locateElement.onAdd = function (map) {
             var div = L.DomUtil.create('div');
             div.id="geolocate_id";
-            div.title = this.text[language_manager.getLanguage()].getLocation;
+            div.title = "Meinen Standort bestimmen";
             div.innerHTML = `<div id="${geolocate.selector_id.replace("#","")}" class="locate btn_map cursor"></div>`;
 
             L.DomEvent

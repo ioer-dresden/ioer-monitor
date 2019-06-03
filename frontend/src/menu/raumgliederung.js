@@ -84,10 +84,10 @@ const raumgliederung = {
                         $('#raumgl_fein'+raumgliederung.getSelectionId()).prop("selected",true);
                     }
                 } else {
-                    menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">Für den Indikator nicht verfügbar</option>');
+                    menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">raumgliederung.text[lan].noSubdivision</option>');
                 }
             } else {
-                menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">Für den Indikator nicht verfügbar</option>');
+                menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">raumgliederung.text[lan].noSubdivision</option>');
             }
         }
     },
