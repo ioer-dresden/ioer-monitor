@@ -59,7 +59,7 @@ const table = {
         createTableHeader=function(){
             let colspan = 5,
                 lan=language_manager.getLanguage();
-            console.log("Language: "+ lan);
+
             if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
                 colspan=6;
             }

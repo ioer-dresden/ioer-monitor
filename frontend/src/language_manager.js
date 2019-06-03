@@ -10,7 +10,7 @@ const language_manager={
       return this.language;
     },
     setElements(){
-        console.log("set Language for",this.language);
+        console.log("set Language for"+ language_manager.language);
         const manager = this;
         $.when($.ajax({
             url:"frontend/data/language.json",

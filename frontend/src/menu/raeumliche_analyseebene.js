@@ -48,6 +48,7 @@ const raeumliche_analyseebene = {
         return $elem;
     },
     fill(){
+        // TODO Reinis fix the loading to load selected spatial resolution after language change
         const menu = this;
         //clear array
         menu.range = [];

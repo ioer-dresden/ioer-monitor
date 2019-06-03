@@ -55,6 +55,7 @@ const raumgliederung = {
         const object = this,
             menu = this.getDOMObject().find('#Raumgliederung_Fein'),
             lan=language_manager.getLanguage();
+        console.log("raumgliederung.js ; raeuml_visualisierung: "+ raeumliche_visualisierung.getRaeumlicheGliederung());
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete") {
             object.clear();
 
