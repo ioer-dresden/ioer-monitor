@@ -6,6 +6,7 @@ class NavBar{
                   <div class="navbar-header w-100">
                       <a class="navbar-brand" href="https://www.ioer.de" target="_blank"/>
                       <a class="float-left navbar-header-text mobile_hidden" href="http://www.ioer-monitor.de"><p>Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)</p></a>
+                       <!--<div class="navbar-text float-right language" id="language"><i class="gb uk flag"></i></div>-->
                        <div id="nav_click" class="h-100">
                            <div class="navbar-text float-right help" id="help">
                                 <p>Hilfe</p>
@@ -16,7 +17,6 @@ class NavBar{
                                     </div>
                                 </div>
                             </div>
-                           <!--<div class="navbar-text float-right language" id="language"><i class="gb uk flag"></i></div>-->
                       </div>
                   </div>
               </nav>

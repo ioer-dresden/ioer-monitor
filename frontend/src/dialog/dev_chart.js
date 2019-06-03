@@ -647,7 +647,7 @@ const dev_chart={
                     .dropdown({
                         onChange: function (value, text, $choice) {
                             let container = $('#visualisation'),
-                                width = container.width()-50,
+                                width = container.width(),
                                 height = container.height(),
                                 migrationClass=$(".migration-band"),
                                 _export = function(){
