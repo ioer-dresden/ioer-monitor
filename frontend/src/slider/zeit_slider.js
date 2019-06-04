@@ -60,10 +60,8 @@ const zeit_slider={
                             stt_id = "stt_raumgl",
                             g50_id = "g50_raumgl",
                             stt_state = document.getElementById("stt_raumgl").dataset.state,
-                            g50_state = document.getElementById("g50_raumgl").dataset.state,
                             raumgl_test = parseInt(gebietsauswahl.countTags());
 
-                        console.log(stt_state);
                         if(stt_state!=="disabled") {
                             if (time < 2014) {
                                 helper.disableElement("#" + stt_id, exclude.disable_text);
