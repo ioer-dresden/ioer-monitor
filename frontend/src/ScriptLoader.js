@@ -119,7 +119,6 @@ class ScriptLoader{
             //dialog
             "frontend/src/dialog/dialog_manager.js",
             "frontend/src/dialog/dev_chart.js",
-            "frontend/src/dialog/feedback.js",
             "frontend/src/dialog/kennblatt.js",
             "frontend/src/dialog/DialogHelper.js",
             "frontend/src/dialog/statistics.js",

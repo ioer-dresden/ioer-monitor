@@ -13,7 +13,7 @@ class NavBar{
                                 <div id="help-content" class="help-content">
                                     <div>
                                         <div class="cursor"><i class="road icon"></i><a id="webtour" title="unternehmen Sie eine Tour durch die Funktionalitäten des IÖR-Monitors">Monitor Tour</a></div>
-                                        <div class="cursor"><i class="envelope icon"></i><a id="feedback_a" onclick="feedback.open();">Feedback</a></div>
+                                        <div class="cursor"><i class="envelope icon"></i><a id="feedback_a" href="mailto:monitor@ioer.de?subject=Feedback für den IÖR-Monitor">Feedback</a></div>
                                     </div>
                                 </div>
                             </div>
