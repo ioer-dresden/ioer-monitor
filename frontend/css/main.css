@@ -1,0 +1,524 @@
+@import url("../lib/jquery/plugin/jquery.splitter.css");
+@import url("../lib/bootstrap/bootstrap.min.css");
+@import url("../lib/bootstrap/font-awesome.min.css");
+@import url("../lib/bootstrap-tour/bootstrap-tour-standalone.css");
+@import url("../lib/jquery/jquery-ui.min.css");
+@import url("../lib/jquery/jquery-ui.structure.min.css");
+@import url("../lib/jquery/jquery-ui.theme.min.css");
+@import url("../lib/jquery/jquery-ui-slider-pips.min.css");
+@import url("../lib/leaflet/leaflet.css");
+@import url("../lib/leaflet/plugin/leaflet-measure.css");
+@import url("../lib/leaflet/plugin/L.Control.ZoomBox.css");
+@import url("../lib/leaflet/plugin/leaflet.magnifyingglass.css");
+@import url("../lib/leaflet/plugin/Control.MiniMap.css");
+@import url("../lib/semanticUi/semantic.min.css");
+@import url("../lib/d3/animate.min.css");
+@import url("../lib/sweetalert/sweetalert.css");
+@import url("../lib/spectrum/spectrum.css");
+@import url("../lib/dataTables/datatables.min.css");
+/*modules*/
+@import "ui/styles.css";
+@import "ui/responsive.css";
+@import "ui/autocomplete.css";
+@import "ui/print_map.css";
+@import "ui/toolbar.css";
+@import "ui/navbar.css";
+@import "ui/map.css";
+@import "ui/table.css";
+@import "ui/feeback.css";
+@import "ui/dev_chart.css";
+@import "ui/statistics.css";
+@import "ui/loading.css";
+@import "ui/area_info.css";
+
+
+body {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    line-height: unset;
+}
+/*
+The Tour
+ */
+.tour-step-background,
+.tour-backdrop {
+    position: fixed;
+}
+/*Search*/
+.search {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.search .input{
+    width: 100%;
+}
+.search .input #search_input_field::placeholder{
+    font-weight: bold;
+    color:black !important;
+}
+/*
+Layer Control
+*/
+#layer_control .container{
+    width:90%;
+}
+#layer_control .container h3{
+    margin-top: 20px;
+}
+#layer_control .maps{
+    width:100%;
+    margin-top: 20px;
+}
+#layer_control .maps .image-content{
+    display: inline-block;
+    width: 100%;
+}
+#layer_control .maps .float-left{
+    float:left;
+    width:40%;
+}
+#layer_control .maps .float-right{
+    float: right;
+    width:40%;
+}
+#layer_control .maps .image{
+    width: 90px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+    float:left;
+}
+#layer_control .extra-maps .extra-image{
+    width: 90px;
+    height: 118px;
+    background-repeat: no-repeat;
+    background-position: center;
+    float:left;
+}
+#layer_control .maps .name{
+    float:left;
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 17px;
+    margin-top: 20px;
+    width:auto;
+    max-width: 50%;
+}
+#layer_control .maps #osm .pic{
+    background-image: url("../assets/icon/osm.png");
+}
+#layer_control .maps #webatlas .pic{
+    background-image: url("../assets/icon/webatlas.png");
+}
+#layer_control .maps #topplus .pic{
+    background-image: url("../assets/icon/topplus.png");
+}
+#layer_control .maps #satellite .pic{
+    background-image: url("../assets/icon/satellite_view.png");
+}
+#layer_control .maps #leer .pic{
+    border: 1px solid black;
+}
+#layer_control .extra-maps #laendergrenzen .pic{
+    background-image: url("../assets/icon/bld.png");
+}
+#layer_control .extra-maps #kreisgrenzen .pic{
+    background-image: url("../assets/icon/krs.png");
+}
+#layer_control .extra-maps #gemeindegrenzen .pic{
+    background-image: url("../assets/icon/gem.png");
+}
+#layer_control .extra-maps #autobahn .pic{
+    background-image: url("../assets/icon/bab.png");
+}
+#layer_control .extra-maps #fernbahnnetz .pic{
+    background-image: url("../assets/icon/bahn.png");
+}
+#layer_control .extra-maps #gewaesser .pic{
+    background-image: url("../assets/icon/water.png");
+}
+#layer_control .extra-maps #mdmap .pic{
+    background-image: url("../assets/icon/3d-house.png");
+}
+#layer_control .active{
+    border: 3px solid green;
+    padding: 5px;
+}
+ /*
+Legende
+ */
+.legende{
+    font-size: 12px;
+    display: none;
+    position: absolute;
+    background: white;
+    padding: 5px;
+    z-index: 3000;
+    border:2px solid var(--main-color);
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    bottom: 30px;
+}
+.legende #grundakt_legende{
+    float:left;
+    width:auto;
+    max-width: 80px;
+    margin-top: 3px;
+    font-size: x-small;
+    line-height: 1.4;
+}
+.legende #legende_grund_line{
+    line-height: 15px;
+    width: 100%;
+    margin-left: 10px;
+    display: inline-block;
+}
+.legende #legende_grund_line i{
+    width: 15px;
+    height: 10px;
+    float: left;
+    margin-right: 8px;
+}
+.legende #grundaktmap {
+    float:right;
+    margin-top: 3px;
+    width: 160.8px;
+    height: 150px;
+    background-color: white;
+}
+.legende #hover_info_grundaktmap{
+    position: absolute;
+    z-index: 10000;
+    right: 30px;
+    width: 100px;
+    background-color: rgba(255,255,255,0.5);
+    display: none;
+    margin-top: 20px;
+}
+.legende #grundaktmap_btn{
+    background-color: #8CB91B;
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+.legende #legende_close{
+    font-weight: bold;
+    position: fixed;
+}
+#legende_close_l{
+    font-weight: bold;
+    position: fixed;
+}
+/* also for export needed*/
+.legende_line{
+    line-height: 15px;
+    width: 100%;
+    display: inline-block;
+}
+.legende_line i{
+    width: 15px;
+    height: 10px;
+    float: left;
+    margin-right: 8px;
+}
+.legende_map .zusatzlayer{
+    line-height: 15px;
+    width: 100%;
+    display: inline-block;
+}
+.legende_map .zusatzlayer div{
+    width: 15px;
+    height: 5px;
+    float: left;
+    margin-right: 8px;
+    margin-top: 5px;
+}
+/*Legende Histogramm*/
+.legende #dropdown_datenalter{
+    display: none;
+}
+.legende #datenalter{
+    pointer-events: auto;
+}
+.legende #Klassifikationsmethode_legende{
+    cursor: pointer;
+}
+.legende #datenalter #histogramm_pic{
+    width: 100%;
+    margin-top: 5px;
+}
+.legende #histogramm_pic #svgId{
+    width: 100%;
+    height: 60px !important;
+}
+.legende #iconhistogramm {
+    width: 100%;
+}
+.legende #histogramm_pic svg g .value-rect{
+    fill:#000000;
+}
+.legende #histogramm_pic svg g .value-rect:hover{
+    fill:red;
+    font-size: 1600px;
+}
+.legende .hist_info{
+    display: none;
+}
+
+#layer_conainer{
+    display: inline-block;
+    width: 100%;
+}
+/*left content*/
+.left_content{
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    overflow: hidden;
+}
+.panner{
+    position:fixed;
+    width:60px;
+    height:60px;
+    z-index: 500;
+    right: 0;
+    top: 265px;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+}
+.tablebackground{
+    background: var(--main-color) url(../assets/icon/table-grid.png) no-repeat center;
+}
+.mapbackground{
+    background: var(--main-color) url(../assets/icon/germany_32.png) no-repeat center;
+}
+/*barchart*/
+.chart div {
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+}
+/*Text class styling*/
+.text {
+    font-weight: normal;
+}
+
+.backButton{
+    font-size: 3.5em;
+}
+.drop_arrow{
+    float:left;
+    color: white;
+}
+.dropdown_menu_d {
+    display: none;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+#user_choice{
+    margin-top: 10px;
+    display:none;
+}
+.layer_ue {
+    display:inline-block;
+    width: 100%;
+}
+/*IMPRESSUM*/
+.toolbar #impressum{
+    position: absolute;
+    bottom: 0;
+    display: inline;
+}
+.toolbar #impressum a{
+    margin-right: 20px;
+}
+/*
+Vergleichskarte Dialog------------------------------------
+*/
+#vergleich_dialog {
+    display: none;
+    padding: 20px;
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 3000;
+    border: 2px solid var(--main-color);
+    width:550px;
+    background: white;
+    overflow-x: hidden;
+    height:auto;
+    min-height: 600px;
+}
+#vergleich_dialog #close_vergleich{
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+}
+#vergleich_dialog #close_vergleich .close{
+    float: right;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+}
+#vergleich_dialog #close_vergleich .destroy{
+    float: right;
+    font-weight: bold;
+    margin-right: 20px;
+}
+#vergleich_dialog .auswahlcontainer{
+    width: 50%;
+    float:left;
+}
+#vergleich_dialog .ind_content{
+    display: none;
+}
+#vergleich_dialog .auswahlcontainer #time_range_raster_vergleich{
+    margin-top: 20px;
+}
+#vergleich_dialog .auswahlcontainer .vergleich_container #zeit_slider_vergleich{
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#vergleich_dialog .auswahlcontainer .vergleich_container #zeit_slider_vergleich .ui-slider-label{
+    color: black !important;
+}
+#vergleich_dialog .auswahlcontainer #spatial_range_raster_vergleich{
+    margin-top: 40px;
+    display: block;
+}
+#vergleich_dialog .auswahlcontainer .vergleich_container #raum_slider_vergleich{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+#vergleich_dialog .auswahlcontainer .vergleich_container #raum_value_vergleich{
+    margin-right: 20px;
+    margin-left: 10px;
+}
+#vergleich_dialog .auswahlcontainer #klassifizierung_vergleich{
+    margin-top: 40px;
+}
+#vergleich_dialog .auswahlcontainer #klassifizierung_vergleich #menu_klassenanzahl_vergleich{
+    margin-top: 20px;
+}
+#vergleich_dialog .auswahlcontainer #klassenbestzung_vergleich{
+    margin-top: 20px;
+}
+#vergleich_dialog .auswahlcontainer #klassenbestzung_vergleich #menu_klassifizierung_vergleich{
+    margin-top: 20px;
+}
+#vergleich_dialog .legende_vergleich{
+    float: right;
+    width: 40%;
+}
+#create_vergleichskarte_button{
+    margin-top: 50px;
+}
+/*
+OGC Dialoge-----------------------------
+ */
+.ogc_dialog{
+    padding: 20px;
+}
+.ogc_dialog h4{
+    margin-bottom: 0;
+}
+.ogc_dialog .ogc_accecpt_container{
+    display:inline-block
+}
+.ogc_dialog .ogc_accecpt_container span{
+    margin-left: 10px;
+}
+.ogc_dialog .ogc_accecpt_container span a {
+    color: #006dcc;
+}
+.ogc_dialog .ogc_allow{
+    display: none;
+    margin-top: 10px;
+}
+.ogc_dialog .ogc_allow .link_container{
+    width: 100%;
+    display: inline-block;
+}
+.ogc_dialog .ogc_allow .link_container h3{
+    margin-top: 5px;
+    color:#006dcc;
+    float:left;
+}
+.ogc_dialog .ogc_allow .link_container .ogc_info{
+    border-radius: 50%;
+    background: #006dcc url(../assets/icon/information.png) no-repeat center;
+    width:32px;
+    height:32px;
+    float: right;
+    margin-right: 10px;
+}
+.ogc_dialog .ogc_anleitung{
+    margin-bottom: 0;
+}
+.ogc_dialog .ogc_anleitung a{
+    text-decoration: none;
+    text-align: center;
+}
+.ogc_dialog .ogc_anleitung a button{
+    margin-left:15px;
+}
+/*Right Pane
+Solution fixed headers: https://stackoverflow.com/questions/673153/html-table-with-fixed-headers
+ */
+#rightPane{
+    background: white;
+}
+.right_content{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 60px 10px 10px;
+    overflow: hidden;
+    background-color: white;
+}
+/*D3*/
+.axis {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #D4D8DA;
+    stroke-width: 2px;
+    shape-rendering: crispEdges;
+}
+
+.line {
+    fill: none;
+    stroke: var(--main-color);
+    stroke-width: 5px;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+/*The Menu Icons*/
+.notify-icon span{
+    display: inline-block;
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    animation: pulse .6s 4 forwards;
+    transform-origin: center center;
+}
