@@ -8,6 +8,7 @@ const zoom_out={
     init:function(){
         zoom_out.zoomElement.onAdd = function (map) {
             var div = L.DomUtil.create('div');
+            div.id="zoom_out_id";
             div.title = "Aus der Karte herauszoomen";
             div.innerHTML = `<div id="${zoom_out.selector}" class="zoomOut btn_map cursor"></div>`;
 

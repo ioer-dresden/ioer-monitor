@@ -273,6 +273,11 @@ const additiveLayer={
             let layer = control.zusatzlayer[_id],
                 name = $(`#zusatz_${_id}`).data("name");
 
+            if(_id==="mdmap"){
+                OsmBuildings.addEngine();
+                return false;
+            }
+
             dialog_manager.close();
             progressbar.init();
             progressbar.setHeaderText("Lade Layer");

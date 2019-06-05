@@ -32,6 +32,7 @@ class ScriptLoader{
             "frontend/lib/leaflet/plugin/togeojson.js",
             "frontend/lib/leaflet/plugin/leaflet.filelayer.js",
             "frontend/lib/leaflet/plugin/leaflet-image.js",
+            "frontend/lib/leaflet/plugin/OSMBuildings-Leaflet.js",
             //Semantic UI
             "frontend/lib/semanticUi/semantic.min.js",
             "frontend/lib/semanticUi/components/transition.js",

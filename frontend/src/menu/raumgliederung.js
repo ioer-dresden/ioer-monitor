@@ -1,5 +1,19 @@
 const raumgliederung = {
     param:'raumgl_fein',
+    text:{
+        de:{
+            pleaseSelect: "Bitte wählen!",
+            resetSelection: "Auswahl zurücksetzen",
+            noSubdivision: "keine Feingliederung verfügbar",
+            notAvailableForIndicator: "Für den Indikator nicht verfügbar"
+        },
+        en:{
+            pleaseSelect: "Please select!",
+            resetSelection: "Reset",
+            noSubdivision: "no subdivision possible",
+            notAvailableForIndicator: "Not available for this indicator"
+        }
+    },
     setParameter:function(_value){
         urlparamter.setUrlParameter(this.param,_value);
     },
@@ -39,7 +53,8 @@ const raumgliederung = {
     },
     fill:function(){
         const object = this,
-            menu = this.getDOMObject().find('#Raumgliederung_Fein');
+            menu = this.getDOMObject().find('#Raumgliederung_Fein'),
+            lan=language_manager.getLanguage();
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete") {
             object.clear();
 
@@ -57,22 +72,22 @@ const raumgliederung = {
                 let position = $.inArray(value_set, values);
                 //show the menu only if the user has mor than 2 possebilities
                 if (position != (values.length - 1) || values.length > 1) {
-                    menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">Bitte wählen!</option><option data-val="preset" value="null">Auswahl zurücksetzen</option>');
+                    menu.append('<option data-val="preset" id="please_select_ddm_option" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">Bitte Wählen</option><option id="reset_ddm_option" data-val="preset" value="null">Auswahl zurücksetzen</option>');
                     $.each(values_menu, function (key, value) {
                         if (key > position) {
                             menu.append('<option data-val="preset" id="raumgl_fein' + value.id + '" name="' + value.name + '" value="' + value.id + '" '+value.state+'>' + value.name + '</option>');
                         }
                     });
                     //set the disable title
-                    menu.find('option').each(function(){if($(this).is(':disabled')){$(this).attr("title","Für den Indikator nicht verfügbar")}});
+                    menu.find('option').each(function(){if($(this).is(':disabled')){$(this).attr("title",raumgliederung.text[lan].notAvailableForIndicator)}});
                     if(typeof raumgliederung.getSelectionId() !=='undefined'){
                         $('#raumgl_fein'+raumgliederung.getSelectionId()).prop("selected",true);
                     }
                 } else {
-                    menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">keine Feingliederung verfügbar</option>');
+                    menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">${raumgliederung.text[lan].noSubdivision}</option>');
                 }
             } else {
-                menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">keine Feingliederung verfügbar</option>');
+                menu.append('<option data-val="preset" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">${raumgliederung.text[lan].noSubdivision}</option>');
             }
         }
     },

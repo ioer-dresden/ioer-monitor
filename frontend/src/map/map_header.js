@@ -1,4 +1,12 @@
 const map_header ={
+    text:{
+        de:{
+            germany:"Deutschland"
+        },
+        en:{
+            germany:"Germany"
+        }
+    },
     getDOMObject:function(){
         $elem = $('.indikator_header');
         return $elem;
@@ -25,7 +33,7 @@ const map_header ={
                         return name;
                     },
                     time = zeit_slider.getTimeSet(),
-                    spatial_text = raeumliche_analyseebene.getSelectionText()
+                    spatial_text = raeumliche_analyseebene.getSelectionText();
                     split_txt = function () {
                         let txt = "als";
                         if (language_manager.getLanguage() === "en") {
@@ -36,7 +44,7 @@ const map_header ={
 
                 if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
                     if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() == 0) {
-                        spatial_text = raeumliche_analyseebene.getSelectionText() + " in Deutschland";
+                        spatial_text = raeumliche_analyseebene.getSelectionText() + " in "+ map_header.text[language_manager.getLanguage()].germany;
                     } else if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() > 0) {
                         spatial_text = gebietsauswahl.getSelectionAsString();
                     } else {
@@ -46,7 +54,7 @@ const map_header ={
                 indikator_text.text(indikator_name() + " (" + time + ")");
                 spatial_object.text(spatial_text);
             }
-        }, 100);
+        }, 500);
     },
     moveVertical:function(_position,_range){
         this.getDOMObject().css(_position,_range);

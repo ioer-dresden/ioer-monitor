@@ -1,4 +1,14 @@
 const geolocate={
+    text:{
+        de:{
+            youAreIn:"Sie befinden sich innerhalb von",
+            mFromThisPoint:"m ausgehend von diesem Punkt"
+        },
+        en:{
+            youAreIn:"You are within",
+            mFromThisPoint: "of this point"
+        }
+    },
     selector_id:"#geolocate",
     cirle:false,
     marker:false,
@@ -11,6 +21,7 @@ const geolocate={
     init:function(){
         geolocate.locateElement.onAdd = function (map) {
             var div = L.DomUtil.create('div');
+            div.id="geolocate_id";
             div.title = "Meinen Standort bestimmen";
             div.innerHTML = `<div id="${geolocate.selector_id.replace("#","")}" class="locate btn_map cursor"></div>`;
 
@@ -37,8 +48,9 @@ const geolocate={
     },
     onLocationFound:function(e) {
         var radius = Math.round(e.accuracy / 2);
+        lan=language_manager.getLanguage();
         geolocate.marker = L.marker(e.latlng).addTo(map)
-            .bindPopup(`Sie befinden sich innerhalb von ${radius}m ausgehend von diesem Punkt`).openPopup();
+            .bindPopup(`${this.text[lan].youAreIn} ${radius} ${this.text[lan].mFromThisPoint}`).openPopup();
         geolocate.getDOMContainer().css("background-color", farbschema.getColorHexActive());
     }
 };

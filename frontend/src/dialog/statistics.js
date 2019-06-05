@@ -407,7 +407,7 @@ const statistics = {
     },
 
 
-    chart: { // Holds all the variables
+    chart: { // Controls, draws the charts
         settings: {
             lan:"",
             ags: "",
@@ -430,7 +430,7 @@ const statistics = {
                 median: "",
                 stDeviation: ""
             }
-        },
+        },  // Holds all the variables
 
         init: function () { // sets the chart/visualisation/svg container dimensions
 

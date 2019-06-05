@@ -10,14 +10,13 @@ const language_manager={
       return this.language;
     },
     setElements(){
-        console.log("set Language for",this.language);
         const manager = this;
         $.when($.ajax({
             url:"frontend/data/language.json",
             dataType:"json",
             cache:false,
             success:function(_data){
-                manager.language_json=data;
+                manager.language_json=_data;
                 manager.language_data = _data;
                 $.each(_data,function(key,value){
                     let id = key;

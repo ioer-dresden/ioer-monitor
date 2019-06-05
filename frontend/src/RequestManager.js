@@ -142,12 +142,16 @@ class RequestManager{
     static sendRequestFlask(json){
         const manager = this;
         call= $.ajax({
-            async: true,
             type: json.type,
             url: 'https://monitor.ioer.de/monitor_api/'+json.endpoint,
             data: json.data,
             error:function(xhr, ajaxOptions, thrownError){
-                alert_manager.alertError();
+                swal({
+                   title: "Es ist ein Problem aufgetreten",
+                   html: true,
+                   text: `Bitte kontaktieren Sie uns über ihr <a href="mailto:monitor@ioer.de?subject=Fehler im IÖR Monitor&body=${json.data.message}"><b>Mailprogramm.</b></a>`,
+                    type: "error"
+                });
             },
             success:function(data){
                 if(json.debug){

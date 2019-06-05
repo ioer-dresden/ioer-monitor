@@ -1,4 +1,18 @@
 const table = {
+    text:{  // Geändert durch Reini: Übersetzungen in die Klasse dazugenommen
+        de:{
+            value:"Wert",
+            no:"lfd. Nr.",
+            ags:"AGS",
+            regionName:"Gebietsname",
+        },
+        en:{
+            value:"Value",
+            no:"No.",
+            ags:"Key",
+            regionName:"Region name",
+        }
+    },
     td_classes : 'collapsing',
     table_classes : 'tablesorter',
     excludedAreas:['Gemeindefreies Gebiet'],
@@ -31,7 +45,7 @@ const table = {
                 </div>
                 <div id="interact_div">
                     <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
-                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>erweitern</span></button>
+                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>Erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
                     <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />
@@ -39,65 +53,64 @@ const table = {
                 <hr class="hr"/>
       `);
     },
-    fill:function(){
-        //array sorted by name
-        let layer_array = _.sortBy(indikator_json_group.getLayerArray(),"gen"),
-            html_table = `<table id="table_ags" class="${this.table_classes}">`,
-            //create the main Table header --private functions
-            createTableHeader=function(){
-                let value_text = `Wert (${indikatorauswahl.getIndikatorEinheit()})`,
-                    colspan = 5;
-                if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
-                    colspan=6;
-                }
-                //the html for the header
-                let html = `<thead id="thead" class="full-width">
+    getTableHTML:function(){let layer_array = _.sortBy(indikator_json_group.getLayerArray(),"gen"),
+        html_table = `<table id="table_ags" class="${this.table_classes}">`,
+        //create the main Table header --private functions
+        createTableHeader=function(){
+            let colspan = 5,
+                lan=language_manager.getLanguage();
+
+            if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
+                colspan=6;
+            }
+            //the html for the header
+            let html = `<thead id="thead" class="full-width">
                     <tr id="first_row_head">
                     <th colspan="${colspan}" data-sorter="false" class="sorter-false" id="header_ind_set">${indikatorauswahl.getSelectedIndikatorText_Lang()} (${zeit_slider.getTimeSet()})</th>
                     </tr>
                     <tr class="header" id="second_row_head">
                         <th class="th_head ${csv_export.ignoreClass}" data-export="false"></th>
-                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">lfd. Nr.</th>
-                        <th class="th_head ags sort-arrow" data-export="true">AGS</th>
-                        <th class="th_head gebietsname sort-arrow" data-export="true">Gebietsname</th>
-                        <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${value_text}</th>`;
+                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">${table.text[lan].no}</th>
+                        <th class="th_head ags sort-arrow" data-export="true">${table.text[lan].ags}</th>
+                        <th class="th_head gebietsname sort-arrow" data-export="true">${table.text[lan].regionName}</th>
+                        <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${table.text[lan].value} ${indikatorauswahl.getIndikatorEinheit()}</th>`;
 
-                if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
-                    html += '<th class="th_head grundakt_head" id="grundakt_head">Mittlere Grund- aktualität</th>';
-                }
+            if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
+                html += '<th class="th_head grundakt_head" id="grundakt_head">Mittlere Grund- aktualität</th>';
+            }
 
-                return (html+"</tr></thead>").trim();
-            },
-            createTableBody=function() {
-                let html = `
+            return (html+"</tr></thead>").trim();
+        },
+        createTableBody=function() {
+            let html = `
                     <tbody id="tBody_selection" class="tBody_value_table"></tbody>
                     <tbody id="tBody_value_table" class="tBody_value_table">
                 `,
                 i=0;
-                $.each(layer_array,function(key,value){
-                    //set the counter
-                    i+=1;
+            $.each(layer_array,function(key,value){
+                //set the counter
+                i+=1;
 
-                    //set the variables
-                    let ags = value.ags,
-                        grundakt_value = value.grundakt,
-                        value_int = value.value,
-                        fc = value.fc,
-                        des= value.des,
-                        hc = value.hc,
-                        name = value.gen,
-                        ind = indikatorauswahl.getSelectedIndikator(),
-                        einheit = indikatorauswahl.getIndikatorEinheit(),
-                        exclude_area=function(){
-                            if($.inArray(des,table.excludedAreas)!==-1){
-                                return 'style="display:none"';
-                            }
-                            else{
-                                return "";
-                            }
-                        },
-                        //'icon container' for trend and indicator-comparing inside a digramm
-                        img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare ${exclude.class_performance} mobile_hidden chart oneTime disbale_performance" 
+                //set the variables
+                let ags = value.ags,
+                    grundakt_value = value.grundakt,
+                    value_int = value.value,
+                    fc = value.fc,
+                    des= value.des,
+                    hc = value.hc,
+                    name = value.gen,
+                    ind = indikatorauswahl.getSelectedIndikator(),
+                    einheit = indikatorauswahl.getIndikatorEinheit(),
+                    exclude_area=function(){
+                        if($.inArray(des,table.excludedAreas)!==-1){
+                            return 'style="display:none"';
+                        }
+                        else{
+                            return "";
+                        }
+                    },
+                    //'icon container' for trend and indicator-comparing inside a digramm
+                    img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare ${exclude.class_performance} mobile_hidden chart oneTime disbale_performance" 
                                                     data-name="${value.gen}" 
                                                     data-ags="${ags}" 
                                                     data-ind="${ind}" 
@@ -108,7 +121,7 @@ const table = {
                                                     id="indikatoren_diagramm_ags${ags}" 
                                                     style="margin-left: .5vh;"
                                                     src="${dev_chart.icon.single.path}"/>`,
-                        img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend ${exclude.class_performance} mobile_hidden chart oneTime disbale_performance" 
+                    img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend ${exclude.class_performance} mobile_hidden chart oneTime disbale_performance" 
                                                     data-name="${value.gen}" 
                                                     data-ags="${ags}" 
                                                     data-ind="${ind}" 
@@ -119,7 +132,7 @@ const table = {
                                                     title="Veränderung des Indikatorwertes für die Gebietseinheit"
                                                     id="indikatoren_diagramm_ags_ind${ags}" 
                                                     src="${dev_chart.icon.multiple.path}"/>`,
-                        img_gebiets_profil = ` <img data-name="${value.gen}" 
+                    img_gebiets_profil = ` <img data-name="${value.gen}" 
                                                         data-ags="${ags}" 
                                                         data-ind="${ind}" 
                                                         data-wert="${value_int}" 
@@ -129,7 +142,7 @@ const table = {
                                                         id="indikatoren_gebietsprofil${ags}" 
                                                         style="margin-left: .2vh;"
                                                         src="frontend/assets/icon/indikatoren.png"/>`,
-                        img_stat = ` <img data-name="${value.gen}" 
+                    img_stat = ` <img data-name="${value.gen}" 
                                                  data-ags="${ags}" 
                                                  data-ind="${ind}" 
                                                  data-wert="${value_int}" 
@@ -138,45 +151,45 @@ const table = {
                                                  class="indikatoren_diagramm_ags histogramm_ags" 
                                                  id="diagramm_ags${ags}" 
                                                  src="frontend/assets/icon/histogramm.png"/>`,
-                        value_td = function(){
+                    value_td = function(){
                         //Todo HC werden vom Backend nicht weitergegeben
-                            if(hc !== '0'){
-                                //split the hc
-                                let hc_arr = hc.split("||"),
-                                    hc_text = hc_arr[0],
-                                    hc_value = hc_arr[1];
-                                return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma}</b>`;
-                            }
-                            else if(fc !== '0'){
-                                //split the fc
-                                let fc_arr = fc.split("||"),
-                                    fc_name = fc_arr[2],
-                                    fc_beschreibung = fc_arr[3];
-                                return `<b title="${fc_beschreibung}" class="">${fc_name}</b>`;
-                            }else{
-                                return `<b class="">${value.value_comma}</b>${img_stat+img_trend + img_trend_ind}`;
-                            }
-                        },
-                        grundaktualitaet_td=function(){
-                            if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
-                                return `<td class="val-grundakt indicator_main">${grundakt_value}</td>`;
-                            }
-                            else{
-                                return '';
-                            }
-                        };
-
-                    try {
-                        if (name === layer_array[i].gen && base_raumgliederung.getBaseRaumgliederungId() !== "bld") {
-                            if (value.krs) {
-                                name = name + " (" + value.krs + ")";
-                            } else {
-                                name = name + " (" + des + ")";
-                            }
+                        if(hc !== '0'){
+                            //split the hc
+                            let hc_arr = hc.split("||"),
+                                hc_text = hc_arr[0],
+                                hc_value = hc_arr[1];
+                            return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma}</b>`;
                         }
-                    }catch(err){}
+                        else if(fc !== '0'){
+                            //split the fc
+                            let fc_arr = fc.split("||"),
+                                fc_name = fc_arr[2],
+                                fc_beschreibung = fc_arr[3];
+                            return `<b title="${fc_beschreibung}" class="">${fc_name}</b>`;
+                        }else{
+                            return `<b class="">${value.value_comma}</b>${img_stat+img_trend + img_trend_ind}`;
+                        }
+                    },
+                    grundaktualitaet_td=function(){
+                        if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
+                            return `<td class="val-grundakt indicator_main">${grundakt_value}</td>`;
+                        }
+                        else{
+                            return '';
+                        }
+                    };
 
-                    html += `<tr ${exclude_area()} id="${ags}" class="tr">
+                try {
+                    if (name === layer_array[i].gen && base_raumgliederung.getBaseRaumgliederungId() !== "bld") {
+                        if (value.krs) {
+                            name = name + " (" + value.krs + ")";
+                        } else {
+                            name = name + " (" + des + ")";
+                        }
+                    }
+                }catch(err){}
+
+                html += `<tr ${exclude_area()} id="${ags}" class="tr">
                                         <td class="${csv_export.ignoreClass}">
                                             <input id="checkbox_${ags}" type="checkbox" class="select_check disbale_performance mobile_hidden" data-ags="${ags}">
                                         </td>
@@ -194,28 +207,28 @@ const table = {
                                         </td>
                                         ${grundaktualitaet_td()}
                                     </tr>`;
-                });
-                return (html+"</tbody>").trim();
-            },
-            createTableFooter=function(){
-                //germany values
-                let stat_array = indikator_json.getStatistikArray(),
-                    ags_ind_array = [],
-                    value_g = false,
-                    grundakt_val = false;
+            });
+            return (html+"</tbody>").trim();
+        },
+        createTableFooter=function(){
+            //germany values
+            let stat_array = indikator_json.getStatistikArray(),
+                ags_ind_array = [],
+                value_g = false,
+                grundakt_val = false;
 
-                //the footer part for the corresponding bld
-                let ags_footer = function(){
-                        //ags_values
-                        if (typeof raumgliederung.getSelectionId() !=='undefined') {
-                            let tfoot_ags='';
-                            $.each(ags_ind_array, function (key, value) {
-                                $.each(value, function (key_found, value_found) {
-                                    let value_set = value_found.value_ags,
-                                        grundakt_val = value_found.ags_grundakt,
-                                        ags = key_found,
-                                        name = value_found.gen,
-                                        img_trend = `<img data-name="${value.gen}" 
+            //the footer part for the corresponding bld
+            let ags_footer = function(){
+                    //ags_values
+                    if (typeof raumgliederung.getSelectionId() !=='undefined') {
+                        let tfoot_ags='';
+                        $.each(ags_ind_array, function (key, value) {
+                            $.each(value, function (key_found, value_found) {
+                                let value_set = value_found.value_ags,
+                                    grundakt_val = value_found.ags_grundakt,
+                                    ags = key_found,
+                                    name = value_found.gen,
+                                    img_trend = `<img data-name="${value.gen}" 
                                                       data-ags="${ags}" 
                                                       data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                       data-wert="${value_set}" 
@@ -225,7 +238,7 @@ const table = {
                                                       class="dev_table indsingle_entwicklungsdiagr mobile_hidden" 
                                                       id="indikatoren_diagramm_ags${ags}" 
                                                       src="${dev_chart.icon.multiple.path}" />`,
-                                        img_trend_ind = `<img data-name="${value.gen}" 
+                                    img_trend_ind = `<img data-name="${value.gen}" 
                                                           data-ags="${ags}" 
                                                           data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                           data-wert="${value_set}" 
@@ -236,7 +249,7 @@ const table = {
                                                           style="margin-left: .5vh;" 
                                                           src="${dev_chart.icon.single.path}"/>`;
 
-                                    tfoot_ags += `<tfoot class="tfoot full-width">
+                                tfoot_ags += `<tfoot class="tfoot full-width">
                                                 <tr id="tfoot_${ags}">
                                                     <th colspan="4" class="td_name">
                                                         <img style="margin-left: 10px; margin-right: 10px;"
@@ -255,32 +268,32 @@ const table = {
                                                         ${value_set}
                                                         ${img_trend_ind+img_trend}
                                                      </th>`;
-                                    if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                        tfoot_ags += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
-                                    }
-                                });
-                            });
-                            return tfoot_ags.trim();
-                        }else{
-                            return ' ';
-                        }
-                    },
-                    brd_footer=function(){
-                        //get the stat values
-                        $.each(stat_array, function (key) {
-                            $.each(stat_array[key], function (key_set, value_set) {
-                                if (key_set === 'wert_brd') {
-                                    value_g = value_set;
-                                } else if (key_set === 'grundakt_brd') {
-                                    grundakt_val = value_set;
-                                } else {
-                                    let obj = {};
-                                    obj[key_set] = value_set;
-                                    ags_ind_array.push(obj);
+                                if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
+                                    tfoot_ags += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
                                 }
                             });
                         });
-                        let img_trend = `<img data-name="Bundesrepublik" 
+                        return tfoot_ags.trim();
+                    }else{
+                        return ' ';
+                    }
+                },
+                brd_footer=function(){
+                    //get the stat values
+                    $.each(stat_array, function (key) {
+                        $.each(stat_array[key], function (key_set, value_set) {
+                            if (key_set === 'wert_brd') {
+                                value_g = value_set;
+                            } else if (key_set === 'grundakt_brd') {
+                                grundakt_val = value_set;
+                            } else {
+                                let obj = {};
+                                obj[key_set] = value_set;
+                                ags_ind_array.push(obj);
+                            }
+                        });
+                    });
+                    let img_trend = `<img data-name="Bundesrepublik" 
                                       data-ags="99" 
                                       data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                       data-wert="${value_g}" 
@@ -290,7 +303,7 @@ const table = {
                                       id="indikatoren_diagramm_ags99" 
                                       style="margin-left: .5vh;" 
                                       src="${dev_chart.icon.multiple.path}" />`,
-                            img_trend_ind = `<img data-name="Bundesrepublik" 
+                        img_trend_ind = `<img data-name="Bundesrepublik" 
                                           data-ags="99" 
                                           data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                           data-wert="${value_g}" 
@@ -300,7 +313,7 @@ const table = {
                                           id="indikatoren_diagramm_ags_ind99" 
                                           style="margin-left: .5vh;" 
                                           src="${dev_chart.icon.single.path}"/>`,
-                            tfoot_brd = `<tfoot class="tfoot full-width">
+                        tfoot_brd = `<tfoot class="tfoot full-width">
                                     <tr id="tfoot_99">
                                         <th colspan="4" class="td_name">
                                             <img style="margin-left: 10px; margin-right: 10px;"
@@ -319,15 +332,19 @@ const table = {
                                             ${img_trend_ind+img_trend}
                                         </th>`;
 
-                        if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                            tfoot_brd += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
-                        }
-                        return tfoot_brd.trim();
-                    };
-                return `${brd_footer()+ags_footer()}</tr></tfoot>`;
-            };
+                    if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
+                        tfoot_brd += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
+                    }
+                    return tfoot_brd.trim();
+                };
+            return `${brd_footer()+ags_footer()}</tr></tfoot>`;
+        };
 
         html_table += createTableHeader()+createTableBody()+createTableFooter()+'</table><table id="header-fixed"></table>';
+        return html_table;
+        },
+    initTableHTML:function(){
+        let html_table= this.getTableHTML();
 
         $.when(this.clear())
             .then(this.append(html_table))
@@ -338,14 +355,20 @@ const table = {
             .then(this.expandState=false)
             .then(exclude.setPerformanceElements())
             .then(progressbar.remove());
+    },
 
+    resizeTable:function(){
         if(view_state.getViewState()==='mw'){
             main_view.resizeSplitter(table.getWidth());
         }
+    },
+
+    initTablePanels(){
         //init the panels to filter or expand the table
         expand_panel.init();
         filter_panel.init();
-
+    },
+    disableCharts:function(){
         //disable charts for community level
         if(raumgliederung.getSelectionId()==='gem' || raeumliche_analyseebene.getSelectionId()==="gem"){
             helper.disableElement(".dev_chart_compare","Steht für die Gemeindeebene nicht zur Verfügung");
@@ -355,6 +378,17 @@ const table = {
         if(zeit_slider.getTimes().length===1){
             helper.disableElement(".dev_table",exclude.disable_text);
         }
+    },
+    fill:function(){
+
+        this.initTableHTML();
+
+        this.resizeTable();
+
+        this.initTablePanels();
+
+        this.disableCharts();
+
     },
     clear:function(){
         this.expandState=false;

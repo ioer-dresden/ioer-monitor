@@ -26,7 +26,9 @@ const area_info={
             state:"Bundesland",
             district:"Kreis",
             difference:"Differenz zu",
-            for:"für"
+            unit:"Einheit",
+            for:"für",
+            key:"Schlüssel"
         },
         en:{
             title:"Area information",
@@ -42,7 +44,9 @@ const area_info={
             state:"State",
             district: "District",
             difference:"Difference to",
-            for:"for"
+            unit:"Unit",
+            for:"for",
+            key:"Key"
         }
     },
 
@@ -76,10 +80,6 @@ const area_info={
         parameters.ags=ags;
         parameters.name=gen;
         parameters.spatialUnit=raumgliederung.getSelectionId();
-        console.log("raumliche_amnalyseebene: "+ raeumliche_analyseebene.getSelectionId());
-        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungId());
-        console.log("base_raumgliederung ID: "+ base_raumgliederung.getBaseRaumgliederungText());
-        console.log("raumgliederung ID: "+ raumgliederung.getSelectionId());
         parameters.lan=language_manager.getLanguage();
         parameters.time=zeit_slider.getTimeSet();
         parameters.columnList=this.getColumnList(parameters.spatialUnit);
@@ -89,10 +89,10 @@ const area_info={
     getColumnList:function(spatialUnit){  // Determining which columns and in what order will get displayed
         let columnList=["category","indicator", "value","unit"];
         if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
-            columnList.push("valueBundesland","unit");
+            columnList.push("valueBundesland");
         }
         else if (spatialUnit=="vwg" || spatialUnit== "gem"){
-            columnList.push("valueKreis","unit","valueBundesland","unit")
+            columnList.push("valueKreis", "valueBundesland")
         }
         columnList.push("valueBRD","unit");
         return columnList;
@@ -219,7 +219,7 @@ const area_info={
         let columnDefs=[];
             for (let i =0;i<columnList.length;i++){
                 let alignment="";
-                if (columnList[i]=="unit" || columnList[i]=="indicator" || columnList[i]== "category"){
+                if  (columnList[i]=="indicator" || columnList[i]== "category"){
                     alignment="dt-body-left"
                 }
                 else {
@@ -245,7 +245,7 @@ const area_info={
                         <div class="flex" >             
                         <h2 class="flexElement">${text[parameters.lan].indicatorValues}</h2>
                         <h2 class="flexElement"> ${parameters.name}</h2>
-                        <h2 class="flexElement" > (AGS: ${parameters.ags})</h2>
+                        <h2 class="flexElement" > (${text[parameters.lan].key}: ${parameters.ags})</h2>
                         </div> 
                     
                     <h3 class="flexElement">${text[parameters.lan].time}: ${parameters.time}  ${relevance}</h3>
@@ -273,11 +273,8 @@ const area_info={
         }
     },
     getTableHeaderHTML:function(parameters, text){
-        let headerFirstRow=`<tr id="firstHeaderRow">`,
-            headerSecondRow=`<tr>`;  // We want to have some Headers span 2 columns (colspan="2"). Because DataTables needs a separate column header for every column,
-                                    // we are adding empty "dummy columns". Result: first header Row w/ headers, second header row w/ empty placeholders
+        let headerFirstRow=`<tr id="firstHeaderRow">`
         for (let columnHeader in parameters.columnList){
-            headerSecondRow+=`<th class="noPaddingNoBorder"> </th>`;
             switch (parameters.columnList[columnHeader]){
                 case "category":
                     headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].category}</th> `;
@@ -286,26 +283,26 @@ const area_info={
                     headerFirstRow+=`<th class="noPaddingNoBorder">${text[parameters.lan].indicator}</th> `;
                     break;
                 case "value":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
+                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${parameters.name}</th> `;
                     break;
                 case "unit":
+                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].unit}</th> `;
                     break;
                 case "valueBRD":
-                    headerFirstRow+= `<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
+                    headerFirstRow+= `<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for}  ${text[parameters.lan].germany} (${parameters.data[1].relevanceYearBRD}) </th> `;   //All the Years are the same. Taking out from random data row
                     break;
                 case "valueBundesland":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].state} ${parameters.parentSpatialUnits[0]["bld"]} (${parameters.data[1].relevanceYearBundesland})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 case "valueKreis":
-                    headerFirstRow+=`<th colspan="2" class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
+                    headerFirstRow+=`<th class="noPaddingNoBorder centered">${text[parameters.lan].value} ${text[parameters.lan].for} ${text[parameters.lan].district} ${parameters.parentSpatialUnits[1]["krs"]} (${parameters.data[1].relevanceYearKreis})</th> `;  //All the Years are the same. Taking out from random data row
                     break;
                 default:
                     headerFirstRow+="";
             }
         }
         headerFirstRow+=`</tr>`;
-        headerSecondRow+=`</tr>`;
-        return headerFirstRow+headerSecondRow;
+        return headerFirstRow;
     },
 
     createDialogWindow:function(parameters, html, text){

@@ -70,7 +70,9 @@ const filter_panel = {
         table.getTableBodyObject().find('.td_name').each(function() {
             let des = $(this).data('des');
             if(_des===des){
-                $(this).closest('tr').css("display","none");
+                $(this).closest('tr')
+                    .css("display","none")
+                    .addClass(csv_export.ignoreClass);
             }
         });
     },
@@ -78,7 +80,10 @@ const filter_panel = {
         table.getTableBodyObject().find('.td_name').each(function() {
             let des = $(this).data('des');
             if(_des===des){
-                $(this).closest('tr').css("display","");
+                $(this)
+                    .closest('tr')
+                    .css("display","")
+                    .removeClass(csv_export.ignoreClass);
             }
         });
     },

@@ -1,5 +1,12 @@
 {
   "toolbar": {
+      "pin mobile_hidden": {
+        "de":"Menü anheften",
+        "en": "Pin the menu",
+        "type": ".",
+        "selector": "i",
+        "attr": "title"
+      },
       "menu_name": {
         "de": "Menü",
         "en": "Menu",
@@ -11,6 +18,12 @@
         "attr":"placeholder",
         "type":"#"
       },
+    "slider_zeit_container": {
+      "de":"Zeitschnitt",
+      "en":"Time",
+      "selector": "b",
+      "type":"#"
+    },
       "indikator_auswahl":{
         "de":"Indikator",
         "en":"Indicator",
@@ -36,7 +49,7 @@
       },
       "gebiete_label":{
         "de":"Gebiete",
-        "en":"District",
+        "en":"Districts",
         "type":"#"
       },
       "raster_label":{
@@ -49,7 +62,11 @@
         "en":"Spatial analysis level",
         "selector":"span",
         "type":"#",
-        "callback":["raeumliche_analyseebene.fill()","indikator_map_header.set()"]
+        "callback":["raeumliche_analyseebene.fill()","map_header.set()"]
+      },
+      "grenzen_choice": {
+        "type":"#",
+        "callback":["gebietsauswahl.init()"]
       },
       "default_text_ddm_grob":{
         "de":"Bitte Wählen..",
@@ -61,8 +78,30 @@
         "en":"Spatial units:",
         "selector":"span",
         "type":"#",
-        "callback":["raumgliederung.fill()","indikator_map_header.set()"]
+        "callback":["raumgliederung.fill()","map_header.set()"]
       },
+      "please_select_ddm_option": {
+        "de":"Bitte Wählen..",
+        "en":"Please choose..",
+        "type":"#"
+      },
+    "clear_gebietsauswahl": {
+      "de": "Auswahl leeren",
+      "en": "Clear selection",
+      "type": "#",
+      "attr": "title"
+    },
+    "clear_farbwahl": {
+      "de": "Auswahl leeren",
+      "en": "Clear selection",
+      "type": "#",
+      "attr": "title"
+    },
+    "reset_ddm_option": {
+      "de":"Auswahl zurücksetzen",
+      "en":"Reset",
+      "type":"#"
+    },
       "spatial_range_raster":{
         "de":"Rasterweite in m",
         "en":"Grid dimensions in m:",
@@ -80,6 +119,17 @@
         "en":"Map design",
         "type":"#",
         "selector":"span"
+      },
+    "create_color_schema": {
+      "de": "Erstellen",
+      "en": "Set",
+      "type": "#"
+    },
+      "dropdown_layer":{
+        "de":"Grundkarten",
+        "en":"Base maps",
+        "type":"#",
+        "selector":"button"
       },
       "layer_conainer":{
         "de":"Sichtbarkeit Indikator",
@@ -104,6 +154,12 @@
         "selector":"span",
         "type":"#"
       },
+    "Klassenanzahn": {
+      "de": "Anzahl der Klassen wählen",
+      "en": "Choose number of classes",
+      "type": "#",
+      "attr": "title"
+    },
       "klassifizierung":{
         "de":"Klassifizierung",
         "en":"Classification",
@@ -160,6 +216,50 @@
         "en":"Import",
         "type":"#"
       },
+      "btn_glaetten":{
+        "de":"Glätten",
+        "en":"Smooth",
+        "type":"#"
+      },
+      "btn_glaetten":{
+        "de":"Steht nur für die räumliche Gliederung- Raster zur Verfügung",
+        "en":"Only available for the Raster- spatial subdivision",
+        "type":"#",
+        "attr": "title"
+      },
+      "dev_chart":{
+        "de":"Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes",
+        "en":"Analyze the temporal evolution of an indicator value",
+        "type":"#",
+        "attr": "title"
+      },
+      "dev_chart_txt":{
+        "de": "Werte- entwicklung",
+        "en": "Value development",
+        "type": "#"
+      },
+      "dev_chart_compare":{
+        "de":"Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte",
+        "en":"Analyze the temporal evolution of multiple indicator values",
+        "type":"#",
+        "attr": "title"
+      },
+    "dev_chart_compare_txt":{
+      "de": "Entwicklungs- vergleich",
+      "en": "Development comparison",
+      "type": "#"
+    },
+    "map_compare_txt":{
+      "de": "Karten- vergleich",
+      "en": "Map comparison",
+      "type": "#"
+    },
+      "ind_compare":{
+        "de":"Steht nur für die Räumliche Gliederung-Raster zur Verfügung",
+        "en":"Only available for the Raster- spatial subdivision",
+        "type":"#",
+        "attr": "title"
+      },
       "dropdown_ogc":{
         "de":"Einbinden in eigenes GIS als",
         "en":"Integration into own GIS as",
@@ -174,7 +274,7 @@
       },
       "save_map_link":{
         "de":"Dauerhaftes Speichern der Karte auf dem IÖR-Server",
-        "en":"Permanently save the card to the IÖR-Server",
+        "en":"Permanently save the map to the IÖR-Server",
         "type":"#",
         "selector":"b"
       },
@@ -206,13 +306,44 @@
         "type":"#"
       }
   },
-  "table_page":{
-    "btn_table":{
-      "de":"Tabelle erweitern",
-      "en":"Expand table",
+  "table_page": {
+    "btn_table": {
+      "de": "Erweitern",
+      "en": "Expand table",
+      "type": "#",
+      "selector": "span"
+    },
+    "tabel_header_raumgl": {
+      "type": "#",
+      "callback": [
+        "setTimeout(function(){table.initTableHTML();},1000)"
+      ]
+    },
+    "filter_table": {
+      "de":"Tabelle filtern",
+      "en":"Filter table",
       "type":"#",
-      "selector":"span",
-      "callback":["setTimeout(function(){table_expand_panel.fill();},1000)"]
+      "attr": "title"
+    },
+    "csv_export": {
+      "de": "Tabelle als CSV exportieren",
+      "en": "Export the table as CSV",
+      "type": "#",
+      "attr": "data-title"
+    },
+    "table_close": {
+      "de": "Tabelle schliessen",
+      "en": "Close Table",
+      "type": "#",
+      "attr": "title",
+      "selector": "span"
+    },
+
+    "search_input_table":{
+      "de":"Suche nach Orten",
+      "en":"Search for a place",
+      "type":"#",
+      "attr": "placeholder"
     }
   },
   "tabelle_erweitern":{
@@ -220,6 +351,12 @@
       "de":"Hinweis:",
       "en":"Note:",
       "type":"."
+    },
+    "time_checkbox": {
+      "de": "Alle Zeiten auswählen",
+      "en": "Select all timespans",
+      "type": "#",
+      "selector": "label"
     },
     "hinweis_time_expand_linear":{
       "de":" Anzeige von zusätzlichen Zeitschnitten und weiteren Kenngrößen nur bei Deaktivierung der Trendfortschreibung.",
@@ -237,7 +374,10 @@
       "de":"Bitte wählen.....",
       "en":"Please choose....",
       "type":"#",
-      "selector":".default"
+      "selector":".default",
+      "callback": [
+        "setTimeout(function(){expand_panel.setIndikatorauswahlDdm()},500)"
+      ]
     },
     "time_expand_conatier":{
       "de":"Zeitschnitte anfügen",
@@ -339,11 +479,17 @@
     }
   },
   "btn-group-map": {
+
+    "legende_button": {
+      "de": "Öffne Legende",
+      "en": "Open the Legend",
+      "type": "#",
+      "attr": "title"
+    },
     "legende_button":{
-        "de": "Legende",
-        "en": "Legend",
-        "type": "#",
-        "selector": "span"
+      "de": "Legende",
+      "en": "Legend",
+      "type": "#"
     },
     "map_button": {
       "de": "Karten",
@@ -410,9 +556,66 @@
         "en":"On and hide the basic update in the map window (click here)",
         "type":"#",
         "callback":["setTimeout(function(){legende.fillContent();},1000)"]
+      },
+      "legende_button":{
+        "de": "Legende",
+        "en": "Legend",
+        "type": "#"
       }
   },
-  "wms_text":{
+    "area_info_content": {
+      "area_info_csv_export": {
+        "de":"Tabelle als CSV eportieren",
+        "en":"Export table as CSV",
+        "type":"#",
+        "attr":"title"
+      }
+    },
+  "map": {
+    "zoom_in_id": {
+      "de":"In die Karte hineinzoomen",
+      "en":"Zoom in",
+      "type":"#",
+      "attr":"title"
+    },
+    "zoom_out_id": {
+      "de":"Aus der Karte herauszoomen",
+      "en":"Zoom out",
+      "type":"#",
+      "attr":"title"
+    },
+    "geolocate_id": {
+      "de":"Meinen Standort bestimmen",
+      "en":"My location",
+      "type":"#",
+      "attr":"title"
+    },
+    "center_map_id": {
+      "de":"Zoom auf die gesamte Ausdehnung anpassen",
+      "en":"Zoom to map extent",
+      "type":"#",
+      "attr":"title"
+    }
+  },
+  "Modal":{
+  "panRight": {
+    "de": "Öffnen Sie die Tabellenansicht",
+    "en": "Open the table view",
+    "type": "#",
+    "attr": "title"
+  },
+    "help": {
+      "de": "Hilfe",
+      "en": "Help",
+      "type": "#",
+      "selector": "p"
+    },
+    "webtour": {
+      "de": "Unternehmen Sie eine Tour durch die Funktionalitäten des IÖR-Monitors",
+      "en": "Take a tour of the functionalities of the IÖR monitor",
+      "type": "#",
+      "attr": "title"
+    }
+}
 
-  }
 }

@@ -1,6 +1,14 @@
 //Multi Choice Gebietsauswahl
 var changed = false;
 const gebietsauswahl = {
+    text:{
+        de:{
+            regionSelect:"Gebietsauswahl"
+        },
+        en:{
+            regionSelect: "Select region"
+        }
+    },
     mapLayer:[],
     mapLayerGrund:[],
     addedAGS:[],
@@ -48,7 +56,7 @@ const gebietsauswahl = {
                 object.setParamter('');
             }
             //create parameter AGS_ARRAY if not set
-            $('#grenzen_choice').text('Gebietsauswahl: ' + raeumliche_analyseebene.getSelectionText().replace("- nur", ""));
+            $('#grenzen_choice').text(gebietsauswahl.text[language_manager.getLanguage()].regionSelect + ": " + raeumliche_analyseebene.getSelectionText().replace("- nur", ""));
             this.controller.set();
         }else{
             raumgliederung.init();
