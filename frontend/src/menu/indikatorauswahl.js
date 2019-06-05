@@ -248,12 +248,15 @@ const indikatorauswahl ={
         const menu = this;
         let name = this.getDOMObject().dropdown('get text');
         if(name.toLowerCase().indexOf("bitte")===0 || menu.getSelectedIndikator() !== menu.previous_indikator){
-            setTimeout(function(){
-                name = $('#'+menu.getSelectedIndikator()+"_item").text();
-                menu.setSelectedIndikatorText(name);
-            },1000);
+            var interval = setInterval(function () {
+                if (indikatorauswahl.getPossebilities()){
+                    clearInterval(interval);
+                    name = $('#' + menu.getSelectedIndikator() + "_item").text();
+                    menu.setSelectedIndikatorText(name);
+                    return name;
+                }
+            },100);
         }
-        return name;
     },
     setSelectedIndikatorText:function(value){
         this.getDOMObject().dropdown('set text',value);

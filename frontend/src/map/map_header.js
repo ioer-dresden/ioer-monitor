@@ -44,24 +44,17 @@ const map_header ={
 
                 if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
                     if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() == 0) {
-                        console.log("language in map_header: "+ language_manager.getLanguage());
                         spatial_text = raeumliche_analyseebene.getSelectionText() + " in "+ map_header.text[language_manager.getLanguage()].germany;
-
-                        console.log("map Header if");
-                        console.log("map header raeuml_analyseebene id:" +raeumliche_analyseebene.getSelectionId());
-                        console.log("map header raeuml_analyseebene text "+ raeumliche_analyseebene.getSelectionText());
                     } else if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() > 0) {
                         spatial_text = gebietsauswahl.getSelectionAsString();
-                        console.log("mapHeader else if");
                     } else {
                         spatial_text = gebietsauswahl.getSelectionAsString() + split_txt() + raumgliederung.getSelectionText();
-                        console.log("Map header else");
                     }
                 }
                 indikator_text.text(indikator_name() + " (" + time + ")");
                 spatial_object.text(spatial_text);
             }
-        }, 100);
+        }, 500);
     },
     moveVertical:function(_position,_range){
         this.getDOMObject().css(_position,_range);

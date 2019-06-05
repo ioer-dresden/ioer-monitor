@@ -21,7 +21,10 @@ const dev_chart={
             cancel:"Abbrechen"
         },
         en:{
-            title:"Trend chart",
+            title:{
+                false:"Trend chart",
+                true:"Trend comparison"
+            },
             info:"This diagram represents the trend of the indicators.",
             indicator:"available indicators",
             choice:"Please choose.....",

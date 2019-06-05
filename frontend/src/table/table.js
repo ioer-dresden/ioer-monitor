@@ -380,7 +380,6 @@ const table = {
         }
     },
     fill:function(){
-        console.log("TABLE FILL!!!!");
 
         this.initTableHTML();
 

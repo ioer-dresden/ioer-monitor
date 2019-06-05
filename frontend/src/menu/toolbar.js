@@ -21,10 +21,8 @@ const toolbar = {
     init:function(){
         // the mapnavbar
         this.state=true;
-        console.log("Setting NavBar??");
         this.create();
         this.controller.set();
-        console.log("NAvBar set??");
         exclude.setSpatialExtendelements();
     },
     getHeight:function(){
