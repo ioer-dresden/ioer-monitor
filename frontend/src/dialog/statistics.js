@@ -94,7 +94,7 @@ const statistics = {
              <div class="jq_dialog" id="${this.endpoint_id}">
                 <div class="container">
                     <div >               
-                        <h4">${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
+                        <h4>${this.text[lan].info} ${this.text[lan].for_lang}: </h4>
                         <h2>${chart.settings.indText} (${timeStamp})</h2>
                     </div>
                     <br/>

@@ -266,15 +266,16 @@ const indikatorauswahl ={
     getSelectedIndikatorText:function(){
         const menu = this;
         let name = this.getDOMObject().dropdown('get text');
-        if(name.toLowerCase().indexOf("bitte")===0 || menu.getSelectedIndikator() !== menu.previous_indikator){
-            var interval = setInterval(function () {
+        console.log("Previous indicator: "+ menu.previous_indikator);
+        console.log("This indicator: "+ menu.getSelectedIndikator());
+        if(name.toLowerCase().indexOf("bitte")===0 || menu.getSelectedIndikator() !== menu.previous_indikator || ((menu.getSelectedIndikator() === menu.previous_indikator)&& (language_manager.getLanguage()==="en"))){
+             console.log("we are in iff");
                 if (indikatorauswahl.getPossebilities()){
-                    clearInterval(interval);
                     name = $('#' + menu.getSelectedIndikator() + "_item").text();
                     menu.setSelectedIndikatorText(name);
                     return name;
                 }
-            },100);
+
         }
     },
     setSelectedIndikatorText:function(value){
