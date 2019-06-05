@@ -38,7 +38,7 @@ const area_info={
             category:"Category",
             indicator:"Indicator",
             value:"Value",
-            relevance:"Topicality",
+            relevance:"Relevance",
             comparison:"Comparison to ",
             germany: "Germany",
             state:"State",

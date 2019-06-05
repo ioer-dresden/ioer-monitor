@@ -5,12 +5,14 @@ const table = {
             no:"lfd. Nr.",
             ags:"AGS",
             regionName:"Gebietsname",
+            relevance:"Mittlere Grund-aktualität"
         },
         en:{
             value:"Value",
             no:"No.",
             ags:"Key",
             regionName:"Region name",
+            relevance:"Mean relevance"
         }
     },
     td_classes : 'collapsing',
@@ -76,7 +78,7 @@ const table = {
                         <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${table.text[lan].value} ${indikatorauswahl.getIndikatorEinheit()}</th>`;
 
             if(indikatorauswahl.getSelectedIndiktorGrundaktState()){
-                html += '<th class="th_head grundakt_head" id="grundakt_head">Mittlere Grund- aktualität</th>';
+                html +=`<th class="th_head grundakt_head" id="grundakt_head"> ${table.text [lan].relevance} </th>`;
             }
 
             return (html+"</tr></thead>").trim();

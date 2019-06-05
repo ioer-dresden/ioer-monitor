@@ -141,7 +141,7 @@ const indikator_json = {
                     compare_title:"Veränderung der Indikatorwerte für die Gebietseinheit"
                 },
                 en:{
-                    profil:"Indicator value overview",
+                    profil:"Value overview",
                     profil_title:"Characteristic of this room unit with value overview of all indicators",
                     stat:"Statistics",
                     stat_title:"Indicator value of the territorial unit in relation to statistical characteristics of the spatial selection and the selected indicator",
