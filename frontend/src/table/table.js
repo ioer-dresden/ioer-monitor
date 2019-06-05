@@ -45,7 +45,7 @@ const table = {
                 </div>
                 <div id="interact_div">
                     <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
-                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>Tabelle erweitern</span></button>
+                        <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>Erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
                     <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />

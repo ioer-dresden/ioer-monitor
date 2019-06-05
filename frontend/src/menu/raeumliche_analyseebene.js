@@ -52,6 +52,7 @@ const raeumliche_analyseebene = {
         const menu = this;
         //clear array
         menu.range = [];
+        console.info(menu.values);
         let raumgl_selection = $('#Raumgliederung');
         raumgl_selection.empty();
         $.each(menu.values,function(key,value){
@@ -63,6 +64,10 @@ const raeumliche_analyseebene = {
             let html = '<option data-state="'+value.state+'" id="'+value.id+'_raumgl" name="'+spatial_name+'" value="'+value.id+'" '+value.state+'>'+spatial_name+'</option>';
             raumgl_selection.append(html);
         });
+        //set the chosen spatial resolution as selected in dropdown menu
+        console.log(menu.getSelectionId());
+        raumgl_selection.val(menu.getSelectionId());
+        console.log(menu.getSelectionId());
         //set the disable title
         raumgl_selection.find('option').each(function(){if($(this).is(':disabled')){$(this).attr("title","Für den Indikator nicht verfügbar")}});
     },

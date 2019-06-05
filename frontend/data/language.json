@@ -49,7 +49,7 @@
       },
       "gebiete_label":{
         "de":"Gebiete",
-        "en":"District",
+        "en":"Districts",
         "type":"#"
       },
       "raster_label":{
@@ -308,7 +308,7 @@
   },
   "table_page": {
     "btn_table": {
-      "de": "Tabelle erweitern",
+      "de": "Erweitern",
       "en": "Expand table",
       "type": "#",
       "selector": "span"

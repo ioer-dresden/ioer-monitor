@@ -57,7 +57,7 @@ const gebietsauswahl = {
             }
             //create parameter AGS_ARRAY if not set
             $('#grenzen_choice').text(gebietsauswahl.text[language_manager.getLanguage()].regionSelect + ": " + raeumliche_analyseebene.getSelectionText().replace("- nur", ""));
-            console.log("gebietsauswahl:  "+raeumliche_analyseebene.getSelectionText())
+            console.log("raumliche Analyseebene:  "+raeumliche_analyseebene.getSelectionId());
             this.controller.set();
         }else{
             raumgliederung.init();

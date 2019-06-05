@@ -1,8 +1,25 @@
 const map_print={
     endpoint_id:"print_container",
+    text:{
+        de:{
+            export:"Exportieren",
+            classificationMethod:"Klassifikationsmethode",
+            histogram:"Histogramm",
+            indicatorInformation:"Information zum Indikator",
+            baseData:"Datengrundlage"
+        },
+        en:{
+            export:"Export",
+            classificationMethod:"Classification method",
+            histogram:"Histogram",
+            indicatorInformation:"Information about the indicator",
+            baseData:"Base data"
+        }
+    },
     map:null,
     format:null,
     open:function(_format){
+        let lan=language_manager.getLanguage();
         map_print.format=_format.toLowerCase();
         //create the dialog html
             let setRasterContent=function(){
@@ -94,7 +111,7 @@ const map_print={
                     <div class="print_map_content" id="print_map_content">
                          <button class="btn btn-primary btn_dropdown" id="export_btn">
                             <i class="glyphicon glyphicon-export"></i>
-                            Exportieren
+                            ${map_print.text[lan].export}
                         </button>
                         <div class="print_header">
                             <div class="float-left w-75">
@@ -114,11 +131,11 @@ const map_print={
                                     <div id="print_legende"></div>
                                 </div>
                                 <div class="map_projection_print_container hover_close" id="print_projection">
-                                        <div><b>Klassifikationsmethode</b></div>
+                                        <div><b>${map_print.text[lan].classificationMethod}</b></div>
                                         <div>${klassifzierung.getSelectionText()}</div>
                                 </div>
                                 <div class="histostogramm_print_container hover_close" id="print_histogramm_container">
-                                        <div><b>Histogramm</b></div>
+                                        <div><b>${map_print.text[lan].histogram}</b></div>
                                         <div id="print_histogramm"></div>
                                 </div>
                             </div>
@@ -126,11 +143,11 @@ const map_print={
                     </div>
                     <div class="print_bottom">
                         <div id="info_ind_print">
-                            <div><b>Information zum Indikator</b></div>
+                            <div><b>${map_print.text[lan].indicatorInformation}</b></div>
                             <div id="info_indikator_print">${$('#indikator_info_text').text()}</div>
                         </div>
                         <div class="datengrundlage_print_container">
-                            <div><b>Datengrundlage</b></div>
+                            <div><b>${map_print.text[lan].baseData}</b></div>
                             <div id="datengrundlage_content_print">${$('#datengrundlage_content').text()}</div>
                         </div>
                     </div>

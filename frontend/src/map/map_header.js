@@ -1,4 +1,12 @@
 const map_header ={
+    text:{
+        de:{
+            germany:"Deutschland"
+        },
+        en:{
+            germany:"Germany"
+        }
+    },
     getDOMObject:function(){
         $elem = $('.indikator_header');
         return $elem;
@@ -25,7 +33,7 @@ const map_header ={
                         return name;
                     },
                     time = zeit_slider.getTimeSet(),
-                    spatial_text = raeumliche_analyseebene.getSelectionText()
+                    spatial_text = raeumliche_analyseebene.getSelectionText();
                     split_txt = function () {
                         let txt = "als";
                         if (language_manager.getLanguage() === "en") {
@@ -36,11 +44,18 @@ const map_header ={
 
                 if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
                     if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() == 0) {
-                        spatial_text = raeumliche_analyseebene.getSelectionText() + " in Deutschland";
+                        console.log("language in map_header: "+ language_manager.getLanguage());
+                        spatial_text = raeumliche_analyseebene.getSelectionText() + " in "+ map_header.text[language_manager.getLanguage()].germany;
+
+                        console.log("map Header if");
+                        console.log("map header raeuml_analyseebene id:" +raeumliche_analyseebene.getSelectionId());
+                        console.log("map header raeuml_analyseebene text "+ raeumliche_analyseebene.getSelectionText());
                     } else if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() > 0) {
                         spatial_text = gebietsauswahl.getSelectionAsString();
+                        console.log("mapHeader else if");
                     } else {
                         spatial_text = gebietsauswahl.getSelectionAsString() + split_txt() + raumgliederung.getSelectionText();
+                        console.log("Map header else");
                     }
                 }
                 indikator_text.text(indikator_name() + " (" + time + ")");

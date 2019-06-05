@@ -6,7 +6,7 @@ class NavBar{
                   <div class="navbar-header w-100">
                       <a class="navbar-brand" href="https://www.ioer.de" target="_blank"/>
                       <a class="float-left navbar-header-text mobile_hidden" href="http://www.ioer-monitor.de"><p id="nav-title">Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)</p></a>
-                      <div class="navbar-text float-right language" id="language" data-value="de"><i class="gb uk flag"></i></div>
+                      <div class="navbar-text float-right language" id="language" data-value="en"><i class="gb uk flag"></i></div>
                        <div id="nav_click" class="h-100">
                            <div class="navbar-text float-right help" id="help">
                                 <p>Hilfe</p>
@@ -22,11 +22,8 @@ class NavBar{
               </nav>
           </div>
       </div>`;
-        console.log("Setting Navbar in Navbar.js");
         NavBar.getContainer().append(this.html);
         NavBarController.set();
-        language_manager.setLanguage($("#language").data("value"));
-        console.log("NavBarController value::: "+ $("#language").data("value"));
     }
     static getContainer() {
         $elem = $('#navbar');
@@ -41,9 +38,6 @@ class NavBarController{
             .unbind()
             .click(function(){
                 language_manager.setLanguage($(this).data("value"));
-                console.log("Element ID: "+ $(this).get(0).id);
-                console.log("language value of NavBar: "+ $(this).data("value"));
-                language_manager.setElements();
                 if($(this).data("value")==="en"){
                     $(this)
                         .data('value',"de")
@@ -52,6 +46,7 @@ class NavBarController{
                         .addClass("de");
                     NavBar.getContainer().find('#nav-title').text('Monitor of Settlement and Open Space Development');
                 }else{
+                    language_manager.setLanguage($(this).data("value"));
                     $(this)
                         .data('value',"en")
                         .find("i")
@@ -59,6 +54,7 @@ class NavBarController{
                         .addClass("gb uk");
                     NavBar.getContainer().find('#nav-title').text('Monitor der Siedlungs- und Freiraumentwicklung (IÖR-Monitor)');
                 }
+                language_manager.setElements();
             });
         $("#nav_click")
         //for mobile devices, without hover
