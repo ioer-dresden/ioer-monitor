@@ -23,7 +23,7 @@ class UserLink
             $filed_array=array("%s","%s");
             DBFactory::getMySQLManager()->insert($this->table_name,$data_array,$filed_array);
             $sql_get = "select id from ".$this->table_name." where ZEITSTEMPEL = '".$date."' and array_value = '".$this->setting["val"]."'";
-            return array("state"=>"inserted","res"=>MysqlManager::get_instance()->query($sql_get));
+            return array("state"=>"inserted","res"=>DBFactory::getMySQLTask()->query($sql_get));
         }catch (Exception $e){
             return array("state"=>"error");
         }

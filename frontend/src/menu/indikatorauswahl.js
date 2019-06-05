@@ -229,6 +229,24 @@ const indikatorauswahl ={
         //highlight the elements inside the menu
         $('#kat_item_'+menu.getIndikatorKategorie(indicator_id)).css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
         $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
+        //enable or disbale OGC Services
+        var interval = setInterval(function () {
+            let state_ogc = indikatorauswahl.getIndikatorInfo(ind_param,"ogc");
+            //if all indictaor values are ready
+            if (state_ogc !== null) {
+                clearInterval(interval);
+                if (state_ogc.wfs !=="1"){
+                    helper.disableElement("#wfs","");
+                }else{
+                    helper.enableElement("#wfs","");
+                }
+                if (state_ogc.wcs !=="1"){
+                    helper.disableElement(".raster_export","");
+                }else{
+                    helper.enableElement(".raster_export","");
+                }
+            }
+        }, 100);
     },
     getIndikatorInfo:function(indicator_id,key_name){
         let val_found = null,
@@ -363,24 +381,6 @@ const indikatorauswahl ={
                         }
                     },
                     onChange: function (value, text, $choice) {
-                        //enable or disbale OGC Services 
-                        let state_ogc = indikatorauswahl.getIndikatorInfo(value,"ogc");
-                        var interval = setInterval(function () {
-                            //if all indictaor values are ready
-                            if (state_ogc) {
-                                clearInterval(interval);
-                                if (state_ogc.wfs !=="1"){
-                                    helper.disableElement("#wfs","");
-                                }else{
-                                    helper.enableElement("#wfs","");
-                                }
-                                if (state_ogc.wcs !=="1"){
-                                    helper.disableElement(".raster_export","");
-                                }else{
-                                    helper.enableElement(".raster_export","");
-                                }
-                            }
-                        }, 100);
                         //clean the search field
                         $('#search_input_indikatoren').val('');
                         //save the prev selected indicator as paramter
