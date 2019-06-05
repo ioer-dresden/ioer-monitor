@@ -231,9 +231,9 @@ const indikatorauswahl ={
         $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
         //enable or disbale OGC Services
         var interval = setInterval(function () {
-            let state_ogc = indikatorauswahl.getIndikatorInfo(ind_param,"ogc");
+            let state_ogc = indikatorauswahl.getIndikatorInfo(indicator_id,"ogc");
             //if all indictaor values are ready
-            if (state_ogc !== null) {
+            if (state_ogc) {
                 clearInterval(interval);
                 if (state_ogc.wfs !=="1"){
                     helper.disableElement("#wfs","");
@@ -246,10 +246,10 @@ const indikatorauswahl ={
                     helper.enableElement(".raster_export","");
                 }
             }
-        }, 100);
+        }, 500);
     },
     getIndikatorInfo:function(indicator_id,key_name){
-        let val_found = null,
+        let val_found = false,
             id = indicator_id;
         if(typeof id==="undefined" || !id){
             id = this.getSelectedIndikator();
