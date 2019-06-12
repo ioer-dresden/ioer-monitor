@@ -245,7 +245,7 @@ const toolbar = {
                                  <li>
                                     <div class="btn_container">
                                         <div id="btn_glaetten" class="image cursor ${exclude.class_raster}" data-title="Glätten Sie die Rasterkarte" title="Glätten Sie die Rasterkarte"></div>
-                                        <div class="btn_txt">Glätten</div>
+                                        <div class="btn_txt" id ="btn_glaetten_txt">Glätten</div>
                                     </div>
                                 </li>
                             </ul>

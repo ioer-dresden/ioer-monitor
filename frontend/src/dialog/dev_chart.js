@@ -13,7 +13,7 @@ const dev_chart={
             indicator:"verfügbare Indikatoren",
             choice:"Bitte wählen.....",
             no_choice:"Kein Indikator gewählt",
-            load:"Lädt Diagramm......",
+            load:"Lädt Diagramm.....",
             pnt:"alle Stützpunkte",
             trend:"Prognosewerte",
             unit:"Einheit",
@@ -107,7 +107,7 @@ const dev_chart={
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
                             <h3 class="Hinweis_diagramm" id="Hinweis_diagramm_empty">${this.text[lan].no_choice}</h3>
-                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">Lädt Diagramm......</h3>
+                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}.......</h3>
                             <svg id="visualisation" height="100"></svg>
                         </div>
                         <div id="tooltip" style="pointer-events: none;"></div>
@@ -420,7 +420,19 @@ const dev_chart={
             function setLegende(data, color) {
                 let legend = svg.append("g")
                     .attr("class", "legend"),
-                    marginTop = margin_top+40;
+                    marginTop = margin_top+40,
+                    lan= language_manager.getLanguage(),
+                // Setting the name of selected unit based on language selection
+                    indicatorName="";
+                    if (lan=="de"){
+                        indicatorName=data[0].name;
+                    }
+                    else if (lan=="en"){
+                        indicatorName=data[0].name
+                    }
+                    else{
+                        console.log("Unknown language chosen!")
+                    }
 
                 legend.append('g')
                     .append("rect")
@@ -437,7 +449,7 @@ const dev_chart={
                     .attr("width", (chart_width))
                     .style("font-size", "20px")
                     .style("fill", color)
-                    .text(data[0].name+" in "+data[0].einheit);
+                    .text(indicatorName+" in "+data[0].einheit);
 
                 margin_top += 20;
             }

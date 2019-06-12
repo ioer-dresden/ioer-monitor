@@ -86,7 +86,7 @@ const area_info={
         return parameters;
     },
 
-    getColumnList:function(spatialUnit){  // Determining which columns and in what order will get displayed
+    getColumnList:function(spatialUnit){  // Determining which columns and in what order will get displayed, based on selected region type
         let columnList=["category","indicator", "value","unit"];
         if (spatialUnit=="ror" || spatialUnit=="krs" || spatialUnit=="lks" || spatialUnit=="kfs" || spatialUnit=="g50" ){
             columnList.push("valueBundesland");
@@ -101,6 +101,7 @@ const area_info={
     extractRelevantDataFromJSON:function(data, lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
         let tableData=[];
         data=data["values"];
+        console.info(data);
         for (let index in data){
             for (let category in data[index]) {
                 let categoryName = " ";

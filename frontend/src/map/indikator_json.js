@@ -131,6 +131,7 @@ const indikator_json = {
     setPopUp:function(e){
         let text={
                 de:{
+                    indicatorValue:"Indikatorwert:",
                     profil:"Wertübersicht",
                     profil_title:"Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren",
                     stat:"Statistik",
@@ -141,6 +142,7 @@ const indikator_json = {
                     compare_title:"Veränderung der Indikatorwerte für die Gebietseinheit"
                 },
                 en:{
+                    indicatorValue:"Indicator value:",
                     profil:"Value overview",
                     profil_title:"Characteristic of this room unit with value overview of all indicators",
                     stat:"Statistics",
@@ -194,17 +196,17 @@ const indikator_json = {
         if(fc !== '0') {
             //get the single values of each fc
             let arr = fc.split("||");
-            let text = arr[2];
+            let arrText = arr[2];
             let color = arr[1];
             div = $(`<div class="PopUp">
-                        <div><b style="color:red">${text}</b></div>
+                        <div><b style="color:red">${arrText}</b></div>
                     </div>`)[0];
         }else{
             div =  $(`<div class="PopUp inline-block w-100">
                         <div class="w-100">
                             <div><b>${gen}</b></div>
                              <hr class="hr"/> 
-                            <div><b>Indikatorwert:</b> ${val_d} ${einheit}</div>
+                            <div><b>${text[lan].indicatorValue}</b> ${val_d} ${einheit}</div>
                         </div> 
                         <div style="margin-top: 1vh;">
                             ${gebietsprofil}

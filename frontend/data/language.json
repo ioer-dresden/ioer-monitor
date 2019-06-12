@@ -216,7 +216,7 @@
         "en":"Import",
         "type":"#"
       },
-      "btn_glaetten":{
+      "btn_glaetten_txt":{
         "de":"Glätten",
         "en":"Smooth",
         "type":"#"

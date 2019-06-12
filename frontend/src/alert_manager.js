@@ -1,8 +1,53 @@
 //collecteions of alerts using sweet alert for bootstrap: https://sweetalert2.github.io/
 const alert_manager= {
+    text:{
+        de:{
+            exitWithESC:"Verlassen Sie die Funktion mit ESC",
+            reload:"Die Anwendung wurde aktualisiert",
+            noIndicator:"kein Indikator gewählt",
+            selectIndicator:"Bitte wählen Sie erst einen Indikator aus",
+            error:"Fehler",
+            problem:"Es ist ein Problem Aufgetreten",
+            tryAgainFeedback:"Bitte versuchen Sie es später nochmal oder kontaktieren Sie uns über das Feedback Formular.",
+            notAvailable:"Der Indikator ist im gewählten Zeitschnitt nicht vorhanden",
+            forIndicator:"Für den Indikator ",
+            yearSetTo:" wurde das Jahr auf ",
+            angepasst:" angepasst",
+            anzupassen:" anzupassen",
+            noSpatial:"Der Indikator ist in der gewählten Raumgliederung nicht vorhanden.",
+            adjustSpatialSelection:"Es wäre möglich den Indikator auf die Raumgliederung ",
+            cancel:"Abbrechen",
+            increasedLoad:"Erhöhte Rechenleistung",
+            refineSelection:"Sie können durch eine Verfeinerung ihrer Auswahl, wie beispielsweise die Wahl eines Bundeslandes, den Prozess beschleunigen.",
+            unsupportedBrowser:"Ihr Browser wird nicht unterstützt, bitte verwendet Sie einen aktuellen Browser wie "
+
+        },
+        en:{
+            exitWithESC:"Leave the function with ESC",
+            reload:"The Application was reloaded",
+            noIndicator:"no Indicator chosen",
+            selectIndicator:"Please select an Indicator",
+            error:"Error",
+            problem:"There has been a problem",
+            tryAgainFeedback:"Please try again later, or contact us using the Feedback form",
+            notAvailable:"The Indicator is not available in the selected timespan",
+            forIndicator:"Fo the Indicator ",
+            yearSetTo:" the Year was set to ",
+            angepasst:"",
+            anzupassen:"",
+            noSpatial:"The indicator is not available in the selected spatial resolution",
+            adjustSpatialSelection:"It would be possible to set the spatial selection to ",
+            cancel:"Cancel",
+            increasedLoad:"Increased computational requirements",
+            refineSelection:"You can accelerate the Process by refining your selection, e.g. choosing one State.",
+            unsupportedBrowser:"Your Browser is not being supported. Please use a newer one like  "
+        }
+    },
+    lan:language_manager.getLanguage(),
+
     leaveESCInfo: function (title,message) {
         let _title=function(){
-             let name = "Verlassen Sie die Funktion mit ESC";
+             let name = alert_manager.text[language_manager.getLanguage()].exitWithESC;
              if(title){name = title;}
              return name;
         },
@@ -18,7 +63,7 @@ const alert_manager= {
     },
     alertUpdate: function (version) {
         swal({
-                title: "Die Anwendung wurde aktualisiert",
+                title: alert_manager.text[language_manager.getLanguage()].reload,
                 text: '',
                 type: "info",
                 html: true
@@ -34,19 +79,19 @@ const alert_manager= {
     alertNoIndicatorChosen:function(){
         setTimeout(function(){
             swal(
-                "Kein Indikator gewählt",
-                "Bitte wählen Sie erst einen Indikator aus",
+                alert_manager.text[language_manager.getLanguage()].noIndicator,
+                alert_manager.text[language_manager.getLanguage()].selectIndicator,
                 "info"
             )
         },500);
     },
     alertError:function(error){
-        let error_span = `<b style="color: red">Fehler: ${error}</b>`;
+        let error_span = `<b style="color: red">${alert_manager.text[language_manager.getLanguage()].error}: ${error}</b>`;
         $('#loading_circle').remove();
         setTimeout(function(){
             swal({
-                title:"Es ist ein Problem aufgetreten",
-                text:`<span>Bitte versuchen Sie es später nochmal oder kontaktieren Sie uns über das Feedback Formular.</span>
+                title:alert_manager.text[language_manager.getLanguage()].problem,
+                text:`<span>${alert_manager.text[language_manager.getLanguage()].tryAgainFeedback}</span>
                       <br/>
                       <hr/>
                       ${error ? error_span: ""}`,
@@ -57,10 +102,11 @@ const alert_manager= {
         },500);
     },
     alertNotInTimeShift:function(){
+        console.log("Not in time");
         setTimeout(function () {
             swal(
-                'Der Indikator ist im gewählten Zeitschnitt nicht vorhanden',
-                'Für den Indikator ' + $('#Indikator option:selected').text() + ' wurde das Jahr auf ' + Math.max.apply(Math, indikatorauswahl.getFilteredPossibleYears()) + ' angepasst',
+                alert_manager.text[language_manager.getLanguage()].notAvailable,
+                alert_manager.text[language_manager.getLanguage()].forIndicator + $('#Indikator option:selected').text() + alert_manager.text[language_manager.getLanguage()].yearSetTo + Math.max.apply(Math, indikatorauswahl.getFilteredPossibleYears()) + alert_manager.text[language_manager.getLanguage()].angepasst,
                 'success'
             );
         }, 500);
@@ -70,10 +116,10 @@ const alert_manager= {
             .then(progressbar.remove())
             .then(setTimeout(function () {
                 swal({
-                        title: 'Der Indikator ist in der gewählten Raumgliederung nicht vorhanden.',
-                        text: 'Es wäre möglich den Indikator auf die Raumgliederung ' + raumglTXT + ' anzupassen',
+                        title: alert_manager.text[language_manager.getLanguage()].noSpatial,
+                        text: alert_manager.text[language_manager.getLanguage()].adjustSpatialSelection + raumglTXT + alert_manager.text[language_manager.getLanguage()].anzupassen,
                         type: 'info',
-                        cancelButtonText: "Abbrechen",
+                        cancelButtonText: alert_manager.text[language_manager.getLanguage()].cancel,
                         showCancelButton: true,
                     },
                     function (isConfirm) {
@@ -91,9 +137,9 @@ const alert_manager= {
     alertNotAsRaster:function(){
         $.when(setTimeout(function(){
             swal({
-                    title: "Der Indikator ist nicht in der Räumlichen Gliederung verfügbar",
+                    title: alert_manager.text[language_manager.getLanguage()].noSpatial,
                     type: "warning",
-                    cancelButtonText: "Abbrechen",
+                    cancelButtonText: alert_manager.text[language_manager.getLanguage()].cancel,
                     showCancelButton: false,
                 }
             );
@@ -102,10 +148,10 @@ const alert_manager= {
     alertServerlast:function(choice){
         setTimeout(function(){
             swal({
-                    title: "Erhöhte Rechenleistung",
-                    text: "Sie können durch eine Verfeinerung ihrer Auswahl, wie beispielsweise die Wahl eines Bundeslandes, den Prozess beschleunigen.",
+                    title: alert_manager.text[language_manager.getLanguage()].increasedLoad,
+                    text: alert_manager.text[language_manager.getLanguage()].refineSelection,
                     type: "warning",
-                    cancelButtonText: "Abbrechen",
+                    cancelButtonText: alert_manager.text[language_manager.getLanguage()].cancel,
                     showCancelButton: true,
                 },
                 function (isConfirm) {
@@ -127,7 +173,7 @@ const alert_manager= {
         $('head').append('<style>.swal-overlay{background-color: lightgray}</style>')
         swal({
             title: '<img src="frontend/assets/icon/worldwide.png"/>',
-            text: 'Ihr Browser wird nicht unterstützt, bitte verwendet Sie einen aktuellen Browser wie <b><a href="https://www.mozilla.org/de/firefox/new/" target="_blank">' +
+            text: alert_manager.text[language_manager.getLanguage()].unsupportedBrowser+' <b><a href="https://www.mozilla.org/de/firefox/new/" target="_blank">' +
                   'Firefox</a></b> oder <b><a href="https://www.google.com/intl/de_ALL/chrome/" target="_blank">Chrome</a></b>',
             html:true,
             showCancelButton: false,

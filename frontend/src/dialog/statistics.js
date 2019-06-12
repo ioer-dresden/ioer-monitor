@@ -26,6 +26,7 @@ const statistics = {
             probability:"Wahrscheinlichkeit",
             amount:"anzahl",
             area:"Gebiet",
+            AGS:"Schlüssel",
             areas:"Gebiete",
             value:"Wert",
             values:"Werte",
@@ -60,6 +61,7 @@ const statistics = {
             probability: "Probability",
             amount: "amount",
             area:"Area",
+            AGS:"Key",
             areas:"Areas",
             value:"Value",
             values:"Values",
@@ -100,7 +102,7 @@ const statistics = {
                     <br/>
                   <div id="statistics_info_container">
                     <div id="area_info"}>
-                        <h3 id="selectedArea">${chart.settings.name} (AGS: ${chart.settings.ags})</h3>
+                        <h3 id="selectedArea">${chart.settings.name} (${this.text[lan].AGS}: ${chart.settings.ags})</h3>
                         <h5 id="currentValue" >${this.text[lan].value}: ${this.parseStringPointToComma(chart.settings.currentValue)} ${chart.settings.indUnit}</h5>
                     </div>
                     
