@@ -6,14 +6,16 @@ const map_print={
             classificationMethod:"Klassifikationsmethode",
             histogram:"Histogramm",
             indicatorInformation:"Information zum Indikator",
-            baseData:"Datengrundlage"
+            baseData:"Datengrundlage",
+            create:"Erstelle "
         },
         en:{
             export:"Export",
             classificationMethod:"Classification method",
             histogram:"Histogram",
             indicatorInformation:"Information about the indicator",
-            baseData:"Base data"
+            baseData:"Base data",
+            create:"Creating "
         }
     },
     map:null,
@@ -197,7 +199,7 @@ const map_print={
                             $('#print_legende').find('.legende_i').find('.error').find('i').css("background","grey");
                         })
                         .then(progressbar.init())
-                        .then(progressbar.setHeaderText("erstelle " + map_print.format.toUpperCase()))
+                        .then(progressbar.setHeaderText(map_print.text[language_manager.getLanguage()].create + map_print.format.toUpperCase()))
                         //needed to set a4
                         .then(dialog_manager.changeHeight( 1100))
                         .then(function () {

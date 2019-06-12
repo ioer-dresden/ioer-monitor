@@ -117,7 +117,8 @@ const kennblatt={
                     "bemerkung":"Bemerkungen",
                     "bezugsebenen":"Bezugsebenen",
                     "ogc":"Verfügbare Geodienste mit Links",
-                    "literatur":"Quellen/Literatur"
+                    "literatur":"Quellen/Literatur",
+                    "erstellePDF":"Erstelle PDF"
                 },
                 "en":{
                     "header":"Indicator data sheet",
@@ -132,7 +133,8 @@ const kennblatt={
                     "bemerkung":"Remarks",
                     "bezugsebenen":"Available levels",
                     "ogc":"Links to available geoservices",
-                    "literatur":"Sources/References"
+                    "literatur":"Sources/References",
+                    "erstellePDF":"Creating PDF"
                 }
             };
         //create the html
@@ -180,11 +182,11 @@ const kennblatt={
         };
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
-        this.controller.set();
+        this.controller.set(header_text[language]["erstellePDF"]);
     },
     controller:{
-        set:function(){
-            let print_button = $('#print_btn_kennblatt');
+        set:function(headerText){
+            let print_button = $('#print_btn_kennblatt');console.log("Header text: "+ headerText);
             print_button
                 .unbind()
                 .click(function(){
@@ -200,7 +202,7 @@ const kennblatt={
                             jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'}
                         };
                     progressbar.init();
-                    progressbar.setHeaderText("erstelle PDF");
+                    progressbar.setHeaderText(headerText);
                     let worker = html2pdf()
                         .from(element)
                         .set(opt)

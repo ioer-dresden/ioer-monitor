@@ -202,15 +202,27 @@
         "type":"#"
       },
       "measure_btn":{
-        "de":"Messen",
-        "en":"Measure",
-        "type":"#"
-      },
+      "de":"Messen",
+      "en":"Measure",
+      "type":"#"
+    },
+    "measure":{
+      "de":"Führen Sie Messungen durch",
+      "en":"Perform measurements",
+      "type":"#",
+      "attr": "title"
+    },
       "lupe_btn":{
         "de":"Lupe",
         "en":"Magni- fying glass",
         "type":"#"
       },
+    "lupe":{
+      "de":"Lupe um die darunter liegende Grundkarte hervorzuheben",
+      "en":"Magnifying glass to highlight the Basemap",
+      "type":"#",
+      "attr": "title"
+    },
       "import_btn":{
         "de":"Import",
         "en":"Import",
@@ -289,6 +301,12 @@
         "type":"#",
         "selector":"b"
       },
+    "rid": {
+      "de":"kartenlink Nr.",
+      "en":"Map link No.",
+      "type":"#",
+      "attr":"placeholder"
+    },
       "btn_reset":{
         "de":"Viewer zurücksetzen",
         "en":"Reset viewer",
@@ -510,6 +528,11 @@
         "type":"#",
         "selector":"span"
       },
+    "legende_line_error": {
+      "de":"keine Daten, nicht berechenbar",
+      "en":"no Data, impossible to compute",
+      "type":"."
+    },
       "Klassifikationsmethode_legende":{
         "de":"Klassifikationsmethode",
         "en":"Classification method",

@@ -1,4 +1,12 @@
 const exclude={
+    text:{
+        de:{
+            disable_text:"Für die gewählte Raumgliederung nicht verfügbar"
+        },
+        en:{
+            disable_text:"not available for the selected spatial unit"
+        }
+    },
     areas:["gem","stt","vwg"],
     class_performance:"disbale_performance",
     class_raster:"gebiete_disable",

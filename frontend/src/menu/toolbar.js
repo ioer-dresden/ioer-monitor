@@ -232,8 +232,8 @@ const toolbar = {
                         <div class="dropdown_menu" id="dropdown_werkzeug">
                             <ul class="tools">
                                 <li><div class="btn_container">
-                                    <div id="measure" class="image cursor"></div>
-                                    <div class="btn_txt" id="measure_btn" title="führen Sie Messungen durch">Messen</div>
+                                    <div id="measure" class="image cursor"  title="führen Sie Messungen durch"></div>
+                                    <div class="btn_txt" id="measure_btn">Messen</div>
                                 </div>
                                 </li>
                                 <li>
@@ -264,13 +264,15 @@ const toolbar = {
                             <ul class="tools w-100">
                                 <li class="w-30">
                                     <div class="btn_container">
-                                        <div id="${dev_chart.chart_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes" title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
+                                        <div id="${dev_chart.chart_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
+                                         title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance}" id="dev_chart_txt">Werte- entwicklung</div>
                                     </div>
                                 </li>
                                  <li class="w-35">
                                     <div class="btn_container">
-                                        <div id="${dev_chart.chart_compare_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" data-title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte" title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
+                                        <div id="${dev_chart.chart_compare_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
+                                         title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance.replace("#","")}" data-title=""  id="dev_chart_compare_txt">Entwicklungs- vergleich</div>
                                     </div>
                                 </li>
