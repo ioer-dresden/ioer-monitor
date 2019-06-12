@@ -47,49 +47,57 @@ const kennblatt={
             datengrundlage=legende.getDatengrundlageObject().text(),
             bezugsebenen=function(){
                 try {
-                    let form = '';
+                    let availableSpatialResolutions = '';
                     $.each(spatial_extends, function (key, value) {
-                        let state = function () {
-                                let state = 'checked="checked"';
-                                if (parseInt(value) != 1) {
-                                    state = "";
+
+                                let spatialUnit="";
+                                if (parseInt(value) == 1) {
+                                     spatialUnit= `<div> ${raeumliche_analyseebene.getSpatialExtentNameById(key)}</div>`;
+                                     availableSpatialResolutions +=spatialUnit;
+                                     console.log("state() "+spatialUnit);
                                 }
-                                return state;
-                            },
+                            });
+                         return `${availableSpatialResolutions}`;
+
+
+                            /*
                             checkbox = `<div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" ${state()} disabled>
                                 <label class="form-check-label">${raeumliche_analyseebene.getSpatialExtentNameById(key)}</label>
                              </div>`;
                         form += checkbox;
                     });
-                    return `${form}`;
-                }catch(err){
+                    */
+
+                }
+                catch(err){
                     console.log(err);
                     return "";
                 }
             },
             ogc_links=function(){
                 try {
-                    let form = '';
+                    let services = '';
                     $.each(ogc, function (key, value) {
-                        let state = function () {
-                                let state = 'checked="checked"';
-                                if (parseInt(value) !== 1) {
-                                    state = "";
+                        let service="";
+                                if (parseInt(value) == 1) {
+                                    let link = function () {
+                                        let ind_id = indikatorauswahl.getSelectedIndikator();
+                                        return  `https://monitor.ioer.de/cgi-bin/${key}?MAP=${ind_id}_${key}`;
+                                    };
+                                    service= `<div class="text" >${key.toUpperCase()} : ${link()}</label>`
                                 }
-                                return state;
-                            },
-                            link = function () {
-                                let ind_id = indikatorauswahl.getSelectedIndikator();
-                                return  `https://monitor.ioer.de/cgi-bin/${key}?MAP=${ind_id}_${key}`;
-                            },
+
+                            /*
                             checkbox = `<div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" ${state()} disabled>
                                 <label class="form-check-label">${key.toUpperCase()}: ${link()}</label>
                              </div>`;
-                        form += checkbox;
+                             */
+
+                        services += service;
                     });
-                    return `${form}`;
+                    return `${services}`;
                 }catch(err){
                     console.log(err);
                     return "";
