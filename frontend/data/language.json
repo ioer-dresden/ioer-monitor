@@ -347,7 +347,7 @@
       "de": "Tabelle als CSV exportieren",
       "en": "Export the table as CSV",
       "type": "#",
-      "attr": "data-title"
+      "attr": "title"
     },
     "table_close": {
       "de": "Tabelle schliessen",
@@ -496,6 +496,7 @@
       "type":"."
     }
   },
+
   "btn-group-map": {
 
     "legende_button": {

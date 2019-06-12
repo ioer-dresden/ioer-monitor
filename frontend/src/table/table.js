@@ -5,14 +5,23 @@ const table = {
             no:"lfd. Nr.",
             ags:"AGS",
             regionName:"Gebietsname",
-            relevance:"Mittlere Grund-aktualität"
+            relevance:"Mittlere Grund-aktualität",
+            areaInfo:"Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren",
+            statistics:"Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators",
+            development:"Veränderung des Indikatorwertes für die Gebietseinheit",
+            comparison:"Veränderung der Indikatorwerte für die Gebietseinheit",
+            noMunicipal:"Nor available on municipal level"
         },
         en:{
             value:"Value",
             no:"No.",
             ags:"Key",
             regionName:"Region name",
-            relevance:"Mean relevance"
+            relevance:"Mean relevance",
+            areaInfo:"Area information: overview over all the indicators for this spatial unit",
+            statistics:"The key statistical parameters for this spatial unit and timeframe",
+            development:"Development of the indicator value over time",
+            comparison:"Development of the indicator values over time"
         }
     },
     td_classes : 'collapsing',
@@ -49,7 +58,7 @@ const table = {
                     <button type="button" class="btn btn-primary mobile_hidden" id="btn_table">
                         <i class="glyphicon glyphicon-chevron-right mobile_hidden" title="Tabelle mit Indikatorwerten oder Zeitschnitten erweitern"></i><span>Erweitern</span></button>
                     <div title="Tabelle filtern" id="filter_table" class="filter"></div>
-                    <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export" data-title="Tabelle als CSV exportieren"></div>
+                    <div title="Tabelle als CSV exportieren" id="csv_export" data-id="csv_export"></div>
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />
                 </div>
                 <hr class="hr"/>
@@ -72,7 +81,7 @@ const table = {
                     </tr>
                     <tr class="header" id="second_row_head">
                         <th class="th_head ${csv_export.ignoreClass}" data-export="false"></th>
-                        <th class="th_head ${csv_export.ignoreClass}" id="tr_rang" data-export="false">${table.text[lan].no}</th>
+                        <th class="th_head" id="tr_rang" data-export="true">${table.text[lan].no}</th>
                         <th class="th_head ags sort-arrow" data-export="true">${table.text[lan].ags}</th>
                         <th class="th_head gebietsname sort-arrow" data-export="true">${table.text[lan].regionName}</th>
                         <th id="tabel_header_raumgl" class="th_head sort-arrow" data-export="true">${table.text[lan].value} ${indikatorauswahl.getIndikatorEinheit()}</th>`;
@@ -118,7 +127,7 @@ const table = {
                                                     data-ind="${ind}" 
                                                     data-wert="${value_int}" 
                                                     data-einheit="${einheit}" 
-                                                    data-title="Veränderung der Indikatorwerte für die Gebietseinheit" 
+                                                    data-title="${table.text[language_manager.getLanguage()].development}" 
                                                     title="Veränderung der Indikatorwerte für die Gebietseinheit" 
                                                     id="indikatoren_diagramm_ags${ags}" 
                                                     style="margin-left: .5vh;"
@@ -130,8 +139,8 @@ const table = {
                                                     data-wert="${value_int}" 
                                                     data-einheit="${einheit}" 
                                                     style="margin-left: .5vh;"
-                                                    data-title="Veränderung des Indikatorwertes für die Gebietseinheit" 
-                                                    title="Veränderung des Indikatorwertes für die Gebietseinheit"
+                                                    data-title="${table.text[language_manager.getLanguage()].comparison}"
+                                                    title="${table.text[language_manager.getLanguage()].comparison}"
                                                     id="indikatoren_diagramm_ags_ind${ags}" 
                                                     src="${dev_chart.icon.multiple.path}"/>`,
                     img_gebiets_profil = ` <img data-name="${value.gen}" 
@@ -139,7 +148,7 @@ const table = {
                                                         data-ind="${ind}" 
                                                         data-wert="${value_int}" 
                                                         data-einheit="${einheit}" 
-                                                        title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
+                                                        title="${table.text[language_manager.getLanguage()].areaInfo}" 
                                                         class="indikatoren_gebietsprofil chart"  
                                                         id="indikatoren_gebietsprofil${ags}" 
                                                         style="margin-left: .2vh;"
@@ -149,7 +158,7 @@ const table = {
                                                  data-ind="${ind}" 
                                                  data-wert="${value_int}" 
                                                  data-einheit="${einheit}" 
-                                                 title="Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators" 
+                                                 title="${table.text[language_manager.getLanguage()].statistics}" 
                                                  class="indikatoren_diagramm_ags histogramm_ags" 
                                                  id="diagramm_ags${ags}" 
                                                  src="frontend/assets/icon/histogramm.png"/>`,
@@ -195,7 +204,7 @@ const table = {
                                         <td class="${csv_export.ignoreClass}">
                                             <input id="checkbox_${ags}" type="checkbox" class="select_check disbale_performance mobile_hidden" data-ags="${ags}">
                                         </td>
-                                        <td class="count_ags_table selectable ${csv_export.ignoreClass}"></td>
+                                        <td class="count_ags_table selectable "></td>
                                         <td class="td_ags">${ags}</td>
                                         <td class="td_name" data-des="${des}">
                                             ${img_gebiets_profil}
@@ -235,7 +244,7 @@ const table = {
                                                       data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                       data-wert="${value_set}" 
                                                       data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                                      title="Veränderung der Indikatorwerte für die Gebietseinheit" 
+                                                      title="${table.text[language_manager.getLanguage()].development}" 
                                                       style="margin-left: .5vh;"
                                                       class="dev_table indsingle_entwicklungsdiagr mobile_hidden" 
                                                       id="indikatoren_diagramm_ags${ags}" 
@@ -245,7 +254,7 @@ const table = {
                                                           data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                           data-wert="${value_set}" 
                                                           data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                                          title="Veränderung des Indikatorwertes für die Gebietseinheit" 
+                                                          title="${table.text[language_manager.getLanguage()].comparison}" 
                                                           class="dev_table ind_entwicklungsdiagr mobile_hidden" 
                                                           id="indikatoren_diagramm_ags_ind${ags}"
                                                           style="margin-left: .5vh;" 
@@ -258,7 +267,7 @@ const table = {
                                                              data-name="${value.gen}" 
                                                              data-ags="${ags}" 
                                                              data-ind="${indikatorauswahl.getSelectedIndikator()}" 
-                                                             title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
+                                                             title="${table.text[language_manager.getLanguage()].areaInfo}" 
                                                              class="indikatoren_gebietsprofil" 
                                                              src="frontend/assets/icon/indikatoren.png"/>
                                                              ${name}
@@ -300,7 +309,7 @@ const table = {
                                       data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                       data-wert="${value_g}" 
                                       data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                      title="Veränderung der Indikatorwerte für die Gebietseinheit" 
+                                      title="${table.text[language_manager.getLanguage()].development}" 
                                       class="dev_table indsingle_entwicklungsdiagr mobile_hidden" 
                                       id="indikatoren_diagramm_ags99" 
                                       style="margin-left: .5vh;" 
@@ -310,7 +319,7 @@ const table = {
                                           data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                           data-wert="${value_g}" 
                                           data-einheit="${indikatorauswahl.getIndikatorEinheit()}" 
-                                          title="Veränderung des Indikatorwertes für die Gebietseinheit" 
+                                          title="${table.text[language_manager.getLanguage()].comparison}" 
                                           class="dev_table ind_entwicklungsdiagr mobile_hidden" 
                                           id="indikatoren_diagramm_ags_ind99" 
                                           style="margin-left: .5vh;" 
@@ -322,7 +331,7 @@ const table = {
                                                  data-name="Bundesrepublik" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
-                                                 title="Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren" 
+                                                 title="${table.text[language_manager.getLanguage()].areaInfo}" 
                                                  class="indikatoren_gebietsprofil" src="frontend/assets/icon/indikatoren.png"/>
                                                  Bundesrepublik
                                         </th>
@@ -373,8 +382,8 @@ const table = {
     disableCharts:function(){
         //disable charts for community level
         if(raumgliederung.getSelectionId()==='gem' || raeumliche_analyseebene.getSelectionId()==="gem"){
-            helper.disableElement(".dev_chart_compare","Steht für die Gemeindeebene nicht zur Verfügung");
-            helper.disableElement(".dev_chart_trend","Steht für die Gemeindeebene nicht zur Verfügung");
+            helper.disableElement(".dev_chart_compare",table.text[language_manager.getLanguage()].noMunicipal);
+            helper.disableElement(".dev_chart_trend",table.text[language_manager.getLanguage()].noMunicipal);
         }
         //disable chart for single time shift
         if(zeit_slider.getTimes().length===1){

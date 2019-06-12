@@ -37,6 +37,7 @@ const csv_export = {
                         $.when(setLoadIcon())
                             .then(csv_export.state = true)
                             .then(function(){
+                                console.log("Exporting table");
                                 TableHelper.destroyStickyTableHeader();
                                 let exportTable = table.getDOMObject()
                                                         .tableExport({
@@ -51,7 +52,7 @@ const csv_export = {
                                                             ignoreCSS: "." + csv_export.ignoreClass
                                                         });
                                                     let exportData = exportTable.getExportData()['table_ags']['csv'];
-                                                    var interval = setInterval(function () {
+                                                    let interval = setInterval(function () {
                                                         //if table date csv is created
                                                         if (exportData.data) {
                                                             clearInterval(interval);
