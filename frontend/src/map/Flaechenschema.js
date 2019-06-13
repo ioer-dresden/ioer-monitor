@@ -58,6 +58,6 @@ class FlaechenschemaLegende{
                 $(this).attr('src', url);
             });
         });
-        map_header.updateText(`Flächennutzungskarte für (${zeit_slider.getTimeSet()})`);
+        map_header.updateText();
     }
 }
