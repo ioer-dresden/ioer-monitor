@@ -8,7 +8,7 @@ include 'models/NOTES.php';
 include 'models/Colors.php';
 include "models/UserLink.php";
 include "chart/IndikatorChart.php";
-include "map/Json.php";
+include "map/IndicatorJson.php";
 include 'map/CacheManager.php';
 include "map/Overlay.php";
 include "table/TableExpand.php";
@@ -42,7 +42,7 @@ try{
         $cache_manager = new CacheManager($indicator,$year,$raumgliederung,$klassifizierung,$klassenanzahl);
         try{
             if (!$cache_manager->check_cached($ags_array,$colors)) {
-                $indicator_json = new Json($indicator,$year,$raumgliederung,$ags_array);
+                $indicator_json = new IndicatorJson($indicator,$year,$raumgliederung,$ags_array);
                 $geometry_values = $indicator_json->createJSON();
                 $class_manager = new Classify($geometry_values,$klassenanzahl,$colors,$indicator,$klassifizierung);
                 $classes = $class_manager->classify();

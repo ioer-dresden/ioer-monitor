@@ -1,9 +1,9 @@
 <?php
 include_once '../database/DBFactory.php';
 
-class Json
+class IndicatorJson
 {
-    protected static $instance = NULL;
+
     private $json;
     public function __construct($indicator_id,$year,$spatial_extend,$ags_array_user) {
 
@@ -13,7 +13,7 @@ class Json
         $this->spatial_extend = $spatial_extend;
         $this->ags_array_user = $ags_array_user;
     }
-    function createJSON(){
+    public function createJSON(){
             # Build GeoJSON
             $output = '';
             $rowOutput = '';

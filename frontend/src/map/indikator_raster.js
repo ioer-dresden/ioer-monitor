@@ -55,6 +55,8 @@ const indikator_raster = {
                         id:"indicator_raster"
                     });
 
+                console.log(url,pfad_mapfile);
+
                 if (_seite) {
                     //removeRasterBySide(_seite);
                     indikator_raster_group.clean(_seite);
