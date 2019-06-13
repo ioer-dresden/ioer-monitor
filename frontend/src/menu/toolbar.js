@@ -54,7 +54,7 @@ const toolbar = {
                                     <div class="zeit_slider" id="zeit_slider"></div>
                         </div>
                         <!---Indicator choice--------------->
-                        <div class="dropdown_choice">
+                        <div class="dropdown_choice fl-unbind">
                             <div class="hh_sf" id="indikator_auswahl">
                                 <i class="large angle down icon" data-ddm="drop_kat"></i>
                                 <span>Indikator</span>
@@ -77,7 +77,7 @@ const toolbar = {
                         </div>
                     <div id="overflow_content">
                         <!--spatial choice--------------------->
-                        <div class="dropdown_choice">
+                        <div class="dropdown_choice fl-unbind">
                             <div class="hh_sf" id="raumgl_auswahl">
                                 <i class="large angle down icon" data-ddm="dropdown_raumgl"></i>
                                 <span>Räumliche Gliederung</span>
@@ -133,7 +133,7 @@ const toolbar = {
                             </div>
                         </div>
                         <!--map layout-------------------->
-                        <div class="dropdown_choice">
+                        <div class="dropdown_choice fl-unbind">
                             <div class="hh_sf" id="kartengestaltung">
                                 <i class="large angle down icon" data-ddm="dropdown_layer"></i>
                                 <span>Kartengestaltung</span>
@@ -220,7 +220,7 @@ const toolbar = {
                             </div>
                         </div>
                         <!--Tools-------------------------->
-                        <div class="dropdown_choice mobile_hidden" id="tools">
+                        <div class="dropdown_choice mobile_hidden fl-unbind" id="tools">
                             <div class="hh_sf" id="hh_sf_dropdown_werkzeug">
                                 <i class="large angle down icon" data-ddm="dropdown_werkzeug"></i>
                                 <span>Werkzeuge</span>
@@ -251,7 +251,7 @@ const toolbar = {
                             </ul>
                         </div>
                         <!-- Analyse -->
-                         <div class="dropdown_choice mobile_hidden" id="analyse">
+                         <div class="dropdown_choice mobile_hidden fl-unbind" id="analyse">
                             <div class="hh_sf" id="hh_sf_analyse">
                                 <i class="large angle down icon" data-ddm="dropdown_analyse"></i>
                                 <span>Analyse</span>
@@ -284,8 +284,9 @@ const toolbar = {
                                 </li>
                             </ul>
                         </div>
+                        
                         <!--Export-->
-                        <div class="dropdown_choice mobile_hidden" id="export_map">
+                        <div class="dropdown_choice mobile_hidden fl-unbind" id="export_map">
                             <div class="hh_sf" id="hh_sf_dropdown_ogc">
                                 <i class="large angle down icon" data-ddm="dropdown_ogc"></i>
                                 Export
@@ -294,6 +295,7 @@ const toolbar = {
                                 <i class="glyphicon glyphicon-pushpin" title="Menü anheften" data-ddm="dropdown_ogc"></i>
                             </div>
                         </div>
+                        
                         <div class="dropdown_menu mobile_hidden" id="dropdown_ogc">
                             <div class="export_div"><b>Einbinden in eigenes GIS als</b></div>
                             <hr class="hr"/>
@@ -315,6 +317,10 @@ const toolbar = {
                                 <input class="form-control" type="text"  id="rid" name="rid" placeholder="Kartenlink Nr.">
                             </form>
                         </div>
+                        
+                         <!--Flächenschema-->
+                        <button type="button" class="btn btn-primary" id="btn_flaechenschema" onclick="Flaechenschema.init()">
+                           <span>Flächennutzungskarte</span></button>
                         <!--Reset Map-->
                         <button type="button" class="btn btn-primary" id="btn_reset" onclick="MapHelper.mapReset();">
                             <i class="glyphicon glyphicon-trash drop_arrow"></i><span>Viewer zurücksetzen</span></button>
@@ -326,6 +332,9 @@ const toolbar = {
                 </div>
             </div>`;
       $('#Modal').find('.left_content').append(html);
+    },
+    closeAllMenues:function(){
+        $('.dropdown_menu').slideUp();
     },
     controller:{
         set:function(){
@@ -344,26 +353,29 @@ const toolbar = {
                 .find(".hh_sf")
                 .unbind()
                 .click(function(event) {
-                    let ddm = $(this).find('i').data('ddm'),
-                        ddm_container = $('#'+ddm);
-                    //check if pinned
-                    if(ddm_container.hasClass('pinned')===false && !ddm_container.is(':visible')){
-                        ddm_container.slideDown();
-                    }else if(ddm_container.is(':visible')===true &&ddm_container.hasClass('pinned')===false){
-                        ddm_container.slideUp();
-                    }
-                    $('.dropdown_menu').each(function(){
-                        if($(this).is('#'+ddm)===false && $(this).hasClass('pinned')===false){
-                            $(this).slideUp();
+                    //prevent for flaechenschema
+                    if(!Flaechenschema.getState()) {
+                        let ddm = $(this).find('i').data('ddm'),
+                            ddm_container = $('#' + ddm);
+                        //check if pinned
+                        if (ddm_container.hasClass('pinned') === false && !ddm_container.is(':visible')) {
+                            ddm_container.slideDown();
+                        } else if (ddm_container.is(':visible') === true && ddm_container.hasClass('pinned') === false) {
+                            ddm_container.slideUp();
                         }
-                    });
-                    //set the height og the overflow content inside the menu bar
-                    if(main_view.getHeight() <= 1000) {
-                        setTimeout(function(){
-                            let height = toolbar.getHeight() - $('#no_overflow').height() - 60;
-                            $('#overflow_content').css("max-height",height+50);
-                        },500);
+                        $('.dropdown_menu').each(function () {
+                            if ($(this).is('#' + ddm) === false && $(this).hasClass('pinned') === false) {
+                                $(this).slideUp();
+                            }
+                        });
+                        //set the height og the overflow content inside the menu bar
+                        if (main_view.getHeight() <= 1000) {
+                            setTimeout(function () {
+                                let height = toolbar.getHeight() - $('#no_overflow').height() - 60;
+                                $('#overflow_content').css("max-height", height + 50);
+                            }, 500);
 
+                        }
                     }
                 });
 

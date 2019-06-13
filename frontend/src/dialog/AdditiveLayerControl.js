@@ -6,7 +6,7 @@ class AdditiveLayerControl{
                 title:"Karten",
                 grund:"Grundkarten",
                 extra:"Zusatzkarten",
-                empty:"kein Hintergrund",
+                empty:"Leer",
                 laendergrenzen:"Ländergrenzen",
                 kreisgrenzen:"Kreisgrenzen",
                 gemeindegrenzen:"Gemeindegrenzen",
@@ -19,7 +19,7 @@ class AdditiveLayerControl{
                 title:"Maps",
                 grund:"Base Maps",
                 extra:"Extra Maps",
-                empty:"no Background",
+                empty:"Empty",
                 laendergrenzen:"National borders",
                 kreisgrenzen:"District boundaries",
                 gemeindegrenzen:"Municipal boundaries",
@@ -51,22 +51,16 @@ class AdditiveLayerControl{
                                             <div class="name">Satellite</div>
                                         </div>
                                   </li>
-                                  <li class="list-group-item">
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 right">
+                            <ul class="list-group">
+                                 <li class="list-group-item">
                                         <div id="osm" class="image-content cursor base_layers" data-id="osm">
                                             <div class="pic image"></div>
                                             <div class="name">OSM</div>
                                         </div>
                                   </li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6 right">
-                            <ul class="list-group">
-                                  <li class="list-group-item">
-                                         <div id="webatlas" class="image-content cursor base_layers" data-id="webatlas" data-name="${this.text[lan].empty}">
-                                            <div class="pic image"></div>
-                                            <div class="name">WebatlasDE</div>
-                                        </div>
-                                   </li>
                                   <li class="list-group-item">
                                         <div id="leer" class="image-content cursor base_layers" data-id="noBackground"  data-name="${this.text[lan].empty}">
                                             <div class="pic image"></div>

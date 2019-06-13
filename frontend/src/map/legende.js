@@ -13,7 +13,11 @@ const legende = {
     getLegendeColorsObject : function(){
         $elem = $('#legende_i');
         return $elem;},
-    getIndikatorInfoObject : function(){
+    getIndicatorInfo:function(){
+      $elem = $("#indicator_info");
+      return $elem;
+    },
+    getIndikatorInfoTxtObject : function(){
         $elem =$('#indikator_info_text');
         return $elem;
     },
@@ -74,7 +78,7 @@ const legende = {
         //restore if window resize
         legende.getShowButtonObject().show();
     },
-    init:function(){
+    init:function(_html){
         const legende = this;
         this.create();
         this.resize();
@@ -95,22 +99,24 @@ const legende = {
                 </div>
                 <div id="legende_i" class="legende_i"></div>
             </div>
-            <hr class="hr"/>
-            <div id="Klassifikationsmethode_legende"><b>Klassifikationsmethode</b></div>
-            <div class="histogramm_klasseneinteilung" id="histogramm_klasseneinteilung"></div>
-            <hr class="hr"/>
-            <div id="indicator_info"><b>Informationen zum Indikator</b></div>
-            <div id="indikator_info_text"></div>
-            <button class="btn btn-primary btn_dropdown kennblatt" id="legende_kennblatt" onclick="kennblatt.open();">Kennblatt</button>
-            <hr class="hr"/>
-            <div id="legende_datangrundlage"><b>Datengrundlage</b></div>
-            <div id="datengrundlage_content"></div>
-            <div id="legende_map_projection"><b>Kartenprojektion</b></div>
-            <div>ETRS89 / UTM Zone 32N</div>
-            <hr class="hr"/>
-            <div id="legende_histogramm"><b>Histogramm</b></div>
-            <div id="histogramm_pic"></div>
-            <div class="hist_info"></div>
+            <div id="indicator_info">
+                <hr class="hr"/>
+                <div id="Klassifikationsmethode_legende"><b>Klassifikationsmethode</b></div>
+                <div class="histogramm_klasseneinteilung" id="histogramm_klasseneinteilung"></div>
+                <hr class="hr"/>
+                <div id="indicator_info"><b>Informationen zum Indikator</b></div>
+                <div id="indikator_info_text"></div>
+                <button class="btn btn-primary btn_dropdown kennblatt" id="legende_kennblatt" onclick="kennblatt.open();">Kennblatt</button>
+                <hr class="hr"/>
+                <div id="legende_datangrundlage"><b>Datengrundlage</b></div>
+                <div id="datengrundlage_content"></div>
+                <div id="legende_map_projection"><b>Kartenprojektion</b></div>
+                <div>ETRS89 / UTM Zone 32N</div>
+                <hr class="hr"/>
+                <div id="legende_histogramm"><b>Histogramm</b></div>
+                <div id="histogramm_pic"></div>
+                <div class="hist_info"></div>
+            </div>
             <div id="datenalter_container">
                 <button class="btn btn-primary btn_dropdown ${exclude.class_performance}" id="datenalter" data-title="Zeige die Karte des Datenalters" title="Zeige die Karte des Datenalters">
                     <i class="glyphicon glyphicon-chevron-down drop_arrow"></i>
@@ -124,7 +130,8 @@ const legende = {
             </div>
         </div>
       `;
-        this.getDOMObject().html(html);
+      this.getDOMObject().html(html);
+
     },
     fillContent:function() {
         const object = this;
@@ -132,7 +139,7 @@ const legende = {
             errorcode = error.getErrorCode(),
             legende_colors = this.getLegendeColorsObject(),
             datengrundlage_container = this.getDatengrundlageObject(),
-            indikator_info_container = this.getIndikatorInfoObject(),
+            indikator_info_container = this.getIndikatorInfoTxtObject(),
             einheit_container = this.getEinheitObject(),
             klasseneinteilung_contaiener = this.getKlasseneinteilungObject(),
             info_json = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()],

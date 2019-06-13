@@ -97,6 +97,7 @@ class ScriptLoader{
             "frontend/src/map/map_header.js",
             "frontend/src/map/legende.js",
             "frontend/src/map/MapHelper.js",
+            "frontend/src/map/Flaechenschema.js",
             //map tool
             "frontend/src/map/tools/lupe.js",
             "frontend/src/map/tools/measurement.js",

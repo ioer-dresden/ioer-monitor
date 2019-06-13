@@ -19,8 +19,7 @@ const zeit_slider={
         const object = this;
         let time_param = this.getTimeSet(),
             value_set=jahre.length-1,
-            slider = this.getSliderDOMObject(),
-            oneTimeClasses = $('.oneTime');
+            slider = this.getSliderDOMObject();
 
         //show the time container
         object.jahre= jahre;
@@ -54,35 +53,39 @@ const zeit_slider={
                 value: value_set,
                 stop: function (event, ui) {
                     object.updateParam(jahre[ui.value]);
-                    if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
-                        var time = object.getTimeSet(),
-                            //disable SST and g50
-                            stt_id = "stt_raumgl",
-                            g50_id = "g50_raumgl",
-                            stt_state = document.getElementById("stt_raumgl").dataset.state,
-                            raumgl_test = parseInt(gebietsauswahl.countTags());
+                    if(!Flaechenschema.getState()) {
+                        if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
+                            var time = object.getTimeSet(),
+                                //disable SST and g50
+                                stt_id = "stt_raumgl",
+                                g50_id = "g50_raumgl",
+                                stt_state = document.getElementById("stt_raumgl").dataset.state,
+                                raumgl_test = parseInt(gebietsauswahl.countTags());
 
-                        if(stt_state!=="disabled") {
-                            if (time < 2014) {
-                                helper.disableElement("#" + stt_id, exclude.disable_text);
-                                helper.disableElement("#" + g50_id, exclude.disable_text);
-                            } else {
-                                helper.enableElement("#" + stt_id, "");
-                                helper.enableElement("#" + g50_id, "");
+                            if (stt_state !== "disabled") {
+                                if (time < 2014) {
+                                    helper.disableElement("#" + stt_id, exclude.disable_text);
+                                    helper.disableElement("#" + g50_id, exclude.disable_text);
+                                } else {
+                                    helper.enableElement("#" + stt_id, "");
+                                    helper.enableElement("#" + g50_id, "");
+                                }
                             }
+                            switch (raumgl_test) {
+                                case raumgl_test === 0:
+                                    indikator_json.init();
+                                    break;
+                                default:
+                                    indikator_json.init(raumgliederung.getSelectionId());
+                                    break;
+                            }
+                        } else {
+                            indikator_raster.init();
                         }
-                        switch(raumgl_test){
-                            case raumgl_test===0:
-                                indikator_json.init();
-                                break;
-                            default:
-                                indikator_json.init(raumgliederung.getSelectionId());
-                                break;
-                        }
+                        map.dragging.enable();
                     }else{
-                        indikator_raster.init();
+                        Flaechenschema.set();
                     }
-                    map.dragging.enable();
                 }
             })
             .mouseenter(function () {

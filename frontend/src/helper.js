@@ -49,7 +49,7 @@ const helper={
         elem
             .removeClass('disabled')
             .prop('disabled',false)
-            .css('cursor','pointer');
+            .css('cursor','pointer !important');
 
         if(title){
             elem.prop('title',title);
@@ -60,7 +60,7 @@ const helper={
         elem
             .addClass('disabled')
             .prop('disabled', true)
-            .css('cursor', 'not-allowed')
+            .css('cursor', 'not-allowed !important')
             .unbind();
 
         if(title){

@@ -56,6 +56,10 @@ const map_header ={
             }
         }, 500);
     },
+    updateText:function(_text){
+      this.getDOMObject().find("#header_raumgl").empty();
+      this.getDOMObject().find("#header").text(_text);
+    },
     moveVertical:function(_position,_range){
         this.getDOMObject().css(_position,_range);
     },

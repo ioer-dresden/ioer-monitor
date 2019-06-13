@@ -48,4 +48,9 @@ class MapHelper{
                 return "Thüringen";
         }
   }
+  static clearMap(){
+      map.eachLayer(function(_layer){
+          _layer.removeFrom(map);
+      })
+  }
 }
