@@ -29,7 +29,6 @@ class Flaechenschema{
     static set(){
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
-        console.log(zeit_slider.getTimeSet());
         //hide all elements which are not needed
         helper.disableElement('.fl-unbind',"");
         toolbar.closeAllMenues();
@@ -38,11 +37,15 @@ class Flaechenschema{
         let legende = new FlaechenschemaLegende();
     }
     static remove(){
+        let indicator_set = indikatorauswahl.getSelectedIndikator();
         flaechenschema_wms.removeFrom(map);
         helper.enableElement('.fl-unbind',"");
         $("#btn_flaechenschema").css("background-color",farbschema.getColorHexMain());
-        indikatorauswahl.setIndicator(indikatorauswahl.getSelectedIndikator());
-        additiveLayer.init();
+        indikatorauswahl.setIndicator(indicator_set);
+        if(indicator_set || typeof indicator_set !== "undefined"){
+            additiveLayer.init();
+        }
+
     }
 }
 
