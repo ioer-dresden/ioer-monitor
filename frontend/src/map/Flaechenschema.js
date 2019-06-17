@@ -1,13 +1,14 @@
+
 //global variablen
 var url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
-    {
-        cache: Math.random(),
-        version: '1.3.0',
-        format: 'image/png',
-        srs: "EPSG:3035",
-        transparent: true
-    }),
+        {
+            cache: Math.random(),
+            version: '1.3.0',
+            format: 'image/png',
+            srs: "EPSG:3035",
+            transparent: true
+        }),
     fl_init = false;
 
 class Flaechenschema{
@@ -41,11 +42,13 @@ class Flaechenschema{
         helper.enableElement('.fl-unbind',"");
         $("#btn_flaechenschema").css("background-color",farbschema.getColorHexMain());
         indikatorauswahl.setIndicator(indikatorauswahl.getSelectedIndikator());
+        additiveLayer.init();
     }
 }
 
 class FlaechenschemaLegende{
     constructor() {
+        legende.init();
         legende.getDatenalterContainerObject().hide();
         legende.getIndicatorInfo().hide();
         legende.close();
