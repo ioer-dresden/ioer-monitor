@@ -193,60 +193,67 @@ const indikatorauswahl ={
         const menu = this;
 
         let ind_param = menu.getSelectedIndikator();
-        if (!ind_param) {
-            menu.setIndikatorParameter(indicator_id);
-        } else {
-            menu.updateIndikatorParamter(indicator_id);
-        }
-        $('#ind_choice_info').css({"color": "black", "font-weight": "bold"});
-        $('.kennblatt').show();
-        //reset the first init layer if still visualized
-        if(start_map.getState()){
-            start_map.remove();
-        }
-        farbschema.reset();
-        //reset error code
-        error.setErrorCode(false);
-        legende.init(true);
-        $.when(RequestManager.getJahre(indicator_id)).done(function(data_time){
-            menu.all_possible_years = data_time;
-            let years_selected = [];
-            $.each(data_time,function(key,value){
-                if(value<helper.getCurrentYear()){
-                    years_selected.push(value);
-                }
-            });
-            menu.filtered_years = years_selected;
-            zeit_slider.init(years_selected);
-            $.when(RequestManager.getRaumgliederung(indicator_id)).done(function(data_raum){
-                raeumliche_analyseebene.init(data_raum);
-            });
-        });
-        //reset highlight
-        $('.item').each(function () {
-            $(this).css({"color": "rgba(0,0,0,.87)", "font-weight": ""})
-        });
-        //highlight the elements inside the menu
-        $('#kat_item_'+menu.getIndikatorKategorie(indicator_id)).css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
-        $('#'+indicator_id+"_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
-        //enable or disbale OGC Services
-        var interval = setInterval(function () {
-            let state_ogc = indikatorauswahl.getIndikatorInfo(indicator_id,"ogc");
-            //if all indictaor values are ready
-            if (state_ogc) {
-                clearInterval(interval);
-                if (state_ogc.wfs !=="1"){
-                    helper.disableElement("#wfs","");
-                }else{
-                    helper.enableElement("#wfs","");
-                }
-                if (state_ogc.wcs !=="1"){
-                    helper.disableElement(".raster_export","");
-                }else{
-                    helper.enableElement(".raster_export","");
-                }
+        if(indicator_id || typeof indicator_id!=="undefined") {
+            if (!ind_param) {
+                menu.setIndikatorParameter(indicator_id);
+            } else {
+                menu.updateIndikatorParamter(indicator_id);
             }
-        }, 500);
+            $('#ind_choice_info').css({"color": "black", "font-weight": "bold"});
+            $('.kennblatt').show();
+            //reset the first init layer if still visualized
+            if (start_map.getState()) {
+                start_map.remove();
+            }
+            farbschema.reset();
+            //reset error code
+            error.setErrorCode(false);
+            legende.init(true);
+            $.when(RequestManager.getJahre(indicator_id)).done(function (data_time) {
+                menu.all_possible_years = data_time;
+                let years_selected = [];
+                $.each(data_time, function (key, value) {
+                    if (value < helper.getCurrentYear()) {
+                        years_selected.push(value);
+                    }
+                });
+                menu.filtered_years = years_selected;
+                zeit_slider.init(years_selected);
+                $.when(RequestManager.getRaumgliederung(indicator_id)).done(function (data_raum) {
+                    raeumliche_analyseebene.init(data_raum);
+                });
+            });
+            //reset highlight
+            $('.item').each(function () {
+                $(this).css({"color": "rgba(0,0,0,.87)", "font-weight": ""})
+            });
+            //highlight the elements inside the menu
+            $('#kat_item_' + menu.getIndikatorKategorie(indicator_id)).css({
+                "color": farbschema.getColorHexMain(),
+                "font-weight": "bold"
+            });
+            $('#' + indicator_id + "_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
+            //enable or disbale OGC Services
+            var interval = setInterval(function () {
+                let state_ogc = indikatorauswahl.getIndikatorInfo(indicator_id, "ogc");
+                //if all indictaor values are ready
+                if (state_ogc) {
+                    clearInterval(interval);
+                    if (state_ogc.wfs !== "1") {
+                        helper.disableElement("#wfs", "");
+                    } else {
+                        helper.enableElement("#wfs", "");
+                    }
+                    if (state_ogc.wcs !== "1") {
+                        helper.disableElement(".raster_export", "");
+                    } else {
+                        helper.enableElement(".raster_export", "");
+                    }
+                }
+            }, 500);
+        }else{
+            start_map.set();
+        }
     },
     getIndikatorInfo:function(indicator_id,key_name){
         let val_found = false,
