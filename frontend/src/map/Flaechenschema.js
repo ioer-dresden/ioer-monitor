@@ -54,7 +54,8 @@ class Flaechenschema{
 
 class FlaechenschemaLegende{
     constructor() {
-        let image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`,
+        let time = zeit_slider.getTimeSet(),
+            image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${time}&IMGSIZE=150+300`,
             header = Flaechenschema.getTxt();
         legende.init();
         legende.getDatenalterContainerObject().hide();
@@ -68,6 +69,6 @@ class FlaechenschemaLegende{
                 $(this).attr('src', url);
             });
         });
-        map_header.updateText(header[language_manager.getLanguage()].title);
+        map_header.updateText(`${header[language_manager.getLanguage()].title} (${time})`);
     }
 }
