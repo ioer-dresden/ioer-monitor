@@ -40,7 +40,7 @@ class Flaechenschema{
         flaechenschema_wms.removeFrom(map);
         helper.enableElement('.fl-unbind',"");
         $("#btn_flaechenschema").css("background-color",farbschema.getColorHexMain());
-        indikatorauswahl.setIndicator();
+        indikatorauswahl.setIndicator(indikatorauswahl.getSelectedIndikator());
     }
 }
 
