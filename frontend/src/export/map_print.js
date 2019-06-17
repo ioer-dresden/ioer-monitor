@@ -83,8 +83,8 @@ const map_print={
                     try{
                         //fit the map bound by json -> not owrking for rater
                         map.fitBounds(jsongroup.getBounds());
+                        map.invalidateSize();
                     }catch(err){}
-                    map.invalidateSize();
 
                     try {
                         overlay = cloneLayer(additiveLayer.zusatzlayer.getLayerGroup_set());
