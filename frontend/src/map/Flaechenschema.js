@@ -12,6 +12,9 @@ var url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
     fl_init = false;
 
 class Flaechenschema{
+    static getTxt(){
+        return {de:{title:"Flächennutzungskarte"},en:{title:"Land Use Map"}};
+    }
     static getState(){
         return fl_init;
     }
@@ -51,11 +54,12 @@ class Flaechenschema{
 
 class FlaechenschemaLegende{
     constructor() {
+        let image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`,
+            header = Flaechenschema.getTxt();
         legende.init();
         legende.getDatenalterContainerObject().hide();
         legende.getIndicatorInfo().hide();
         legende.close();
-        let image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`;
         legende.getLegendeColorsObject().empty().load(image,function () {
             let elements = $(this).find('img');
             elements.each(function (key, value) {
@@ -64,6 +68,6 @@ class FlaechenschemaLegende{
                 $(this).attr('src', url);
             });
         });
-        map_header.updateText();
+        map_header.updateText(header[language_manager.getLanguage()].title);
     }
 }

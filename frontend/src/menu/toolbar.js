@@ -320,7 +320,7 @@ const toolbar = {
                         
                          <!--Flächenschema-->
                         <button type="button" class="btn btn-primary" id="btn_flaechenschema" onclick="Flaechenschema.init()">
-                           <span>Flächennutzungskarte</span></button>
+                           <span id="title_flaechenschema">Flächennutzungskarte</span></button>
                         <!--Reset Map-->
                         <button type="button" class="btn btn-primary" id="btn_reset" onclick="MapHelper.mapReset();">
                             <i class="glyphicon glyphicon-trash drop_arrow"></i><span>Viewer zurücksetzen</span></button>

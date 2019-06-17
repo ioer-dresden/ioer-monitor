@@ -322,7 +322,12 @@
         "de":"Datenschutz",
         "en":"Data protection",
         "type":"#"
-      }
+      },
+    "title_flaechenschema":{
+      "de":"Flächennutzungskarte",
+      "en":"Land Use Map",
+      "type":"#"
+    }
   },
   "table_page": {
     "btn_table": {

@@ -30,7 +30,11 @@ const language_manager={
                         if(value_s.callback){
                             $.each(value_s.callback,function(key,val){
                                 var tmpFunc = new Function(val);
-                                tmpFunc();
+                                try {
+                                    tmpFunc();
+                                }catch{
+                                    console.error("Fehler bei der durchführung von "+val)
+                                }
                             });
                         }
                         if(value_s.attr){
