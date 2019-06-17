@@ -40,16 +40,16 @@ const ogc_export={
                                     </i>
                                 </a>
                             </div>
-                            <!-- ToDo<hr/>
+                            <hr/>
                             <h4>Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung</h4>
                             <div style="margin-top: 20px; margin-left: 20%;" class="cursor">
-                                <a href="" target="_blank">
+                                <a href="frontend/assets/pdf/tutorial.${_service}.pdf" target="_blank">
                                      <i class="huge icons">
                                         <i class="big circle outline icon"></i>
                                         <i class="help icon"></i>
                                     </i>
                                 </a>
-                            </div>-->
+                            </div>
                         `;
                     }else{return "";}
                 },
