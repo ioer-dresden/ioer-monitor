@@ -45,7 +45,9 @@ const map_print={
                     //create the print map
                     let cloned_layer, overlay;
 
-                    let map = L.map('print_map', {zoomControl: false}).setView([urlparamter.getUrlParameter('lat'),urlparamter.getUrlParameter('lng')],urlparamter.getUrlParameter('zoom'));
+                    let map = L.map('print_map', {
+                        zoomControl: false})
+                        .setView([urlparamter.getUrlParameter('lat'),urlparamter.getUrlParameter('lng')],urlparamter.getUrlParameter('zoom'));
                     //scalebar
                     L.control.scale({
                         metric: true,
@@ -64,8 +66,8 @@ const map_print={
                     try{
                         //fit the map bound by json -> not owrking for rater
                         map.fitBounds(jsongroup.getBounds());
+                        map.invalidateSize();
                     }catch(err){}
-                    map.invalidateSize();
 
                     try {
                         overlay = cloneLayer(additiveLayer.zusatzlayer.getLayerGroup_set());
