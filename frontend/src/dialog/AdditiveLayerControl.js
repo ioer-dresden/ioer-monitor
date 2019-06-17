@@ -6,7 +6,7 @@ class AdditiveLayerControl{
                 title:"Karten",
                 grund:"Grundkarten",
                 extra:"Zusatzkarten",
-                empty:"Leer",
+                empty:"kein Hintergrund",
                 laendergrenzen:"Ländergrenzen",
                 kreisgrenzen:"Kreisgrenzen",
                 gemeindegrenzen:"Gemeindegrenzen",
@@ -19,7 +19,7 @@ class AdditiveLayerControl{
                 title:"Maps",
                 grund:"Base Maps",
                 extra:"Extra Maps",
-                empty:"Empty",
+                empty:"no Background",
                 laendergrenzen:"National borders",
                 kreisgrenzen:"District boundaries",
                 gemeindegrenzen:"Municipal boundaries",
@@ -55,7 +55,13 @@ class AdditiveLayerControl{
                         </div>
                         <div class="col-sm-6 right">
                             <ul class="list-group">
-                                 <li class="list-group-item">
+                                  <!--<li class="list-group-item">
+                                         <div id="webatlas" class="image-content cursor base_layers" data-id="webatlas" data-name="${this.text[lan].empty}">
+                                            <div class="pic image"></div>
+                                            <div class="name">WebatlasDE</div>
+                                        </div>
+                                   </li>-->
+                                   <li class="list-group-item">
                                         <div id="osm" class="image-content cursor base_layers" data-id="osm">
                                             <div class="pic image"></div>
                                             <div class="name">OSM</div>
@@ -122,10 +128,15 @@ class AdditiveLayerControl{
         `;
         console.log("open");
         //settings for the manager
-        dialog_manager.instructions.endpoint = `${endpoint_id}`;
-        dialog_manager.instructions.html= html;
-        dialog_manager.instructions.title=this.text[lan].title;
-        dialog_manager.instructions.modal=false;
+        let dialog_settings = {
+            endpoint:`${endpoint_id}`,
+            html:html,
+            title:this.text[lan].title,
+            modal:false,
+            width: main_view.getMobileState() ? main_view.getWidth():main_view.getWidth()*0.75,
+            height: toolbar.getHeight()
+        };
+        dialog_manager.setInstruction(dialog_settings);
         dialog_manager.create();
 
         try {
