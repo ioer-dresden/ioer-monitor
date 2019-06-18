@@ -455,21 +455,9 @@ const legende = {
                 type:"GET",
                 url :urlparamter.getURL_RASTER() + "php/histogramm.php?Jahr=" + zeit_slider.getTimeSet() + "&Kategorie=" + indikatorauswahl.getSelectedIndikatorKategorie() + "&Indikator=" + indikatorauswahl.getSelectedIndikator() + "&Raumgliederung=" + raeumliche_analyseebene.getSelectionId() + "&Klassifizierung=" + klassifzierung.getSelectionId() + "&AnzKlassen=" + klassenanzahl.getSelection(),
                 success:function(data){
-                    legende.getHistogrammObject().empty().append('<img style="width:100%;" src="'+data+'"/>');
+                    legende.getHistogrammObject().empty().append('<img style="width:100%;" src="'+data+'" alt="Histogramm"/>');
                 }
             });
-        }
-    },
-    datenalter:{
-        getDOMObject:function(){
-            $elem = legende.getDatenalterContainerObject().find('#dropdown_datenalter') ;
-            return $elem;
-        },
-        show:function(){
-
-        },
-        hide:function(){
-
         }
     }
 };

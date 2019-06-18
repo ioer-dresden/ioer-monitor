@@ -266,10 +266,6 @@ const grundakt_layer = {
                     .remove();
 
                 grundakt_layer.controller.set();
-
-        /*}catch(err){
-            legende.datenalter.hide();
-        }*/
-    }
+        }
     }
 };
