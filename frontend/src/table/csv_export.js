@@ -37,7 +37,6 @@ const csv_export = {
                         $.when(setLoadIcon())
                             .then(csv_export.state = true)
                             .then(function(){
-                                console.log("Exporting table");
                                 TableHelper.destroyStickyTableHeader();
                                 let exportTable = table.getDOMObject()
                                                         .tableExport({

@@ -1,18 +1,18 @@
 const exclude={
     text:{
         de:{
-            disable_text:"Für die gewählte Raumgliederung nicht verfügbar"
+            disable_text:"Für die gewählte Raumgliederung nicht verfügbar",
+            disable_text_raster:"Steht nur für die Räumliche Gliederung-Raster zur Verfügung"
         },
         en:{
-            disable_text:"not available for the selected spatial unit"
+            disable_text:"not available for the selected spatial unit",
+            disable_text_raster:"Only available for Raster spatial subdivision"
         }
     },
     areas:["gem","stt","vwg"],
     class_performance:"disbale_performance",
     class_raster:"gebiete_disable",
     class_gebiete:"raster_disable",
-    disable_text:"Für die gewählte Raumgliederung nicht verfügbar",
-    disbale_text_raster:"Steht nur für die Räumliche Gliederung-Raster zur Verfügung",
     checkPerformanceAreas:function(){
         return $.inArray(base_raumgliederung.getBaseRaumgliederungId(), this.areas) === -1;
     },
@@ -24,7 +24,7 @@ const exclude={
             });
         }else{
             elements.each(function() {
-                helper.disableElement(`#${$(this).attr("id")}`, exclude.disable_text);
+                helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text);
             });
         }
     },
@@ -36,11 +36,11 @@ const exclude={
                 helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
             });
             elements_gebiete.each(function() {
-                helper.disableElement(`#${$(this).attr("id")}`, exclude.disable_text);
+                helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text);
             });
         }else{
             elements_raster.each(function() {
-                helper.disableElement(`#${$(this).attr("id")}`, exclude.disbale_text_raster);
+                helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text_raster);
             });
             elements_gebiete.each(function() {
                 helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
