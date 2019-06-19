@@ -75,14 +75,20 @@ const ogc_export={
                 endpoint:`${this.endpoint_id}`,
                 html:html,
                 title:this.text[lan].title(),
-                modal:false
+                modal:false,
+                height:main_view.getHeight()*0.3
             };
             dialog_manager.setInstruction(instructions);
             dialog_manager.create();
             $('#ogc_allow')
                 .unbind()
                 .change(function(){
-                    $('#allow_container').show();
+                    let container =$('#allow_container');
+                    if($(this).is(":checked")) {
+                        container.show();
+                    }else{
+                        container.hide();
+                    }
                 });
 
         }else{

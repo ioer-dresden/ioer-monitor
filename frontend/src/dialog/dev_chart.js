@@ -420,11 +420,10 @@ const dev_chart={
                     marginTop = margin_top+40;
 
                 legend.append('g')
-                    .append("rect")
-                    .attr("x", margin.left)
-                    .attr("y", chart_height + 70 + marginTop)
-                    .attr("width", 10)
-                    .attr("height", 10)
+                    .append("circle")
+                    .attr("cx", margin.left)
+                    .attr("cy", chart_height + 70 + marginTop)
+                    .attr("r", 5.5)
                     .style("fill", color);
 
                 legend.append("text")

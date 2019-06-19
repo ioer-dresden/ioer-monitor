@@ -12,7 +12,12 @@ class App{
             else {
                 main_view.initializeFirstView();
             }
-        };
+        },
+            remove_loading = function(){
+                setTimeout(function(){
+                    $("#loading_circle").remove();
+                },500);
+            };
         //load the config data
         $.when($.ajax({
             async:true,
@@ -43,6 +48,6 @@ class App{
             .then(main_view.restoreView())
             .then(left_view.setMapView())
             .then(check_links())
-            .then($("#loading_circle").remove());
+            .then(remove_loading());
     }
 }
