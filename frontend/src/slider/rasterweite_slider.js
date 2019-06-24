@@ -17,6 +17,11 @@ const rasterweite_slider={
     getSelectText: function(){
         return this.steps[this.getParameter()];
     },
+    getSelectValue:function(){
+      return parseInt(this.getSelectText()
+          .replace("Raster ","")
+          .replace(" m",""));
+    },
     init:function(steps){
         const obj = this;
         let raumgl_param = obj.getParameter(),
