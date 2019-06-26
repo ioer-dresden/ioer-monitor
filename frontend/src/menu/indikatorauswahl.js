@@ -97,7 +97,8 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=600) {
+                if(main_view.getHeight()>=900) {
+                    console.info("main view",main_view.getHeight());
                     menu.responsive=false;
                     html += `<div id="kat_item_${cat_id}"
                                   title="${main_view.getHeight() >= 1000 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
@@ -109,6 +110,7 @@ const indikatorauswahl ={
                                 ${cat_name()}
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
                 }else{
+                    console.log("responsive view");
                     menu.responsive=true;
                     html += `<div class="header">
                                 <i class="tags icon"></i>${cat_name()}</div>
@@ -379,6 +381,11 @@ const indikatorauswahl ={
                                     }
                                 });
                         }
+                        if(indikatorauswahl.responsive){
+                            toolbar.getDOMObject().css({"overflow-y":"auto","overflow-x":"hidden"});
+                        }else{
+                            toolbar.getDOMObject().removeAttr("style");
+                        }
                     },
                     onChange: function (value, text, $choice) {
                         //clean the search field
@@ -397,6 +404,7 @@ const indikatorauswahl ={
                     },
                     onHide: function () {
                         helper.resetHighlightElementByID('indicator_ddm');
+                        toolbar.getDOMObject().removeAttr("style");
                     }
                 });
         }

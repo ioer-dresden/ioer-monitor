@@ -101,7 +101,7 @@ const main_view = {
         console.warn("init Responsive View");
         view_state.setViewState("responsive");
         main_view.getWidth();
-        if(main_view.getWidth()<=500 || main_view.getHeight() <=700) {
+        if(main_view.getWidth()<=500 || main_view.getHeight() <=768) {
             $('.content')
                 .css("overflow-y","auto");
             indikatorauswahl.getDOMObject()
