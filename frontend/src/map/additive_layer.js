@@ -2,6 +2,14 @@ const additiveLayer={
     control:'',
     state:'sw',
     toolbar_button:'#map_button',
+    text:{
+      de:{
+          loadLayer: "Lade Layer"
+      },
+      en:{
+          loadLayer: "Loading Layer"
+      }
+    },
     baselayer:{
         paramter:'baselayer',
         layer_set: "topplus",
@@ -280,7 +288,7 @@ const additiveLayer={
 
             dialog_manager.close();
             progressbar.init();
-            progressbar.setHeaderText("Lade Layer");
+            progressbar.setHeaderText(additiveLayer.text[language_manager.getLanguage()].loadLayer);
 
             $.when(RequestManager.getZusatzlayer(_id)).done(function(json){
                 layer.addData(json);
