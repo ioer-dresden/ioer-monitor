@@ -2,7 +2,7 @@ const raumgliederung = {
     param:'raumgl_fein',
     text:{
         de:{
-            pleaseSelect: "Bitte wählen!",
+            pleaseSelect: "Bitte wählen...",
             resetSelection: "Auswahl zurücksetzen",
             noSubdivision: "keine Feingliederung verfügbar",
             notAvailableForIndicator: "Für den Indikator nicht verfügbar"
@@ -72,7 +72,7 @@ const raumgliederung = {
                 let position = $.inArray(value_set, values);
                 //show the menu only if the user has mor than 2 possebilities
                 if (position != (values.length - 1) || values.length > 1) {
-                    menu.append('<option data-val="preset" id="please_select_ddm_option" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">Bitte Wählen</option><option id="reset_ddm_option" data-val="preset" value="null">Auswahl zurücksetzen</option>');
+                    menu.append('<option data-val="preset" id="please_select_ddm_option" style="color: lightgrey;" selected="true" value="empty" disabled="disabled">'+raumgliederung.text[lan].pleaseSelect+'</option><option id="reset_ddm_option" data-val="preset" value="null">'+raumgliederung.text[lan].resetSelection+'</option>');
                     $.each(values_menu, function (key, value) {
                         if (key > position) {
                             menu.append('<option data-val="preset" id="raumgl_fein' + value.id + '" name="' + value.name + '" value="' + value.id + '" '+value.state+'>' + value.name + '</option>');

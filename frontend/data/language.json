@@ -81,8 +81,8 @@
         "callback":["raumgliederung.fill()","map_header.set()"]
       },
       "please_select_ddm_option": {
-        "de":"Bitte Wählen..",
-        "en":"Please choose..",
+        "de":"Bitte Wählen...",
+        "en":"Please choose...",
         "type":"#"
       },
     "clear_gebietsauswahl": {
@@ -91,16 +91,34 @@
       "type": "#",
       "attr": "title"
     },
+    "reset_ddm_option": {
+      "de":"Auswahl zurücksetzen",
+      "en":"Reset selection",
+      "type":"#"
+    },
     "clear_farbwahl": {
       "de": "Auswahl leeren",
       "en": "Clear selection",
       "type": "#",
       "attr": "title"
     },
-    "reset_ddm_option": {
-      "de":"Auswahl zurücksetzen",
-      "en":"Reset",
-      "type":"#"
+    "triggerSet_min": {
+      "de": "Farbname oder HEX-Wert",
+      "en": "Color name or HEX-value",
+      "type": "#",
+      "attr": "title"
+    },
+    "triggerSet_max": {
+      "de": "Farbname oder HEX-Wert",
+      "en": "Color name or HEX-value",
+      "type": "#",
+      "attr": "title"
+    },
+    "Klassenanzahl": {
+      "de": "Anzahl der Klassen wählen",
+      "en": "Select class count",
+      "type": "#",
+      "attr": "title"
     },
       "spatial_range_raster":{
         "de":"Rasterweite in m",
