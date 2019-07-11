@@ -9,6 +9,7 @@ const dev_chart={
                 false:"Wertentwicklung",
                 true:"Entwicklungs- vergleich"
             },
+            indicatorFor:"Indikatorentwicklung für ",
             info:"Dieses Diagramm stellt die Entwicklung der Indikatoren dar.",
             indicator:"verfügbare Indikatoren",
             choice:"Bitte wählen.....",
@@ -26,6 +27,7 @@ const dev_chart={
                 false:"Trend chart",
                 true:"Trend comparison"
             },
+            indicatorFor:"Trend development for ",
             info:"This diagram represents the trend of the indicators.",
             indicator:"available indicators",
             choice:"Please choose.....",
@@ -668,7 +670,7 @@ const dev_chart={
                                     if (value === 'png') {
                                         Export_Helper.svgString2Image(width, height, '.container_diagramm #diagramm svg', Export_Helper.saveIMAGE);
                                     } else if (value === 'pdf') {
-                                        Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg',{header:"Indikatorentwicklung für "+chart.settings.name,sub_header:""},Export_Helper.savePDF);
+                                        Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg',{header:dev_chart.text[language_manager.getLanguage()].indicatorFor+chart.settings.name,sub_header:""},Export_Helper.savePDF);
                                     }
                             };
                             //workaround for firefox Bug

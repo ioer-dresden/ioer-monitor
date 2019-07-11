@@ -1,6 +1,16 @@
 const measurement={
     selector:"#measure",
     info_leave:0,
+    text:{
+        de:{
+            startMeasure:"Starten Sie mit dem setzen der Messpunkte",
+            leaveESC:"Verlassen Sie die Funktion mit ESC"
+        },
+        en:{
+            startMeasure:"Start measuring by setting measurement points",
+            leaveESC:"You can leave the tool by pressing ESC"
+        }
+    },
     getDOMContainer:function(){
         $elem = $(`${this.selector}`);
         return $elem;
@@ -38,11 +48,12 @@ const measurement={
                 activeColor: farbschema.getColorHexActive(),
                 completedColor: farbschema.getColorHexMain(),
                 position: 'topleft',
-                localization: 'de',
-                collapsed: false
-            });
+                localization: language_manager.getLanguage(),
+                collapsed: false,
+            }),
+                lan=language_manager.getLanguage();
             if(this.info_leave<=2){
-                alert_manager.leaveESCInfo("Starten Sie mit dem setzen der Messpunkte","Verlassen Sie die Funktion mit ESC");
+                alert_manager.leaveESCInfo(measurement.text[lan].startMeasure,measurement.text[lan].leaveESC);
                 this.info_leave+=1;
             }
             $('.toolbar').toggleClass("toolbar_close", 500);
