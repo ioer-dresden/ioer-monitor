@@ -14,13 +14,20 @@ const ogc_export={
             title:function(){return `${ogc_export.service.toUpperCase()}-Dienst`},
             use:function(){return `Dieser ${ogc_export.service.toUpperCase()}-Dienst steht Ihnen für die Verwendung der Karten in Ihrem eigenen GIS-System zur Verfügung. Voraussetzung ist die Zustimmung zu geltenden Nutzungsbedingungen.`},
             terms:'Ich akzeptiere alle geltenden <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">Nutzungsbedingungen</a>',
-            url:function(){return `Die zu verwendende URL für den ${ogc_export.service.toUpperCase()}-Dienst lautet:`}
+            url:function(){return `Die zu verwendende URL für den ${ogc_export.service.toUpperCase()}-Dienst lautet:`},
+            noAPI: "Wenn Sie noch keinen API-Key besitzen, können Sie diesen durch eine einmalige Anmeldung generieren.",
+            help:'Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung',
+            accept:'Akzeptieren'
+
         },
         en:{
             title:function (){return`${ogc_export.service.toUpperCase()}-Service`},
             use:function(){return `This ${ogc_export.service.toUpperCase()} service is available to you for using the maps in your own GIS system. Prerequisite is the approval of applicable terms of use.`},
-                terms:'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">terms of use</a>',
-                url:function(){return `The URL for the ${ogc_export.service.toUpperCase()} service to use is:`}
+            terms:'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">terms of use</a>',
+            url:function(){return `The URL for the ${ogc_export.service.toUpperCase()} service to use is:`},
+            noAPI:'If you do not have an API-key, you can generate it after registering for the service.',
+            help: 'If you need help, you can find instructions here',
+            accept:'Accept'
         },
     },
     open:function(_service){
@@ -31,7 +38,7 @@ const ogc_export={
                 user_login=function(){
                     if(_service==="wcs" || _service==="wfs") {
                         return `
-                            <h4>Wenn Sie noch keinen API-Key besitzen, können Sie diesen durch eine einmalige Anmeldung generieren.</h4>
+                            <h4>${ogc_export.text[language_manager.getLanguage()].noAPI}</h4>
                             <div style="margin-top: 20px; margin-left: 20%;" class="cursor">
                                 <a href="https://monitor.ioer.de/monitor_api" target="_blank">
                                      <i class="huge icons">
@@ -41,7 +48,7 @@ const ogc_export={
                                 </a>
                             </div>
                             <hr/>
-                            <h4>Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung</h4>
+                            <h4>${ogc_export.text[language_manager.getLanguage()].help}</h4>
                             <div style="margin-top: 20px; margin-left: 20%;" class="cursor">
                                 <a href="frontend/assets/pdf/tutorial.${_service}.pdf" target="_blank">
                                      <i class="huge icons">
@@ -57,7 +64,7 @@ const ogc_export={
                                      <div class="jq_dialog ogc_dialog" id="${object.endpoint_id}">
                                         <h4>${object.text[lan].use()}</h4>
                                         <div class="ogc_accecpt_container">
-                                            <input title="Aktzeptieren" type="checkbox" name="allow" id="ogc_allow"/>
+                                            <input title='${ogc_export.text[language_manager.getLanguage()].accept}' type="checkbox" name="allow" id="ogc_allow"/>
                                             <span>${object.text[lan].terms}</span>
                                         </div>
                                         <hr/>
