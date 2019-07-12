@@ -10,7 +10,8 @@ const table = {
             statistics:"Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators",
             development:"Veränderung des Indikatorwertes für die Gebietseinheit",
             comparison:"Veränderung der Indikatorwerte für die Gebietseinheit",
-            noMunicipal:"Nor available on municipal level"
+            noMunicipal:"Nor available on municipal level",
+            smallCoverage:"Grundaktualisierter Flächenanteil beträgt 50-90 % der Gebietsfläche."
         },
         en:{
             value:"Value",
@@ -21,7 +22,8 @@ const table = {
             areaInfo:"Area information: overview over all the indicators for this spatial unit",
             statistics:"The key statistical parameters for this spatial unit and timeframe",
             development:"Development of the indicator value over time",
-            comparison:"Development of the indicator values over time"
+            comparison:"Development of the indicator values over time",
+            smallCoverage:"Latest updated indicator values available only for 50-90 % of the area."
         }
     },
     td_classes : 'collapsing',
@@ -167,8 +169,11 @@ const table = {
                         if(hc !== '0'){
                             //split the hc
                             let hc_arr = hc.split("||"),
-                                hc_text = hc_arr[0],
-                                hc_value = hc_arr[1];
+                                hc_text = hc_arr[0];
+                            console.log("HC_TEXT 1: "+hc_text);
+                                let hc_value = hc_arr[1];
+                                hc_text= table.text[language_manager.getLanguage()].smallCoverage;
+                            console.log("HC_TEXT 2: "+hc_text);
                             return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma}</b>`;
                         }
                         else if(fc !== '0'){

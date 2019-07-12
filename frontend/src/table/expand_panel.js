@@ -1,4 +1,12 @@
 const expand_panel = {
+    text:{
+        de:{
+            comparison:"Zum Vergleich"
+        },
+        en:{
+            comparison:"Comparison with"
+        }
+    },
     expandArray:[],
     class_expand : 'table_expand',
     getDOMObject:function(){
@@ -383,7 +391,7 @@ const expand_panel = {
                     onAdd: function (addedValue, addedText, $addedChoice) {
                         expand_panel.expandArray.push({
                             id: indikatorauswahl.getSelectedIndikator() + '|' + addedValue,
-                            text: 'Zum Vergleich (' + addedText + ')',
+                            text: `${expand_panel.text[language_manager.getLanguage()].comparison} (${addedText})`,
                             time: addedValue,
                             einheit: indikatorauswahl.getIndikatorEinheit(),
                             count: 20
