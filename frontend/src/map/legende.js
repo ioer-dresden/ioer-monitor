@@ -104,7 +104,7 @@ const legende = {
                 <div id="Klassifikationsmethode_legende"><b>Klassifikationsmethode</b></div>
                 <div class="histogramm_klasseneinteilung" id="histogramm_klasseneinteilung"></div>
                 <hr class="hr"/>
-                <div id="indicator_info"><b>Informationen zum Indikator</b></div>
+                <div id="indicator_info" class="indicator_info_text"><b>Informationen zum Indikator</b></div>
                 <div id="indikator_info_text"></div>
                 <button class="btn btn-primary btn_dropdown kennblatt" id="legende_kennblatt" onclick="kennblatt.open();">Kennblatt</button>
                 <hr class="hr"/>

@@ -563,10 +563,10 @@
         "type":"#",
         "selector":"b"
       },
-      "indicator_info":{
+      "indicator_info_text":{
         "de":"Informationen zum Indikator",
         "en":"Information about the indicator",
-        "type":"#",
+        "type":".",
         "selector":"b"
       },
       "legende_kennblatt":{
