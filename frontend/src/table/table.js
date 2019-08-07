@@ -47,6 +47,10 @@ const table = {
         $elem = $('.tBody_value_table');
         return $elem;
     },
+    getTableBodyValues:function(){
+        $elem = $('#tBody_value_table');
+        return $elem;
+    },
     getColSpanRow:function(){
         $elem = $('#header_ind_set');
         return $elem;
@@ -116,7 +120,7 @@ const table = {
                     einheit = indikatorauswahl.getIndikatorEinheit(),
                     exclude_area=function(){
                         if($.inArray(des,table.excludedAreas)!==-1){
-                            return 'style="display:none"';
+                            return 'style="display:none" class="row hidden_row"';
                         }
                         else{
                             return "";

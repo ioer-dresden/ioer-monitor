@@ -4,7 +4,7 @@ class AdditiveLayerControl{
         this.text = {
             de:{
                 title:"Karten",
-                grund:"Grundkarten",
+                grund:"Hintergrundkarten",
                 extra:"Zusatzkarten",
                 empty:"kein Hintergrund",
                 laendergrenzen:"Ländergrenzen",
