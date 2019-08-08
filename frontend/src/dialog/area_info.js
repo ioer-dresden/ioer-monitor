@@ -28,7 +28,7 @@ const area_info={
             difference:"Differenz zu",
             unit:"Einheit",
             for:"für",
-            key:"Schlüssel"
+            key:"Gebietsschlüssel"
         },
         en:{
             title:"Area information",
@@ -46,7 +46,7 @@ const area_info={
             difference:"Difference to",
             unit:"Unit",
             for:"for",
-            key:"Key"
+            key:"Area Key"
         }
     },
 
@@ -101,7 +101,6 @@ const area_info={
     extractRelevantDataFromJSON:function(data, lan){ // prepares the raw data for visualisation in a Table- creates single rows (objects) for each Indicator
         let tableData=[];
         data=data["values"];
-        console.info(data);
         for (let index in data){
             for (let category in data[index]) {
                 let categoryName = " ";

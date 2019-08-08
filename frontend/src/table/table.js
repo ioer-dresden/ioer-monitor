@@ -3,7 +3,7 @@ const table = {
         de:{
             value:"Wert",
             no:"lfd. Nr.",
-            ags:"AGS",
+            ags:"Gebietsschlüssel",
             regionName:"Gebietsname",
             relevance:"Mittlere Grund-aktualität",
             areaInfo:"Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren",
@@ -16,7 +16,7 @@ const table = {
         en:{
             value:"Value",
             no:"No.",
-            ags:"Key",
+            ags:"Area key",
             regionName:"Region name",
             relevance:"Mean relevance",
             areaInfo:"Area information: overview over all the indicators for this spatial unit",
@@ -335,8 +335,11 @@ const table = {
                                           src="${dev_chart.icon.single.path}"/>`,
                         tfoot_brd = `<tfoot class="tfoot full-width">
                                     <tr id="tfoot_99">
-                                        <th colspan="4" class="td_name">
-                                            <img style="margin-left: 10px; margin-right: 10px;"
+                                        <th class="tableexport-ignore"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="td_name" style="font-weight: normal; font-size:12px">
+                                            <img style="margin-left: 10px; margin-right: 10px"
                                                  data-name="Bundesrepublik" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 

@@ -342,8 +342,8 @@
         "type":"#"
       },
     "title_flaechenschema":{
-      "de":"Flächennutzungskarte",
-      "en":"Land Use Map",
+      "de":"Monitor-Basiskarte Flächennutzung",
+      "en":"Monitor Land Use Basemap",
       "type":"#"
     }
   },
