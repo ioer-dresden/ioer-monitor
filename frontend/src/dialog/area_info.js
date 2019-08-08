@@ -256,7 +256,7 @@ const area_info={
             </div>
             <br/>
             <hr />
-            <table id="dataTable" class="display" width="90%">
+            <table id="areaInfoDataTable" class="display" width="90%">
                     <thead>
                     ${headerHTML}
                     </thead>
@@ -321,7 +321,7 @@ const area_info={
             language=area_info.getDataTablesLanguage(parameters.lan),
             columnDefs= area_info.getColumnDefsForDataTables(columnList);
 
-        $("#dataTable").DataTable(
+        $("#areaInfoDataTable").DataTable(
             {
                 destroy:true,   // destroys the old table before redrawing. Not the most efficient way, though. Consider using dataTables.api
                 responsive: true,
@@ -376,7 +376,9 @@ const area_info={
             $("#area_info_csv_export")
                 .unbind()
                 .click(function(){
-                    Export_Helper.exportTable("dataTable");
+                    console.log("clicked");
+                    Export_Helper.exportTable("areaInfoDataTable");
+                    console.log("Exported");
                 });
         }
     }

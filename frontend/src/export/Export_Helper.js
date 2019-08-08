@@ -72,7 +72,7 @@ class Export_Helper{
         doc.addImage(dataURL, 'PNG', 15, 40, 180, 160);
         doc.save(indikatorauswahl.getSelectedIndikator()+"_"+raeumliche_analyseebene.getSelectionId()+"_"+zeit_slider.getTimeSet() + ".pdf");
     }
-//**dataURL to blob**
+
     static dataURLtoBlob(dataurl) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -81,40 +81,61 @@ class Export_Helper{
         }
         return new Blob([u8arr], {type:mime});
     }
-    static downloadFile(data,filename,extension){
-        let a = document.createElement("a"),
-            url="data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURI(data);
-        document.body.appendChild(a);
-        a.style = "display: none";
-        a.href = url;
-        a.download = filename+extension;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        setTimeout(function(){
-            csv_export.state=false;
-            a.remove();
-        },500);
-    }
-    static exportTable(_tableId){
-        let exportTable = $(`#${_tableId}`)
-            .tableExport({
-                formats: ['csv'],
-                headers: true,
-                footers: false,
-                filename: indikatorauswahl.getSelectedIndikator() + "_" + gebietsauswahl.getSelectionAsString() + "_" + zeit_slider.getTimeSet(),
-                trimWhitespace: true,
-                bootstrap: false,
-                //ignoreCols: [0, 1],
-                exportButtons: false,
-                ignoreCSS: "." + csv_export.ignoreClass
-            });
-        let exportData = exportTable.getExportData()[_tableId]['csv'];
-        var interval = setInterval(function () {
-            //if table date csv is created
-            if (exportData.data) {
-                clearInterval(interval);
-                Export_Helper.downloadFile(exportData.data, exportData.filename, exportData.fileExtension);
+
+    static downloadFile(text_data, filename, extension){
+        try {
+            console.log("trying to start download");
+            let blob = new Blob(["\ufeff", text_data], {type: "text/csv"});
+            //Export_Helper.downloadFile(blob,filename, extension);
+            console.log("Export finished???");
+
+            window.URL = window.URL || window.webkitURL;
+            let link = window.URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            if (document.getElementById("caption") != null) {
+                a.download = document.getElementById("caption").innerText;
+            } else {
+                a.download = filename + extension;
             }
-        }, 500);
+
+            a.href = link;
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            document.body.removeChild(a);
+
+        } catch (e) {
+        }
+    }
+
+    static exportTable(tableid){
+        let filename = indikatorauswahl.getSelectedIndikator() + "_" + gebietsauswahl.getSelectionAsString() + "_" + zeit_slider.getTimeSet();
+        let extension = ".csv";
+        let tab = document.getElementById(tableid);//.getElementsByTagName('table'); // id of table
+        if (tab == null) {
+            console.log("Table is null!!");
+            return false;
+        }
+        if (tab.rows.length == 0) {
+            console.log("Table has no rows!!");
+            return false;
+        }
+        let csv = []; // Holds all rows of data
+        let rows = tab.querySelectorAll("table tr:not(.hidden_row)"); // exclude ignored rows
+
+        for (let i = 0; i < rows.length; i++) { // Format Table Text here!
+            let row = [], cols = rows[i].querySelectorAll(" th:not(.tableexport-ignore), td:not(.tableexport-ignore)"); // exclude ignored columns
+            for (let j = 0; j < cols.length; j++)
+                row.push(cols[j].innerText);
+
+            csv.push(row.join(";"));
+        }
+        let tab_text = csv.join("\n"); // joins array into text, each row in a new line
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomoves input params
+        this.downloadFile(tab_text,filename, extension);
     }
 }
