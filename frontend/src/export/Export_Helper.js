@@ -84,11 +84,7 @@ class Export_Helper{
 
     static downloadFile(text_data, filename, extension){
         try {
-            console.log("trying to start download");
             let blob = new Blob(["\ufeff", text_data], {type: "text/csv"});
-            //Export_Helper.downloadFile(blob,filename, extension);
-            console.log("Export finished???");
-
             window.URL = window.URL || window.webkitURL;
             let link = window.URL.createObjectURL(blob);
             let a = document.createElement("a");

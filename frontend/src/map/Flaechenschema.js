@@ -67,6 +67,7 @@ class FlaechenschemaLegende{
             elements.each(function (key, value) {
                 let src = $(this).attr('src'),
                     url = "https://maps.ioer.de" + src;
+                console.log("legend: "+src);
                 $(this).attr('src', url);
             });
         });
