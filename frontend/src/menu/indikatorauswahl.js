@@ -377,7 +377,7 @@ const indikatorauswahl ={
                             $('.link_kat')
                                 .unbind()
                                 .click(function () {
-                                    //transform meu on click
+                                    //transform menu on click
                                     if (click === 0) {
                                         MenuHelper.setUpward($(this).find('.submenu'));
                                         click++;
@@ -389,6 +389,10 @@ const indikatorauswahl ={
                         }
                     },
                     onChange: function (value, text, $choice) {
+                        // if Land Use map is open, close it
+                        if (Flaechenschema.getState()){
+                            Flaechenschema.remove();
+                        }
                         //clean the search field
                         $('#search_input_indikatoren').val('');
                         //save the prev selected indicator as paramter

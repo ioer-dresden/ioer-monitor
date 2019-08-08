@@ -54,7 +54,7 @@ const toolbar = {
                                     <div class="zeit_slider" id="zeit_slider"></div>
                         </div>
                         <!---Indicator choice--------------->
-                        <div class="dropdown_choice fl-unbind">
+                        <div class="dropdown_choice fl-unbind indicator_choice">
                             <div class="hh_sf" id="indikator_auswahl">
                                 <i class="large angle down icon" data-ddm="drop_kat"></i>
                                 <span>Indikator</span>
@@ -320,7 +320,7 @@ const toolbar = {
                         
                          <!--Flächenschema-->
                         <button type="button" class="btn btn-primary" id="btn_flaechenschema" onclick="Flaechenschema.init()">
-                           <span id="title_flaechenschema">Flächennutzungskarte</span></button>
+                           <span id="title_flaechenschema">Monitor-Basiskarte Flächennutzung</span></button>
                         <!--Reset Map-->
                         <button type="button" class="btn btn-primary" id="btn_reset" onclick="MapHelper.mapReset();">
                             <i class="glyphicon glyphicon-trash drop_arrow"></i><span>Viewer zurücksetzen</span></button>
@@ -354,7 +354,7 @@ const toolbar = {
                 .unbind()
                 .click(function(event) {
                     //prevent for flaechenschema
-                    if(!Flaechenschema.getState()) {
+                    if(!(Flaechenschema.getState() && $(this).find('i').data('ddm')!=="drop_kat")) {
                         let ddm = $(this).find('i').data('ddm'),
                             ddm_container = $('#' + ddm);
                         //check if pinned
