@@ -395,12 +395,12 @@ const dev_chart={
                         .append("rect")
                         .attr("x", margin.left)
                         .attr("y", chart_height + 60 + margin_top)
-                        .attr("width", 5)
-                        .attr("height", 5)
-                        .style("fill", "grey");
+                        .attr("width", 30)
+                        .attr("height", 10)
+                        .attr("fill","url(#linear-gradient)");
 
                     legend_migration.append("text")
-                        .attr("x", margin.left + 30)
+                        .attr("x", margin.left + 40)
                         .attr("y", chart_height + 70 + margin_top)
                         .attr("height", 20)
                         .attr("width", (chart_width*0.7))
