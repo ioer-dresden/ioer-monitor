@@ -48,7 +48,7 @@ class ScriptLoader{
             //Export
             "frontend/lib/export/Blob.js",
             "frontend/lib/export/FileSaver.js",
-            "frontend/lib/export/tableexport.min.js",
+            //"frontend/lib/export/tableexport.min.js",
             "frontend/lib/export/jspdf.min.js",
             "frontend/lib/export/html2canvas.js",
             "frontend/lib/export/html2pdf.bundle.min.js",
