@@ -7,7 +7,8 @@ var url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             version: '1.3.0',
             format: 'image/png',
             srs: "EPSG:3035",
-            transparent: true
+            transparent: true,
+            attribution: '<a href="https://de.wikipedia.org/wiki/Amtliches_Liegenschaftskatasterinformationssystem">Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM © GeoBasis- DE / BKG ('+(new Date).getFullYear()+')</a>',
         }),
     fl_init = false;
 
