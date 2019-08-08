@@ -428,9 +428,10 @@ const dev_chart={
                     indicatorName="";
                     if (lan=="de"){
                         indicatorName=data[0].name;
+                        console.log("DE! "+ indicatorName)
                     }
-                    else if (lan=="en"){
-                        indicatorName=data[0].name
+                    else if (lan=="en"){ // todo here should be english translation of the indicator name
+                        console.log("EN!!! "+ indicatorName)
                     }
                     else{
                         console.log("Unknown language chosen!")
