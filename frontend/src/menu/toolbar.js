@@ -231,18 +231,19 @@ const toolbar = {
                         </div>
                         <div class="dropdown_menu" id="dropdown_werkzeug">
                             <ul class="tools">
-                                <li><div class="btn_container">
+                                <li class="w-25">
+                                <div class="btn_container">
                                     <div id="measure" class="image cursor"  title="führen Sie Messungen durch"></div>
                                     <div class="btn_txt" id="measure_btn">Messen</div>
-                                </div>
+                                    </div>
                                 </li>
-                                <li>
+                                <li class="w-25">
                                     <div class="btn_container">
                                         <div id="lupe" class="image cursor" title="Lupe um die darunter liegende Grundkarte hervorzuheben"></div>
                                         <div class="btn_txt" id="lupe_btn">Lupe</div>
                                     </div>
                                 </li>
-                                 <li>
+                                 <li class="w-25">
                                     <div class="btn_container">
                                         <div id="btn_glaetten" class="image cursor ${exclude.class_raster}" data-title="Glätten Sie die Rasterkarte" title="Glätten Sie die Rasterkarte"></div>
                                         <div class="btn_txt" id ="btn_glaetten_txt">Glätten</div>

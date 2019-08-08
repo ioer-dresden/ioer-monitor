@@ -11,7 +11,6 @@ var url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             attribution: '<a href="https://de.wikipedia.org/wiki/Amtliches_Liegenschaftskatasterinformationssystem">Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM © GeoBasis- DE / BKG ('+(new Date).getFullYear()+')</a>',
         }),
     fl_init = false;
-
 class Flaechenschema{
     static getTxt(){
         return {de:{title:"Monitor-Basiskarte Flächennutzung"},en:{title:"Monitor Land Use Basemap"}};
