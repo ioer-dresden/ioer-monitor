@@ -250,6 +250,8 @@ const dev_chart={
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
+                console.log("MinMax: "+minValue+ maxValue);
+                console.info(data);
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
@@ -278,7 +280,9 @@ const dev_chart={
                                 }
                             }
                             else if (d !== minValue || d !== maxValue) {
-                                return d;
+                                console.log("D not minmax: "+d);
+                                return y(d);
+                                //return d;
                             }
                         } else {
                             return d;
@@ -290,6 +294,7 @@ const dev_chart={
             function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
+                    console.info(data)
                     abstractData(data);
                     try {
                         setMigrationValue(data);
