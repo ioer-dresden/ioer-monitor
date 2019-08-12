@@ -17,6 +17,14 @@ const legende = {
       $elem = $("#indicator_info");
       return $elem;
     },
+    getIndicatorInfoContainer:function(){
+        $elem = $("#indicator_info_container");
+        return $elem;
+    },
+    getDatengrundlage:function(){
+        $elem = $('#legende_datangrundlage');
+        return $elem;},
+
     getIndikatorInfoTxtObject : function(){
         $elem =$('#indikator_info_text');
         return $elem;
@@ -25,6 +33,9 @@ const legende = {
         $elem = $('#datengrundlage_content');
         return $elem;
     },
+    getDatengrundlageContainer:function(){
+        $elem = $('#datengrundlage_container');
+        return $elem;},
     getEinheitObject:  function(){
         $elem =$('#einheit_container');
         return $elem;
@@ -99,7 +110,7 @@ const legende = {
                 </div>
                 <div id="legende_i" class="legende_i"></div>
             </div>
-            <div id="indicator_info">
+            <div id="indicator_info_container">
                 <hr class="hr"/>
                 <div id="Klassifikationsmethode_legende"><b>Klassifikationsmethode</b></div>
                 <div class="histogramm_klasseneinteilung" id="histogramm_klasseneinteilung"></div>
@@ -108,17 +119,19 @@ const legende = {
                 <div id="indikator_info_text"></div>
                 <button class="btn btn-primary btn_dropdown kennblatt" id="legende_kennblatt" onclick="kennblatt.open();">Kennblatt</button>
                 <hr class="hr"/>
-                <div id="legende_datangrundlage"><b>Datengrundlage</b></div>
-                <div id="datengrundlage_content"></div>
-                <div id="legende_map_projection"><b>Kartenprojektion</b></div>
-                <div>ETRS89 / UTM Zone 32N</div>
+                <div id="datengrundlage_container">
+                    <div id="legende_datangrundlage"><b>Datengrundlage</b></div>
+                    <div id="datengrundlage_content"></div>
+                    <div id="legende_map_projection"><b>Kartenprojektion</b></div>
+                    <div>ETRS89 / UTM Zone 32N</div>
+                </div>
                 <hr class="hr"/>
                 <div id="legende_histogramm"><b>Histogramm</b></div>
                 <div id="histogramm_pic"></div>
                 <div class="hist_info"></div>
             </div>
             <div id="datenalter_container">
-                <button class="btn btn-primary btn_dropdown ${exclude.class_performance}" id="datenalter" data-title="Zeige die Karte des Datenalters" title="Zeige die Karte des Datenalters">
+                <button class="btn btn-primary btn_dropdown ${exclude.class_performance}" id="datenalter" >
                     <i class="glyphicon glyphicon-chevron-down drop_arrow"></i>
                     <span>Datenalter</span>
                 </button>

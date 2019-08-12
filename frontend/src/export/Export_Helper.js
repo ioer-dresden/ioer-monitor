@@ -109,6 +109,7 @@ class Export_Helper{
     static exportTable(tableid){
         let filename = indikatorauswahl.getSelectedIndikator() + "_" + gebietsauswahl.getSelectionAsString() + "_" + zeit_slider.getTimeSet();
         let extension = ".csv";
+        let separator=";";
         let tab = document.getElementById(tableid);//.getElementsByTagName('table'); // id of table
         if (tab == null) {
             console.log("Table is null!!");
@@ -126,7 +127,7 @@ class Export_Helper{
             for (let j = 0; j < cols.length; j++)
                 row.push(cols[j].innerText);
 
-            csv.push(row.join(";"));
+            csv.push(row.join(separator));
         }
         let tab_text = csv.join("\n"); // joins array into text, each row in a new line
         tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table

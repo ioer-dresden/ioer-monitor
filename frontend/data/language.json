@@ -592,18 +592,13 @@
         "type":"#",
         "selector":"b"
       },
-      "datenalter":{
-        "de":"Datenalter",
-        "en":"Statistics age",
-        "type":"#",
-        "selector":"span"
-      },
-      "hover_info_grundaktmap":{
-        "de":"Ein und Ausblenden der Grundaktualität im Kartenfenster (hier klicken)",
-        "en":"On and hide the basic update in the map window (click here)",
-        "type":"#",
-        "callback":["setTimeout(function(){legende.fillContent();},1000)"]
-      },
+
+    "datenalter":{
+      "de":"Datenalter",
+      "en":"Statistics age",
+      "type":"#",
+      "selector":"span"
+    },
       "legende_button":{
         "de": "Legende",
         "en": "Legend",

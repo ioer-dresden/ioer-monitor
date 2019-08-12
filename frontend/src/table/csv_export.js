@@ -11,11 +11,6 @@ const csv_export = {
     controller: {
         set: function () {
             const csv_button = csv_export.getButtonDomObject();
-            let csv = {
-                fileExtension: ".csv",
-                separator: ";",
-                mimeType: "data:application/csv;charset=UTF-8"
-            };
             helper.enableElement("#" + csv_button.attr("id"), csv_button.data("title")); // show .csv export button
             csv_button
                 .unbind()
