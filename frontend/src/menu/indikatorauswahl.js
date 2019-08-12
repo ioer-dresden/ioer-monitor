@@ -273,14 +273,16 @@ const indikatorauswahl ={
     getSelectedIndikatorText:function(){
         const menu = this;
         let name = this.getDOMObject().dropdown('get text');
+        console.log("indicatorauswahl text: "+name);
         if(name.toLowerCase().indexOf("bitte")===0 || menu.getSelectedIndikator() !== menu.previous_indikator || ((menu.getSelectedIndikator() === menu.previous_indikator)&& (language_manager.getLanguage()==="en"))){
                 if (indikatorauswahl.getPossebilities()){
+                    console.log("Idikatorauswahl success: ");
                     name = $('#' + menu.getSelectedIndikator() + "_item").text();
                     menu.setSelectedIndikatorText(name);
-                    return name;
-                }
 
+                }
         }
+        return name;
     },
     setSelectedIndikatorText:function(value){
         this.getDOMObject().dropdown('set text',value);

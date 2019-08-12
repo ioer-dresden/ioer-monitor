@@ -187,7 +187,7 @@ const dev_chart={
                     return x(d.date);
                 })
                 .y(function (d) {
-                    return y(d.value);
+                    return y(d.real_value);
                 });
 
             let def = $.Deferred();
@@ -234,12 +234,15 @@ const dev_chart={
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = parseInt(helper.getMaxArray(data, "value")+1),
-                    minValue = parseInt(helper.getMinArray(data, "value")-1),
+                    maxValue = parseInt(helper.getMaxArray(data, "real_value")),
+                    minValue = parseInt(helper.getMinArray(data, "real_value")),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
 
+                // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
+                maxValue=maxValue+maxValue/10;
+                minValue=minValue-maxValue/10;
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
                     max_date = new Date(current_year + 2, 0, 1);
@@ -250,8 +253,6 @@ const dev_chart={
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
-                console.log("MinMax: "+minValue+ maxValue);
-                console.info(data);
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
@@ -271,22 +272,7 @@ const dev_chart={
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
-                        if (chart.settings.ind_vergleich) {
-                            if (d=== 0) {
-                                if (array.length===1) {
-                                    return data[0].real_value;
-                                } else {
-                                    return 'x';
-                                }
-                            }
-                            else if (d !== minValue || d !== maxValue) {
-                                console.log("D not minmax: "+d);
-                                return y(d);
-                                //return d;
-                            }
-                        } else {
-                            return d;
-                        }
+                        return helper.dotTocomma(d)
                     }));
             }
 
@@ -294,7 +280,6 @@ const dev_chart={
             function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
-                    console.info(data)
                     abstractData(data);
                     try {
                         setMigrationValue(data);
@@ -425,6 +410,7 @@ const dev_chart={
             }
             //function to set the legende, margin is a object like margin.left = 50x
             function setLegende(data, color) {
+
                 let legend = svg.append("g")
                     .attr("class", "legend"),
                     marginTop = margin_top+40,
@@ -433,10 +419,9 @@ const dev_chart={
                     indicatorName="";
                     if (lan=="de"){
                         indicatorName=data[0].name;
-                        console.log("DE! "+ indicatorName)
                     }
                     else if (lan=="en"){ // todo here should be english translation of the indicator name
-                        console.log("EN!!! "+ indicatorName)
+                        indicatorName=indikatorauswahl.getSelectedIndikatorText();
                     }
                     else{
                         console.log("Unknown language chosen!")
@@ -488,7 +473,7 @@ const dev_chart={
                         .attr("data-month", data[i].month)
                         .attr("data-einheit", data[i].einheit)
                         .attr("data-color", color_set)
-                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].value) + ")")
+                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].real_value) + ")")
                         .on("mouseenter",function(){
                             //handle what happens on moueover
                             const chart = dev_chart.chart,
@@ -505,7 +490,6 @@ const dev_chart={
                                 y = elem.position().top-document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
                                 text_value = "Wert: " + real_value + " "+einheit;
-
                             elem.attr("r",7.5);
 
                             //the tooltip for ind vergleich
@@ -565,7 +549,8 @@ const dev_chart={
             function abstractData(data) {
                 data.forEach(function (d) {
                     d.date = parseTime(d.date);
-                    d.value = +d.value;
+                    d.real_value = +d.real_value;
+                    d.value = +d.value
                 });
                 return data;
             }
@@ -744,12 +729,11 @@ const dev_chart={
                        alert_manager.alertError();
                     }
                 });
-
             $(document).on("click", dev_chart.chart_compare_selector_toolbar, function () {
                 let callback = function () {
                     if(Dialoghelper.getAGS_Input()) {
                         dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
-                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName()
+                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName();
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
                         dev_chart.chart.settings.ind_vergleich = true;
                         dev_chart.open();

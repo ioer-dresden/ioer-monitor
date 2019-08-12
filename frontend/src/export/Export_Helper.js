@@ -115,7 +115,7 @@ class Export_Helper{
             console.log("Table is null!!");
             return false;
         }
-        if (tab.rows.length == 0) {
+        if (tab.rows.length === 0) {
             console.log("Table has no rows!!");
             return false;
         }

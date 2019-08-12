@@ -64,7 +64,6 @@ class FlaechenschemaLegende{
         for (child of infoChildren){
             try{
                 if (!(keepLegendElements.includes(child.id))){
-                    console.log("Child id: "+child.id+ "  Datengrundlage Container: "+legende.getDatengrundlageContainer().attr('id'));
                     child.style.display = "none"
                 }
             }
