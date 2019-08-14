@@ -50,6 +50,7 @@ const dev_chart={
       }
     },
     init:function(){
+        console.log("dev_chart Init");
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
             helper.disableElement(this.chart_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
             helper.disableElement(this.chart_compare_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
@@ -60,6 +61,7 @@ const dev_chart={
         this.controller.set();
     },
     open:function(){
+        console.log("dev_chart Open");
         let lan = language_manager.getLanguage(),
             html = he.encode(`
             <div class="jq_dialog" id="${this.endpoint_id}">
@@ -158,7 +160,6 @@ const dev_chart={
                 chart_height = 400 - (array.length * 30),
                 margin_top = 0,
                 migration_set = false;
-
             //let chart_height = $('.ui-dialog').height()*(1.5/3);
             let x = d3.scaleTime().range([0, chart_width]),
                 y = d3.scaleLinear().range([chart_height, 0]);
@@ -234,8 +235,8 @@ const dev_chart={
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = parseInt(helper.getMaxArray(data, "real_value")),
-                    minValue = parseInt(helper.getMinArray(data, "real_value")),
+                    maxValue = helper.getMaxArray(data, "real_value"),
+                    minValue = helper.getMinArray(data, "real_value"),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
@@ -243,6 +244,7 @@ const dev_chart={
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
                 maxValue=maxValue+maxValue/10;
                 minValue=minValue-maxValue/10;
+
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
                     max_date = new Date(current_year + 2, 0, 1);
@@ -420,8 +422,9 @@ const dev_chart={
                     if (lan=="de"){
                         indicatorName=data[0].name;
                     }
-                    else if (lan=="en"){ // todo here should be english translation of the indicator name
-                        indicatorName=indikatorauswahl.getSelectedIndikatorText();
+                    else if (lan=="en"){
+                        // todo here should be english translation of the indicator name. Adjust the SQL query @ Backend to receive also the english Indicator name when asking tor TrendValues -> backend/chart/indikatorChart.createValueArray()
+                        //indicatorName=indikatorauswahl.getSelectedIndikatorText();
                     }
                     else{
                         console.log("Unknown language chosen!")
@@ -561,6 +564,7 @@ const dev_chart={
                 indikatorauswahl_chart = $('#indicator_ddm_diagramm');
             chart.controller.clearChartArray();
             $('#default_diagramm_choice').text(indikatorauswahl.getSelectedIndikatorText());
+
             if(chart.settings.ind_vergleich) {
                 $('#indikator_choice_container_diagramm').show();
                 if (chart.ind_array_chart.length==0) {
@@ -574,8 +578,10 @@ const dev_chart={
                                 $(this).remove();
                             }
                         });
-                    kat_auswahl_diagramm.find('.item').each(function(){$(this).css("color","rgba(0,0,0,.87)")});
-                    //remove selected Indicatopr from the list
+                    kat_auswahl_diagramm.find('.item').each(function(){
+                        $(this).css("color","rgba(0,0,0,.87)");
+                    });
+                    //remove selected Indicator from the list
                     helper.disableElement(`#kat_auswahl_diagramm #${indikatorauswahl.getSelectedIndikator()}_item`);
                     chart.ind_array_chart.push({"id": chart.settings.ind});
                 }
@@ -583,11 +589,13 @@ const dev_chart={
                 selector.find('#indikator_choice_container_diagramm').remove();
                 chart.ind_array_chart.push({"id": chart.settings.ind});
             }
+
             chart.init();
             chart.controller.set();
         },
         controller:{
             set:function(){
+
                 const chart = dev_chart.chart;
                 let ind_auswahl = $('#indicator_ddm_diagramm'),
                     download = $('#diagramm_download_format_choice');
@@ -595,9 +603,11 @@ const dev_chart={
                 $("#diagramm_gebietsname").text(chart.settings.name);
                 $('#diagramm_ags').text(" (" + chart.settings.ags + ")");
                 $('#diagrmm_gebiets_typ').text(" "+indikatorauswahl.getIndikatorEinheit());
-                //set the selcted value
+
+
+                //set the selected value
                 ind_auswahl
-                    .unbind()
+                    .off()
                     .dropdown({
                         'maxSelections': 2,
                         onAdd: function (addedValue, addedText, $addedChoice) {
@@ -697,8 +707,21 @@ const dev_chart={
                     download.dropdown("hide");
                 },500);
 
+                ///////////// Workaround: remove empty labels from dropdown menu. Needed to fix the bug where one extra empty label was shown in english version of Site
+                // todo: find a better solution! (Reinis) the extra element is being set somewhere in chart.controller.set() or its dependencies. right now in English version only 1 extra selection is possible (2 are possible in German version)
+                ind_auswahl.children('a').each(function(index, object) {
+                    console.log("Index: "+index);
+                    console.log($(this).text());
+                    console.log("NEXT!");
+                    if ($(this).text()==""){
+                        $(this).remove();
+                    }
+                });
+                ///////////////
+
             },
             clear:function(){
+                console.log("clearing chart, includinf ddm");
                 $('#visualisation').empty();
                 $("#diagramm_gebietsname").empty();
                 $('#diagramm_ags').empty();

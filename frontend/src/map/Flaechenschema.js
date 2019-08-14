@@ -28,6 +28,8 @@ class Flaechenschema{
         }
     }
     static set(){
+        map_header.set();
+        map_header.show();
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
         //hide all elements which are not needed

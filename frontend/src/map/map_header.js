@@ -1,69 +1,77 @@
-const map_header ={
-    text:{
-        de:{
-            germany:"Deutschland"
+const map_header = {
+    text: {
+        de: {
+            germany: "Deutschland"
         },
-        en:{
-            germany:"Germany"
+        en: {
+            germany: "Germany"
         }
     },
-    getDOMObject:function(){
+    getDOMObject: function () {
         $elem = $('.indikator_header');
         return $elem;
     },
-    show:function(){
+    show: function () {
         this.getDOMObject().show();
     },
-    hide:function(){
+    hide: function () {
         this.getDOMObject().hide();
     },
-    set:function(){
+    set: function () {
         const object = this;
-        var interval = setInterval(function () {
-            if (indikatorauswahl.getPossebilities()
-                && raeumliche_analyseebene.getSelectionText()) {
-                clearInterval(interval);
+        let indikator_text = object.getDOMObject().find('#header'),
+            time = zeit_slider.getTimeSet();
+        // add the Flaeschenschema.js header if Land-use basemap is switched on
+        if (Flaechenschema.getState()) {
+            console.log("We have a Flaeschenschema in Header!");
+            indikator_text.text(Flaechenschema.getTxt()[language_manager.getLanguage()].title + " " + time);
+        } else {
+            let interval = setInterval(function () {
                 let spatial_object = object.getDOMObject().find('#header_raumgl'),
-                    indikator_text = object.getDOMObject().find('#header'),
-                    indikator_name = function(){
-                        let name = indikatorauswahl.getSelectedIndikatorText_Lang();
-                        if(!name || typeof name ==="undefined"){
-                            name = indikatorauswahl.getSelectedIndikatorText();
-                        }
-                        return name;
-                    },
-                    time = zeit_slider.getTimeSet(),
                     spatial_text = raeumliche_analyseebene.getSelectionText();
-                    split_txt = function () {
-                        let txt = "als";
-                        if (language_manager.getLanguage() === "en") {
-                            txt = "as";
-                        }
-                        return " " + txt + " ";
-                    };
 
-                if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
-                    if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() == 0) {
-                        spatial_text = raeumliche_analyseebene.getSelectionText() + " in "+ map_header.text[language_manager.getLanguage()].germany;
-                    } else if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() > 0) {
-                        spatial_text = gebietsauswahl.getSelectionAsString();
-                    } else {
-                        spatial_text = gebietsauswahl.getSelectionAsString() + split_txt() + raumgliederung.getSelectionText();
+                if (indikatorauswahl.getPossebilities()
+                    && raeumliche_analyseebene.getSelectionText()) {
+                    clearInterval(interval);
+                    let
+                        indikator_name = function () {
+                            let name = indikatorauswahl.getSelectedIndikatorText_Lang();
+                            if (!name || typeof name === "undefined") {
+                                name = indikatorauswahl.getSelectedIndikatorText();
+                            }
+                            return name;
+                        },
+                        split_txt = function () {
+                            let txt = "als";
+                            if (language_manager.getLanguage() === "en") {
+                                txt = "as";
+                            }
+                            return " " + txt + " ";
+                        };
+
+                    if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
+                        if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() == 0) {
+                            spatial_text = raeumliche_analyseebene.getSelectionText() + " in " + map_header.text[language_manager.getLanguage()].germany;
+                        } else if (!raumgliederung.getSelectionId() && gebietsauswahl.countTags() > 0) {
+                            spatial_text = gebietsauswahl.getSelectionAsString();
+                        } else {
+                            spatial_text = gebietsauswahl.getSelectionAsString() + split_txt() + raumgliederung.getSelectionText();
+                        }
                     }
+                    indikator_text.text(indikator_name() + " (" + time + ")");
+                    spatial_object.text(spatial_text);
                 }
-                indikator_text.text(indikator_name() + " (" + time + ")");
-                spatial_object.text(spatial_text);
-            }
-        }, 500);
+            }, 500);
+        }
     },
-    updateText:function(_text){
-      this.getDOMObject().find("#header_raumgl").empty();
-      this.getDOMObject().find("#header").text(_text);
+    updateText: function (_text) {
+        this.getDOMObject().find("#header_raumgl").empty();
+        this.getDOMObject().find("#header").text(_text);
     },
-    moveVertical:function(_position,_range){
-        this.getDOMObject().css(_position,_range);
+    moveVertical: function (_position, _range) {
+        this.getDOMObject().css(_position, _range);
     },
-    resetCSS:function(){
+    resetCSS: function () {
         this.getDOMObject().removeAttr("style");
     }
 };
