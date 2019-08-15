@@ -62,6 +62,9 @@ class Export_Helper{
             unit: 'mm',
             format: 'a4'
         });
+
+        let width = 270;
+
         let dataURL = dataBlob;
 
         doc.setFontSize(20);
@@ -69,7 +72,7 @@ class Export_Helper{
         doc.setFontSize(10);
         doc.text(35, 57,text.sub_header);
         //data.addImage(base64_source, image format, X, Y, width, height)
-        doc.addImage(dataURL, 'PNG', 15, 40, 180, 160);
+        doc.addImage(dataURL, 'PNG', 15, 40, width, 0);
         doc.save(indikatorauswahl.getSelectedIndikator()+"_"+raeumliche_analyseebene.getSelectionId()+"_"+zeit_slider.getTimeSet() + ".pdf");
     }
 

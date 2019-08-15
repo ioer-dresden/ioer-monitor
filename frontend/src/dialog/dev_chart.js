@@ -50,7 +50,6 @@ const dev_chart={
       }
     },
     init:function(){
-        console.log("dev_chart Init");
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
             helper.disableElement(this.chart_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
             helper.disableElement(this.chart_compare_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
@@ -61,7 +60,6 @@ const dev_chart={
         this.controller.set();
     },
     open:function(){
-        console.log("dev_chart Open");
         let lan = language_manager.getLanguage(),
             html = he.encode(`
             <div class="jq_dialog" id="${this.endpoint_id}">
@@ -710,9 +708,6 @@ const dev_chart={
                 ///////////// Workaround: remove empty labels from dropdown menu. Needed to fix the bug where one extra empty label was shown in english version of Site
                 // todo: find a better solution! (Reinis) the extra element is being set somewhere in chart.controller.set() or its dependencies. right now in English version only 1 extra selection is possible (2 are possible in German version)
                 ind_auswahl.children('a').each(function(index, object) {
-                    console.log("Index: "+index);
-                    console.log($(this).text());
-                    console.log("NEXT!");
                     if ($(this).text()==""){
                         $(this).remove();
                     }
@@ -721,7 +716,6 @@ const dev_chart={
 
             },
             clear:function(){
-                console.log("clearing chart, includinf ddm");
                 $('#visualisation').empty();
                 $("#diagramm_gebietsname").empty();
                 $('#diagramm_ags').empty();
