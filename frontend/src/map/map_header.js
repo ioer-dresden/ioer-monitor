@@ -23,7 +23,6 @@ const map_header = {
             time = zeit_slider.getTimeSet();
         // add the Flaeschenschema.js header if Land-use basemap is switched on
         if (Flaechenschema.getState()) {
-            console.log("We have a Flaeschenschema in Header!");
             indikator_text.text(Flaechenschema.getTxt()[language_manager.getLanguage()].title + " " + time);
         } else {
             let interval = setInterval(function () {

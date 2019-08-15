@@ -1,65 +1,69 @@
-const dev_chart={
-    chart_compare_selector_toolbar:"#dev_chart_compare",
-    chart_selector_toolbar:"#dev_chart",
-    endpoint_id:"entwicklungsdiagramm_content",
-    imigration:false,
-    text:{
-        de:{
-            title:{
-                false:"Wertentwicklung",
-                true:"Entwicklungs- vergleich"
+const dev_chart = {
+    chart_compare_selector_toolbar: "#dev_chart_compare",
+    chart_selector_toolbar: "#dev_chart",
+    endpoint_id: "entwicklungsdiagramm_content",
+    imigration: false,
+    text: {
+        de: {
+            title: {
+                false: "Wertentwicklung",
+                true: "Entwicklungs- vergleich"
             },
-            indicatorFor:"Indikatorentwicklung für ",
-            info:"Dieses Diagramm stellt die Entwicklung der Indikatoren dar.",
-            indicator:"verfügbare Indikatoren",
-            choice:"Bitte wählen.....",
-            no_choice:"Kein Indikator gewählt",
-            load:"Lädt Diagramm.....",
-            pnt:"alle Stützpunkte",
-            trend:"Prognosewerte",
-            unit:"Einheit",
-            chart:"Entwicklungsdiagramm für Gebietseinheit",
-            set_choice: function(){return `Bitte ${base_raumgliederung.getBaseRaumgliederungText(true)} angeben`},
-            cancel:"Abbrechen"
+            indicatorFor: "Indikatorentwicklung für ",
+            info: "Dieses Diagramm stellt die Entwicklung der Indikatoren dar.",
+            indicator: "verfügbare Indikatoren",
+            choice: "Bitte wählen.....",
+            no_choice: "Kein Indikator gewählt",
+            load: "Lädt Diagramm.....",
+            pnt: "alle Stützpunkte",
+            trend: "Prognosewerte",
+            unit: "Einheit",
+            chart: "Entwicklungsdiagramm für Gebietseinheit",
+            set_choice: function () {
+                return `Bitte ${base_raumgliederung.getBaseRaumgliederungText(true)} angeben`
+            },
+            cancel: "Abbrechen"
         },
-        en:{
-            title:{
-                false:"Trend chart",
-                true:"Trend comparison"
+        en: {
+            title: {
+                false: "Trend chart",
+                true: "Trend comparison"
             },
-            indicatorFor:"Trend development for ",
-            info:"This diagram represents the trend of the indicators.",
-            indicator:"available indicators",
-            choice:"Please choose.....",
-            no_choice:"No indicator selected",
-            load:"Loading diagram ......",
+            indicatorFor: "Trend development for ",
+            info: "This diagram represents the trend of the indicators.",
+            indicator: "available indicators",
+            choice: "Please choose.....",
+            no_choice: "No indicator selected",
+            load: "Loading diagram ......",
             pnt: "all base points",
-            trend:"Forecast values",
-            unit:"Unit",
-            chart:"Development diagram for territorial unit",
-            set_choice: function(){return `Please set ${base_raumgliederung.getBaseRaumgliederungText(true)}`},
-            cancel:"Cancel"
+            trend: "Forecast values",
+            unit: "Unit",
+            chart: "Development diagram for territorial unit",
+            set_choice: function () {
+                return `Please set ${base_raumgliederung.getBaseRaumgliederungText(true)}`
+            },
+            cancel: "Cancel"
         }
     },
-    icon:{
-      single:{
-          path:"frontend/assets/icon/trend20.png"
-      },
-      multiple:{
-          path:"frontend/assets/icon/trend_compare20.png"
-      }
+    icon: {
+        single: {
+            path: "frontend/assets/icon/trend20.png"
+        },
+        multiple: {
+            path: "frontend/assets/icon/trend_compare20.png"
+        }
     },
-    init:function(){
-        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
-            helper.disableElement(this.chart_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
-            helper.disableElement(this.chart_compare_selector_toolbar,"vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
-        }else{
-            helper.enableElement(this.chart_selector_toolbar,$(this.chart_selector_toolbar).data("title"));
-            helper.enableElement(this.chart_compare_selector_toolbar,$(this.chart_compare_selector_toolbar).data("title"));
+    init: function () {
+        if (raeumliche_visualisierung.getRaeumlicheGliederung() === "raster") {
+            helper.disableElement(this.chart_selector_toolbar, "vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
+            helper.disableElement(this.chart_compare_selector_toolbar, "vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander");
+        } else {
+            helper.enableElement(this.chart_selector_toolbar, $(this.chart_selector_toolbar).data("title"));
+            helper.enableElement(this.chart_compare_selector_toolbar, $(this.chart_compare_selector_toolbar).data("title"));
         }
         this.controller.set();
     },
-    open:function(){
+    open: function () {
         let lan = language_manager.getLanguage(),
             html = he.encode(`
             <div class="jq_dialog" id="${this.endpoint_id}">
@@ -120,33 +124,33 @@ const dev_chart={
         `);
         //settings for the manager
         let instructions = {
-            endpoint:`${this.endpoint_id}`,
-            html:html,
-            title:dev_chart.text[lan].title[this.chart.settings.ind_vergleich],
-            modal:false,
-            width: main_view.getMobileState() ? main_view.getWidth():main_view.getWidth()*0.75,
+            endpoint: `${this.endpoint_id}`,
+            html: html,
+            title: dev_chart.text[lan].title[this.chart.settings.ind_vergleich],
+            modal: false,
+            width: main_view.getMobileState() ? main_view.getWidth() : main_view.getWidth() * 0.75,
             height: toolbar.getHeight(),
-            close:function(){
-                dev_chart.chart.settings.state_stueztpnt=false;
-                dev_chart.chart.settings.state_prognose=false;
+            close: function () {
+                dev_chart.chart.settings.state_stueztpnt = false;
+                dev_chart.chart.settings.state_prognose = false;
             }
         };
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
         this.chart.create();
     },
-    chart:{
-        settings:{
-            ags:"",
-            ind:"",
-            name:"",
-            ind_vergleich:false,
-            state_stueztpnt : false,
-            state_prognose :false
+    chart: {
+        settings: {
+            ags: "",
+            ind: "",
+            name: "",
+            ind_vergleich: false,
+            state_stueztpnt: false,
+            state_prognose: false
         },
-        ind_array_chart:[],
-        merge_data:[],
-        init:function(){
+        ind_array_chart: [],
+        merge_data: [],
+        init: function () {
             const chart = this,
                 migrationValues = MigrationValue.getValues(),
                 ags = this.settings.ags;
@@ -165,7 +169,7 @@ const dev_chart={
             //show loading info
             $('#diagramm_loading_info').show();
 
-            if (array.length=== 0) {
+            if (array.length === 0) {
                 $('#visualisation').hide();
                 $('#Hinweis_diagramm_empty').show();
             } else {
@@ -195,18 +199,19 @@ const dev_chart={
             function defCalls() {
                 let requests = [],
                     settings = {
-                        "forecast":chart.settings.state_prognose.toString(),
-                        "all_points":chart.settings.state_stueztpnt.toString(),
-                        "compare":chart.settings.ind_vergleich.toString()
+                        "forecast": chart.settings.state_prognose.toString(),
+                        "all_points": chart.settings.state_stueztpnt.toString(),
+                        "compare": chart.settings.ind_vergleich.toString()
                     };
                 $.each(array, function (key, value) {
-                    requests.push(RequestManager.getTrendValues(value.id,chart.settings.ags.toString(),settings));
+                    requests.push(RequestManager.getTrendValues(value.id, chart.settings.ags.toString(), settings));
                 });
                 $.when.apply($, requests).done(function () {
                     def.resolve(arguments);
                 });
                 return def.promise();
             }
+
             defCalls().done(function (arr) {
                 chart.merge_data = [];
                 let i = 0;
@@ -224,6 +229,7 @@ const dev_chart={
                 scaleChart();
                 createPath();
             });
+
             function scaleChart() {
                 let data = [];
                 $.each(chart.merge_data, function (key, value) {
@@ -240,14 +246,14 @@ const dev_chart={
                     current_year = helper.getCurrentYear();
 
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
-                maxValue=maxValue+maxValue/10;
-                minValue=minValue-maxValue/10;
+                maxValue = maxValue + maxValue / 10;
+                minValue = minValue - maxValue / 10;
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
                     max_date = new Date(current_year + 2, 0, 1);
                 }
-                if (minYear===maxYear) {
+                if (minYear === maxYear) {
                     x.domain(d3.extent([new Date(maxYear - 5, 0, 1), max_date]));
                 } else {
                     x.domain(d3.extent([min_date, max_date]));
@@ -258,12 +264,12 @@ const dev_chart={
                     .attr("class", "axis axis--x")
                     .style("font-size", "15px")
                     .attr("transform", "translate(0," + chart_height + ")")
-                    .call(d3.axisBottom(x).scale(x).ticks(10).tickFormat(function(d){
-                        if(chart.settings.state_prognose){
-                            if(d.getFullYear() <= helper.getCurrentYear()){
+                    .call(d3.axisBottom(x).scale(x).ticks(10).tickFormat(function (d) {
+                        if (chart.settings.state_prognose) {
+                            if (d.getFullYear() <= helper.getCurrentYear()) {
                                 return d.getFullYear();
                             }
-                        }else{
+                        } else {
                             return d.getFullYear();
                         }
                     }));
@@ -283,65 +289,68 @@ const dev_chart={
                     abstractData(data);
                     try {
                         setMigrationValue(data);
-                    }catch(error){
+                    } catch (error) {
                         dev_chart.imigration = false;
                     }
-                    setTimeout(function(){
+                    setTimeout(function () {
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
                         setLegende(data, data[0].color.toString());
-                    },100);
+                    }, 100);
                 });
             }
 
             //add the data
             function appendData(data, color) {
-                 let values_line = [],
-                    values_future=[],
-                    set=function(array,_dash_array){
+                let values_line = [],
+                    values_future = [],
+                    set = function (array, _dash_array) {
                         g.append("path")
                             .data(array)
                             .attr("class", "path_line")
                             .attr('stroke', color)
-                            .attr("stroke-dasharray",_dash_array)
+                            .attr("stroke-dasharray", _dash_array)
                             .attr("fill", "none")
                             .attr("d", line(array));
-                };
-                $.each(data,function(key,value){
-                    if(value.year <(new Date).getFullYear()){
+                    };
+                $.each(data, function (key, value) {
+                    if (value.year < (new Date).getFullYear()) {
                         values_line.push(value);
-                    }else{
+                    } else {
                         values_future.push(value);
                     }
                 });
-                set(values_line,("7,3"));
-                if(values_future.length>0){
-                    values_future.push(values_line[(values_line.length-1)]);
-                    values_future = values_future.sort(function(a,b){
-                       return a.year>b.year ? 1:-1;
+                set(values_line, ("7,3"));
+                if (values_future.length > 0) {
+                    values_future.push(values_line[(values_line.length - 1)]);
+                    values_future = values_future.sort(function (a, b) {
+                        return a.year > b.year ? 1 : -1;
                     });
-                    set(values_future,("1,3"));
+                    set(values_future, ("1,3"));
                 }
             }
-            //create the migration value
-            function setMigrationValue(data){
-                if(!migration_set) {
-                    dev_chart.imigration = true;
-                    let ags_s = ags.toString().substr(0,2),
-                        id=null,
-                        year=null,
-                        class_band="migration-band";
 
-                    for(let x=0; x<=data.length-1; x++) {
-                            id = data[x].id;
-                            year = parseInt(data[x].year);
+            //create the migration value
+            function setMigrationValue(data) {
+                if (!migration_set) {
+                    dev_chart.imigration = true;
+                    let ags_s = ags.toString().substr(0, 2),
+                        id = null,
+                        year = null,
+                        class_band = "migration-band";
+
+                    for (let x = 0; x <= data.length - 1; x++) {
+                        id = data[x].id;
+                        year = parseInt(data[x].year);
                     }
 
                     let min = parseTime(`01/${migrationValues[id][ags_s]["min"]}`),
                         max = parseTime(`01/${migrationValues[id][ags_s]["max"]}`);
 
                     //if min or max is null exit function
-                    if (min == null || max==null){return;}
+                    if (min == null || max == null) {
+                        return;
+                    }
 
                     let linearGradient = svg.append("defs")
                         .append("linearGradient")
@@ -368,18 +377,18 @@ const dev_chart={
                         .attr("stop-color", "#ffffff");
 
                     g.append('rect')
-                        .attr("x",x(min))
-                        .attr("y",0)
-                        .attr("width",x(max)-x(min))
-                        .attr("height",chart_height)
-                        .attr("id",id)
-                        .attr("class",class_band)
-                        .attr("style","background")
-                        .attr("fill","url(#linear-gradient)");
+                        .attr("x", x(min))
+                        .attr("y", 0)
+                        .attr("width", x(max) - x(min))
+                        .attr("height", chart_height)
+                        .attr("id", id)
+                        .attr("class", class_band)
+                        .attr("style", "background")
+                        .attr("fill", "url(#linear-gradient)");
 
                     //create the legende
                     let legend_migration = svg.append("g")
-                        .attr("class",`${class_band} ${class_band}`);
+                        .attr("class", `${class_band} ${class_band}`);
 
                     legend_migration.append('g')
                         .append("rect")
@@ -387,13 +396,13 @@ const dev_chart={
                         .attr("y", chart_height + 60 + margin_top)
                         .attr("width", 30)
                         .attr("height", 10)
-                        .attr("fill","url(#linear-gradient)");
+                        .attr("fill", "url(#linear-gradient)");
 
                     legend_migration.append("text")
                         .attr("x", margin.left + 40)
                         .attr("y", chart_height + 70 + margin_top)
                         .attr("height", 20)
-                        .attr("width", (chart_width*0.7))
+                        .attr("width", (chart_width * 0.7))
                         .style("fill", "grey")
                         .text(`ggf. beeinflusst durch Datenmodellmigration in ${MapHelper.getBldName(ags)}`);
 
@@ -405,28 +414,27 @@ const dev_chart={
                         .attr("height", 1)
                         .style("fill", "grey");
 
-                    migration_set=true;
+                    migration_set = true;
                 }
             }
+
             //function to set the legende, margin is a object like margin.left = 50x
             function setLegende(data, color) {
 
                 let legend = svg.append("g")
-                    .attr("class", "legend"),
-                    marginTop = margin_top+40,
-                    lan= language_manager.getLanguage(),
-                // Setting the name of selected unit based on language selection
-                    indicatorName="";
-                    if (lan=="de"){
-                        indicatorName=data[0].name;
-                    }
-                    else if (lan=="en"){
-                        // todo here should be english translation of the indicator name. Adjust the SQL query @ Backend to receive also the english Indicator name when asking tor TrendValues -> backend/chart/indikatorChart.createValueArray()
-                        //indicatorName=indikatorauswahl.getSelectedIndikatorText();
-                    }
-                    else{
-                        console.log("Unknown language chosen!")
-                    }
+                        .attr("class", "legend"),
+                    marginTop = margin_top + 40,
+                    lan = language_manager.getLanguage(),
+                    // Setting the name of selected unit based on language selection
+                    indicatorName = "";
+                if (lan == "de") {
+                    indicatorName = data[0].name;
+                } else if (lan == "en") {
+                    // todo here should be english translation of the indicator name. Adjust the SQL query @ Backend to receive also the english Indicator name when asking tor TrendValues -> backend/chart/indikatorChart.createValueArray()
+                    //indicatorName=indikatorauswahl.getSelectedIndikatorText();
+                } else {
+                    console.log("Unknown language chosen!")
+                }
 
                 legend.append('g')
                     .append("circle")
@@ -442,10 +450,11 @@ const dev_chart={
                     .attr("width", (chart_width))
                     .style("font-size", "20px")
                     .style("fill", color)
-                    .text(indicatorName+" in "+data[0].einheit);
+                    .text(indicatorName + " in " + data[0].einheit);
 
                 margin_top += 20;
             }
+
             function createCircle(data, color) {
                 let color_set = color,
                     format_month = d3.timeFormat("%m"),
@@ -475,7 +484,7 @@ const dev_chart={
                         .attr("data-einheit", data[i].einheit)
                         .attr("data-color", color_set)
                         .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].real_value) + ")")
-                        .on("mouseenter",function(){
+                        .on("mouseenter", function () {
                             //handle what happens on moueover
                             const chart = dev_chart.chart,
                                 elem = $(this);
@@ -487,19 +496,19 @@ const dev_chart={
                                 real_value = elem.data('realvalue'),
                                 color = elem.data('color'),
                                 einheit = elem.data('einheit'),
-                                x = elem.position().left-document.getElementById('visualisation').getBoundingClientRect().x +10,
-                                y = elem.position().top-document.getElementById('visualisation').getBoundingClientRect().y + 80,
+                                x = elem.position().left - document.getElementById('visualisation').getBoundingClientRect().x + 10,
+                                y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
-                                text_value = "Wert: " + real_value + " "+einheit;
-                            elem.attr("r",7.5);
+                                text_value = "Wert: " + real_value + " " + einheit;
+                            elem.attr("r", 7.5);
 
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {
                                 let data = [],
-                                    ind_before = function(merge_data,ind,year){
+                                    ind_before = function (merge_data, ind, year) {
                                         let array = [],
                                             res = false;
-                                        for (let i = 0; i <merge_data.length; i++) {
+                                        for (let i = 0; i < merge_data.length; i++) {
                                             if (merge_data[i].id === ind) {
                                                 array.push(merge_data[i])
                                             }
@@ -507,25 +516,25 @@ const dev_chart={
                                         for (let i = 0; i < array.length; i++) {
                                             if (array[i].id === ind) {
                                                 if (array[i].year == year) {
-                                                    res= i - 1;
+                                                    res = i - 1;
                                                 }
                                             }
                                         }
                                         return res;
                                     };
-                                $.each(chart.merge_data,function(x,y){
+                                $.each(chart.merge_data, function (x, y) {
                                     if (y.id === ind) {
                                         data.push(y.values);
                                     }
                                 });
                                 //check if the oldest year is hover
-                                let index = ind_before(data[0],ind, year);
+                                let index = ind_before(data[0], ind, year);
                                 if (index == -1) {
                                     html = text_value + "<br/>" + "Stand: " + month + "/" + year;
                                 } else {
                                     //the text part
-                                    let date_before = "von " + data[0][index].month + "/" +data[0][index].year + " bis " + month + "/" + year;
-                                    let text_value_dev = "Entwicklung: " + (value - data[0][index].value).toFixed(2) + " "+einheit;
+                                    let date_before = "von " + data[0][index].month + "/" + data[0][index].year + " bis " + month + "/" + year;
+                                    let text_value_dev = "Entwicklung: " + (value - data[0][index].value).toFixed(2) + " " + einheit;
                                     html = text_value + `<br/>${text_value_dev}<br/>${date_before}`;
                                 }
                             } else {
@@ -537,16 +546,18 @@ const dev_chart={
                                 .css({"left": x, "top": y, "color": color, "border": "1px solid" + color})
                                 .show();
                         })
-                        .on("mouseout",function(){
+                        .on("mouseout", function () {
                             $(this).attr("r", 5.5);
                             tooltip.hide();
-                    });
+                        });
                 }
             }
-            function parseTime(_string){
+
+            function parseTime(_string) {
                 let parseTime = d3.timeParse("%m/%Y");
                 return parseTime(_string);
             }
+
             function abstractData(data) {
                 data.forEach(function (d) {
                     d.date = parseTime(d.date);
@@ -556,34 +567,42 @@ const dev_chart={
                 return data;
             }
         },
-        create:function(){
+        create: function () {
             const chart = dev_chart.chart;
             let selector = $(`#${dev_chart.endpoint_id}`),
                 indikatorauswahl_chart = $('#indicator_ddm_diagramm');
             chart.controller.clearChartArray();
             $('#default_diagramm_choice').text(indikatorauswahl.getSelectedIndikatorText());
 
-            if(chart.settings.ind_vergleich) {
+            if (chart.settings.ind_vergleich) {
                 $('#indikator_choice_container_diagramm').show();
-                if (chart.ind_array_chart.length==0) {
-                    let kat_auswahl_diagramm =$('#kat_auswahl_diagramm');
-                    indikatorauswahl.cloneMenu('kat_auswahl_diagramm', 'link_kat_diagramm', 'right','X',false);
-                    //remove items which have not the simular unit
+                if (chart.ind_array_chart.length == 0) {
+                    let kat_auswahl_diagramm = $('#kat_auswahl_diagramm');
+                    indikatorauswahl.cloneMenu('kat_auswahl_diagramm', 'link_kat_diagramm', 'right', 'X', false);
+
+                    // Filter the Toolbar indicator dropdown menu entries needed for dropdown in dev_chart.js menu
                     indikatorauswahl_chart
                         .find('.submenu .item')
-                        .each(function(){
-                                 if(indikatorauswahl.getIndikatorEinheit() !== $(this).data('einheit')){
+                        .each(function () {  // select only indicators with same units
+                            if (indikatorauswahl.getIndikatorEinheit() !== $(this).data('einheit')) {
                                 $(this).remove();
                             }
+                            /*else {
+                                console.log("Name "+ $(this).attr('data-value'));
+                                let ags=$(this).attr('data-value');
+                                console.log("Spatial extent: "+ raeumliche_analyseebene.getSpatialExtentNameById(ags));
+                                console.info(raeumliche_analyseebene.range);
+                            }
+                            */
                         });
-                    kat_auswahl_diagramm.find('.item').each(function(){
-                        $(this).css("color","rgba(0,0,0,.87)");
+                    kat_auswahl_diagramm.find('.item').each(function () {
+                        $(this).css("color", "rgba(0,0,0,.87)");
                     });
                     //remove selected Indicator from the list
                     helper.disableElement(`#kat_auswahl_diagramm #${indikatorauswahl.getSelectedIndikator()}_item`);
                     chart.ind_array_chart.push({"id": chart.settings.ind});
                 }
-            }else{
+            } else {
                 selector.find('#indikator_choice_container_diagramm').remove();
                 chart.ind_array_chart.push({"id": chart.settings.ind});
             }
@@ -591,8 +610,8 @@ const dev_chart={
             chart.init();
             chart.controller.set();
         },
-        controller:{
-            set:function(){
+        controller: {
+            set: function () {
 
                 const chart = dev_chart.chart;
                 let ind_auswahl = $('#indicator_ddm_diagramm'),
@@ -600,7 +619,7 @@ const dev_chart={
                 //set the info text
                 $("#diagramm_gebietsname").text(chart.settings.name);
                 $('#diagramm_ags').text(" (" + chart.settings.ags + ")");
-                $('#diagrmm_gebiets_typ').text(" "+indikatorauswahl.getIndikatorEinheit());
+                $('#diagrmm_gebiets_typ').text(" " + indikatorauswahl.getIndikatorEinheit());
 
 
                 //set the selected value
@@ -619,28 +638,28 @@ const dev_chart={
                         }
                     });
 
-                setTimeout(function(){
+                setTimeout(function () {
                     ind_auswahl.dropdown("hide");
-                },500);
+                }, 500);
 
                 //options-------------------------
                 //1. alle Stützpkt
                 $('#alle_stpkt')
                     .unbind()
                     .prop('checked', false)
-                    .change(function(){
+                    .change(function () {
                         if (this.checked) {
                             chart.settings.state_stueztpnt = true;
                             chart.init();
-                        }else{
+                        } else {
                             chart.settings.state_stueztpnt = false;
                             chart.init();
                         }
                     });
 
-                if($.inArray(2025,indikatorauswahl.getAllPossibleYears())!==-1){
+                if ($.inArray(2025, indikatorauswahl.getAllPossibleYears()) !== -1) {
                     $('#prognose_container').show();
-                }else{
+                } else {
                     $('#prognose_container').hide();
                 }
 
@@ -648,11 +667,11 @@ const dev_chart={
                 $('#prognose')
                     .unbind()
                     .prop('checked', false)
-                    .change(function(){
+                    .change(function () {
                         if (this.checked) {
                             chart.settings.state_prognose = true;
                             chart.init();
-                        }else{
+                        } else {
                             chart.settings.state_prognose = false;
                             chart.init();
                         }
@@ -664,19 +683,22 @@ const dev_chart={
                             let container = $('#visualisation'),
                                 width = container.width(),
                                 height = container.height(),
-                                migrationClass=$(".migration-band"),
-                                _export = function(){
+                                migrationClass = $(".migration-band"),
+                                _export = function () {
                                     if (value === 'png') {
                                         Export_Helper.svgString2Image(width, height, '.container_diagramm #diagramm svg', Export_Helper.saveIMAGE);
                                     } else if (value === 'pdf') {
-                                        Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg',{header:dev_chart.text[language_manager.getLanguage()].indicatorFor+chart.settings.name,sub_header:""},Export_Helper.savePDF);
+                                        Export_Helper.svgString2DataURL(width, height, '.container_diagramm #diagramm svg', {
+                                            header: dev_chart.text[language_manager.getLanguage()].indicatorFor + chart.settings.name,
+                                            sub_header: ""
+                                        }, Export_Helper.savePDF);
                                     }
-                            };
+                                };
                             //workaround for firefox Bug
-                            container.attr("height",height).attr("width",width);
+                            container.attr("height", height).attr("width", width);
                             $(this).dropdown("hide");
                             //ask user if he wants to export the migration band if avaliable
-                            if(dev_chart.imigration) {
+                            if (dev_chart.imigration) {
                                 swal({
                                         title: "Möchten Sie auch das Unsicherheitsband exportieren ?",
                                         type: "info",
@@ -696,59 +718,59 @@ const dev_chart={
 
                                         }
                                     });
-                            }else{
+                            } else {
                                 _export();
                             }
                         }
                     });
-                setTimeout(function(){
+                setTimeout(function () {
                     download.dropdown("hide");
-                },500);
+                }, 500);
 
                 ///////////// Workaround: remove empty labels from dropdown menu. Needed to fix the bug where one extra empty label was shown in english version of Site
                 // todo: find a better solution! (Reinis) the extra element is being set somewhere in chart.controller.set() or its dependencies. right now in English version only 1 extra selection is possible (2 are possible in German version)
-                ind_auswahl.children('a').each(function(index, object) {
-                    if ($(this).text()==""){
+                ind_auswahl.children('a').each(function (index, object) {
+                    if ($(this).text() == "") {
                         $(this).remove();
                     }
                 });
                 ///////////////
 
             },
-            clear:function(){
+            clear: function () {
                 $('#visualisation').empty();
                 $("#diagramm_gebietsname").empty();
                 $('#diagramm_ags').empty();
                 $('#diagrmm_gebiets_typ').empty();
             },
-            clearChartArray:function(){
+            clearChartArray: function () {
                 dev_chart.chart.ind_array_chart = [];
                 dev_chart.chart.merge_data = [];
             }
         }
     },
-    controller:{
-        set:function(){
-                //DOM events for the chart
-                $(document).on("click", dev_chart.chart_selector_toolbar, function () {
-                    let callback = function () {
-                        if(Dialoghelper.getAGS_Input()) {
-                            dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
-                            dev_chart.chart.settings.name =Dialoghelper.getAGS_InputName();
-                            dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
-                            dev_chart.chart.settings.ind_vergleich = false;
-                            dev_chart.open();
-                        }
-                    };
-                    try {
-                        Dialoghelper.setSwal(callback);
-                    }catch(err){
-                       alert_manager.alertError();
+    controller: {
+        set: function () {
+            //DOM events for the chart
+            $(document).on("click", dev_chart.chart_selector_toolbar, function () {
+                let callback = function () {
+                    if (Dialoghelper.getAGS_Input()) {
+                        dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
+                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName();
+                        dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
+                        dev_chart.chart.settings.ind_vergleich = false;
+                        dev_chart.open();
                     }
-                });
+                };
+                try {
+                    Dialoghelper.setSwal(callback);
+                } catch (err) {
+                    alert_manager.alertError();
+                }
+            });
             $(document).on("click", dev_chart.chart_compare_selector_toolbar, function () {
                 let callback = function () {
-                    if(Dialoghelper.getAGS_Input()) {
+                    if (Dialoghelper.getAGS_Input()) {
                         dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
                         dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName();
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
@@ -758,7 +780,7 @@ const dev_chart={
                 };
                 try {
                     Dialoghelper.setSwal(callback);
-                }catch(err){
+                } catch (err) {
                     alert_manager.alertError();
                 }
             });

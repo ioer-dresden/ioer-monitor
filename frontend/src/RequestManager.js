@@ -83,7 +83,6 @@ class RequestManager{
     //get the chart values to set up the line chart
     static getTrendValues(indicator_id,ags,settings){
         let json = JSON.parse('{"ind":{"id":"'+indicator_id+'","ags_array":"'+ags+'"},"set":'+JSON.stringify(settings)+',"query":"getTrend"}');
-        console.log(JSON.stringify(json));
         return this.sendRequestPHP({"file":json,"query":"getTrend","type":"POST","debug":false});
     }
     //get the stored map-Link parameters to create the map
