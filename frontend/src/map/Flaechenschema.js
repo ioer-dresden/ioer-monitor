@@ -1,6 +1,6 @@
 
 //global variablen
-var url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
+let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
         {
             cache: Math.random(),
@@ -20,11 +20,13 @@ class Flaechenschema{
     static init(){
         zeit_slider.init([2000,2006,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018]);
         if(!fl_init){
-            Flaechenschema.set();
             fl_init=true;
+            Flaechenschema.set();
+
         }else{
-            Flaechenschema.remove();
             fl_init=false;
+            Flaechenschema.remove();
+
         }
     }
     static set(){
@@ -39,6 +41,7 @@ class Flaechenschema{
         $("#btn_flaechenschema").css("background-color",farbschema.getColorHexActive());
         flaechenschema_wms.addTo(map);
         let legende = new FlaechenschemaLegende();
+        map.on('click', this.onClick);
     }
     static remove(){
         let indicator_set = indikatorauswahl.getSelectedIndikator();
@@ -49,7 +52,47 @@ class Flaechenschema{
         if(indicator_set || typeof indicator_set !== "undefined"){
             additiveLayer.init();
         }
+        map.off('click', this.onClick);
         fl_init=false
+    }
+    static onClick(e){
+        console.log("OnClick in Flaeschenschema!! ");
+        let X = map.layerPointToContainerPoint(e.layerPoint).x,
+            Y = map.layerPointToContainerPoint(e.layerPoint).y,
+            BBOX = map.getBounds().toBBoxString(),
+            SRS = 'EPSG:4326',
+            WIDTH,
+            HEIGHT = map.getSize().y,
+            lat = e.latlng.lat,
+            lng = e.latlng.lng;
+
+        let windowWidth = $(window).width();
+
+        if (windowWidth > 2045) {
+            WIDTH = 2045;
+        } else {
+            WIDTH = map.getSize().x;
+        }
+
+        let URL= url_flaechenschema_mapserv+ '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
+        BBOX + '&SRS=' +
+        SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT +
+        '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
+            url_flaechenschema_mapserv + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
+
+        console.log("Setting the clicking click onclick:  "+ URL);
+
+        let getPixelValue = $.ajax({
+            url: URL,
+            cache: false,
+            datatype: "html",
+            type: "GET"
+        });
+        getPixelValue.done(function (data) {
+            let html_value = $(data).text();
+            let html_float = parseFloat(html_value);
+            let pixel_value = null;
+    })
     }
 }
 

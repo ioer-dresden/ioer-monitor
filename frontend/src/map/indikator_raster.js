@@ -93,8 +93,9 @@ const indikator_raster = {
     },
     onClick:function(e){
         const object = indikator_raster;
-        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster") {
+        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
             try {
+                console.log("Flaeschenschema state: "+ Flaechenschema.getState());
                 let mapOptions = object.getInfos(),
                     indikator = indikatorauswahl.getSelectedIndikator(),
                     X = map.layerPointToContainerPoint(e.layerPoint).x,
@@ -132,6 +133,8 @@ const indikator_raster = {
                     SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT + '&LAYERS=' + mapOptions[0].layername +
                     '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
                     mapOptions[0].layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
+                console.log("Map pfad: " +mapOptions[0].pfadmapfile);
+                console.log("Map name: " +mapOptions[0].layername);
 
                 let URL_WFS = 'https://sg.geodatenzentrum.de/wfs_vg250?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=vg250_gem&BBOX=' +
                     lng + ',' + lat + ',' + (lng + 0.000000000000100) + ',' + (lat + 0.000000000000100) +
@@ -219,6 +222,11 @@ const indikator_raster = {
             }catch(error){
                 console.error(error);
             }
+        }
+
+        else if (Flaechenschema.getState()){
+
+
         }
     },
     getInfos:function(_seite){
