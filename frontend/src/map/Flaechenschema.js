@@ -8,6 +8,7 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             format: 'image/png',
             srs: "EPSG:3035",
             transparent: true,
+            layername: 'landuse_map',
         }),
     fl_init = false;
 class Flaechenschema{
@@ -64,7 +65,8 @@ class Flaechenschema{
             WIDTH,
             HEIGHT = map.getSize().y,
             lat = e.latlng.lat,
-            lng = e.latlng.lng;
+            lng = e.latlng.lng,
+            layername='landuse_map';
 
         let windowWidth = $(window).width();
 
@@ -77,8 +79,9 @@ class Flaechenschema{
         let URL= url_flaechenschema_mapserv+ '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
         BBOX + '&SRS=' +
         SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT +
+            '&LAYERS=' + layername +
         '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
-            url_flaechenschema_mapserv + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
+            layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
 
         console.log("Setting the clicking click onclick:  "+ URL);
 
@@ -90,6 +93,7 @@ class Flaechenschema{
         });
         getPixelValue.done(function (data) {
             let html_value = $(data).text();
+            console.log("Got the Pixel Value: "+ html_value);
             let html_float = parseFloat(html_value);
             let pixel_value = null;
     })
