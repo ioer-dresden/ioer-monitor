@@ -1,6 +1,6 @@
 # user stuff
-backend/database/DbSettings.php
-backend/sora/
+#backend/database/DbSettings.php
+#backend/sora/
 
 # Created by https://www.gitignore.io/api/phpstorm
 
