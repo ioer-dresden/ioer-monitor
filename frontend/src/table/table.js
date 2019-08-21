@@ -229,27 +229,27 @@ const table = {
                                         ${grundaktualitaet_td()}
                                     </tr>`;
                 });
-                return (html + "</tbody>").trim();
-            },
-            createTableFooter = function () {
-                //germany values
-                let stat_array = indikator_json.getStatistikArray(),
-                    ags_ind_array = [],
-                    value_g = false,
-                    grundakt_val = false;
 
-                //the footer part for the corresponding bld
-                let ags_footer = function () {
-                        //ags_values
-                        if (typeof raumgliederung.getSelectionId() !== 'undefined') {
-                            let tfoot_ags = '';
-                            $.each(ags_ind_array, function (key, value) {
-                                $.each(value, function (key_found, value_found) {
-                                    let value_set = value_found.value_ags,
-                                        grundakt_val = value_found.ags_grundakt,
-                                        ags = key_found,
-                                        name = value_found.gen,
-                                        img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare mobile_hidden chart oneTime" 
+                // Method to create the table
+                createTableFooter = function () {
+                    //germany values
+                    let stat_array = indikator_json.getStatistikArray(),
+                        ags_ind_array = [],
+                        value_g = false,
+                        grundakt_val = false;
+
+                    //the footer part for the corresponding bld
+                    let ags_footer = function () {
+                            //ags_values
+                            if (typeof raumgliederung.getSelectionId() !== 'undefined') {
+                                let tfoot_ags = '';
+                                $.each(ags_ind_array, function (key, value) {
+                                    $.each(value, function (key_found, value_found) {
+                                        let value_set = value_found.value_ags,
+                                            grundakt_val = value_found.ags_grundakt,
+                                            ags = key_found,
+                                            name = value_found.gen,
+                                            img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare mobile_hidden chart oneTime" 
                                                     data-name="${value.gen}" 
                                                     data-ags="${ags}" 
                                                     data-ind="${indikatorauswahl.getSelectedIndikator()}}" 
@@ -260,7 +260,7 @@ const table = {
                                                     id="indikatoren_diagramm_ags${ags}" 
                                                     style="margin-left: .5vh;"
                                                     src="${dev_chart.icon.single.path}"/>`,
-                                        img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend mobile_hidden chart oneTime" 
+                                            img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend mobile_hidden chart oneTime" 
                                                     data-name="${value.gen}" 
                                                     data-ags="${ags}" 
                                                     data-ind="${indikatorauswahl.getSelectedIndikator()}}" 
@@ -272,8 +272,7 @@ const table = {
                                                     id="indikatoren_diagramm_ags_ind${ags}" 
                                                     src="${dev_chart.icon.multiple.path}"/>`;
 
-                                    tfoot_ags += `<tfoot class="tfoot full-width">
-                                                <tr id="tfoot_${ags}">
+                                        tfoot_ags += `<tr id="tfoot_${ags}" class="tr">
                                                     <th class="tableexport-ignore"></th>
                                                     <th></th>
                                                     <th style="font-weight: normal; font-size:12px; text-align:center">${ags}</th>
@@ -296,32 +295,32 @@ const table = {
                                                         ${img_trend + img_trend_ind}
                                                         
                                                      </th>`;
-                                    if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                        tfoot_ags += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
+                                        if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
+                                            tfoot_ags += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
+                                        }
+                                    });
+                                });
+                                return tfoot_ags.trim();
+                            } else {
+                                return ' ';
+                            }
+                        },
+                        brd_footer = function () {
+                            //get the stat values
+                            $.each(stat_array, function (key) {
+                                $.each(stat_array[key], function (key_set, value_set) {
+                                    if (key_set === 'wert_brd') {
+                                        value_g = value_set;
+                                    } else if (key_set === 'grundakt_brd') {
+                                        grundakt_val = value_set;
+                                    } else {
+                                        let obj = {};
+                                        obj[key_set] = value_set;
+                                        ags_ind_array.push(obj);
                                     }
                                 });
                             });
-                            return tfoot_ags.trim();
-                        } else {
-                            return ' ';
-                        }
-                    },
-                    brd_footer = function () {
-                        //get the stat values
-                        $.each(stat_array, function (key) {
-                            $.each(stat_array[key], function (key_set, value_set) {
-                                if (key_set === 'wert_brd') {
-                                    value_g = value_set;
-                                } else if (key_set === 'grundakt_brd') {
-                                    grundakt_val = value_set;
-                                } else {
-                                    let obj = {};
-                                    obj[key_set] = value_set;
-                                    ags_ind_array.push(obj);
-                                }
-                            });
-                        });
-                        let img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare mobile_hidden chart oneTime"                                                  
+                            let img_trend = `<img class="dev_table indsingle_entwicklungsdiagr dev_chart_compare mobile_hidden chart oneTime"                                                  
                                           data-ags="99" 
                                           data-ind="${indikatorauswahl.getSelectedIndikator()}}" 
                                           data-wert="${value_g}" 
@@ -332,7 +331,7 @@ const table = {
                                           style="margin-left: .5vh;"
                                           src="${dev_chart.icon.single.path}"/>`,
 
-                            img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend mobile_hidden chart oneTime"                                            
+                                img_trend_ind = `<img class="dev_table ind_entwicklungsdiagr dev_chart_trend mobile_hidden chart oneTime"                                            
                                               data-ags="99" 
                                               data-ind="${indikatorauswahl.getSelectedIndikator()}}" 
                                               data-wert="${value_g}" 
@@ -343,8 +342,7 @@ const table = {
                                               id="indikatoren_diagramm_ags_ind99"
                                               src="${dev_chart.icon.multiple.path}"/>`;
 
-                        tfoot_brd = `<tfoot class="tfoot full-width">
-                                    <tr id="tfoot_99">
+                            tfoot_brd = `<tr id="tfoot_99" class="tr">
                                         <th class="tableexport-ignore"></th>
                                         <th></th>
                                         <th style="font-weight: normal; font-size:12px; text-align:center">99</th>
@@ -366,15 +364,24 @@ const table = {
                                             ${img_trend+img_trend_ind}
                                         </th>`;
 
-                        if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                            tfoot_brd += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
-                        }
-                        return tfoot_brd.trim();
-                    };
-                return `${brd_footer() + ags_footer()}</tr></tfoot>`;
+                            if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
+                                tfoot_brd += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
+                            }
+                            return tfoot_brd.trim();
+                        };
+                    return `${brd_footer() + ags_footer()}</tr>`;
+                };
+
+                // add the corresponding parent area data
+                html +=createTableFooter();
+
+
+                return (html + "</tbody>").trim();
+
             };
 
-        html_table += createTableHeader() + createTableBody() + createTableFooter() + '</table><table id="header-fixed"></table>';
+
+        html_table += createTableHeader() + createTableBody() + '</table><table id="header-fixed"></table>';
         return html_table;
     },
     initTableHTML: function () {

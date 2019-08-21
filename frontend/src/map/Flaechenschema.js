@@ -66,11 +66,7 @@ class Flaechenschema{
             HEIGHT = map.getSize().y,
             lat = e.latlng.lat,
             lng = e.latlng.lng,
-            layername='landuse_map';
-        console.log("BBOX: "+BBOX);
-        console.log("SRS: "+SRS);
-        console.log("WIDTH: "+ WIDTH+" HEIGHTH: "+HEIGHT);
-
+            layername='WMS Flächenschema';
 
         let windowWidth = $(window).width();
 
@@ -79,6 +75,10 @@ class Flaechenschema{
         } else {
             WIDTH = map.getSize().x;
         }
+
+        console.log("BBOX: "+BBOX);
+        console.log("SRS: "+SRS);
+        console.log("WIDTH: "+ WIDTH+" HEIGHTH: "+HEIGHT);
 
         let URL= url_flaechenschema_mapserv+ '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
         BBOX + '&SRS=' +
