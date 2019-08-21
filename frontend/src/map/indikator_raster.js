@@ -130,7 +130,7 @@ const indikator_raster = {
                 let URL = 'https://maps.ioer.de/cgi-bin/mapserv_dv?Map=' +
                     mapOptions[0].pfadmapfile + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
                     BBOX + '&SRS=' +
-                    SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT + '&LAYERS=' + mapOptions[0].layername +
+                    SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT + '&LAYERS=WMS Flächenschema' + mapOptions[0].layername +
                     '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
                     mapOptions[0].layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
 

@@ -8,7 +8,7 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             format: 'image/png',
             srs: "EPSG:3035",
             transparent: true,
-            layername: 'landuse_map',
+            layername: 'WMS Flächenschema',
         }),
     fl_init = false;
 class Flaechenschema{
@@ -67,6 +67,10 @@ class Flaechenschema{
             lat = e.latlng.lat,
             lng = e.latlng.lng,
             layername='landuse_map';
+        console.log("BBOX: "+BBOX);
+        console.log("SRS: "+SRS);
+        console.log("WIDTH: "+ WIDTH+" HEIGHTH: "+HEIGHT);
+
 
         let windowWidth = $(window).width();
 
