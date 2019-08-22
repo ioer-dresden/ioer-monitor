@@ -6,6 +6,7 @@ const table = {
             ags: "Gebietsschlüssel",
             regionName: "Gebietsname",
             relevance: "Mittlere Grund-aktualität",
+            difference:"Aktualitäts- Differenz",
             areaInfo: "Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren",
             statistics: "Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators",
             development: "Veränderung des Indikatorwertes für die Gebietseinheit",
@@ -19,6 +20,7 @@ const table = {
             ags: "Area key",
             regionName: "Region name",
             relevance: "Mean relevance",
+            difference:"Difference of temporal relevance",
             areaInfo: "Area information: overview over all the indicators for this spatial unit",
             statistics: "The key statistical parameters for this spatial unit and timeframe",
             development: "Development of the indicator value over time",
@@ -274,8 +276,8 @@ const table = {
 
                                         tfoot_ags += `<tr id="tfoot_${ags}" class="tr" role="row">
                                                     <td class="tableexport-ignore"></td>
-                                                    <td></td>
-                                                    <td>${ags}</td>
+                                                    <td class="selectable"></td>
+                                                    <td class="td_ags">${ags}</td>
                                                     <td class="td_name">
                                                         <img style="margin-left: 10px; margin-right: 10px;"
                                                              data-name="${value.gen}" 
@@ -295,7 +297,7 @@ const table = {
                                                         
                                                      </td>`;
                                         if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                            tfoot_ags += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
+                                            tfoot_ags += `<td class="td_akt indicator_main">${grundakt_val}</td>`;
                                         }
                                     });
                                 });
@@ -343,8 +345,8 @@ const table = {
 
                             tfoot_brd = `<tr id="tfoot_99" class="tr" role="row">
                                         <td class="tableexport-ignore"></td>
-                                        <td></td>
-                                        <td class="td_ags">99</tdtd_ags>
+                                        <td class="selectable"></td>
+                                        <td class="td_ags">99</td>
                                         <td class="td_name">
                                             <img style="margin-left: 10px; margin-right: 10px"
                                                  data-name="Bundesrepublik" 
@@ -363,11 +365,11 @@ const table = {
                                         </td>`;
 
                             if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                tfoot_brd += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
+                                tfoot_brd += `<td class="td_akt indicator_main">${grundakt_val}</td>`;
                             }
                             return tfoot_brd.trim();
                         };
-                    return `${brd_footer() + ags_footer()}</tr>`;
+                    return `${ags_footer() + brd_footer()}</tr>`;
                 };
 
                 // add the corresponding parent area data
@@ -471,7 +473,6 @@ const table = {
             },
             //function to get the order state inside the table, based on the given number
             getExpandValue = function (id, key_set) {
-                console.log("call expand value", id, key_set);
                 let result = "";
                 $.each(expand_array, function (key, value) {
                     if (value.id === id) {
@@ -530,7 +531,6 @@ const table = {
 
             //expand the table---------------------------------------------------------------
             $.each(results, function (key, values_expand) {
-                console.log("results", results);
                 let id = values_expand.id,
                     count = parseInt(values_expand.count),
                     name = getExpandValue(id, 'text'),
@@ -539,8 +539,6 @@ const table = {
                     //the html elements
                     obj_brd = getExpandValue(id),
                     obj_ags = [{ags: "99"}];
-
-                console.log(id, count, name, einheit, time_set);
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if (count === 10) {
@@ -552,7 +550,7 @@ const table = {
                     if (id === "B00AG") {
                         einheit_txt = einheit;
                     }
-                    second_header_row.append(`<th class="th_head ${class_expand} header">${name} ${einheit_txt}</th>`);
+                    second_header_row.append(`<th class="thead sort-arrow ${class_expand}" data-export="true">${name} ${einheit_txt}</th>`);
                     //expand the body
                     $.each(values_expand.values, function (key, value) {
                         table_body.find('tr').each(function () {
@@ -576,7 +574,7 @@ const table = {
                         //append the footer
                         $.each(selection, function (key, value) {
                             let obj_ags_bld = [{ags: value}];
-                            $('#tfoot_' + value).append(`<th id="${value}_expand_${id}" class="val-ags ${class_expand}"></th>`);
+                            $('#tfoot_' + value).append(`<td id="${value}_expand_${id}" class="val-ags ${class_expand}"></td>`);
                             $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
                                 let value_bld = data['values'][value]['value_round'];
                                 $(`#${value}_expand_${id}`).text(value_bld);
@@ -597,8 +595,8 @@ const table = {
                         header_text_second_row = 'Wert für BRD';
                     }
                     first_header_row.append(`<th colspan="2" class="${grey_border} ${class_expand} sorter-false expand">${name}</th>`);
-                    second_header_row.append(`<th class="${grey_border} ${class_expand}">${header_text_first_row}</th>
-                                              <th class="${class_expand}">${header_text_second_row}</th>`);
+                    second_header_row.append(`<th class="${grey_border} ${class_expand} sort-arrow">${header_text_first_row}</th>
+                                              <th class="${class_expand} sort-arrow">${header_text_second_row}</th>`);
 
                     //expand the table body
                     $.each(values_expand.values, function (key, value_json) {
@@ -634,15 +632,15 @@ const table = {
 
                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
                         x = x + 2;
-                        td_grund = '<th class="' + class_expand + ' header">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">Aktualitäts- Differenz</th>';
+                        td_grund = '<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">Aktualitäts- Differenz</th>';
                     }
                     if (expand_panel.getDifferenceState()) {
                         x = x + 1;
-                        td_diff = '<th class="' + class_expand + ' header">Differenz (' + time_set + ' bis ' + zeit_slider.getTimeSet() + ')</th>';
+                        td_diff = '<th class="' + class_expand + ' header sort-arrow">Differenz (' + time_set + ' bis ' + zeit_slider.getTimeSet() + ')</th>';
                     }
                     //append the header
                     first_header_row.append(`<th colspan="${(colspan + x)}" class="${grey_border} ${class_expand} sorter-false expand">${name}</th>`);
-                    second_header_row.append(`<th class="${grey_border} ${class_expand} header">${$('#tabel_header_raumgl').text()}</th>${td_grund + td_diff}`);
+                    second_header_row.append(`<th class="${grey_border} ${class_expand} header sort-arrow">${$('#tabel_header_raumgl').text()}</th>${td_grund + td_diff}`);
 
                     //append the body
                     $.each(values_expand.values, function (key, value_json) {
@@ -703,13 +701,13 @@ const table = {
                         $.each(selection, function (key, value) {
                             let tFoot_append_bld = $('#tfoot_' + value);
                             let obj_ags_bld = [{ags: value}];
-                            tFoot_append_bld.append('<th id="' + value + '_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
+                            tFoot_append_bld.append('<td id="' + value + '_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                             //first append, because if append inside ajax causes some trouble with the table order
                             if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                tFoot_append_bld.append('<th id="expand_grundakt_footer' + value + '" class="val-grundakt ' + class_expand + '"></th><th id="expand_grundakt_footer_diff' + value + '" class="val-grundakt ' + class_expand + '"></th>');
+                                tFoot_append_bld.append('<td id="expand_grundakt_footer' + value + '" class="val-grundakt ' + class_expand + '"></td><th id="expand_grundakt_footer_diff' + value + '" class="val-grundakt ' + class_expand + '"></th>');
                             }
                             if (expand_panel.getDifferenceState()) {
-                                tFoot_append_bld.append('<th id="expand_diff_footer_' + value + '" class="' + class_expand + '"></th>');
+                                tFoot_append_bld.append('<td id="expand_diff_footer_' + value + '" class="' + class_expand + '"></td>');
                             }
                             $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
                                 let data_array_bld = data;
@@ -738,7 +736,7 @@ const table = {
                 else if (count === 30) {
                     //the head
                     first_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' sorter-false expand">' + name + '</th>');
-                    second_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' header">' + $('#tabel_header_raumgl').text() + '</th>');
+                    second_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' header sort-arrow">' + $('#tabel_header_raumgl').text() + '</th>');
                     //expand the table body
                     $.each(values_expand.values, function (key, value_json) {
                         table_body.find('tr').each(function () {
@@ -760,7 +758,7 @@ const table = {
                         //append the footer
                         $.each(selection, function (key, value) {
                             let obj_ags_bld = [{ags: value}];
-                            $('#tfoot_' + value).append('<th id="' + value + '_expand_' + time_set + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
+                            $('#tfoot_' + value).append('<td id="' + value + '_expand_' + time_set + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                             $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
                                 let value_bld = data['values'][value]['value_round'];
                                 $('#' + value + '_expand_' + time_set).text(value_bld);
@@ -771,7 +769,7 @@ const table = {
                 //indicator expand
                 else if (count === 50) {
                     //epand the table header
-                    first_header_row.append(`<th rowspan="2" class="${grey_border + " " + class_expand + " header"}">${name + " (" + einheit + ")"}</th>`);
+                    first_header_row.append(`<th rowspan="2" class="${grey_border + " " + class_expand + " header"} sort-arrow">${name + " (" + einheit + ")"}</th>`);
 
                     //expand the table body
                     $.each(values_expand.values, function (key, value_json) {
@@ -784,7 +782,6 @@ const table = {
                     //expand the footer
                     footer_brd.append('<th id="99_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
-                        console.log(data);
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_ind').text(value_brd);
                     });
@@ -795,9 +792,8 @@ const table = {
                         //append the footer
                         $.each(selection, function (key, value) {
                             let obj_ags_bld = [{ags: value}];
-                            $('#tfoot_' + value).append('<th id="' + value + '_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
+                            $('#tfoot_' + value).append('<td id="' + value + '_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                             $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
-                                console.log(data);
                                 let value_bld = data['values'][value]['value_round'];
                                 $('#' + value + '_expand_ind').text(value_bld);
                             });
@@ -806,9 +802,11 @@ const table = {
                 }
             });
             progressbar.remove();
-            TableHelper.setTableSorter();
+
             table.expandState = true;
             main_view.resizeSplitter(table.getWidth() + 80);
+            TableHelper.destroyTableSorter();
+            TableHelper.setTableSorter();
         });
     },
     setExpandState: function (_state) {
@@ -897,7 +895,6 @@ const table = {
                     let ags = $(this).data('ags');
                     let name = $(this).data('name');
                     let ind = indikatorauswahl.getSelectedIndikator();
-                    console.log("click");
                     dev_chart.chart.settings.ags = ags;
                     dev_chart.chart.settings.name = name;
                     dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
