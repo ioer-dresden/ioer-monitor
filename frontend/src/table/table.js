@@ -230,7 +230,7 @@ const table = {
                                     </tr>`;
                 });
 
-                // Method to create the table
+                // Method to create the table footer! Has to blend into the Table main body, as of Kerngruppenmeeting 21.08.19
                 createTableFooter = function () {
                     //germany values
                     let stat_array = indikator_json.getStatistikArray(),
@@ -272,11 +272,11 @@ const table = {
                                                     id="indikatoren_diagramm_ags_ind${ags}" 
                                                     src="${dev_chart.icon.multiple.path}"/>`;
 
-                                        tfoot_ags += `<tr id="tfoot_${ags}" class="tr">
-                                                    <th class="tableexport-ignore"></th>
-                                                    <th></th>
-                                                    <th style="font-weight: normal; font-size:12px; text-align:center">${ags}</th>
-                                                    <th class="td_name" style="font-weight: normal; font-size:12px">
+                                        tfoot_ags += `<tr id="tfoot_${ags}" class="tr" role="row">
+                                                    <td class="tableexport-ignore"></td>
+                                                    <td></td>
+                                                    <td>${ags}</td>
+                                                    <td class="td_name">
                                                         <img style="margin-left: 10px; margin-right: 10px;"
                                                              data-name="${value.gen}" 
                                                              data-ags="${ags}" 
@@ -285,18 +285,17 @@ const table = {
                                                              class="indikatoren_gebietsprofil" 
                                                              src="frontend/assets/icon/indikatoren.png"/>
                                                              ${name}
-                                                    </th>
-                                                    <th class="val-ags" 
+                                                    </td>
+                                                    <td class="val-ags" 
                                                         data-name="${value.gen}" 
                                                         data-val="${value_g}" 
-                                                        data-ind="${indikatorauswahl.getSelectedIndikator()}"
-                                                        style="font-weight: normal; font-size:12px; text-align:right">
+                                                        data-ind="${indikatorauswahl.getSelectedIndikator()}">
                                                         ${value_set}
                                                         ${img_trend + img_trend_ind}
                                                         
-                                                     </th>`;
+                                                     </td>`;
                                         if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                            tfoot_ags += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
+                                            tfoot_ags += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
                                         }
                                     });
                                 });
@@ -342,11 +341,11 @@ const table = {
                                               id="indikatoren_diagramm_ags_ind99"
                                               src="${dev_chart.icon.multiple.path}"/>`;
 
-                            tfoot_brd = `<tr id="tfoot_99" class="tr">
-                                        <th class="tableexport-ignore"></th>
-                                        <th></th>
-                                        <th style="font-weight: normal; font-size:12px; text-align:center">99</th>
-                                        <th class="td_name" style="font-weight: normal; font-size:12px">
+                            tfoot_brd = `<tr id="tfoot_99" class="tr" role="row">
+                                        <td class="tableexport-ignore"></td>
+                                        <td></td>
+                                        <td class="td_ags">99</tdtd_ags>
+                                        <td class="td_name">
                                             <img style="margin-left: 10px; margin-right: 10px"
                                                  data-name="Bundesrepublik" 
                                                  data-ags="99" 
@@ -354,18 +353,17 @@ const table = {
                                                  title="${table.text[language_manager.getLanguage()].areaInfo}" 
                                                  class="indikatoren_gebietsprofil" src="frontend/assets/icon/indikatoren.png"/>
                                                  Bundesrepublik
-                                        </th>
-                                        <th class="val-ags" 
+                                        </td>
+                                        <td class="val-ags" 
                                             data-name="Bundesrepublik" 
                                             data-val="${value_g}" 
-                                            data-ind="${indikatorauswahl.getSelectedIndikator()}"
-                                            style="font-weight: normal; font-size:12px; ; text-align:right">
+                                            data-ind="${indikatorauswahl.getSelectedIndikator()}">
                                             ${value_g}
                                             ${img_trend+img_trend_ind}
-                                        </th>`;
+                                        </td>`;
 
                             if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                tfoot_brd += `<th class="td_akt indicator_main" style="font-weight: normal; font-size:12px">${grundakt_val}</th>`;
+                                tfoot_brd += `<th class="td_akt indicator_main">${grundakt_val}</th>`;
                             }
                             return tfoot_brd.trim();
                         };

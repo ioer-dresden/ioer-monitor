@@ -91,7 +91,7 @@
 .right_content .scrollable-area #table_ags .tBody_value_table tr:hover{
     background-color: rgba(78,96,170,.5)
 }
-.right_content .scrollable-area #table_ags tr td{
+.right_content .scrollable-area #table_ags tr td {
     display: table-cell;
     font-size: 12px;
     border:.1px solid black;
