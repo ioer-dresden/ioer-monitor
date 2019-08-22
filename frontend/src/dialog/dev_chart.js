@@ -10,7 +10,7 @@ const dev_chart = {
                 true: "Entwicklungs- vergleich"
             },
             indicatorFor: "Indikatorentwicklung für ",
-            info: "Dieses Diagramm stellt die Entwicklung der Indikatoren dar.",
+            info: "",
             indicator: "verfügbare Indikatoren",
             choice: "Bitte wählen.....",
             no_choice: "Kein Indikator gewählt",
@@ -30,7 +30,7 @@ const dev_chart = {
                 true: "Trend comparison"
             },
             indicatorFor: "Trend development for ",
-            info: "This diagram represents the trend of the indicators.",
+            info: "",
             indicator: "available indicators",
             choice: "Please choose.....",
             no_choice: "No indicator selected",
