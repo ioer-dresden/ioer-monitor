@@ -514,6 +514,29 @@ const table = {
             });
             return def.promise();
         }
+        function checkExtraAbsoluteValue(indicatorId){
+            // check if indicator has an Absolute Value!
+            let result=false;
+            if(indicatorId.indexOf("RG") >= 0){ //Check if right RaumGliederung
+                if(indikatorauswahl.getIndikatorKategorie(indicatorId) !== 'O') { // check for Category
+                    console.log("Indikatorkategorie: "+ indikatorauswahl.getIndikatorKategorie(indicatorId));
+                    try { // get the value of kenngoessen_ddm_table
+                        console.log("We are looking for ddm_elements!");
+                        let kenngroessenInput= $('#kenngroessen_ddm_table').find('a');
+                        $.each(kenngroessenInput, function(key,value){
+                            if (value.getAttribute('data-value')==='ABS'){
+                                console.log("Data- value: "+value.getAttribute('data-value'));
+                                result=true;
+                            }
+                        })
+                    }
+                    catch (e) {
+                        console.log("Sorry, could not get the kenngoessen_ddm_table "+e );
+                    }
+                }
+            }
+            return result
+        }
 
         defCalls().done(function (arr) {
             let results = [];
@@ -561,7 +584,7 @@ const table = {
                         })
                     });
                     //expand the footer
-                    footer_brd.append(`<th id="99_expand_${id}" class="val-ags ${class_expand}"></th>`);
+                    footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
                     //grab the data for brd and bld
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
                         let value_brd = data['values']['99']['value_round'];
@@ -619,7 +642,7 @@ const table = {
                     });
                     //expand the table footer
                     $('#table_ags').find('.tfoot').find('tr').each(function () {
-                        $(this).append(`<th class="${grey_border} ${class_expand}" colspan="2"></th>`)
+                        $(this).append(`<td class="${grey_border} ${class_expand}" colspan="2"></td>`)
                     })
                 }
                 //time shift expand
@@ -667,12 +690,12 @@ const table = {
                     });
                     //expand the footer
                     let key_time_shift = id.replace("|", "_");
-                    footer_brd.append('<th id="99_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
+                    footer_brd.append('<td id="99_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                        footer_brd.append('<th id="expand_grundakt_footer_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></th><th id="expand_grundakt_footer_diff_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></th>');
+                        footer_brd.append('<td id="expand_grundakt_footer_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></td><th id="expand_grundakt_footer_diff_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></th>');
                     }
                     if (expand_panel.getDifferenceState()) {
-                        footer_brd.append('<th id="expand_diff_footer_99' + key_time_shift + '" class="' + class_expand + '"></th>');
+                        footer_brd.append('<td id="expand_diff_footer_99' + key_time_shift + '" class="' + class_expand + '"></td>');
                     }
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
                         let data_array = data;
@@ -689,7 +712,7 @@ const table = {
                             //create the difference view
                             let value_ind = parseFloat((value_brd).replace(',', '.'));
                             let value_ags = parseFloat(footer_brd.find('.val-ags').text().replace(',', '.'));
-                            console.warn(value_ind, value_ags);
+                            //console.warn(value_ind, value_ags);
                             $('#expand_diff_footer_99' + key_time_shift).html(getDifferenceDiv(value_ind, value_ags));
                         }
                     });
@@ -704,7 +727,7 @@ const table = {
                             tFoot_append_bld.append('<td id="' + value + '_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                             //first append, because if append inside ajax causes some trouble with the table order
                             if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                                tFoot_append_bld.append('<td id="expand_grundakt_footer' + value + '" class="val-grundakt ' + class_expand + '"></td><th id="expand_grundakt_footer_diff' + value + '" class="val-grundakt ' + class_expand + '"></th>');
+                                tFoot_append_bld.append('<td id="expand_grundakt_footer' + value + '" class="val-grundakt ' + class_expand + '"></td><td id="expand_grundakt_footer_diff' + value + '" class="val-grundakt ' + class_expand + '"></td>');
                             }
                             if (expand_panel.getDifferenceState()) {
                                 tFoot_append_bld.append('<td id="expand_diff_footer_' + value + '" class="' + class_expand + '"></td>');
@@ -746,7 +769,7 @@ const table = {
                         });
                     });
                     //expand the footer
-                    footer_brd.append('<th id="99_expand_' + time_set + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
+                    footer_brd.append('<td id="99_expand_' + time_set + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_' + time_set).text(value_brd);
@@ -768,39 +791,85 @@ const table = {
                 }
                 //indicator expand
                 else if (count === 50) {
-                    //epand the table header
-                    first_header_row.append(`<th rowspan="2" class="${grey_border + " " + class_expand + " header"} sort-arrow">${name + " (" + einheit + ")"}</th>`);
+                    // TODO REINI: Continue here!! 
+                    // Checking, if an extra ABS should be shown! As asked in Kerngruppensitzung 07.08
+                    if (checkExtraAbsoluteValue(id)){   // This indicator has a absolute value
+                        //expand the table header
+                        console.log("Extra Absolute check: TRUE");
+                        first_header_row.append(`<th colspan="2" class="${grey_border + " " + class_expand + " header"}">${name}</th>`);
+                        second_header_row.append('<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">Aktualitäts- Differenz</th>');
+                        console.log("Expanding another indicator, with Absolute Value!: " + name);
 
-                    //expand the table body
-                    $.each(values_expand.values, function (key, value_json) {
-                        table_body.find('tr').each(function () {
-                            if ($(this).attr("id") === key) {
-                                $(this).append('<td class="val-ags ' + grey_border + ' ' + class_expand + '">' + value_json.value_round + '</td>');
-                            }
-                        });
-                    });
-                    //expand the footer
-                    footer_brd.append('<th id="99_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></th>');
-                    $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
-                        let value_brd = data['values']['99']['value_round'];
-                        $('#99_expand_ind').text(value_brd);
-                    });
-                    //if finer spatial choice -> expand the table footer above the brd part
-                    if (typeof raumgliederung.getSelectionId() !== 'undefined') {
-                        //get the selection from the dropdown as string
-                        let selection = $('#dropdown_grenzen_container').dropdown('get value').split(',');
-                        //append the footer
-                        $.each(selection, function (key, value) {
-                            let obj_ags_bld = [{ags: value}];
-                            $('#tfoot_' + value).append('<td id="' + value + '_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
-                            $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
-                                let value_bld = data['values'][value]['value_round'];
-                                $('#' + value + '_expand_ind').text(value_bld);
+                        //expand the table body
+                        $.each(values_expand.values, function (key, value_json) {
+                            table_body.find('tr').each(function () {
+                                if ($(this).attr("id") === key) {
+                                    $(this).append('<td class="val-ags ' + grey_border + ' ' + class_expand + '">' + value_json.value_round + '</td>');
+                                }
                             });
                         });
+                        //expand the footer
+                        footer_brd.append('<td id="99_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
+                        $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
+                            let value_brd = data['values']['99']['value_round'];
+                            $('#99_expand_ind').text(value_brd);
+                        });
+                        //if finer spatial choice -> expand the table footer above the brd part
+                        if (typeof raumgliederung.getSelectionId() !== 'undefined') {
+                            //get the selection from the dropdown as string
+                            let selection = $('#dropdown_grenzen_container').dropdown('get value').split(',');
+                            //append the footer
+                            $.each(selection, function (key, value) {
+                                let obj_ags_bld = [{ags: value}];
+                                $('#tfoot_' + value).append('<td id="' + value + '_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
+                                $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
+                                    let value_bld = data['values'][value]['value_round'];
+                                    $('#' + value + '_expand_ind').text(value_bld);
+                                });
+                            });
+                        }
+
+                    }
+
+
+                    else {    // there is no Absolute Value for this indicator
+                        console.log("Extra Absolute check: FALSE");
+                        //expand the table header
+                        first_header_row.append(`<th rowspan="2" class="${grey_border + " " + class_expand + " header"} sort-arrow">${name + " (" + einheit + ")"}</th>`);
+                        console.log("Expanding another indicator: " + name);
+
+                        //expand the table body
+                        $.each(values_expand.values, function (key, value_json) {
+                            table_body.find('tr').each(function () {
+                                if ($(this).attr("id") === key) {
+                                    $(this).append('<td class="val-ags ' + grey_border + ' ' + class_expand + '">' + value_json.value_round + '</td>');
+                                }
+                            });
+                        });
+                        //expand the footer
+                        footer_brd.append('<td id="99_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
+                        $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
+                            let value_brd = data['values']['99']['value_round'];
+                            $('#99_expand_ind').text(value_brd);
+                        });
+                        //if finer spatial choice -> expand the table footer above the brd part
+                        if (typeof raumgliederung.getSelectionId() !== 'undefined') {
+                            //get the selection from the dropdown as string
+                            let selection = $('#dropdown_grenzen_container').dropdown('get value').split(',');
+                            //append the footer
+                            $.each(selection, function (key, value) {
+                                let obj_ags_bld = [{ags: value}];
+                                $('#tfoot_' + value).append('<td id="' + value + '_expand_ind" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
+                                $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags_bld)).done(function (data) {
+                                    let value_bld = data['values'][value]['value_round'];
+                                    $('#' + value + '_expand_ind').text(value_bld);
+                                });
+                            });
+                        }
                     }
                 }
             });
+
             progressbar.remove();
 
             table.expandState = true;
