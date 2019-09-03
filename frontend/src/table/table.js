@@ -103,7 +103,6 @@ const table = {
                     html += `<th class="th_head grundakt_head" id="grundakt_head"> ${table.text [lan].relevance} </th>`;
                 }
                 html=(html + "</tr></thead>").trim();
-                console.log("This is the HLTM of the Header! : "+ html);
                 return html;
 
             },
@@ -523,13 +522,10 @@ const table = {
             let result=false;
             if(indicatorId.indexOf("RG") >= 0){ //Check if right RaumGliederung
                 if(indikatorauswahl.getIndikatorKategorie(indicatorId) !== 'O') { // check for Category
-                    console.log("Indikatorkategorie: "+ indikatorauswahl.getIndikatorKategorie(indicatorId));
                     try { // get the value of kenngoessen_ddm_table
-                        console.log("We are looking for ddm_elements!");
                         let kenngroessenInput= $('#kenngroessen_ddm_table').find('a');
                         $.each(kenngroessenInput, function(key,value){
                             if (value.getAttribute('data-value')==='ABS'){
-                                console.log("Data- value: "+value.getAttribute('data-value'));
                                 result=true;
                             }
                         })
@@ -544,7 +540,7 @@ const table = {
 
         defCalls().done(function (arr) {
             let results = [],
-                lan= language_manager.getLanguage();
+                lan = language_manager.getLanguage();
             if (expand_array.length === 1) {
                 results.push(arr[0]);
             } else {
@@ -552,12 +548,13 @@ const table = {
                     results.push(arr[i][0]);
                 }
             }
+
             //sort by count
             results = results.sort(function (obj1, obj2) {
                 return obj1.count - obj2.count;
             });
-
             //expand the table---------------------------------------------------------------
+            try {
             $.each(results, function (key, values_expand) {
                 let id = values_expand.id,
                     count = parseInt(values_expand.count),
@@ -567,8 +564,6 @@ const table = {
                     //the html elements
                     obj_brd = getExpandValue(id),
                     obj_ags = [{ags: "99"}];
-
-                console.log("COUNT: "+ count);
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if (count === 10) {
@@ -662,7 +657,7 @@ const table = {
 
                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
                         x = x + 2;
-                        td_grund = '<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">' + table.text[lan].actualityDifference+' </th>';
+                        td_grund = '<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">' + table.text[lan].actualityDifference + ' </th>';
                     }
                     if (expand_panel.getDifferenceState()) {
                         x = x + 1;
@@ -671,7 +666,6 @@ const table = {
                     //append the header
                     first_header_row.append(`<th colspan="${(colspan + x)}" class="${grey_border} ${class_expand} sorter-false expand">${name}</th>`);
                     second_header_row.append(`<th class="${grey_border} ${class_expand} header sort-arrow">${$('#tabel_header_raumgl').text()}</th>${td_grund + td_diff}`);
-                    console.log("Count 20, second header row append: "+ td_grund + td_diff);
                     //append the body
                     $.each(values_expand.values, function (key, value_json) {
                         table_body.find('tr').each(function () {
@@ -798,14 +792,14 @@ const table = {
                 }
                 //indicator expand
                 else if (count === 50) {
-                    // TODO REINI: Continue here!!
+                    // TODO REINI: Continue here!! Have to change the request in Backend, to get Absolute Value for any element. Right now only the absolute level from the currently selected indicator is possible backend/table/TavbleExpand.php
                     // Checking, if an extra ABS should be shown! As asked in Kerngruppensitzung 07.08
-                    if (checkExtraAbsoluteValue(id)){   // This indicator has a absolute value
+                    /*
+                    if (checkExtraAbsoluteValue(id)) {   // This indicator has a absolute value
                         //expand the table header
                         console.log("Extra Absolute check: TRUE");
-                        first_header_row.append('<th colspan="2" class="${grey_border + " " + class_expand + " header"}">'+ name + '</th></th><th rowspan="2" class="' + class_expand + ' header">' + table.text[lan].actualityDifference + '</th>');
-                        second_header_row.append('<th class="' + class_expand + ' header sort-arrow">' + name + ' '+einheit + '</th><th class="' + class_expand + ' header sort-arrow">'+ table.text[lan].actualityDifference+'</th>');
-                        console.log("Text of second header row added absolute value: "+ $('#grundakt_head').text());
+                        first_header_row.append('<th colspan="2" class="${grey_border + " " + class_expand + " header"}">' + name + '</th></th><th rowspan="2" class="' + class_expand + ' header">' + table.text[lan].actualityDifference + '</th>');
+                        second_header_row.append('<th class="' + class_expand + ' header sort-arrow">' + table.text[lan].value +" "+einheit  + '</th><th class="' + class_expand + ' header sort-arrow">'  + '</th>');
                         console.log("Expanding another indicator, with Absolute Value!: " + name);
 
                         //expand the table body
@@ -836,15 +830,12 @@ const table = {
                                 });
                             });
                         }
+                        */
+                    //} else {
+                    // there is no Absolute Value for this indicator
 
-                    }
-
-
-                    else {    // there is no Absolute Value for this indicator
-                        console.log("Extra Absolute check: FALSE");
                         //expand the table header
                         first_header_row.append(`<th rowspan="2" class="${grey_border + " " + class_expand + " header"} sort-arrow">${name + " (" + einheit + ")"}</th>`);
-                        console.log("Expanding another indicator: " + name);
 
                         //expand the table body
                         $.each(values_expand.values, function (key, value_json) {
@@ -875,8 +866,12 @@ const table = {
                             });
                         }
                     }
-                }
+                //}
             });
+        }
+        catch{
+            console.log("ERROR adding the extra columns!!!");
+        }
 
             progressbar.remove();
             TableHelper.setTableSorter();
@@ -931,7 +926,6 @@ const table = {
                 .unbind()
                 .click(function () {
                     const header_rang = $('#tr_rang');
-                    console.log("tr_rang accessed!");
                     if ($(this).hasClass('gebietsname') || $(this).hasClass('ags')) {
                         header_rang.text(table.text[language_manager.getLanguage()].no);
 

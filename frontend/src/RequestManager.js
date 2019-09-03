@@ -78,6 +78,8 @@ class RequestManager{
         }
         let json = JSON.parse('{"ind":{"id":"'+indikatorauswahl.getSelectedIndikator()+'","time":"'+zeit_slider.getTimeSet()+
             '","raumgliederung":"'+raumgliederung_set+'"},"expand_values":'+JSON.stringify(expand_values)+',"ags_array":'+JSON.stringify(ags_set)+',"query":"getTableExpandValues"}');
+        console.log("REquest Manager: table expand. Expand_Values: ");
+        console.info(expand_values);
         return this.sendRequestPHP({"file":json,"query":"getTableExpandValues","type":"POST","debug":false});
     }
     //get the chart values to set up the line chart

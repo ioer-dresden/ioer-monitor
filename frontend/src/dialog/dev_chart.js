@@ -165,7 +165,6 @@ const dev_chart = {
             //let chart_height = $('.ui-dialog').height()*(1.5/3);
             let x = d3.scaleTime().range([0, chart_width]),
                 y = d3.scaleLinear().range([chart_height, 0]);
-
             //show loading info
             $('#diagramm_loading_info').show();
 
@@ -232,7 +231,10 @@ const dev_chart = {
 
             function scaleChart() {
                 let data = [];
+                console.info(chart.merge_data);
                 $.each(chart.merge_data, function (key, value) {
+                    console.log("scaleChart key: "+ key);
+                    console.log("Scale chart Value: ");
                     $.each(value.values, function (x, y) {
                         data.push({"year": y.year, "value": y.value, "real_value": y.real_value});
                     })
@@ -248,6 +250,13 @@ const dev_chart = {
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
                 maxValue = maxValue + maxValue / 10;
                 minValue = minValue - maxValue / 10;
+                console.log(" Chart Merge length: "+ chart.merge_data.length);
+                console.log("Indicator Category:  "+ indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id));
+                // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
+                if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
+                    console.log("NACHHALTIGKEIT!!!!!")
+                    minValue=0;
+                }
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
