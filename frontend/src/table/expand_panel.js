@@ -372,7 +372,7 @@ const expand_panel = {
                         expand_panel.expandArray = _.sortBy(expand_panel.expandArray, 'total').reverse();
                         // If
 
-                        console.log("Adding something!!");
+                        console.log("Adding something to expand panel!!");
                         console.info(expand_panel.expandArray);
                         //disable other choice possibilities
                         helper.disableElement("#"+expand_panel.getHinweisOnlyOlderTimeShiftsObject().attr("id"));

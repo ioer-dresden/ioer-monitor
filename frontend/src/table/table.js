@@ -12,7 +12,8 @@ const table = {
             development: "Veränderung des Indikatorwertes für die Gebietseinheit",
             comparison: "Veränderung der Indikatorwerte für die Gebietseinheit",
             noMunicipal: "Nor available on municipal level",
-            smallCoverage: "Grundaktualisierter Flächenanteil beträgt 50-90 % der Gebietsfläche."
+            smallCoverage: "Grundaktualisierter Flächenanteil beträgt 50-90 % der Gebietsfläche.",
+            actualityDifference: "Aktualitäts- Differenz"
         },
         en: {
             value: "Value",
@@ -25,7 +26,8 @@ const table = {
             statistics: "The key statistical parameters for this spatial unit and timeframe",
             development: "Development of the indicator value over time",
             comparison: "Development of the indicator values over time",
-            smallCoverage: "Latest updated indicator values available only for 50-90 % of the area."
+            smallCoverage: "Latest updated indicator values available only for 50-90 % of the area.",
+            actualityDifference: "Temporal relevance difference"
         }
     },
     td_classes: 'collapsing',
@@ -100,8 +102,10 @@ const table = {
                 if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
                     html += `<th class="th_head grundakt_head" id="grundakt_head"> ${table.text [lan].relevance} </th>`;
                 }
+                html=(html + "</tr></thead>").trim();
+                console.log("This is the HLTM of the Header! : "+ html);
+                return html;
 
-                return (html + "</tr></thead>").trim();
             },
             createTableBody = function () {
                 let html = `
@@ -163,7 +167,7 @@ const table = {
                                                         id="indikatoren_gebietsprofil${ags}" 
                                                         style="margin-left: .2vh;"
                                                         src="frontend/assets/icon/indikatoren.png"/>`,
-                        img_stat = ` <img data-name="${value.gen}" 
+                        img_stat = `<img data-name="${value.gen}" 
                                                  data-ags="${ags}" 
                                                  data-ind="${ind}" 
                                                  data-wert="${value_int}" 
@@ -539,7 +543,8 @@ const table = {
         }
 
         defCalls().done(function (arr) {
-            let results = [];
+            let results = [],
+                lan= language_manager.getLanguage();
             if (expand_array.length === 1) {
                 results.push(arr[0]);
             } else {
@@ -563,6 +568,8 @@ const table = {
                     obj_brd = getExpandValue(id),
                     obj_ags = [{ags: "99"}];
 
+                console.log("COUNT: "+ count);
+
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if (count === 10) {
                     let colspan_th = $('#header_ind_set'),
@@ -573,7 +580,7 @@ const table = {
                     if (id === "B00AG") {
                         einheit_txt = einheit;
                     }
-                    second_header_row.append(`<th class="thead sort-arrow ${class_expand}" data-export="true">${name} ${einheit_txt}</th>`);
+                    second_header_row.append(`<th class="th_head sort-arrow ${class_expand} header" data-export="true">${name} ${einheit_txt}</th>`);
                     //expand the body
                     $.each(values_expand.values, function (key, value) {
                         table_body.find('tr').each(function () {
@@ -648,14 +655,14 @@ const table = {
                 //time shift expand
                 else if (count === 20) {
                     let colspan = 1,
-                        //calculate the cospan
+                        //calculate the colspan
                         td_grund = '',
                         td_diff = '',
                         x = 0;
 
                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
                         x = x + 2;
-                        td_grund = '<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">Aktualitäts- Differenz</th>';
+                        td_grund = '<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">' + table.text[lan].actualityDifference+' </th>';
                     }
                     if (expand_panel.getDifferenceState()) {
                         x = x + 1;
@@ -664,7 +671,7 @@ const table = {
                     //append the header
                     first_header_row.append(`<th colspan="${(colspan + x)}" class="${grey_border} ${class_expand} sorter-false expand">${name}</th>`);
                     second_header_row.append(`<th class="${grey_border} ${class_expand} header sort-arrow">${$('#tabel_header_raumgl').text()}</th>${td_grund + td_diff}`);
-
+                    console.log("Count 20, second header row append: "+ td_grund + td_diff);
                     //append the body
                     $.each(values_expand.values, function (key, value_json) {
                         table_body.find('tr').each(function () {
@@ -791,13 +798,14 @@ const table = {
                 }
                 //indicator expand
                 else if (count === 50) {
-                    // TODO REINI: Continue here!! 
+                    // TODO REINI: Continue here!!
                     // Checking, if an extra ABS should be shown! As asked in Kerngruppensitzung 07.08
                     if (checkExtraAbsoluteValue(id)){   // This indicator has a absolute value
                         //expand the table header
                         console.log("Extra Absolute check: TRUE");
-                        first_header_row.append(`<th colspan="2" class="${grey_border + " " + class_expand + " header"}">${name}</th>`);
-                        second_header_row.append('<th class="' + class_expand + ' header sort-arrow">' + $('#grundakt_head').text() + '</th><th class="' + class_expand + ' header">Aktualitäts- Differenz</th>');
+                        first_header_row.append('<th colspan="2" class="${grey_border + " " + class_expand + " header"}">'+ name + '</th></th><th rowspan="2" class="' + class_expand + ' header">' + table.text[lan].actualityDifference + '</th>');
+                        second_header_row.append('<th class="' + class_expand + ' header sort-arrow">' + name + ' '+einheit + '</th><th class="' + class_expand + ' header sort-arrow">'+ table.text[lan].actualityDifference+'</th>');
+                        console.log("Text of second header row added absolute value: "+ $('#grundakt_head').text());
                         console.log("Expanding another indicator, with Absolute Value!: " + name);
 
                         //expand the table body
@@ -871,11 +879,10 @@ const table = {
             });
 
             progressbar.remove();
-
+            TableHelper.setTableSorter();
             table.expandState = true;
             main_view.resizeSplitter(table.getWidth() + 80);
-            TableHelper.destroyTableSorter();
-            TableHelper.setTableSorter();
+
         });
     },
     setExpandState: function (_state) {
@@ -924,8 +931,10 @@ const table = {
                 .unbind()
                 .click(function () {
                     const header_rang = $('#tr_rang');
+                    console.log("tr_rang accessed!");
                     if ($(this).hasClass('gebietsname') || $(this).hasClass('ags')) {
-                        header_rang.text('lfd. Nr.');
+                        header_rang.text(table.text[language_manager.getLanguage()].no);
+
                     } else {
                         header_rang.text('Rang');
                     }
