@@ -189,7 +189,7 @@ const dev_chart = {
                     return x(d.date);
                 })
                 .y(function (d) {
-                    return y(d.real_value);
+                    return y(d.value);
                 });
 
             let def = $.Deferred();
@@ -228,26 +228,34 @@ const dev_chart = {
                 scaleChart();
                 createPath();
             });
-
             function scaleChart() {
+
+                function calculatePercentiles(firstValue, currentValue){
+                    let onePercent=firstValue/100;
+                    return currentValue/onePercent
+                }
+
                 let data = [];
-                console.info(chart.merge_data);
                 $.each(chart.merge_data, function (key, value) {
-                    console.log("scaleChart key: "+ key);
-                    console.log("Scale chart Value: ");
-                    $.each(value.values, function (x, y) {
-                        data.push({"year": y.year, "value": y.value, "real_value": y.real_value});
+                    let firstValue=0;
+                    $.each(value.values, function (index, val) {
+                        if (index==0){
+                            firstValue=val.real_value;
+                        }
+                        console.log("I am the X: "+ index);
+                        data.push({"year": val.year, "value": val.value, "real_value": val.real_value, "percentile": calculatePercentiles(firstValue,val.real_value)});
                     })
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = helper.getMaxArray(data, "real_value"),
-                    minValue = helper.getMinArray(data, "real_value"),
+                    maxValue = helper.getMaxArray(data, "value"),
+                    minValue = helper.getMinArray(data, "value"),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
 
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
+
                 maxValue = maxValue + maxValue / 10;
                 minValue = minValue - maxValue / 10;
                 console.log(" Chart Merge length: "+ chart.merge_data.length);
@@ -287,7 +295,21 @@ const dev_chart = {
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
-                        return helper.dotTocomma(d)
+
+                        if (chart.settings.ind_vergleich) {
+                                if (array.length===1) {
+                                    console.log("Only one indicator in Array! Showing the normal scale");
+                                    console.info(d);
+                                    return data[0].real_value;
+                                }
+
+                            if (d !== minValue || d !== maxValue) {
+                                console.log("D not minmax: "+d);
+                                return d;
+                            }
+                        } else {
+                            return d;
+                        }
                     }));
             }
 
@@ -492,7 +514,7 @@ const dev_chart = {
                         .attr("data-month", data[i].month)
                         .attr("data-einheit", data[i].einheit)
                         .attr("data-color", color_set)
-                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].real_value) + ")")
+                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].value) + ")")
                         .on("mouseenter", function () {
                             //handle what happens on moueover
                             const chart = dev_chart.chart,
@@ -621,7 +643,6 @@ const dev_chart = {
         },
         controller: {
             set: function () {
-
                 const chart = dev_chart.chart;
                 let ind_auswahl = $('#indicator_ddm_diagramm'),
                     download = $('#diagramm_download_format_choice');
