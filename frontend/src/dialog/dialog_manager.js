@@ -60,7 +60,9 @@ const dialog_manager={
                 else{return manager.calculateHeight();}
             },
             title=function(){
+                console.log("Getting title, dialog_manager");
                 let title =  manager.instructions.title;
+                console.log(title);
                 return title.replace("- ","");
             };
         //close existing dialog
