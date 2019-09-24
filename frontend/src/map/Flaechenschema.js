@@ -109,8 +109,25 @@ class FlaechenschemaLegende{
             image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${time}&IMGSIZE=150+300`,
             header = Flaechenschema.getTxt();
         legende.init();
-        legende.getDatenalterContainerObject().hide();
-        legende.getIndicatorInfo().hide();
+        // hide all Elements except the needed ones ("datengrundlage_container")
+        let infoChildren= legende.getIndicatorInfoContainer().children();
+        let child;
+        let keepLegendElements=[legende.getDatengrundlageContainer().attr('id')]; // here include all the elements (from "indicator_info" <div>) that are to be kept
+        for (child of infoChildren){
+            try{
+                if (!(keepLegendElements.includes(child.id))){
+                    child.style.display = "none"
+                }
+            }
+            catch{
+                console.log("Did not manage to hide child")
+            }
+
+        }
+        legende.getDatenalterContainerObject().css("visibility", "hidden");
+        console.log("Trying to hide datenalterContainer");
+        legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> </div>
+                                                    <br/>`) //set the data source
         legende.close();
         legende.getLegendeColorsObject().empty().load(image,function () {
             let elements = $(this).find('img');
@@ -121,5 +138,6 @@ class FlaechenschemaLegende{
             });
         });
         map_header.updateText(`${header[language_manager.getLanguage()].title} (${time})`);
+        //legende.getDatenalterContainerObject().css("display", "none");
     }
 }
