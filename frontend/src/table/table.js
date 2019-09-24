@@ -585,7 +585,7 @@ const table = {
                             }
                         })
                     });
-                    //expand the footer
+                    //expand the footer    Footer has been changed to be integrated in 'main' data table  -> th changed to td, hee VCS history
                     footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
                     //grab the data for brd and bld
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
@@ -877,7 +877,8 @@ const table = {
             TableHelper.setTableSorter();
             table.expandState = true;
             main_view.resizeSplitter(table.getWidth() + 80);
-
+            TableHelper.destroyTableSorter();
+            TableHelper.setTableSorter();
         });
     },
     setExpandState: function (_state) {
@@ -928,7 +929,6 @@ const table = {
                     const header_rang = $('#tr_rang');
                     if ($(this).hasClass('gebietsname') || $(this).hasClass('ags')) {
                         header_rang.text(table.text[language_manager.getLanguage()].no);
-
                     } else {
                         header_rang.text('Rang');
                     }

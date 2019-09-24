@@ -7,8 +7,8 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             version: '1.3.0',
             format: 'image/png',
             srs: "EPSG:3035",
-            transparent: true,
-            layername: 'WMS Flächenschema',
+            transparent: true
+            //layername: 'WMS Flächenschema',
         }),
     fl_init = false;
 class Flaechenschema{
@@ -21,13 +21,11 @@ class Flaechenschema{
     static init(){
         zeit_slider.init([2000,2006,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018]);
         if(!fl_init){
-            fl_init=true;
             Flaechenschema.set();
-
+            fl_init=true;
         }else{
-            fl_init=false;
             Flaechenschema.remove();
-
+            fl_init=false;
         }
     }
     static set(){
@@ -62,19 +60,20 @@ class Flaechenschema{
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
             SRS = 'EPSG:4326',
-            WIDTH,
+            WIDTH = map.getSize().x,
             HEIGHT = map.getSize().y,
             lat = e.latlng.lat,
             lng = e.latlng.lng,
             layername='WMS Flächenschema';
 
         let windowWidth = $(window).width();
-
+/*
         if (windowWidth > 2045) {
             WIDTH = 2045;
         } else {
             WIDTH = map.getSize().x;
         }
+        */
 
         console.log("BBOX: "+BBOX);
         console.log("SRS: "+SRS);
@@ -110,21 +109,9 @@ class FlaechenschemaLegende{
             image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${time}&IMGSIZE=150+300`,
             header = Flaechenschema.getTxt();
         legende.init();
-        // hide all Elements except the needed ones ("datengrundlage_container")
-        let infoChildren= legende.getIndicatorInfoContainer().children();
-        let child;
-        let keepLegendElements=[legende.getDatengrundlageContainer().attr('id')]; // here include all the elements (from "indicator_info" <div>) that are to be kept
-        for (child of infoChildren){
-            try{
-                if (!(keepLegendElements.includes(child.id))){
-                    child.style.display = "none"
-                }
-            }
-            catch{
-                console.log("Did not manage to hide child")
-            }
-
-        }
+        legende.getDatenalterContainerObject().hide();
+        legende.getIndicatorInfo().hide();
+        legende.close();
         legende.getLegendeColorsObject().empty().load(image,function () {
             let elements = $(this).find('img');
             elements.each(function (key, value) {
@@ -134,8 +121,5 @@ class FlaechenschemaLegende{
             });
         });
         map_header.updateText(`${header[language_manager.getLanguage()].title} (${time})`);
-        legende.getDatenalterContainerObject().hide();
-        legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> </div>
-                                                    <br/>`) //set the data source
     }
 }
