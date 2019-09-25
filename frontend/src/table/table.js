@@ -517,6 +517,7 @@ const table = {
             });
             return def.promise();
         }
+        /*
         function checkExtraAbsoluteValue(indicatorId){
             // check if indicator has an Absolute Value!
             let result=false;
@@ -537,6 +538,7 @@ const table = {
             }
             return result
         }
+        */
 
         defCalls().done(function (arr) {
             let results = [],
@@ -550,9 +552,15 @@ const table = {
             }
 
             //sort by count
-            results = results.sort(function (obj1, obj2) {
+            try{
+                results = results.sort(function (obj1, obj2) {
                 return obj1.count - obj2.count;
             });
+            }
+            catch (e) {
+             console.log("Error sorting the results!" + e);
+            }
+
             //expand the table---------------------------------------------------------------
             try {
             $.each(results, function (key, values_expand) {
@@ -567,6 +575,7 @@ const table = {
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if (count === 10) {
+                    console.log("Case 10");
                     let colspan_th = $('#header_ind_set'),
                         rowspan_head = parseFloat(colspan_th.attr("colspan")),
                         einheit_txt = '(' + einheit + ')';
@@ -585,7 +594,7 @@ const table = {
                             }
                         })
                     });
-                    //expand the footer    Footer has been changed to be integrated in 'main' data table  -> th changed to td, hee VCS history
+                    //expand the footer    Footer has been changed to be integrated in 'main' data table  -> th changed to td, see VCS history
                     footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
                     //grab the data for brd and bld
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
@@ -609,7 +618,8 @@ const table = {
                 }
                 //expand with BRD ord BLD as new columns outside the table
                 else if (count === 15) {
-                    //epand the header
+                    console.log("Case 15");
+                    //expand the header
                     let header_text_first_row = "Differenz",
                         header_text_second_row = "Bld-Wert (" + indikatorauswahl.getIndikatorEinheit() + ")",
                         //get only the difference Value for data sorting
@@ -649,6 +659,7 @@ const table = {
                 }
                 //time shift expand
                 else if (count === 20) {
+                    console.log("Case 20");
                     let colspan = 1,
                         //calculate the colspan
                         td_grund = '',
@@ -693,7 +704,7 @@ const table = {
                     let key_time_shift = id.replace("|", "_");
                     footer_brd.append('<td id="99_expand_' + key_time_shift + '" class="val-ags ' + grey_border + ' ' + class_expand + '"></td>');
                     if (indikatorauswahl.getSelectedIndiktorGrundaktState()) {
-                        footer_brd.append('<td id="expand_grundakt_footer_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></td><th id="expand_grundakt_footer_diff_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></th>');
+                        footer_brd.append('<td id="expand_grundakt_footer_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></td><td id="expand_grundakt_footer_diff_99' + key_time_shift + '" class="val-grundakt ' + class_expand + '"></td>');
                     }
                     if (expand_panel.getDifferenceState()) {
                         footer_brd.append('<td id="expand_diff_footer_99' + key_time_shift + '" class="' + class_expand + '"></td>');
@@ -758,6 +769,7 @@ const table = {
                 }
                 //trend values
                 else if (count === 30) {
+                    console.log("Case 30");
                     //the head
                     first_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' sorter-false expand">' + name + '</th>');
                     second_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' header sort-arrow">' + $('#tabel_header_raumgl').text() + '</th>');
@@ -792,6 +804,7 @@ const table = {
                 }
                 //indicator expand
                 else if (count === 50) {
+                    console.log("Case 50");
                     // TODO REINI: Continue here!! Have to change the request in Backend, to get Absolute Value for any element. Right now only the absolute level from the currently selected indicator is possible backend/table/TavbleExpand.php
                     // Checking, if an extra ABS should be shown! As asked in Kerngruppensitzung 07.08
                     /*
@@ -872,14 +885,13 @@ const table = {
         catch{
             console.log("ERROR adding the extra columns!!!");
         }
-
-            progressbar.remove();
-            TableHelper.setTableSorter();
             table.expandState = true;
             main_view.resizeSplitter(table.getWidth() + 80);
-            TableHelper.destroyTableSorter();
-            TableHelper.setTableSorter();
-        });
+            TableHelper.updateTableSorter();
+            progressbar.remove();
+            console.log("Done adding shit")
+        })
+
     },
     setExpandState: function (_state) {
         this.expandState = _state;

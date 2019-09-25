@@ -21,6 +21,8 @@ class RequestManager{
                 colors()+
                 '},"format":{"id":"'+raeumliche_visualisierung.getRaeumlicheGliederung()+
                 '"},"query":"getJSON"}');
+        console.log(`Request manager JSON:  `);
+        console.info(json);
         return this.sendRequestPHP({"file":json,"query":"getGeoJSON","type":"POST","debug":false});
     }
     //check if a indicator is possible to view in the the given kind of visualization (gebiete/raster)

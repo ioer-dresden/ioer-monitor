@@ -68,7 +68,7 @@ class TableHelper{
     }
     //refresh the sorter cache
     static updateTableSorter(){
-        table.getDOMObject().trigger("update");
+        table.getDOMObject().trigger("updateAll");
     }
     static destroyTableSorter(){
         table.getDOMObject().trigger("destroy");
