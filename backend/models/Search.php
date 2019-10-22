@@ -56,7 +56,7 @@ class Search{
     private function queryArea(){
         $JSON = '';
         $searchTerm = $this->search_string;
-        $year_pg = 2016;
+        $year_pg = DBFactory::getMySQLTask()->getPostGreYear(2016);
 
         $geom = "the_geom ";
 
@@ -88,6 +88,7 @@ class Search{
                 $JSON .= '{"titel": "' . $row->gen. '","value":["' . $array[0]. '","'.$array[1].'"],"category":"Orte","description":"'.$row->des.'"},';
             }
         }
+
         /*$query_g50 = "select gid, ags, gen,des, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_g50_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%".$searchTerm."%')";
         $erg_g50 = DBManagerFactory::getPostgreSQLManager()->query($query_g50);
         if (empty((array)$erg_krs)) {
@@ -97,6 +98,7 @@ class Search{
                 $JSON .= '{"titel": "' . $row->gen. '","value":["' . $array[0]. '","'.$array[1].'"],"category":"Orte","description":"'.$row->des.'"},';
             }
         }*/
+
         $query_stt = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_stt_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%".$searchTerm."%')";
         $erg_stt = DBFactory::getPostgreSQLManager()->query($query_stt);
 

@@ -14,6 +14,7 @@ const search={
     },
     controller:{
         set:function(){
+            console.log("initiating search!");
             search
                 .getDomObject()
                 .search({

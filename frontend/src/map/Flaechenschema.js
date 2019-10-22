@@ -122,7 +122,6 @@ class FlaechenschemaLegende{
             catch{
                 console.log("Did not manage to hide child")
             }
-
         }
         legende.getDatenalterContainerObject().css("visibility", "hidden");
         console.log("Trying to hide datenalterContainer");
@@ -135,6 +134,7 @@ class FlaechenschemaLegende{
                 let src = $(this).attr('src'),
                     url = "https://maps.ioer.de" + src;
                 $(this).attr('src', url);
+                console.log("URL for Land Use Map: "+url)
             });
         });
         map_header.updateText(`${header[language_manager.getLanguage()].title} (${time})`);

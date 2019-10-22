@@ -31,7 +31,6 @@ try{
     //set the ags_array
     $ags_array = array();
     //set the factory
-
     if(strlen($ags_user)>0){
         $ags_array = explode(",",$ags_user);
     }

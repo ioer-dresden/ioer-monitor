@@ -889,7 +889,6 @@ const table = {
             main_view.resizeSplitter(table.getWidth() + 80);
             TableHelper.updateTableSorter();
             progressbar.remove();
-            console.log("Done adding shit")
         })
 
     },

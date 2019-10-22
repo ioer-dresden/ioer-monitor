@@ -54,7 +54,9 @@ const area_info={
         //singelton
         const object = area_info;
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
+        console.log("Start area info open");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
+                console.log("Start area info open");
                 object.parameters.parentSpatialUnits= data["spatial_info"];
                 data= object.extractRelevantDataFromJSON(data,object.parameters.lan);
                 object.parameters.data=data;
