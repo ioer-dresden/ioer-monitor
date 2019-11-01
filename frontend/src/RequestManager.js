@@ -71,7 +71,8 @@ class RequestManager{
         let json = JSON.parse('{"ind":{"klassenzahl":"'+klassenanzahl.getSelection()+'","time":"'+zeit_slider.getTimeSet()+
             '","ags_array":"'+gebietsauswahl.getSelection()+
             '","raumgliederung":"'+raumgliederung+'"},"query":"countgeometries"}');
-        console.log(`getCountGeometries":  `);
+        console.log(`getCountGeometries input :`);
+        console.info(raumgliederung);
         console.info(json);
         return this.sendRequestPHP({"file":json,"query":"getCountGeometries","type":"POST","debug":false});
     }

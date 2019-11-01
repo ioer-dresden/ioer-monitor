@@ -364,6 +364,7 @@ class MysqlTasks extends MysqlManager
     {
         try {
             $sql = "SELECT IFNULL(FARBWERT_MAX,'FFCC99') as max,IFNULL(FARBWERT_MIN,'66CC99') as min FROM m_zeichenvorschrift WHERE ID_INDIKATOR='" . $ind . "'";
+
             $rs = $this->query($sql);
             return $rs[0];
         } catch (Error $e) {

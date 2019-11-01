@@ -6,6 +6,7 @@ class PostgreTasks extends PostgreManager
     function getGeometry($year,$spatial_extend,$ags_array)
     {
         try {
+
             $log = "  getGeometry ";
             file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             $digit = '';
@@ -111,7 +112,7 @@ class PostgreTasks extends PostgreManager
             $log = "  getAGSName ";
             file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             if (intval($year) == 2018) {
-                $year = 2016;
+                $year = 2017;
             }
             $sql = "select gen from vg250_" . $raumgliederung . "_" . $year . "_grob where ags ='" . $ags . "'";
             $rs = $this->query($sql);
