@@ -111,10 +111,10 @@ const table = {
                     <tbody id="tBody_selection" class="tBody_value_table"></tbody>
                     <tbody id="tBody_value_table" class="tBody_value_table">
                 `,
+                    //set the counter
                     i = 0;
                 $.each(layer_array, function (key, value) {
-                    //set the counter
-                    i += 1;
+
 
                     //set the variables
                     let ags = value.ags,
@@ -205,9 +205,9 @@ const table = {
                         };
 
                     try {
-                        if (name === layer_array[i].gen && base_raumgliederung.getBaseRaumgliederungId() !== "bld") {
+                        if (i!=0 && name === layer_array[i-1].gen && base_raumgliederung.getBaseRaumgliederungId() !== "bld") {
                             if (value.krs) {
-                                name = name + " (" + value.krs + ")";
+                                name = name + " (" + des + ")";
                             } else {
                                 name = name + " (" + des + ")";
                             }
@@ -233,6 +233,7 @@ const table = {
                                         </td>
                                         ${grundaktualitaet_td()}
                                     </tr>`;
+                    i += 1
                 });
 
                 // Method to create the table footer! Has to blend into the Table main body, as of Kerngruppenmeeting 21.08.19
