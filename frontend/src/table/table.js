@@ -447,6 +447,7 @@ const table = {
         TableHelper.setStickTableHeader();
     },
     expand: function () {
+        console.log("Starting expanding");
         const table = this;
         let grey_border = 'grey_border',
             class_expand = expand_panel.class_expand,
@@ -458,7 +459,9 @@ const table = {
             def = $.Deferred();
 
         TableHelper.resetColspan();
-
+        console.log("Expand array: ");
+        console.info(expand_array);
+        console.log("Reset colspan done");
         //function
         let getDifferenceValue = function (value_ind, value_ags) {
                 return (value_ags - value_ind).toFixed(2);
@@ -489,6 +492,7 @@ const table = {
                         }
                     }
                 });
+                console.log("Expand value got");
                 return result;
             },
             //function to create the difference div, value ind = expand value
@@ -508,14 +512,18 @@ const table = {
         //reset the colspan to originial
         if (!indikatorauswahl.getSelectedIndiktorGrundaktState()) {
             TableHelper.setColspanHeader(5);
+            console.log("Resetting colspan");
         }
 
         function defCalls() {
             let requests = [];
             $.each(expand_array, function (key, value) {
+                console.log("Starting getting table expand values: ");
+                console.info(value);
                 requests.push(RequestManager.getTableExpandValues(value));
             });
             $.when.apply($, requests).done(function () {
+                console.log("Fetched the expand values from backend");
                 def.resolve(arguments);
             });
             return def.promise();
@@ -542,8 +550,9 @@ const table = {
             return result
         }
         */
-
+        console.log("Before calling DefCalls");
         defCalls().done(function (arr) {
+            console.log("DEfcalls done");
             let results = [],
                 lan = language_manager.getLanguage();
             if (expand_array.length === 1) {
@@ -601,6 +610,7 @@ const table = {
                     footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
                     //grab the data for brd and bld
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
+                        console.log("Trying again to get the expand values maybe this time?");
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_' + id).text(value_brd);
                     });

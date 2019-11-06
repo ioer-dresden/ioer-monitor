@@ -78,7 +78,9 @@ class RequestManager{
         }
         let json = JSON.parse('{"ind":{"id":"'+indikatorauswahl.getSelectedIndikator()+'","time":"'+zeit_slider.getTimeSet()+
             '","raumgliederung":"'+raumgliederung_set+'"},"expand_values":'+JSON.stringify(expand_values)+',"ags_array":'+JSON.stringify(ags_set)+',"query":"getTableExpandValues"}');
-        return this.sendRequestPHP({"file":json,"query":"getTableExpandValues","type":"POST","debug":false});
+        console.log("here is what we want: ");
+        console.info(json);
+        return this.sendRequestPHP({"file":json,"query":"getTableExpandValues","type":"POST","debug":true});
     }
     //get the chart values to set up the line chart
     static getTrendValues(indicator_id,ags,settings){

@@ -20,6 +20,7 @@ class TableExpand{
         $ind_set  = $id_splitted[0];
         //temp array
         $ags_array = array();
+        $year_pg = DBFactory::getMySQLTask()->getPostGreYear($time_set);
         try {
             //store the passed ags JSON in an array
             foreach ($ags_array_user as $item) {
@@ -29,7 +30,7 @@ class TableExpand{
             $length_ags = strlen($ags_array[0]);
 
              //get all the bld values in an array
-            $bldArray = DBFactory::getPostgreSQLManager()->query("SELECT gen, ags FROM vg250_bld_2016_grob");
+            $bldArray = DBFactory::getPostgreSQLManager()->query("SELECT gen, ags FROM vg250_bld_".$year_pg."_grob");
 
             //set the ABS IND
             if($ind_set==='ABS'){
@@ -54,8 +55,8 @@ class TableExpand{
 
             //get the object
             $sql = "SELECT i.INDIKATORWERT AS value, i.ID_INDIKATOR as ind, z.EINHEIT as einheit,i.FEHLERCODE as fc, i.HINWEISCODE as hc, i.AGS as ags, z.RUNDUNG_NACHKOMMASTELLEN as rundung,
-                              COALESCE((SELECT x.INDIKATORWERT FROM m_indikatorwerte_".$time_set." x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags=i.AGS AND x.INDIKATORWERT <=".$time_set."),0) as grundakt_year,
-                                COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$time_set." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS =i.AGS AND y.INDIKATORWERT <= ".$time_set."),0) as grundakt_month
+                              COALESCE((SELECT x.INDIKATORWERT FROM m_indikatorwerte_".$time_set." x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags=i.AGS AND x.INDIKATORWERT <=".$time_set." GROUP BY x.INDIKATORWERT),0) as grundakt_year,
+                                COALESCE((SELECT y.INDIKATORWERT FROM m_indikatorwerte_".$time_set." y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS =i.AGS AND y.INDIKATORWERT <= ".$time_set." GROUP BY y.INDIKATORWERT),0) as grundakt_month
                                         FROM m_indikatorwerte_" . $time_set . " i, m_indikatoren z
                                         Where i.ID_INDIKATOR =  '" . $ind_set . "'
                                         And z.ID_INDIKATOR = i.ID_INDIKATOR
