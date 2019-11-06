@@ -112,7 +112,7 @@ class PostgreTasks extends PostgreManager
             $log = "  getAGSName ";
             file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             if (intval($year) == 2018) {
-                $year = 2017;
+                $year = DBFactory::getMySQLTask()->getPostGreYear($year);
             }
             $sql = "select gen from vg250_" . $raumgliederung . "_" . $year . "_grob where ags ='" . $ags . "'";
             $rs = $this->query($sql);
