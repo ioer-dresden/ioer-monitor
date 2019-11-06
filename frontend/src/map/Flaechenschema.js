@@ -1,6 +1,6 @@
 
 //global variablen
-let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
+let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
         {
             cache: Math.random(),
@@ -29,8 +29,9 @@ class Flaechenschema{
         }
     }
     static set(){
-        map_header.set();
-        map_header.show();
+        //map_header.set();
+        //map_header.show();
+        map_header.updateText(`${Flaechenschema.getTxt()[language_manager.getLanguage()].title} (${zeit_slider.getTimeSet()})`);
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
         //hide all elements which are not needed
@@ -105,9 +106,7 @@ class Flaechenschema{
 
 class FlaechenschemaLegende{
     constructor() {
-        let time = zeit_slider.getTimeSet(),
-            image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${time}&IMGSIZE=150+300`,
-            header = Flaechenschema.getTxt();
+        let image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`;
         legende.init();
         // hide all Elements except the needed ones ("datengrundlage_container")
         let infoChildren= legende.getIndicatorInfoContainer().children();
@@ -137,7 +136,6 @@ class FlaechenschemaLegende{
                 console.log("URL for Land Use Map: "+url)
             });
         });
-        map_header.updateText(`${header[language_manager.getLanguage()].title} (${time})`);
         //legende.getDatenalterContainerObject().css("display", "none");
     }
 }

@@ -47,10 +47,9 @@ const indikator_json = {
                     }
                 },10);
         });
-        console.log(`Paramters for the Request manager-> IND: ${ind} , time: ${time}, raumgliederung: ${raumgliederung_set}, ags: ${ags_set}, klassenanzahl: ${klassenanzahl.getSelection()}, klassifizierung: ${klassifzierung.getSelectionId()}`);
+
         $.when(RequestManager.getGeoJSON(ind, time, raumgliederung_set, ags_set,klassenanzahl.getSelection(),klassifzierung.getSelectionId()))
             .done(function(arr){
-                console.log("Data got from Request Manager");
                 //now we have access to array of data
                 try{
                     object.json_file = JSON.parse(arr);

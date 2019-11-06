@@ -12,12 +12,14 @@ const map_header = {
         return $elem;
     },
     show: function () {
+        console.log("Header Show");
         this.getDOMObject().show();
     },
     hide: function () {
         this.getDOMObject().hide();
     },
     set: function () {
+        console.log("Header Set");
         const object = this;
         let indikator_text = object.getDOMObject().find('#header'),
             time = zeit_slider.getTimeSet();
@@ -64,6 +66,7 @@ const map_header = {
         }
     },
     updateText: function (_text) {
+        console.log("Header Update");
         this.getDOMObject().find("#header_raumgl").empty();
         this.getDOMObject().find("#header").text(_text);
     },

@@ -205,6 +205,7 @@ const table = {
                         };
 
                     try {
+                        // checking to differentiate between same name
                         if (i!=0 && name === layer_array[i-1].gen && base_raumgliederung.getBaseRaumgliederungId() !== "bld") {
                             if (value.krs) {
                                 name = name + " (" + des + ")";
@@ -233,6 +234,7 @@ const table = {
                                         </td>
                                         ${grundaktualitaet_td()}
                                     </tr>`;
+                    // Increment counter- needed to differentiate between same name Stadt/Landkreis
                     i += 1
                 });
 
@@ -345,14 +347,14 @@ const table = {
                                               data-title="${table.text[language_manager.getLanguage()].comparison}"
                                               title="${table.text[language_manager.getLanguage()].comparison}"
                                               id="indikatoren_diagramm_ags_ind99"
-                                              src="${dev_chart.icon.multiple.path}"/>`;
+                                              src="${dev_chart.icon.multiple.path}"/>`,
 
                             tfoot_brd = `<tr id="tfoot_99" class="tr" role="row">
                                         <td class="tableexport-ignore"></td>
                                         <td class="selectable"></td>
                                         <td class="td_ags">99</td>
                                         <td class="td_name">
-                                            <img style="margin-left: 10px; margin-right: 10px"
+                                            <img class="indikatoren_gebietsname chart"
                                                  data-name="Bundesrepublik" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
