@@ -4,11 +4,11 @@ include "../database/DBFactory.php";
 
 class Search
 {
-    public function __construct($search_string, $option, $language)
+    public function __construct($search_string, $option, $lan)
     {
         $this->search_string = strtolower($search_string);
         $this->option = $option;
-        $this->language = $language;
+        $this->language = $lan;
     }
 
     public function query()
@@ -25,52 +25,47 @@ class Search
 
     private function queryIndicator()
     {
-
         // manage languages:
         if ($this->language == "de") {
             $ind_name = "INDIKATOR_NAME";
+            $cat_name = "THEMA_KAT_NAME";
             $info1 = "INFO_VIEWER_ZEILE_1";
             $info2 = "INFO_VIEWER_ZEILE_2";
             $info3 = "INFO_VIEWER_ZEILE_3";
         } else {
             $ind_name = "INDIKATOR_NAME_EN";
+            $cat_name = "THEMA_KAT_NAME_EN";
             $info1 = "INFO_VIEWER_ZEILE_1_EN";
             $info2 = "INFO_VIEWER_ZEILE_2_EN";
             $info3 = "INFO_VIEWER_ZEILE_3_EN";
         }
         $JSON = '';
-        $sql = "SELECT i." . $ind_name . " as name, i.ID_INDIKATOR as id, i.EINHEIT as unit, i.ID_THEMA_KAT as id_cat, k.THEMA_KAT_NAME as cat_name,k.THEMA_KAT_NAME_EN as cat_name_en,
+        $sql = "SELECT i." . $ind_name . " as name, i.ID_INDIKATOR as id, i.EINHEIT as unit, i.ID_THEMA_KAT as id_cat, k." . $cat_name . " as cat_name,
               i.METHODIK as methodik, i.BEDEUTUNG_INTERPRETATION as bedeutung, i.DATENGRUNDLAGE_ZEILE_1 as daten1,i.DATENGRUNDLAGE_ZEILE_2 as daten2,
-              i." . $info1 . " as info1,i." . $info2 . " as info2,i." . $info3 . " as info3
+              i." . $info1 . " as info1,i." . $info2 . " as info2, i." . $info3 . " as info3
             FROM m_indikatoren i, m_indikator_freigabe f, m_thematische_kategorien k
             WHERE f.ID_INDIKATOR = i.ID_Indikator
             AND f.STATUS_INDIKATOR_FREIGABE =3
             AND k.ID_THEMA_KAT = i.ID_THEMA_KAT
             GROUP BY i.ID_INDIKATOR";
-
-            $indObject = DBFactory::getMySQLManager()->query($sql);
-
+        $indObject = DBFactory::getMySQLManager()->query($sql);
         $q = $this->search_string;
         //seach for the suitable results inside the object
         foreach ($indObject as $key => $row) {
             //search inside indicators
             if (strpos(strtolower($row->id), $q) !== false
                 or strpos(strtolower($row->name), $q) !== false
-                or strpos(strtolower($row->name_en), $q) !== false
-                or strpos(strtolower($row->cat_name), $q) !== false
-                or strpos(strtolower($row->cat_name_en), $q) !== false
-                // Exclude these search parameters as by Kerngruppe Meeting Protocol 05.11.19
-                //or strpos(strtolower($row->methodik),$q)!==false
-                //or strpos(strtolower($row->bedeutung),$q)!==false
+                // removing search parameters that are not needed as of meeting protocol from 05.11
+                //or strpos(strtolower($row->cat_name), $q) !== false
+                //or strpos(strtolower($row->methodik), $q) !== false
+                //or strpos(strtolower($row->bedeutung), $q) !== false
                 //or strpos(strtolower($row->daten1),$q)!==false
                 //or strpos(strtolower($row->daten2),$q)!==false
                 or strpos(strtolower($row->info1), $q) !== false
                 or strpos(strtolower($row->info2), $q) !== false
                 or strpos(strtolower($row->info3), $q) !== false
             ) {
-
                 $name = str_replace('"', '', $row->name);
-
                 $string = '{"titel": "' . $name . '","value":"' . $row->id . '","category":"Indikatoren","description":"' . $row->unit . '"},';
                 if (strpos($JSON, $string) !== true) {
                     $JSON .= $string;

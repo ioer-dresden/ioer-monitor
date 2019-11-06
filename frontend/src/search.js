@@ -14,7 +14,7 @@ const search={
     },
     controller:{
         set:function(){
-            let language=language_manager.getLanguage();
+            console.log("initiating search!");
             search
                 .getDomObject()
                 .search({
@@ -63,7 +63,8 @@ const search={
                         data:{
                             values:function(){
                                 let value = $('#search_input_field').val();
-                                return '{"q":"'+value+'","option":"all", "language:"'+language+'","query":"search"}';
+                                console.log("Search query: "+ '{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}');
+                                return '{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}';
                             }
                         },
                         cache:false
