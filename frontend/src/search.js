@@ -14,6 +14,7 @@ const search={
     },
     controller:{
         set:function(){
+            let language=language_manager.getLanguage();
             search
                 .getDomObject()
                 .search({
@@ -62,7 +63,7 @@ const search={
                         data:{
                             values:function(){
                                 let value = $('#search_input_field').val();
-                                return '{"q":"'+value+'","option":"all","query":"search"}';
+                                return '{"q":"'+value+'","option":"all", "language:"'+language+'","query":"search"}';
                             }
                         },
                         cache:false

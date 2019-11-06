@@ -208,10 +208,17 @@ try{
     }
     //search for a indicator or place
     else if($query=="search"){
-        $search_string = $json_obj['q'];
-        $option = $json_obj['option'];
-        $search = new Search($search_string,$option);
-        echo json_encode($search->query());
+        try {
+            $search_string = $json_obj['q'];
+            $option = $json_obj['option'];
+            $language = $json_obj['language'];
+            $search = new Search($search_string, $option, $language);
+            echo json_encode($search->query());
+        }
+        catch(Error $e){
+            $trace = $e->getTrace();
+            echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
+        }
     }
     //get the values to create the chart
     else if($query=="gettrend"){
