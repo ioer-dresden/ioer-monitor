@@ -41,6 +41,7 @@ const additiveLayer={
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',name: "osm",id: 'baselayer'})
         },
         baselayer_rgb:{
+            // flaechenschema is implemented in its own .js class now. the flaechenschema overlay is here redundant
             flaechenschema:new L.tileLayer.wms("https://maps.ioer.de/cgi-bin/mapserv_dv?map=/mapsrv_daten/detailviewer/wms_mapfiles/flaechenschema.map", {
                 layers: "Flaechenschema",
                 version: '1.3.0',
@@ -142,6 +143,7 @@ const additiveLayer={
         state:false,
         overlays_set : new L.FeatureGroup().on("mouseover",function(){
             this.eachLayer(function(layer){
+                console.log("bringing to front");
                 layer.bringToBack();
             })}),
         laendergrenzen:new L.GeoJSON('',{
