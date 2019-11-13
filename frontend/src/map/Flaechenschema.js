@@ -6,19 +6,22 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             version: '1.3.0',
             format: 'image/png',
             srs: "EPSG:3035",
-            transparent: true
-            //layername: 'WMS Flächenschema',
+            transparent: true,
+            name: 'WMS Flächenschema',
         }),
     zusatzlayers = {
         bordersWMS: L.tileLayer.wms("http://sg.geodatenzentrum.de/wms_vg250", {
-            layers: "vg250_lan",
+            layers:'vg250_lan',
             version: '1.3.0',
             format: 'image/png',
             srs: "EPSG:3035",
             transparent: true,
             name: "Landesgrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
-            id: 'zusatzlayer'
+            id: 'zusatzlayer',
+            minZoom:0,
+            maxZoom:8,
+            tileSize:600
         })
     },
     fl_init = false;
@@ -55,9 +58,13 @@ class Flaechenschema {
         toolbar.closeAllMenues();
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
         flaechenschema_wms.addTo(map);
-        this.getZoomLayers();
-        for (zusatzMap in zusatzlayers){}:
+
+        let zoomLevel = map.getZoom();
+        console.log("Zoom Level:" + zoomLevel);
+
+        zusatzlayers.bordersWMS.addTo(map);
         let legende = new FlaechenschemaLegende();
+        //this.setZoomBehavior();
 
         map.on('click', this.onClick);
     }
@@ -75,16 +82,40 @@ class Flaechenschema {
         fl_init = false
     }
 
+    static setMaplayerTileParameters(mapLayer){
+        let WIDTH = map.getSize().x,
+            HEIGHT = map.getSize().y,
+            point= [WIDTH, HEIGHT];
+        mapLayer.setParams({tileSize:point});
+    }
+
     static getZoomLayers() {
         let zoomLevel = map.getZoom();
         console.log("Zoom Level:" + zoomLevel);
         if (zoomLevel <10) {
+
             zusatzlayers.bordersWMS.setParams({layers: `vg250_lan`});
         }
         else {
-            console.log("Zoom too big for ")
+            console.log("Zoom too big for ");
+            zusatzlayers.bordersWMS.setParams({layers: `vg250_lan,vg250_gem`});
         }
     }
+
+    static addZusatzMaps(){
+        this.getZoomLayers();
+            for (let mapLayer in zusatzlayers){
+                this.setMaplayerTileParameters(zusatzlayers[mapLayer]);
+                zusatzlayers[mapLayer].addTo(map);
+            }
+    }
+    static setZoomBehavior(){
+        for (let mapLayer in zusatzlayers){
+            zusatzlayers[mapLayer].on('zoomend', this.addZusatzMaps());
+        }
+    }
+
+
 
     static onClick(e) {
         console.log("OnClick in Flaeschenschema!! ");
