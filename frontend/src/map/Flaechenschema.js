@@ -10,18 +10,30 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             name: 'WMS Flächenschema',
         }),
     zusatzlayers = {
-        bordersWMS: L.tileLayer.wms("http://sg.geodatenzentrum.de/wms_vg250", {
-            layers:'vg250_lan',
-            version: '1.3.0',
+        bordersBld: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
             format: 'image/png',
-            srs: "EPSG:3035",
             transparent: true,
             name: "Landesgrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
-            id: 'zusatzlayer',
             minZoom:0,
             maxZoom:8,
-            tileSize:600
+        }),
+        bordersKrs: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
+            format: 'image/png',
+            transparent: true,
+            name: "Kreisgrenzen",
+            attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
+            minZoom:9,
+            maxZoom:13,
+        }),
+
+        bordersGem: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
+            format: 'image/png',
+            transparent: true,
+            name: "Gemeindegrenzen",
+            attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
+            minZoom:13,
+            maxZoom:18
         })
     },
     fl_init = false;
@@ -59,10 +71,28 @@ class Flaechenschema {
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
         flaechenschema_wms.addTo(map);
 
-        let zoomLevel = map.getZoom();
-        console.log("Zoom Level:" + zoomLevel);
 
-        zusatzlayers.bordersWMS.addTo(map);
+        let additiveBLD=L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
+                format:'image/png',
+                transparent:true,
+                minZoom:0,
+                maxZoom:8
+            }
+        ),
+            additiveKRS= L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
+                    format:'image/png',
+                    transparent:true,
+                    minZoom:9,
+                    maxZoom:12
+                }
+            );
+
+        zusatzlayers.bordersBld.getLayer("vg250_lan").addTo(map);
+        zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
+        zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
+
+        this.setZoomBehavior();
+        //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
         //this.setZoomBehavior();
 
@@ -72,6 +102,9 @@ class Flaechenschema {
     static remove() {
         let indicator_set = indikatorauswahl.getSelectedIndikator();
         flaechenschema_wms.removeFrom(map);
+        for (let zusatzMap in zusatzlayers){
+            zusatzMap.removeFrom(map)
+        }
         helper.enableElement('.fl-unbind', "");
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexMain());
         indikatorauswahl.setIndicator(indicator_set);
@@ -82,31 +115,13 @@ class Flaechenschema {
         fl_init = false
     }
 
-    static setMaplayerTileParameters(mapLayer){
-        let WIDTH = map.getSize().x,
-            HEIGHT = map.getSize().y,
-            point= [WIDTH, HEIGHT];
-        mapLayer.setParams({tileSize:point});
-    }
-
-    static getZoomLayers() {
+    static addZusatzMaps(){
         let zoomLevel = map.getZoom();
         console.log("Zoom Level:" + zoomLevel);
-        if (zoomLevel <10) {
-
-            zusatzlayers.bordersWMS.setParams({layers: `vg250_lan`});
-        }
-        else {
-            console.log("Zoom too big for ");
-            zusatzlayers.bordersWMS.setParams({layers: `vg250_lan,vg250_gem`});
-        }
-    }
-
-    static addZusatzMaps(){
-        this.getZoomLayers();
-            for (let mapLayer in zusatzlayers){
-                this.setMaplayerTileParameters(zusatzlayers[mapLayer]);
-                zusatzlayers[mapLayer].addTo(map);
+        for (let mapLayer in zusatzlayers){
+            console.log("Adding layer: "+ mapLayer);
+            //this.setMaplayerTileParameters(zusatzlayers[mapLayer]);
+            zusatzlayers[mapLayer].addTo(map);
             }
     }
     static setZoomBehavior(){
