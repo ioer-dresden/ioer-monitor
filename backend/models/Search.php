@@ -32,12 +32,14 @@ class Search
             $info1 = "INFO_VIEWER_ZEILE_1";
             $info2 = "INFO_VIEWER_ZEILE_2";
             $info3 = "INFO_VIEWER_ZEILE_3";
+            $indicators ="Indikatoren";
         } else {
             $ind_name = "INDIKATOR_NAME_EN";
             $cat_name = "THEMA_KAT_NAME_EN";
             $info1 = "INFO_VIEWER_ZEILE_1_EN";
             $info2 = "INFO_VIEWER_ZEILE_2_EN";
             $info3 = "INFO_VIEWER_ZEILE_3_EN";
+            $indicators = "Indicators";
         }
         $JSON = '';
         $sql = "SELECT i." . $ind_name . " as name, i.ID_INDIKATOR as id, i.EINHEIT as unit, i.ID_THEMA_KAT as id_cat, k." . $cat_name . " as cat_name,
@@ -66,7 +68,7 @@ class Search
                 or strpos(strtolower($row->info3), $q) !== false
             ) {
                 $name = str_replace('"', '', $row->name);
-                $string = '{"titel": "' . $name . '","value":"' . $row->id . '","category":"Indikatoren","description":"' . $row->unit . '"},';
+                $string = '{"titel": "' . $name . '","value":"' . $row->id . '","category":"' .$indicators .'","description":"' . $row->unit . '"},';
                 if (strpos($JSON, $string) !== true) {
                     $JSON .= $string;
                 }
@@ -77,6 +79,12 @@ class Search
 
     private function queryArea()
     {
+        // manage languages:
+        if ($this->language == "de") {
+            $locations ="Orte";
+        } else {
+            $locations = "Locations";
+        }
         $JSON = '';
         $searchTerm = $this->search_string;
         $year_pg = DBFactory::getMySQLTask()->getPostGreYear(2016);
@@ -88,7 +96,7 @@ class Search
         foreach ($erg_bld as $row) {
             $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
             $array = explode(" ", $coordinates);
-            $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"Orte","description":"Bundesland"},';
+            $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Bundesland"},';
         }
 
         $query_ror = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_ror_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
@@ -97,7 +105,7 @@ class Search
             foreach ($erg_ror as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
-                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"Orte","description":"Raumordnungsregion"},';
+                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Raumordnungsregion"},';
             }
         }
 
@@ -108,7 +116,7 @@ class Search
             foreach ($erg_krs as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
-                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"Orte","description":"' . $row->des . '"},';
+                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"' . $row->des . '"},';
             }
         }
 
@@ -129,7 +137,7 @@ class Search
             foreach ($erg_stt as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
-                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"Orte","description":"Stadtteil"},';
+                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Stadtteil"},';
             }
         }
 
@@ -139,7 +147,7 @@ class Search
             foreach ($erg_gem as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
-                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"Orte","description":"Gemeinde"},';
+                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Gemeinde"},';
             }
         }
         return $JSON;
