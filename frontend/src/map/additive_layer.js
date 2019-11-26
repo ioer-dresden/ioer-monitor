@@ -143,7 +143,6 @@ const additiveLayer={
         state:false,
         overlays_set : new L.FeatureGroup().on("mouseover",function(){
             this.eachLayer(function(layer){
-                console.log("bringing to front");
                 layer.bringToBack();
             })}),
         laendergrenzen:new L.GeoJSON('',{

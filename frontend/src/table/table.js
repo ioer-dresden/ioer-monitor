@@ -447,7 +447,6 @@ const table = {
         TableHelper.setStickTableHeader();
     },
     expand: function () {
-        console.log("Starting expanding");
         const table = this;
         let grey_border = 'grey_border',
             class_expand = expand_panel.class_expand,
@@ -459,9 +458,7 @@ const table = {
             def = $.Deferred();
 
         TableHelper.resetColspan();
-        console.log("Expand array: ");
-        console.info(expand_array);
-        console.log("Reset colspan done");
+
         //function
         let getDifferenceValue = function (value_ind, value_ags) {
                 return (value_ags - value_ind).toFixed(2);
@@ -492,7 +489,6 @@ const table = {
                         }
                     }
                 });
-                console.log("Expand value got");
                 return result;
             },
             //function to create the difference div, value ind = expand value
@@ -512,18 +508,14 @@ const table = {
         //reset the colspan to originial
         if (!indikatorauswahl.getSelectedIndiktorGrundaktState()) {
             TableHelper.setColspanHeader(5);
-            console.log("Resetting colspan");
         }
 
         function defCalls() {
             let requests = [];
             $.each(expand_array, function (key, value) {
-                console.log("Starting getting table expand values: ");
-                console.info(value);
                 requests.push(RequestManager.getTableExpandValues(value));
             });
             $.when.apply($, requests).done(function () {
-                console.log("Fetched the expand values from backend");
                 def.resolve(arguments);
             });
             return def.promise();
@@ -550,9 +542,7 @@ const table = {
             return result
         }
         */
-        console.log("Before calling DefCalls");
         defCalls().done(function (arr) {
-            console.log("DEfcalls done");
             let results = [],
                 lan = language_manager.getLanguage();
             if (expand_array.length === 1) {
@@ -587,7 +577,6 @@ const table = {
 
                 //expand elements inside the map indicator table (S00AG, B00AG, ABS)
                 if (count === 10) {
-                    console.log("Case 10");
                     let colspan_th = $('#header_ind_set'),
                         rowspan_head = parseFloat(colspan_th.attr("colspan")),
                         einheit_txt = '(' + einheit + ')';
@@ -610,7 +599,6 @@ const table = {
                     footer_brd.append(`<td id="99_expand_${id}" class="val-ags ${class_expand}"></td>`);
                     //grab the data for brd and bld
                     $.when(RequestManager.getTableExpandValues(obj_brd, obj_ags)).done(function (data) {
-                        console.log("Trying again to get the expand values maybe this time?");
                         let value_brd = data['values']['99']['value_round'];
                         $('#99_expand_' + id).text(value_brd);
                     });
@@ -631,7 +619,6 @@ const table = {
                 }
                 //expand with BRD ord BLD as new columns outside the table
                 else if (count === 15) {
-                    console.log("Case 15");
                     //expand the header
                     let header_text_first_row = "Differenz",
                         header_text_second_row = "Bld-Wert (" + indikatorauswahl.getIndikatorEinheit() + ")",
@@ -672,7 +659,6 @@ const table = {
                 }
                 //time shift expand
                 else if (count === 20) {
-                    console.log("Case 20");
                     let colspan = 1,
                         //calculate the colspan
                         td_grund = '',
@@ -782,7 +768,6 @@ const table = {
                 }
                 //trend values
                 else if (count === 30) {
-                    console.log("Case 30");
                     //the head
                     first_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' sorter-false expand">' + name + '</th>');
                     second_header_row.append('<th class="' + grey_border + ' ' + class_expand + ' header sort-arrow">' + $('#tabel_header_raumgl').text() + '</th>');
@@ -817,8 +802,7 @@ const table = {
                 }
                 //indicator expand
                 else if (count === 50) {
-                    console.log("Case 50");
-                    // TODO REINI: Continue here!! Have to change the request in Backend, to get Absolute Value for any element. Right now only the absolute level from the currently selected indicator is possible backend/table/TavbleExpand.php
+                    // TODO REINI: Continue here!! Have to change the request in Backend, to get Absolute Value for any element. Right now only the absolute level from the currently selected indicator is possible backend/table/TableExpand.php
                     // Checking, if an extra ABS should be shown! As asked in Kerngruppensitzung 07.08
                     /*
                     if (checkExtraAbsoluteValue(id)) {   // This indicator has a absolute value
@@ -895,8 +879,8 @@ const table = {
                 //}
             });
         }
-        catch{
-            console.log("ERROR adding the extra columns!!!");
+        catch(err){
+            console.log("ERROR adding the extra columns!!!\n"+ err);
         }
             table.expandState = true;
             main_view.resizeSplitter(table.getWidth() + 80);

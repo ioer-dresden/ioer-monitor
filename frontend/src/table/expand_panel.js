@@ -370,10 +370,7 @@ const expand_panel = {
                         expand_panel.expandArray.push({id:addedValue,text:addedText,time:zeit_slider.getTimeSet(),einheit:false, count: 50});
                         //sort the time array desc
                         expand_panel.expandArray = _.sortBy(expand_panel.expandArray, 'total').reverse();
-                        // If
 
-                        console.log("Adding something to expand panel!!");
-                        console.info(expand_panel.expandArray);
                         //disable other choice possibilities
                         helper.disableElement("#"+expand_panel.getHinweisOnlyOlderTimeShiftsObject().attr("id"));
                         helper.disableElement("#"+expand_panel.getTrendAuswahlContainer().attr("id"));

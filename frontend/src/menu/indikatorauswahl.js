@@ -172,7 +172,6 @@ const indikatorauswahl ={
                 if(value.ind === ind) {
                     if(value.avability===false){
                         alert_manager.alertNotAsRaster();
-                        console.log(ind,value.ind,value.avability);
                         return false;
                     }else{
                         if(!ind){

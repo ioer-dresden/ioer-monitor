@@ -7,6 +7,7 @@ const map_print={
             histogram:"Histogramm",
             indicatorInformation:"Information zum Indikator",
             baseData:"Datengrundlage",
+            termsOfUse:"Nutzungsbedingungen",
             create:"Erstelle "
         },
         en:{
@@ -15,6 +16,7 @@ const map_print={
             histogram:"Histogram",
             indicatorInformation:"Information about the indicator",
             baseData:"Base data",
+            termsOfUse:"Terms of use",
             create:"Creating "
         }
     },

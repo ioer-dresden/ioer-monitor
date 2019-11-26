@@ -7,8 +7,9 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             format: 'image/png',
             srs: "EPSG:3035",
             transparent: true,
-            name: 'WMS Flächenschema',
+            name: 'WMS Flächenschema'
         }),
+    // defining the overlay map parameters. Basically separate layers needed to achieve different zoom behaviours for each layer. uses plugin leaflet.wms.js. Plugin needed to achieve 'single Tile WMS'. Otherwise the area labels are repeated in each Leaflet Tile.
     zusatzlayers = {
         bordersBld: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
             format: 'image/png',
@@ -16,7 +17,7 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             name: "Landesgrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:0,
-            maxZoom:8,
+            maxZoom:8
         }),
         bordersKrs: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
             format: 'image/png',
@@ -24,7 +25,7 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             name: "Kreisgrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:9,
-            maxZoom:13,
+            maxZoom:11
         }),
 
         bordersGem: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
@@ -32,7 +33,7 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             transparent: true,
             name: "Gemeindegrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
-            minZoom:13,
+            minZoom:12,
             maxZoom:18
         })
     },
@@ -71,40 +72,24 @@ class Flaechenschema {
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
         flaechenschema_wms.addTo(map);
 
-
-        let additiveBLD=L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
-                format:'image/png',
-                transparent:true,
-                minZoom:0,
-                maxZoom:8
-            }
-        ),
-            additiveKRS= L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
-                    format:'image/png',
-                    transparent:true,
-                    minZoom:9,
-                    maxZoom:12
-                }
-            );
-
+        // Adding all extra overlay maps
         zusatzlayers.bordersBld.getLayer("vg250_lan").addTo(map);
         zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
         zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
 
-        this.setZoomBehavior();
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
-        //this.setZoomBehavior();
-
         map.on('click', this.onClick);
     }
 
     static remove() {
         let indicator_set = indikatorauswahl.getSelectedIndikator();
         flaechenschema_wms.removeFrom(map);
-        for (let zusatzMap in zusatzlayers){
-            zusatzMap.removeFrom(map)
-        }
+        // remove all the extra overlay layers. has a bit different syntax than flaeschenschema_wms, because uses plugin leaflet.wms.js
+        zusatzlayers.bordersBld.getLayer("vg250_lan").removeFrom(map);
+        zusatzlayers.bordersKrs.getLayer("vg250_krs").removeFrom(map);
+        zusatzlayers.bordersGem.getLayer("vg250_gem").removeFrom(map);
+
         helper.enableElement('.fl-unbind', "");
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexMain());
         indikatorauswahl.setIndicator(indicator_set);
@@ -114,23 +99,6 @@ class Flaechenschema {
         map.off('click', this.onClick);
         fl_init = false
     }
-
-    static addZusatzMaps(){
-        let zoomLevel = map.getZoom();
-        console.log("Zoom Level:" + zoomLevel);
-        for (let mapLayer in zusatzlayers){
-            console.log("Adding layer: "+ mapLayer);
-            //this.setMaplayerTileParameters(zusatzlayers[mapLayer]);
-            zusatzlayers[mapLayer].addTo(map);
-            }
-    }
-    static setZoomBehavior(){
-        for (let mapLayer in zusatzlayers){
-            zusatzlayers[mapLayer].on('zoomend', this.addZusatzMaps());
-        }
-    }
-
-
 
     static onClick(e) {
         console.log("OnClick in Flaeschenschema!! ");
@@ -200,18 +168,15 @@ class FlaechenschemaLegende {
             }
         }
         legende.getDatenalterContainerObject().css("visibility", "hidden");
-        console.log("Trying to hide datenalterContainer");
-        legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> </div>
+        legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> <br/> <a href=" http://sg.geodatenzentrum.de/web_public/nutzungsbedingungen.pdf"> Nutzungsbedingungen</a> </div>
                                                     <br/>`) //set the data source
 
         legende.getLegendeColorsObject().empty().load(image, function () {
             let elements = $(this).find('img');
             elements.each(function (key, value) {
-                console.log("Adding image");
                 let src = $(this).attr('src'),
                     url = "https://monitor.ioer.de" + src;
                 $(this).attr('src', url);
-                console.log("URL for Land Use Map: " + url)
             });
         });
         legende.getDatenalterContainerObject().css("display", "none");

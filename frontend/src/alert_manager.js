@@ -102,7 +102,6 @@ const alert_manager= {
         },500);
     },
     alertNotInTimeShift:function(){
-        console.log("Not in time");
         setTimeout(function () {
             swal(
                 alert_manager.text[language_manager.getLanguage()].notAvailable,

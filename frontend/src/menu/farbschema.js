@@ -94,7 +94,6 @@ const farbschema = {
                 showInput: true,
                 preferredFormat: "hex",
                 change: function(color) {
-                    console.log("on change");
                     trigger_max.val(color);
                 }
             });
@@ -134,10 +133,8 @@ const farbschema = {
                 }
                 else {
                     if (typeof raumgliederung.getSelectionId() === 'undefined') {
-                        console.log("undefined");
                         indikator_json.init();
                     } else {
-                        console.log("defined");
                         indikator_json.init(raumgliederung.getSelectionId());
                     }
                 }

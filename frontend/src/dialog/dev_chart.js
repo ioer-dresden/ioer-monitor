@@ -227,16 +227,14 @@ const dev_chart = {
                     for (let item in chart.merge_data) {
                         let firstValue = 100;
                         for (let val in chart.merge_data[item].values) {
-                            console.log("Value of val: " + val);
+
                             if (val == 0) {
                                 firstValue = chart.merge_data[item].values[val].real_value;
-                                console.log("REAL REAL FIRST VALUE" + firstValue)
+
                             }
                             chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value)
                         }
                     }
-                    console.log("THis is merge data: ");
-                    console.info(chart.merge_data);
 
                 }
                 $('#diagramm_loading_info').hide();
@@ -253,7 +251,6 @@ const dev_chart = {
                 let data = [];
                 $.each(chart.merge_data, function (key, value) {
                     let firstValue = value.values[0]['real_value'];
-                    console.log("First Value, setting axis: " + firstValue);
                     $.each(value.values, function (x, y) {
                         data.push({"year": y.year, "value": y.value, "real_value": y.real_value})
                     })
@@ -270,12 +267,9 @@ const dev_chart = {
 
                 maxValue = maxValue + maxValue / 30;
                 minValue = minValue - maxValue / 30;
-                console.log(" Chart Merge length: " + chart.merge_data.length);
-                console.log("Indicator Category:  " + indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id));
 
                 // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
                if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
-                   console.log("NACHHALTIGKEIT!!!!!")
                    minValue=0;
                }
 

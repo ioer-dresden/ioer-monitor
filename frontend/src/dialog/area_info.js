@@ -54,9 +54,7 @@ const area_info={
         //singelton
         const object = area_info;
         this.parameters=this.getAllParameters(ags, gen); // getting the regular Parameters
-        console.log("Start area info open");
         $.when(RequestManager.getSpatialOverview(indikatorauswahl.getSelectedIndikator(),ags).done(function(data){    // Fetching the data. Async function, waiting for results before continuing
-                console.log("Start area info open");
                 object.parameters.parentSpatialUnits= data["spatial_info"];
                 data= object.extractRelevantDataFromJSON(data,object.parameters.lan);
                 object.parameters.data=data;
@@ -363,7 +361,6 @@ const area_info={
                 };
                 break;
             default:
-                console.log("Language other than German! Default is English");
                 break;
         }
         return language;
@@ -377,9 +374,7 @@ const area_info={
             $("#area_info_csv_export")
                 .unbind()
                 .click(function(){
-                    console.log("clicked");
                     Export_Helper.exportTable("areaInfoDataTable");
-                    console.log("Exported");
                 });
         }
     }

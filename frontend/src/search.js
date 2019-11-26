@@ -14,7 +14,6 @@ const search={
     },
     controller:{
         set:function(){
-            console.log("initiating search!");
             search
                 .getDomObject()
                 .search({
@@ -49,6 +48,7 @@ const search={
                                     };
                                 }
                                 // add result to category
+                                console.log("Language: "+ item.language);
                                 response.results[language].results.push({
                                     title       : item.titel,
                                     description : item.description,
@@ -63,7 +63,7 @@ const search={
                         data:{
                             values:function(){
                                 let value = $('#search_input_field').val();
-                                console.log("Search query: "+ '{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}');
+                                console.info('{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}');
                                 return '{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}';
                             }
                         },

@@ -126,7 +126,6 @@ class AdditiveLayerControl{
                 </div>
              </div>
         `;
-        console.log("open");
         //settings for the manager
         let dialog_settings = {
             endpoint:`${endpoint_id}`,

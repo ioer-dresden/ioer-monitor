@@ -142,7 +142,6 @@ const grundakt_layer = {
                 },
                 setSVG=function(){
                     indikator_json_group.clean();
-                    console.log(grund_layer);
                     grund_layer.addTo(map);
                     grund_layer.bringToFront();
                     opacity_slider.setOpacity();
