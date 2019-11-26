@@ -61,7 +61,6 @@ const dialog_manager={
             },
             title=function(){
                 let title =  manager.instructions.title;
-                console.log(title);
                 return title.replace("- ","");
             };
         //close existing dialog

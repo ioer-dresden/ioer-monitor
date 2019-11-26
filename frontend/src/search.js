@@ -18,6 +18,7 @@ const search={
     },
     init:function(){
         //css settings for result
+        console.log("Initializing search!");
         this.getResultObject().css({'max-height':$('#toolbar').height()-50,'overflow-y':'auto', 'overflow-x':'hidden'});
         this.controller.set();
     },

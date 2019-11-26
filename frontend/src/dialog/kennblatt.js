@@ -104,8 +104,8 @@ const kennblatt={
             },
             literatur=function(){
                 try {
-                    let litereatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())];
-                    return he.decode(litereatur);
+                    let literatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())];
+                    return he.decode(literatur);
                 }catch(err){
                     console.log(err);
                     return "";
