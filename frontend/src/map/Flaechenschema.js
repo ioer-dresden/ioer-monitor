@@ -15,6 +15,7 @@ let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map
             format: 'image/png',
             transparent: true,
             name: "Landesgrenzen",
+            identify:false,
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:0,
             maxZoom:8
@@ -70,12 +71,12 @@ class Flaechenschema {
         helper.enableElement('.indicator_choice', "");
         toolbar.closeAllMenues();
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
-        flaechenschema_wms.addTo(map);
-
         // Adding all extra overlay maps
         zusatzlayers.bordersBld.getLayer("vg250_lan").addTo(map);
-        zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
-        zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
+
+        //zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
+        //zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
+        flaechenschema_wms.addTo(map);
 
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
@@ -85,10 +86,11 @@ class Flaechenschema {
     static remove() {
         let indicator_set = indikatorauswahl.getSelectedIndikator();
         flaechenschema_wms.removeFrom(map);
+        map.removeLayer(zusatzlayers.bordersBld.getLayer("vg250_lan"));
         // remove all the extra overlay layers. has a bit different syntax than flaeschenschema_wms, because uses plugin leaflet.wms.js
-        zusatzlayers.bordersBld.getLayer("vg250_lan").removeFrom(map);
-        zusatzlayers.bordersKrs.getLayer("vg250_krs").removeFrom(map);
-        zusatzlayers.bordersGem.getLayer("vg250_gem").removeFrom(map);
+        //zusatzlayers.bordersBld.getLayer("vg250_lan").removeFrom(map);
+        //zusatzlayers.bordersKrs.getLayer("vg250_krs").removeFrom(map);
+        //zusatzlayers.bordersGem.getLayer("vg250_gem").removeFrom(map);
 
         helper.enableElement('.fl-unbind', "");
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexMain());

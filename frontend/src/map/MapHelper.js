@@ -50,7 +50,7 @@ class MapHelper{
   }
   static clearMap(){
       map.eachLayer(function(_layer){
-          // Try/catch block as a quick and dirty solution to avoid crashing when asking for non-existing layers. Happens because leaflet plugin leaflet.wms.js has a bit different sintax?? (needs _layer.getLayer(layername).removeFrom(map)). See the implementation in Flaeschenschema.js
+          // Try/catch block as a quick and dirty solution to avoid crashing when asking for non-existing layers. Happens because leaflet plugin leaflet.wms.js has a bit different syntax?? (needs _layer.getLayer(layername).removeFrom(map)). See the implementation in Flaeschenschema.js
           try {
               _layer.removeFrom(map);
           }

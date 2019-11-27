@@ -21,7 +21,9 @@ const dev_chart = {
             set_choice: function () {
                 return `Bitte ${base_raumgliederung.getBaseRaumgliederungText(true)} angeben`
             },
-            cancel: "Abbrechen"
+            cancel: "Abbrechen",
+            value:"Wert",
+            explanation:"Realtive Änderung des Indikators. Anfangswert gleich 100 %"
         },
         en: {
             title: {
@@ -40,7 +42,9 @@ const dev_chart = {
             set_choice: function () {
                 return `Please set ${base_raumgliederung.getBaseRaumgliederungText(true)}`
             },
-            cancel: "Cancel"
+            cancel: "Cancel",
+            value:"Value",
+            explanation:"Relative change of indicator value. Relative starting value is 100 %"
         }
     },
     icon: {
@@ -107,6 +111,7 @@ const dev_chart = {
                     </div>
                     <div id="diagramm_info_text">
                         <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span> in <b id="diagrmm_gebiets_typ"></b>.</div>
+                        <div>${this.text[lan].explanation} </div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
@@ -501,7 +506,7 @@ const dev_chart = {
                         .attr("data-month", data[i].month)
                         .attr("data-einheit", function () {
                             if (chart.settings.ind_vergleich) {
-                                return ""
+                                return data[i].einheit
                             } else {
                                 return data[i].einheit;
                             }
@@ -523,10 +528,10 @@ const dev_chart = {
                                 x = elem.position().left - document.getElementById('visualisation').getBoundingClientRect().x + 10,
                                 y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
-                                text_value = "Wert: " + real_value + " " + einheit;
+                                text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
 
                             elem.attr("r", 7.5);
-
+                            console.log("Einheit: "+ einheit);
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {
                                 let data = [],
@@ -558,9 +563,10 @@ const dev_chart = {
                                     html = text_value + "<br/>" + "Stand: " + month + "/" + year;
                                 } else {
                                     //the text part
-                                    let date_before = "von " + data[0][index].month + "/" + data[0][index].year + " bis " + month + "/" + year;
-                                    let text_value_dev = "Entwicklung: " + (value - data[0][index].value).toFixed(2) + " " + einheit;
-                                    html = text_value + `<br/>${text_value_dev}<br/>${date_before}`;
+                                    let date_before = "von " + data[0][index].month + "/" + data[0][index].year + " bis " + month + "/" + year,
+                                        text_value_dev = `Relative Entwicklung ${date_before}`,
+                                        relative_value= (value - data[0][index].value).toFixed(2) + " %";
+                                    html = text_value + `<br/>${text_value_dev}<br/>${relative_value}`;
                                 }
                             } else {
                                 html = text_value + `<br/> Stand: ${month} / ${year}`;
@@ -788,7 +794,7 @@ const dev_chart = {
                 let callback = function () {
                     if (Dialoghelper.getAGS_Input()) {
                         dev_chart.chart.settings.ags = Dialoghelper.getAGS_Input();
-                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName()
+                        dev_chart.chart.settings.name = Dialoghelper.getAGS_InputName();
                         dev_chart.chart.settings.ind = indikatorauswahl.getSelectedIndikator();
                         dev_chart.chart.settings.ind_vergleich = true;
                         dev_chart.open();
