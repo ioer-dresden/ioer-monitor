@@ -73,9 +73,9 @@ class Flaechenschema {
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
         // Adding all extra overlay maps
         zusatzlayers.bordersBld.getLayer("vg250_lan").addTo(map);
-
-        //zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
-        //zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
+        zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
+        zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
+        
         flaechenschema_wms.addTo(map);
 
         //zusatzlayers.bordersKrs
@@ -88,9 +88,9 @@ class Flaechenschema {
         flaechenschema_wms.removeFrom(map);
         map.removeLayer(zusatzlayers.bordersBld.getLayer("vg250_lan"));
         // remove all the extra overlay layers. has a bit different syntax than flaeschenschema_wms, because uses plugin leaflet.wms.js
-        //zusatzlayers.bordersBld.getLayer("vg250_lan").removeFrom(map);
-        //zusatzlayers.bordersKrs.getLayer("vg250_krs").removeFrom(map);
-        //zusatzlayers.bordersGem.getLayer("vg250_gem").removeFrom(map);
+        zusatzlayers.bordersBld.removeSubLayer("vg250_lan");
+        zusatzlayers.bordersKrs.removeSubLayer("vg250_krs");
+        zusatzlayers.bordersGem.removeSubLayer("vg250_gem");
 
         helper.enableElement('.fl-unbind', "");
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexMain());

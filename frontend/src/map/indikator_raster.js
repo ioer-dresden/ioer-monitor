@@ -92,9 +92,14 @@ const indikator_raster = {
             });
     },
     onClick:function(e){
+        console.log("OnClick in indikator_raster");
+        console.log("Fleachenschema getState: "+ Flaechenschema.getState());
+        console.log("Raumliche Visualisierung: "+ raeumliche_visualisierung.getRaeumlicheGliederung());
         const object = indikator_raster;
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
+            console.log("Proceeding with info gathering:");
             try {
+                console.log("setting map options");
                 let mapOptions = object.getInfos(),
                     indikator = indikatorauswahl.getSelectedIndikator(),
                     X = map.layerPointToContainerPoint(e.layerPoint).x,
@@ -144,6 +149,7 @@ const indikator_raster = {
                     type: "GET"
                 });
                 getPixelValue.done(function (data) {
+                    console.log("Got pixel value");
                     let html_value = $(data).text();
                     let html_float = parseFloat(html_value);
                     let pixel_value = null;
@@ -157,6 +163,7 @@ const indikator_raster = {
                     getGem.done(function (xml) {
                         let gem = $(xml).find('vg250\\:gen,gen').text();
                         let ags = $(xml).find('vg250\\:ags,ags').text();
+                        console.log("Got AGS value: "+ ags);
                         //query the gem statistic
                         let getGemStat = $.ajax({
                             type: "GET",
@@ -164,7 +171,9 @@ const indikator_raster = {
                             dataType: 'json',
                             data: {ags: ags, indikator: indikator, jahr: zeit_slider.getTimeSet()}
                         });
+                        console.log("We are looking for this here searchQuery: " + urlparamter.getURL_RASTER() + "php/onClickQuery.php");
                         getGemStat.done(function (json) {
+                            console.log("Getting GemStat: DONE");
                             let data = JSON.parse(json);
                             let layer = new L.GeoJSON(data)
                                 .setStyle({
@@ -173,7 +182,9 @@ const indikator_raster = {
                                     color: 'black',
                                     fillOpacity: 0
                                 });
+
                             let gem_stat = data.features[0].properties.value;
+                            console.log("we are after the getGem request: "+ gem_stat);
 
                             if (html_float === -9998) {
                                 pixel_value = "nicht Relevant"
@@ -186,7 +197,10 @@ const indikator_raster = {
                             let popup = new L.popup({
                                 maxWith: 300
                             });
-
+                            console.log("popup content: ");
+                            console.log('<b>Pixelwert: </b>' + pixel_value + '</br>' +
+                                '<span>Gemeinde: </span>' + gem + '</br>' +
+                                '<span>Gemeindewert: </span>' + gem_stat);
                             popup.setContent('<b>Pixelwert: </b>' + pixel_value + '</br>' +
                                 '<span>Gemeinde: </span>' + gem + '</br>' +
                                 '<span>Gemeindewert: </span>' + gem_stat);
@@ -214,6 +228,7 @@ const indikator_raster = {
 
 
                         });
+                        console.log("Popup done!")
                     });
                 });
             }catch(error){
