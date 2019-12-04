@@ -3,6 +3,7 @@ var call = false,
 class RequestManager{
     //get the indicator-JSON
     static getGeoJSON(ind,time,_raumgliederung,ags_array,_klassenanzahl,_klassifizierung){
+        console.log("Getting geojson");
         let colors = function(){
                 let max = farbschema.getHexMax(),
                     min = farbschema.getHexMin(),
@@ -25,6 +26,7 @@ class RequestManager{
     }
     //check if a indicator is possible to view in the the given kind of visualization (gebiete/raster)
     static getAvabilityIndicator(_ind){
+        console.log("Indicator availability");
         let ind = indikatorauswahl.getSelectedIndikator();
         if(_ind){ind=_ind;}
         let json = JSON.parse('{"ind":{"id":"'+ind+'"},"format":{"id":"'+raeumliche_visualisierung.getRaeumlicheGliederung()+'"},"query":"getAvability"}');
@@ -32,11 +34,13 @@ class RequestManager{
     }
     //get all avaliable indicators
     static getAllAvaliableIndicators(){
+        console.log("Available indicators");
         let json = JSON.parse('{"format":{"id":"'+raeumliche_visualisierung.getRaeumlicheGliederung()+'"},"query":"getAllIndicators"}');
         return this.sendRequestPHP({"file":json,"query":"getAllAvaliableIndicators","type":"POST","debug":false});
     }
     //get the possible time`s
     static getJahre(ind){
+        console.log("GetJears");
         let ind_set = indikatorauswahl.getSelectedIndikator();
         if(ind){
             ind_set = ind;
@@ -47,6 +51,7 @@ class RequestManager{
     }
     //get the possible spatial extends for a indicator
     static getRaumgliederung(ind){
+        console.log("Get Raumgliederung");
         let ind_set = indikatorauswahl.getSelectedIndikator();
         if(ind){
             ind_set = ind;
@@ -58,6 +63,7 @@ class RequestManager{
     }
     //get the sum of geometries to show them inside the loading bar
     static getCountGeometries(raumgliederung){
+        console.log("Count geometries");
         let json = JSON.parse('{"ind":{"klassenzahl":"'+klassenanzahl.getSelection()+'","time":"'+zeit_slider.getTimeSet()+
             '","ags_array":"'+gebietsauswahl.getSelection()+
             '","raumgliederung":"'+raumgliederung+'"},"query":"countgeometries"}');
@@ -65,11 +71,13 @@ class RequestManager{
     }
     //get overlays like autobahn, train, communal borders, rivers
     static getZusatzlayer(layer){
+        console.log("Zusatzlayers?");
         let json = JSON.parse('{"ind":{"zusatzlayer":"'+layer+'"},"query":"getzusatzlayer"}');
         return this.sendRequestPHP({"file":json,"query":"getZusatzlayer","type":"POST","debug":false});
     }
     //get the needed values to expand the table, has it´s own parameters, because the logic is slightly different
     static getTableExpandValues(expand_values,ags_array){
+        console.log("Getting table expand valueaas");
         let ags_set = indikator_json_group.getLayerArray(table.excludedAreas);
         let raumgliederung_set = base_raumgliederung.getBaseRaumgliederungId();
         //optional ags array must include ags object {ags:01}
@@ -92,6 +100,7 @@ class RequestManager{
     }
     //get all indicator values for a given indicator and AGS
     static getSpatialOverview(indicator_id,ags){
+        console.log("Get spatial oevrview");
         let json = JSON.parse(`{"ind":{"id":"${indicator_id}","ags":"${ags}","time":"${zeit_slider.getTimeSet()}"},"query":"getvaluesags"}`);
         return this.sendRequestPHP({"file":json,"query":"getvaluesags","type":"POST","debug":false});
     }
@@ -121,6 +130,8 @@ class RequestManager{
         return this.sendRequestFlask(json)
     }
     static sendRequestPHP(json){
+        console.log("Sending php");
+        console.info(json);
         const manager = this;
         call= $.ajax({
             async: true,
@@ -139,6 +150,7 @@ class RequestManager{
         return call;
     }
     static sendRequestFlask(json){
+        console.log("Sending flask");
         const manager = this;
         call= $.ajax({
             type: json.type,
@@ -165,6 +177,7 @@ class RequestManager{
         call.abort();
     }
     static getRasterMap(time,ind,_raumgliederung,klassifizierung,klassenanzahl,darstellung_map,_seite) {
+        console.log("Creating raster");
         return $.ajax({
             async: true,
             type: "GET",

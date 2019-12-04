@@ -75,7 +75,7 @@ class Flaechenschema {
         zusatzlayers.bordersBld.getLayer("vg250_lan").addTo(map);
         zusatzlayers.bordersKrs.getLayer("vg250_krs").addTo(map);
         zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
-        
+
         flaechenschema_wms.addTo(map);
 
         //zusatzlayers.bordersKrs

@@ -250,6 +250,7 @@ const table = {
                     let ags_footer = function () {
                             //ags_values
                             if (typeof raumgliederung.getSelectionId() !== 'undefined') {
+                                console.info(ags_ind_array);
                                 let tfoot_ags = '';
                                 $.each(ags_ind_array, function (key, value) {
                                     $.each(value, function (key_found, value_found) {
@@ -280,13 +281,12 @@ const table = {
                                                     id="indikatoren_diagramm_ags_ind${ags}" 
                                                     src="${dev_chart.icon.multiple.path}"/>`;
 
-                                        tfoot_ags += `<tr id="tfoot_${ags}" class="tr" role="row">
+                                        tfoot_ags += `<tr id="tfoot_${ags}" class="tr tfoot" role="row" style="background-color: lightgrey">
                                                     <td class="tableexport-ignore"></td>
                                                     <td class="selectable"></td>
-                                                    <td class="td_ags">${ags}</td>
-                                                    <td class="td_name">
-                                                        <img style="margin-left: 10px; margin-right: 10px;"
-                                                             data-name="${value.gen}" 
+                                                    <td class="th_ags">${ags}</td>
+                                                    <td class="th_name" >
+                                                        <img data-name="${value.gen}" 
                                                              data-ags="${ags}" 
                                                              data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                              title="${table.text[language_manager.getLanguage()].areaInfo}" 
@@ -349,21 +349,21 @@ const table = {
                                               id="indikatoren_diagramm_ags_ind99"
                                               src="${dev_chart.icon.multiple.path}"/>`,
 
-                            tfoot_brd = `<tr id="tfoot_99" class="tr" role="row">
+                            tfoot_brd = `<tr id="tfoot_99" class="tr tfoot" role="row" style="background-color: lightgrey">
                                         <td class="tableexport-ignore"></td>
                                         <td class="selectable"></td>
-                                        <td class="td_ags">99</td>
-                                        <td class="td_name">
+                                        <td class="th_ags">99</td>
+                                        <td class="th_name" >
                                             <img class="indikatoren_gebietsname chart"
-                                                 data-name="Bundesrepublik" 
+                                                 data-name="Deutschland" 
                                                  data-ags="99" 
                                                  data-ind="${indikatorauswahl.getSelectedIndikator()}" 
                                                  title="${table.text[language_manager.getLanguage()].areaInfo}" 
                                                  class="indikatoren_gebietsprofil" src="frontend/assets/icon/indikatoren.png"/>
-                                                 Bundesrepublik
+                                                 Deutschland
                                         </td>
                                         <td class="val-ags" 
-                                            data-name="Bundesrepublik" 
+                                            data-name="Deutschland" 
                                             data-val="${value_g}" 
                                             data-ind="${indikatorauswahl.getSelectedIndikator()}">
                                             ${value_g}
@@ -375,7 +375,7 @@ const table = {
                             }
                             return tfoot_brd.trim();
                         };
-                    return `${ags_footer() + brd_footer()}</tr>`;
+                    return `${ brd_footer() + ags_footer()}</tr>`;
                 };
 
                 // add the corresponding parent area data
