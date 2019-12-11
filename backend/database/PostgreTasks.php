@@ -6,6 +6,7 @@ class PostgreTasks extends PostgreManager
     function getGeometry($year,$spatial_extend,$ags_array)
     {
         try {
+            $year_pg = DBFactory::getMySQLTask()->getPostGreYear($year);
 
             $log = "  getGeometry ";
             file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
@@ -19,7 +20,7 @@ class PostgreTasks extends PostgreManager
             }
             if ($spatial_extend === "gem") {
                 $krs_col = ",k.gen as kreis";
-                $sql_join_krs = " inner join vg250_krs_2016_grob k on cast(k.ags as text) Like substring(cast(x.ags as text) for 5)";
+                $sql_join_krs = " inner join vg250_krs_".$year_pg."_grob k on cast(k.ags as text) Like substring(cast(x.ags as text) for 5)";
             }
             if (count($ags_array) == 0) {
                 // Build SQL SELECT statement and return the geometry as a GeoJSON element in EPSG: 4326
