@@ -53,10 +53,8 @@ class Flaechenschema {
         zeit_slider.init([2000, 2006, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]);
         if (!fl_init) {
             Flaechenschema.set();
-            fl_init = true;
         } else {
             Flaechenschema.remove();
-            fl_init = false;
         }
     }
 
@@ -66,6 +64,7 @@ class Flaechenschema {
         map_header.updateText(`${Flaechenschema.getTxt()[language_manager.getLanguage()].title} (${zeit_slider.getTimeSet()})`);
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
+        console.log("Flaeschenschema timeset: "+ zeit_slider.getTimeSet());
         //hide all elements which are not needed
         helper.disableElement('.fl-unbind', "");
         helper.enableElement('.indicator_choice', "");
@@ -81,6 +80,7 @@ class Flaechenschema {
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
         map.on('click', this.onClick);
+        fl_init = true;
     }
 
     static remove() {
