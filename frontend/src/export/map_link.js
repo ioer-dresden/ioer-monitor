@@ -69,7 +69,6 @@ const map_link={
         loadRID(_rid){
             let setting = {"id":"get","val":_rid};
             $.when(RequestManager.handleLink(setting)).done(function (data) {
-                console.log(data);
                 if(data.state==="get") {
                     window.location.href = `${window.location.href.split('?')[0]}?${data.res[0]["array_value"]}`;
                 }else{

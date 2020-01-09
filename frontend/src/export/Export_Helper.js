@@ -115,11 +115,11 @@ class Export_Helper{
         let separator=";";
         let tab = document.getElementById(tableid);//.getElementsByTagName('table'); // id of table
         if (tab == null) {
-            console.log("Table is null!!");
+
             return false;
         }
         if (tab.rows.length === 0) {
-            console.log("Table has no rows!!");
+
             return false;
         }
         let csv = []; // Holds all rows of data

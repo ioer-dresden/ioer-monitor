@@ -35,3 +35,4 @@ fabric.properties
 # *.iml
 # modules.xml
 # *.ipr
+backend/log.txt

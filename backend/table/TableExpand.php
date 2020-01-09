@@ -20,6 +20,7 @@ class TableExpand{
         $ind_set  = $id_splitted[0];
         //temp array
         $ags_array = array();
+        $year_pg = DBFactory::getMySQLTask()->getPostGreYear($time_set);
         try {
             //store the passed ags JSON in an array
             foreach ($ags_array_user as $item) {
@@ -29,7 +30,7 @@ class TableExpand{
             $length_ags = strlen($ags_array[0]);
 
              //get all the bld values in an array
-            $bldArray = DBFactory::getPostgreSQLManager()->query("SELECT gen, ags FROM vg250_bld_2016_grob");
+            $bldArray = DBFactory::getPostgreSQLManager()->query("SELECT gen, ags FROM vg250_bld_".$year_pg."_grob");
 
             //set the ABS IND
             if($ind_set==='ABS'){

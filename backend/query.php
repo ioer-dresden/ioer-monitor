@@ -31,7 +31,6 @@ try{
     //set the ags_array
     $ags_array = array();
     //set the factory
-
     if(strlen($ags_user)>0){
         $ags_array = explode(",",$ags_user);
     }
@@ -211,7 +210,8 @@ try{
     else if($query=="search"){
         $search_string = $json_obj['q'];
         $option = $json_obj['option'];
-        $search = new Search($search_string,$option);
+        $lan=$json_obj['language'];
+        $search = new Search($search_string,$option,$lan);
         echo json_encode($search->query());
     }
     //get the values to create the chart

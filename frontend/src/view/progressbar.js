@@ -25,7 +25,6 @@ const progressbar ={
             this.active = true;
         }
         $(document).on("click","#abort_btn",function(){
-            console.log("click");
             RequestManager.cancel();
             window.stop();
             object.remove();

@@ -37,7 +37,7 @@ const indikator_json = {
             ags_set = [];
         }
 
-        //info how much geomtries will be created and afterwards stat the creation
+        //info how much geomtries will be created and afterwards start the creation
         $.when(RequestManager.getCountGeometries(raumgliederung_set)).done(function (x) {
                 var interval = setInterval(function () {
                     if (progressbar.getContainer().is(":visible")) {

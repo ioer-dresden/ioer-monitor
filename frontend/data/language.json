@@ -16,7 +16,8 @@
         "de":"Suche nach Indikatoren, Orten...",
         "en":"Search for indicators, places...",
         "attr":"placeholder",
-        "type":"#"
+        "type":"#",
+        "callback": ["search.init()"]
       },
     "slider_zeit_container": {
       "de":"Zeitschnitt",

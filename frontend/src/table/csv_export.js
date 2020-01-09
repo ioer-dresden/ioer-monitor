@@ -28,7 +28,6 @@ const csv_export = {
                     $.when(setLoadIcon())
                         .then(csv_export.state = true)
                         .then(function () {
-                                console.log("Starting the csv export, ");
                                 TableHelper.destroyStickyTableHeader();
                                 //csv_export.exportToCSV(table.getTableBodyValues());
                                 Export_Helper.exportTable(table.getDOMObject().attr("id"));

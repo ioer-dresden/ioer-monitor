@@ -91,7 +91,7 @@
 .right_content .scrollable-area #table_ags .tBody_value_table tr:hover{
     background-color: rgba(78,96,170,.5)
 }
-.right_content .scrollable-area #table_ags tr td{
+.right_content .scrollable-area #table_ags tr td {
     display: table-cell;
     font-size: 12px;
     border:.1px solid black;
@@ -100,14 +100,27 @@
 .right_content .scrollable-area #table_ags tr .td_name{
     text-align:left;
 }
+
 .right_content .scrollable-area #table_ags tr .td_ags{
     text-align:center;
 }
 .right_content .scrollable-area #table_ags tr .td_akt{
     text-align:right;
 }
+
+.right_content .scrollable-area #table_ags tr .th_name{
+    text-align:left;
+    font-weight:bolder;
+}
+
+.right_content .scrollable-area #table_ags tr .th_ags{
+    text-align:center;
+    font-weight:bolder;
+}
+
 .right_content .scrollable-area #table_ags tr .val-ags{
     text-align: right;
+    font-weight:bold;
     width:140px;
 }
 .right_content .scrollable-area #table_ags tr .expand_brd_bld{
@@ -228,6 +241,7 @@ tabelle filtern
     z-index: 20000 !important;
     overflow-x: hidden;
 }
+
 .right_content #tabelle_erweitern #kenngroessen_ddm_table #ue_raum_sum_content .ue_sum_content_table_erweitern{
     margin-left: 60px;
 }

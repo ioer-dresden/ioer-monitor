@@ -361,7 +361,6 @@ const area_info={
                 };
                 break;
             default:
-                console.log("Language other than German! Default is English");
                 break;
         }
         return language;
@@ -375,9 +374,7 @@ const area_info={
             $("#area_info_csv_export")
                 .unbind()
                 .click(function(){
-                    console.log("clicked");
                     Export_Helper.exportTable("areaInfoDataTable");
-                    console.log("Exported");
                 });
         }
     }

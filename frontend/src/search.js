@@ -1,4 +1,13 @@
 const search={
+
+    text: {
+        de:{noResult:"Kein Ergebnis für die Suchanfrage",
+        serverError:"Es gab ein Problem mit dem Server"
+        },
+        en:{noResult:"The search did not produce any results",
+        serverError:"There was an error on the server side"}
+    },
+
     getDomObject:function(){
         $elem =  $('.ui.search');
         return $elem;
@@ -20,8 +29,8 @@ const search={
                     type          : 'category',
                     minCharacters : 2,
                     error: {
-                        noResults   : 'Kein Ergebnis für die Suchanfrage',
-                        serverError : 'Es gab ein Problem mit dem Server'
+                        noResults   : search.text[language_manager.getLanguage()].noResult,
+                        serverError : search.text[language_manager.getLanguage()].serverError
                     },
                     cache: false,
                     apiSettings   : {
@@ -62,16 +71,17 @@ const search={
                         data:{
                             values:function(){
                                 let value = $('#search_input_field').val();
-                                return '{"q":"'+value+'","option":"all","query":"search"}';
+                                return '{"q":"'+value+'","option":"all","query":"search","language":"'+language_manager.getLanguage()+'"}';
                             }
                         },
                         cache:false
                     },
                     onSelect: function(result,response){
                             var cat = result.category;
-                        if(cat === 'Indikatoren'){
+
+                        if(cat === 'Indikatoren' || 'Indicators'){
                             indikatorauswahl.checkAvability(result.value,true);
-                        }else if(cat ==='Orte'){
+                        }else if(cat ==='Orte' || 'Locations'){
                             var lat = result.value[0];
                             var lon = result.value[1];
                             var title = "<b>"+result.title+"</b></br>"+result.description;

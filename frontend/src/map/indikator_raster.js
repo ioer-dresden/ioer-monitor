@@ -54,7 +54,6 @@ const indikator_raster = {
                         einheit: einheit,
                         id:"indicator_raster"
                     });
-
                 if (_seite) {
                     //removeRasterBySide(_seite);
                     indikator_raster_group.clean(_seite);
@@ -93,7 +92,7 @@ const indikator_raster = {
     },
     onClick:function(e){
         const object = indikator_raster;
-        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster") {
+        if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
             try {
                 let mapOptions = object.getInfos(),
                     indikator = indikatorauswahl.getSelectedIndikator(),
@@ -136,7 +135,6 @@ const indikator_raster = {
                 let URL_WFS = 'https://sg.geodatenzentrum.de/wfs_vg250?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=vg250_gem&BBOX=' +
                     lng + ',' + lat + ',' + (lng + 0.000000000000100) + ',' + (lat + 0.000000000000100) +
                     '&srsName=' + SRS + '&MAXFEATURES=1';
-
                 let getPixelValue = $.ajax({
                     url: URL,
                     cache: false,
@@ -173,6 +171,7 @@ const indikator_raster = {
                                     color: 'black',
                                     fillOpacity: 0
                                 });
+
                             let gem_stat = data.features[0].properties.value;
 
                             if (html_float === -9998) {
@@ -186,7 +185,6 @@ const indikator_raster = {
                             let popup = new L.popup({
                                 maxWith: 300
                             });
-
                             popup.setContent('<b>Pixelwert: </b>' + pixel_value + '</br>' +
                                 '<span>Gemeinde: </span>' + gem + '</br>' +
                                 '<span>Gemeindewert: </span>' + gem_stat);
@@ -219,6 +217,11 @@ const indikator_raster = {
             }catch(error){
                 console.error(error);
             }
+        }
+
+        else if (Flaechenschema.getState()){
+
+
         }
     },
     getInfos:function(_seite){

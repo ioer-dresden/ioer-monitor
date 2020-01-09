@@ -9,12 +9,11 @@ const dev_chart = {
                 false: "Wertentwicklung",
                 true: "Entwicklungs- vergleich"
             },
-            indicatorFor: "Indikatorentwicklung für ",
             info: "Dieses Diagramm stellt die Entwicklung der Indikatoren dar.",
             indicator: "verfügbare Indikatoren",
             choice: "Bitte wählen.....",
             no_choice: "Kein Indikator gewählt",
-            load: "Lädt Diagramm.....",
+            load: "Lädt Diagramm......",
             pnt: "alle Stützpunkte",
             trend: "Prognosewerte",
             unit: "Einheit",
@@ -22,14 +21,15 @@ const dev_chart = {
             set_choice: function () {
                 return `Bitte ${base_raumgliederung.getBaseRaumgliederungText(true)} angeben`
             },
-            cancel: "Abbrechen"
+            cancel: "Abbrechen",
+            value:"Wert",
+            explanation:"Realtive Änderung des Indikators. Anfangswert gleich 100 %"
         },
         en: {
             title: {
                 false: "Trend chart",
                 true: "Trend comparison"
             },
-            indicatorFor: "Trend development for ",
             info: "This diagram represents the trend of the indicators.",
             indicator: "available indicators",
             choice: "Please choose.....",
@@ -42,7 +42,9 @@ const dev_chart = {
             set_choice: function () {
                 return `Please set ${base_raumgliederung.getBaseRaumgliederungText(true)}`
             },
-            cancel: "Cancel"
+            cancel: "Cancel",
+            value:"Value",
+            explanation:"Relative change of indicator value. Relative starting value is 100 %"
         }
     },
     icon: {
@@ -109,11 +111,12 @@ const dev_chart = {
                     </div>
                     <div id="diagramm_info_text">
                         <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span> in <b id="diagrmm_gebiets_typ"></b>.</div>
+                        <div>${this.text[lan].explanation} </div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
                             <h3 class="Hinweis_diagramm" id="Hinweis_diagramm_empty">${this.text[lan].no_choice}</h3>
-                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}.......</h3>
+                            <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}......</h3>
                             <svg id="visualisation" height="100"></svg>
                         </div>
                         <div id="tooltip" style="pointer-events: none;"></div>
@@ -162,6 +165,7 @@ const dev_chart = {
                 chart_height = 400 - (array.length * 30),
                 margin_top = 0,
                 migration_set = false;
+
             //let chart_height = $('.ui-dialog').height()*(1.5/3);
             let x = d3.scaleTime().range([0, chart_width]),
                 y = d3.scaleLinear().range([chart_height, 0]);
@@ -190,7 +194,7 @@ const dev_chart = {
                     return x(d.date);
                 })
                 .y(function (d) {
-                    return y(d.real_value);
+                    return y(d.value);
                 });
 
             let def = $.Deferred();
@@ -224,30 +228,55 @@ const dev_chart = {
                     chart.merge_data.push(obj);
                     i++;
                 });
+                if (chart.settings.ind_vergleich) {  // Recalculate the 'value' property of all elements, to display it correctly as percentiles
+                    for (let item in chart.merge_data) {
+                        let firstValue = 100;
+                        for (let val in chart.merge_data[item].values) {
 
+                            if (val == 0) {
+                                firstValue = chart.merge_data[item].values[val].real_value;
+
+                            }
+                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value)
+                        }
+                    }
+
+                }
                 $('#diagramm_loading_info').hide();
                 scaleChart();
                 createPath();
             });
 
+            function calculatePercentiles(firstValue, currentValue) {
+                let onePercent = firstValue / 100;
+                return currentValue / onePercent
+            }
+
             function scaleChart() {
                 let data = [];
                 $.each(chart.merge_data, function (key, value) {
+                    let firstValue = value.values[0]['real_value'];
                     $.each(value.values, function (x, y) {
-                        data.push({"year": y.year, "value": y.value, "real_value": y.real_value});
+                        data.push({"year": y.year, "value": y.value, "real_value": y.real_value})
                     })
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = helper.getMaxArray(data, "real_value"),
-                    minValue = helper.getMinArray(data, "real_value"),
+                    maxValue = helper.getMaxArray(data, "value"),
+                    minValue = helper.getMinArray(data, "value"),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
 
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
-                maxValue = maxValue + maxValue / 10;
-                minValue = minValue - maxValue / 10;
+
+                maxValue = maxValue + maxValue / 30;
+                minValue = minValue - maxValue / 30;
+
+                // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
+               if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
+                   minValue=0;
+               }
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
@@ -278,7 +307,7 @@ const dev_chart = {
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
-                        return helper.dotTocomma(d)
+                        return helper.dotTocomma(d);
                     }));
             }
 
@@ -396,7 +425,7 @@ const dev_chart = {
                         .attr("y", chart_height + 60 + margin_top)
                         .attr("width", 30)
                         .attr("height", 10)
-                        .attr("fill", "url(#linear-gradient)");
+                        .style("fill", "url(#linear-gradient)");
 
                     legend_migration.append("text")
                         .attr("x", margin.left + 40)
@@ -420,21 +449,9 @@ const dev_chart = {
 
             //function to set the legende, margin is a object like margin.left = 50x
             function setLegende(data, color) {
-
                 let legend = svg.append("g")
                         .attr("class", "legend"),
-                    marginTop = margin_top + 40,
-                    lan = language_manager.getLanguage(),
-                    // Setting the name of selected unit based on language selection
-                    indicatorName = "";
-                if (lan == "de") {
-                    indicatorName = data[0].name;
-                } else if (lan == "en") {
-                    // todo here should be english translation of the indicator name. Adjust the SQL query @ Backend to receive also the english Indicator name when asking tor TrendValues -> backend/chart/indikatorChart.createValueArray()
-                    //indicatorName=indikatorauswahl.getSelectedIndikatorText();
-                } else {
-                    console.log("Unknown language chosen!")
-                }
+                    marginTop = margin_top + 40;
 
                 legend.append('g')
                     .append("circle")
@@ -450,7 +467,13 @@ const dev_chart = {
                     .attr("width", (chart_width))
                     .style("font-size", "20px")
                     .style("fill", color)
-                    .text(indicatorName + " in " + data[0].einheit);
+                    .text(function () {
+                        if (chart.settings.ind_vergleich) {
+                            return data[0].name
+                        } else {
+                            return data[0].name + data[0].einheit;
+                        }
+                    });
 
                 margin_top += 20;
             }
@@ -481,9 +504,15 @@ const dev_chart = {
                         .attr("data-ind", data[i].id)
                         .attr("data-year", data[i].year)
                         .attr("data-month", data[i].month)
-                        .attr("data-einheit", data[i].einheit)
+                        .attr("data-einheit", function () {
+                            if (chart.settings.ind_vergleich) {
+                                return data[i].einheit
+                            } else {
+                                return data[i].einheit;
+                            }
+                        })
                         .attr("data-color", color_set)
-                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].real_value) + ")")
+                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].value) + ")")
                         .on("mouseenter", function () {
                             //handle what happens on moueover
                             const chart = dev_chart.chart,
@@ -499,9 +528,9 @@ const dev_chart = {
                                 x = elem.position().left - document.getElementById('visualisation').getBoundingClientRect().x + 10,
                                 y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
-                                text_value = "Wert: " + real_value + " " + einheit;
-                            elem.attr("r", 7.5);
+                                text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
 
+                            elem.attr("r", 7.5);
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {
                                 let data = [],
@@ -533,9 +562,10 @@ const dev_chart = {
                                     html = text_value + "<br/>" + "Stand: " + month + "/" + year;
                                 } else {
                                     //the text part
-                                    let date_before = "von " + data[0][index].month + "/" + data[0][index].year + " bis " + month + "/" + year;
-                                    let text_value_dev = "Entwicklung: " + (value - data[0][index].value).toFixed(2) + " " + einheit;
-                                    html = text_value + `<br/>${text_value_dev}<br/>${date_before}`;
+                                    let date_before = "von " + data[0][index].month + "/" + data[0][index].year + " bis " + month + "/" + year,
+                                        text_value_dev = `Relative Entwicklung ${date_before}`,
+                                        relative_value= (value - data[0][index].value).toFixed(2) + " %";
+                                    html = text_value + `<br/>${text_value_dev}<br/>${relative_value}`;
                                 }
                             } else {
                                 html = text_value + `<br/> Stand: ${month} / ${year}`;
@@ -561,8 +591,7 @@ const dev_chart = {
             function abstractData(data) {
                 data.forEach(function (d) {
                     d.date = parseTime(d.date);
-                    d.real_value = +d.real_value;
-                    d.value = +d.value
+                    d.value = +d.value;
                 });
                 return data;
             }
@@ -573,32 +602,23 @@ const dev_chart = {
                 indikatorauswahl_chart = $('#indicator_ddm_diagramm');
             chart.controller.clearChartArray();
             $('#default_diagramm_choice').text(indikatorauswahl.getSelectedIndikatorText());
-
             if (chart.settings.ind_vergleich) {
                 $('#indikator_choice_container_diagramm').show();
                 if (chart.ind_array_chart.length == 0) {
                     let kat_auswahl_diagramm = $('#kat_auswahl_diagramm');
                     indikatorauswahl.cloneMenu('kat_auswahl_diagramm', 'link_kat_diagramm', 'right', 'X', false);
-
-                    // Filter the Toolbar indicator dropdown menu entries needed for dropdown in dev_chart.js menu
+                    //remove items which have not the simular unit
                     indikatorauswahl_chart
                         .find('.submenu .item')
-                        .each(function () {  // select only indicators with same units
+                        .each(function () {
                             if (indikatorauswahl.getIndikatorEinheit() !== $(this).data('einheit')) {
                                 $(this).remove();
                             }
-                            /*else {
-                                console.log("Name "+ $(this).attr('data-value'));
-                                let ags=$(this).attr('data-value');
-                                console.log("Spatial extent: "+ raeumliche_analyseebene.getSpatialExtentNameById(ags));
-                                console.info(raeumliche_analyseebene.range);
-                            }
-                            */
                         });
                     kat_auswahl_diagramm.find('.item').each(function () {
-                        $(this).css("color", "rgba(0,0,0,.87)");
+                        $(this).css("color", "rgba(0,0,0,.87)")
                     });
-                    //remove selected Indicator from the list
+                    //remove selected Indicatopr from the list
                     helper.disableElement(`#kat_auswahl_diagramm #${indikatorauswahl.getSelectedIndikator()}_item`);
                     chart.ind_array_chart.push({"id": chart.settings.ind});
                 }
@@ -606,25 +626,27 @@ const dev_chart = {
                 selector.find('#indikator_choice_container_diagramm').remove();
                 chart.ind_array_chart.push({"id": chart.settings.ind});
             }
-
             chart.init();
             chart.controller.set();
         },
         controller: {
             set: function () {
-
                 const chart = dev_chart.chart;
                 let ind_auswahl = $('#indicator_ddm_diagramm'),
                     download = $('#diagramm_download_format_choice');
                 //set the info text
                 $("#diagramm_gebietsname").text(chart.settings.name);
                 $('#diagramm_ags').text(" (" + chart.settings.ags + ")");
-                $('#diagrmm_gebiets_typ').text(" " + indikatorauswahl.getIndikatorEinheit());
-
-
-                //set the selected value
+                $('#diagrmm_gebiets_typ').text(function () {
+                    if (chart.settings.ind_vergleich) {
+                        return " %"
+                    } else {
+                        return (" " + indikatorauswahl.getIndikatorEinheit())
+                    }
+                });
+                //set the selcted value
                 ind_auswahl
-                    .off()
+                    .unbind()
                     .dropdown({
                         'maxSelections': 2,
                         onAdd: function (addedValue, addedText, $addedChoice) {
@@ -728,14 +750,12 @@ const dev_chart = {
                 }, 500);
 
                 ///////////// Workaround: remove empty labels from dropdown menu. Needed to fix the bug where one extra empty label was shown in english version of Site
-                // todo: find a better solution! (Reinis) the extra element is being set somewhere in chart.controller.set() or its dependencies. right now in English version only 1 extra selection is possible (2 are possible in German version)
+                // todo: find a better solution! (Reinis) the extra element is being set somewhere in chart.control
                 ind_auswahl.children('a').each(function (index, object) {
                     if ($(this).text() == "") {
                         $(this).remove();
                     }
                 });
-                ///////////////
-
             },
             clear: function () {
                 $('#visualisation').empty();
@@ -768,6 +788,7 @@ const dev_chart = {
                     alert_manager.alertError();
                 }
             });
+
             $(document).on("click", dev_chart.chart_compare_selector_toolbar, function () {
                 let callback = function () {
                     if (Dialoghelper.getAGS_Input()) {

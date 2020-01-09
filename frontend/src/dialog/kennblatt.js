@@ -54,7 +54,6 @@ const kennblatt={
                                 if (parseInt(value) == 1) {
                                      spatialUnit= `<div> ${raeumliche_analyseebene.getSpatialExtentNameById(key)}</div>`;
                                      availableSpatialResolutions +=spatialUnit;
-                                     console.log("state() "+spatialUnit);
                                 }
                             });
                          return `${availableSpatialResolutions}`;
@@ -105,8 +104,8 @@ const kennblatt={
             },
             literatur=function(){
                 try {
-                    let litereatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())];
-                    return he.decode(litereatur);
+                    let literatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())];
+                    return he.decode(literatur);
                 }catch(err){
                     console.log(err);
                     return "";
@@ -194,7 +193,7 @@ const kennblatt={
     },
     controller:{
         set:function(headerText){
-            let print_button = $('#print_btn_kennblatt');console.log("Header text: "+ headerText);
+            let print_button = $('#print_btn_kennblatt');
             print_button
                 .unbind()
                 .click(function(){

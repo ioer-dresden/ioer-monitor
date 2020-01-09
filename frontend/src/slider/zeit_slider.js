@@ -53,8 +53,11 @@ const zeit_slider={
                 value: value_set,
                 stop: function (event, ui) {
                     object.updateParam(jahre[ui.value]);
-                    if(!Flaechenschema.getState()) {
-                        if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
+
+                        if (Flaechenschema.getState()){
+                            Flaechenschema.set();
+                        }
+                        else if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
                             var time = object.getTimeSet(),
                                 //disable SST and g50
                                 stt_id = "stt_raumgl",
@@ -83,9 +86,7 @@ const zeit_slider={
                             indikator_raster.init();
                         }
                         map.dragging.enable();
-                    }else{
-                        Flaechenschema.set();
-                    }
+
                 }
             })
             .mouseenter(function () {

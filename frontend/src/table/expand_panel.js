@@ -254,7 +254,7 @@ const expand_panel = {
                                 <i class="dropdown icon"></i>
                                 <div id="kenngroessen_ddm_table_header" class="default text">Bitte wählen.....</div>
                                 <div  id="kenngroessen_auswahl_table" class="menu">
-                                    <div id="expand_abs" class="item" data-value="ABS">Absoluter Indikatorwert</div>
+                                    <div id="expand_abs" class="item expand_abs" data-value="ABS">Absoluter Indikatorwert</div>
                                     <div id="area_size" class="item" data-value="S00AG">Gebietsfläche</div>
                                     <div id="expand_b00ag" class="item" data-value="B00AG">Einwohnerzahl</div>
                                     <div id="expand_kenngroessen" class="item" data-value="UE_RaumSum">
@@ -370,6 +370,7 @@ const expand_panel = {
                         expand_panel.expandArray.push({id:addedValue,text:addedText,time:zeit_slider.getTimeSet(),einheit:false, count: 50});
                         //sort the time array desc
                         expand_panel.expandArray = _.sortBy(expand_panel.expandArray, 'total').reverse();
+
                         //disable other choice possibilities
                         helper.disableElement("#"+expand_panel.getHinweisOnlyOlderTimeShiftsObject().attr("id"));
                         helper.disableElement("#"+expand_panel.getTrendAuswahlContainer().attr("id"));
