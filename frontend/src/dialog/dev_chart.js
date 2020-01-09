@@ -531,7 +531,6 @@ const dev_chart = {
                                 text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
 
                             elem.attr("r", 7.5);
-                            console.log("Einheit: "+ einheit);
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {
                                 let data = [],

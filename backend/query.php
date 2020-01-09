@@ -139,7 +139,7 @@ try{
                         '","verweise_en":"' . preg_replace('/\s+/', ' ',str_replace('"',"'",htmlentities($row_ind->VERWEISE_EN))) .
                         '","interpretation":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION))) .
                         '","interpretation_en":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION_EN))) .
-                        '","methodik":"' . trim(preg_replace('/\s+/', '</br>', str_replace('"', "'", $row_ind->METHODIK))) .
+                        '","methodik":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->METHODIK))) .
                         '","bemerkungen":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEMERKUNGEN))) .
                         '","bemerkungen_en":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEMERKUNGEN_EN))) .
                         '","methodik_en":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->METHODIK_EN))) .

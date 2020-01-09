@@ -64,7 +64,6 @@ class Flaechenschema {
         map_header.updateText(`${Flaechenschema.getTxt()[language_manager.getLanguage()].title} (${zeit_slider.getTimeSet()})`);
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
-        console.log("Flaeschenschema timeset: "+ zeit_slider.getTimeSet());
         //hide all elements which are not needed
         helper.disableElement('.fl-unbind', "");
         helper.enableElement('.indicator_choice', "");
@@ -103,7 +102,6 @@ class Flaechenschema {
     }
 
     static onClick(e) {
-        console.log("OnClick in Flaeschenschema!! ");
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
@@ -123,9 +121,6 @@ class Flaechenschema {
                 }
                 */
 
-        console.log("BBOX: " + BBOX);
-        console.log("SRS: " + SRS);
-        console.log("WIDTH: " + WIDTH + " HEIGHTH: " + HEIGHT);
 
         let URL = url_flaechenschema_mapserv + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
             BBOX + '&SRS=' +
@@ -133,8 +128,6 @@ class Flaechenschema {
             '&LAYERS=' + layername +
             '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
             layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
-
-        console.log("Setting the clicking click onclick:  " + URL);
 
         let getPixelValue = $.ajax({
             url: URL,
@@ -144,7 +137,6 @@ class Flaechenschema {
         });
         getPixelValue.done(function (data) {
             let html_value = $(data).text();
-            console.log("Got the Pixel Value: " + html_value);
             let html_float = parseFloat(html_value);
             let pixel_value = null;
         })

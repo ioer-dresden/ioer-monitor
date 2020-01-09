@@ -160,8 +160,7 @@ const indikatorauswahl ={
         //append 'Siedlungsdicht for Herr Dr. Meinel'
             .then(function() {
                     $('#B02DT_item').clone().appendTo('#submenuN');
-                    console.info(indikatorauswahl.possebilities);
-                }
+    }
             );
     },
     checkAvability:function(_ind,draw){

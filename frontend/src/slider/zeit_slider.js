@@ -79,12 +79,10 @@ const zeit_slider={
                                     indikator_json.init();
                                     break;
                                 default:
-                                    console.log("INITIATING THE VEKTOR");
                                     indikator_json.init(raumgliederung.getSelectionId());
                                     break;
                             }
                         } else {
-                            console.log("INITIATING THE RASTER");
                             indikator_raster.init();
                         }
                         map.dragging.enable();
