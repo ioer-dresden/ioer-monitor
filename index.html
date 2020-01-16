@@ -15,6 +15,20 @@
 
 </head>
 
+    <!-- Testing if Browser is Internet Explorer or Microsoft Edge -->
+<script>
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        console.log("Browser: "+ navigator.appName);
+        if(msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./) || /Edge/.test(navigator.userAgent)) {
+            let browserName="Internet Explorer";
+            if (/Edge/.test(navigator.userAgent)){
+                browserName="Microsoft Edge"
+            }
+            alert("Sie Nutzen "+browserName+".\n Leider ist der IÖR Flächenmonitor mit "+browserName+" nicht kompatibel. Bitte verwenden einen anderen Browser.\n\n You are using "+browserName+".\n Unfortunately "+browserName+" is not compatible with IÖR Monitor. Please consider using a different browser.")
+        }
+</script>
+
 <body>
 <!-- the map content-->
 <div id="loading_circle">

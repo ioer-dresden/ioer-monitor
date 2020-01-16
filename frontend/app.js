@@ -11,8 +11,10 @@ class App{
             }
             else {
                 main_view.initializeFirstView();
+
             }
         };
+
             $.when(panner.init())
             .then(toolbar.init())
             .then(table.init())

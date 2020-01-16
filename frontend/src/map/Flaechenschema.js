@@ -164,15 +164,18 @@ class FlaechenschemaLegende {
         legende.getDatenalterContainerObject().css("visibility", "hidden");
         legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> <br/> <a href=" http://sg.geodatenzentrum.de/web_public/nutzungsbedingungen.pdf"> Nutzungsbedingungen</a> </div>
                                                     <br/>`) //set the data source
-
+        console.log("Flaechenschema Image: "+ image)
         legende.getLegendeColorsObject().empty().load(image, function () {
+
             let elements = $(this).find('img');
             elements.each(function (key, value) {
                 let src = $(this).attr('src'),
                     url = "https://monitor.ioer.de" + src;
+                console.log("URL Flaeuschenschema Legende: "+ url)
                 $(this).attr('src', url);
             });
         });
+
         legende.getDatenalterContainerObject().css("display", "none");
     }
 }

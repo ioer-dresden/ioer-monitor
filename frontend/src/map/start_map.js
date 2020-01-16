@@ -11,6 +11,7 @@ const start_map= {
         return new L.geoJSON(this.json_bld(),{style:style.startMap});
     },
     set:function(){
+        console.log("Startuing map");
         this.state=true;
         additiveLayer.remove();
 
