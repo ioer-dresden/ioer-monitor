@@ -110,7 +110,7 @@ class Flaechenschema {
             HEIGHT = map.getSize().y,
             lat = e.latlng.lat,
             lng = e.latlng.lng,
-            layername = 'WMS Flächenschema';
+            layername = `flaechenschema_${zeit_slider.getTimeSet()}`;
 
         let windowWidth = $(window).width();
         /*

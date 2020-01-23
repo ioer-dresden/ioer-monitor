@@ -75,7 +75,6 @@ const indikator_raster = {
                 raster_layer.bringToFront();
                 raster_layer.setOpacity(opacity_slider.getOpacity());
                 object.raster_layer = raster_layer;
-                console.log("Setting onClick behaviour in indicator_raster.js ");
                 map.on('click', object.onClick);
                 if (!_seite){
                     var interval = setInterval(function () {
@@ -92,11 +91,9 @@ const indikator_raster = {
             });
     },
     onClick:function(e){
-        console.log("You clicked!!!!");
         const object = indikator_raster;
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
             try {
-                console.log("Trying to get to the point");
                 let mapOptions = object.getInfos(),
                     indikator = indikatorauswahl.getSelectedIndikator(),
                     X = map.layerPointToContainerPoint(e.layerPoint).x,
@@ -134,7 +131,6 @@ const indikator_raster = {
                     SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT + '&LAYERS=' + mapOptions[0].layername +
                     '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
                     mapOptions[0].layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
-                console.log("Raster request URL set");
                 let URL_WFS = 'https://sg.geodatenzentrum.de/wfs_vg250?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=vg250_gem&BBOX=' +
                     lng + ',' + lat + ',' + (lng + 0.000000000000100) + ',' + (lat + 0.000000000000100) +
                     '&srsName=' + SRS + '&MAXFEATURES=1';
@@ -144,9 +140,7 @@ const indikator_raster = {
                     datatype: "html",
                     type: "GET"
                 });
-                console.log("Get Pixelvalue set");
                 getPixelValue.done(function (data) {
-                    console.log("GetPixelvalue done: "+ $(data).text());
                     let html_value = $(data).text();
                     let html_float = parseFloat(html_value);
                     let pixel_value = null;
@@ -157,12 +151,10 @@ const indikator_raster = {
                         dataType: 'xml',
                         type: "GET"
                     });
-                    console.log("Trying to get the AGS from WFS BKG service" );
                     getGem.done(function (xml) {
 
                         let gem = $(xml).find('vg250\\:gen,gen').text();
                         let ags = $(xml).find('vg250\\:ags,ags').text();
-                        console.log("This is the ags: "+ags);
                         //query the gem statistic
 
                         /*
@@ -172,28 +164,28 @@ const indikator_raster = {
                         php/onClick läuft auf den ALTEN MapServer, musste also theoretisch auf monitor.ioer.de migriert werden!! Oder in Backend integriert werden (in query.php).
 
                         */
-                        console.log("Now we want the statistics from php/onClickQuery");
+
+                        /*
                         let getGemStat = $.ajax({
                             type: "GET",
                             url: urlparamter.getURL_RASTER() + "php/onClickQuery.php",
                             dataType: 'json',
                             data: {ags: ags, indikator: indikator, jahr: 2017}
                         });
-                        console.log("Statistics GET request set");
-                        //getGemStat.done(function (json) {
-                        //    console.log("Statistics request done!!!! yeeeeey");
-                        //
-                        //    let data = JSON.parse(json);
-                        //    let layer = new L.GeoJSON(data)
-                        //        .setStyle({
-                        //            weight: 2,
-                        //            opacity: 1,
-                        //            color: 'black',
-                        //            fillOpacity: 0
-                        //        });
+                        getGemStat.done(function (json) {
+                            console.log("Statistics request done!!!! yeeeeey");
 
-                         //   let gem_stat = data.features[0].properties.value;
+                            let data = JSON.parse(json);
+                            let layer = new L.GeoJSON(data)
+                                .setStyle({
+                                    weight: 2,
+                                    opacity: 1,
+                                    color: 'black',
+                                    fillOpacity: 0
+                                });
 
+                            let gem_stat = data.features[0].properties.value;
+                        */
                             if (html_float === -9998) {
                                 pixel_value = "nicht Relevant"
                             } else if (html_float < 0) {
