@@ -91,6 +91,7 @@ const indikator_raster = {
             });
     },
     onClick:function(e){
+        console.log("OnClick in Raster Map of Indicator");
         const object = indikator_raster;
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
             try {

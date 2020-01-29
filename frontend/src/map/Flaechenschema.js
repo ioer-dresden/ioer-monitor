@@ -1,8 +1,8 @@
 //global variablen
-let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
+let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
         {
-            cache: Math.random(),
+            //cache: Math.random(),
             version: '1.3.0',
             format: 'image/png',
             srs: "EPSG:3035",
@@ -78,7 +78,7 @@ class Flaechenschema {
 
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
-        map.on('click', this.onClick);
+        //map.on('click', this.onClick);
         fl_init = true;
     }
 
@@ -97,10 +97,10 @@ class Flaechenschema {
         if (indicator_set || typeof indicator_set !== "undefined") {
             additiveLayer.init();
         }
-        map.off('click', this.onClick);
+        //map.off('click', this.onClick);
         fl_init = false
     }
-
+    /*
     static onClick(e) {
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
@@ -113,13 +113,13 @@ class Flaechenschema {
             layername = `flaechenschema_${zeit_slider.getTimeSet()}`;
 
         let windowWidth = $(window).width();
-        /*
+
                 if (windowWidth > 2045) {
                     WIDTH = 2045;
                 } else {
                     WIDTH = map.getSize().x;
                 }
-                */
+
 
 
         let URL = url_flaechenschema_mapserv + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
@@ -141,6 +141,7 @@ class Flaechenschema {
             let pixel_value = null;
         })
     }
+    */
 }
 
 
@@ -170,7 +171,7 @@ class FlaechenschemaLegende {
             let elements = $(this).find('img');
             elements.each(function (key, value) {
                 let src = $(this).attr('src'),
-                    url = "https://monitor.ioer.de" + src;
+                    url = "https://maps.ioer.de" + src;
                 console.log("URL Flaeuschenschema Legende: "+ url)
                 $(this).attr('src', url);
             });
