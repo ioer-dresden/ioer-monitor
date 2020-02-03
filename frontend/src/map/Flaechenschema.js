@@ -1,14 +1,28 @@
 //global variablen
 let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
     text={ de:{
-        basemap: "Monitor-Basiskarte Flächennutzung",
-        agriculture:"Landwirtschaft",
-        wooded: "Wald und Gehölz",
-        not_cultivated: "Unkultivierte Bodenfläche",
-        water:"Wasserfläche",
-
+            landuse: "Flächennutzung",
+            basemap: "Monitor-Basiskarte Flächennutzung",
+            agriculture:"Landwirtschaft",
+            wooded: "Wald und Gehölz",
+            not_cultivated: "Unkultivierte Bodenfläche",
+            water:"Wasserfläche",
+            mining: "Abbau- und Haldenfläche",
+            built_up: "Baulich geprägte Fläche",
+            urban_green:"Siedlungsfreifläche",
+            traffic:"Verkehrsfläche"
         },
-    en:{basemap: "Monitor Land Use Basemap",
+        en:{
+            landuse: "Land Use",
+            basemap: "Monitor Land Use Basemap",
+            agriculture:"Agricultural area",
+            wooded: "Wooded area",
+            not_cultivated: "Uncultivated area",
+            water:"Water",
+            mining: "Mining and stockpile area",
+            built_up: "Built up area",
+            urban_green:"Urban green space",
+            traffic:"Traffic infrastructure"
     }
     },
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
@@ -89,12 +103,10 @@ class Flaechenschema {
         zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
 
         flaechenschema_wms.addTo(map);
-        console.log("added Flaechenschema");
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
 
         map.on('click', this.onClick);
-        console.log("onClick set");
         fl_init = true;
     }
 
@@ -118,7 +130,6 @@ class Flaechenschema {
     }
 
     static onClick(e) {
-        console.log("OnClick in Flaechenschema");
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
@@ -150,23 +161,50 @@ class Flaechenschema {
             datatype: "html",
             type: "GET"
         });
+
         getPixelValue.done(function (data) {
-            //console.log("got Pixelvalue: "+ $(data).text());
-            let html_value = $(data).text();
+
+            let html_value = $(data).text().match(/\d+/)[0];
             let html_float = parseFloat(html_value);
-            console.log("got Pixelvalue: "+ html_float);
-            let pixel_value = null;
+
             let popup = new L.popup({
                 maxWith: 300
             });
-            popup.setContent('<b>Pixelwert: </b>' + html_float );
-            //+
-            //'<span>Gemeindewert: </span>' + gem_stat);
+            popup.setContent(` ${text[language_manager.getLanguage()].landuse}:</br>  <b> ${Flaechenschema.getLandUseCode(html_float)}</b>` );
             popup.setLatLng(e.latlng);
             popup.openOn(map);
             map.openPopup(popup)
         })
 
+    }
+    static getLandUseCode(code){
+        switch (true) {
+            case (code >=  0 && code <=  7):
+                return text[language_manager.getLanguage()].agriculture;
+
+            case (code >=  8 && code <=  11):
+                return text[language_manager.getLanguage()].wooded;
+
+            case (code >=  12 && code <=  16):
+                return text[language_manager.getLanguage()].not_cultivated;
+
+            case (code >=  16 && code <=  20):
+                return text[language_manager.getLanguage()].water;
+
+            case (code ==  21):
+                return text[language_manager.getLanguage()].mining;
+
+            case (code >=  100 && code <=  104):
+                return text[language_manager.getLanguage()].built_up;
+
+            case (code >=  120 && code <=  127):
+                return text[language_manager.getLanguage()].urban_green;
+
+            case (code >=  161 && code <=  168):
+                return text[language_manager.getLanguage()].traffic;
+
+
+        }
     }
 
 
@@ -196,14 +234,12 @@ class FlaechenschemaLegende {
         legende.getDatenalterContainerObject().css("visibility", "hidden");
         legende.getDatengrundlageObject().html(`<div> Abgeleitet aus ATKIS Basis-DLM (Verkehrstrassen gepuffert mit Breitenattribut), Quelle: ATKIS Basis-DLM <a href="https://www.bkg.bund.de"> © GeoBasis- DE / BKG (${helper.getCurrentYear()})</a> <br/> <a href=" http://sg.geodatenzentrum.de/web_public/nutzungsbedingungen.pdf"> Nutzungsbedingungen</a> </div>
                                                     <br/>`) //set the data source
-        console.log("Flaechenschema Image: "+ image)
         legende.getLegendeColorsObject().empty().load(image, function () {
 
             let elements = $(this).find('img');
             elements.each(function (key, value) {
                 let src = $(this).attr('src'),
                     url = "https://maps.ioer.de" + src;
-                console.log("URL Flaeuschenschema Legende: "+ url);
                 $(this).attr('src', url);
             });
         });
