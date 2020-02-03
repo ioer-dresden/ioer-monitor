@@ -1,5 +1,16 @@
 //global variablen
-let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map",
+let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
+    text={ de:{
+        basemap: "Monitor-Basiskarte Flächennutzung",
+        agriculture:"Landwirtschaft",
+        wooded: "Wald und Gehölz",
+        not_cultivated: "Unkultivierte Bodenfläche",
+        water:"Wasserfläche",
+
+        },
+    en:{basemap: "Monitor Land Use Basemap",
+    }
+    },
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
         {
             //cache: Math.random(),
@@ -15,10 +26,10 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             format: 'image/png',
             transparent: true,
             name: "Landesgrenzen",
-            identify:false,
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:0,
-            maxZoom:8
+            maxZoom:8,
+            identify: false
         }),
         bordersKrs: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
             format: 'image/png',
@@ -26,7 +37,8 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             name: "Kreisgrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:9,
-            maxZoom:11
+            maxZoom:11,
+            identify: false
         }),
 
         bordersGem: L.WMS.source("http://sg.geodatenzentrum.de/wms_vg250", {
@@ -35,7 +47,8 @@ let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/m
             name: "Gemeindegrenzen",
             attribution: '<a href="http://www.geodatenzentrum.de/geodaten/gdz_rahmen.gdz_div?gdz_spr=deu&gdz_akt_zeile=4&gdz_anz_zeile=4&gdz_unt_zeile=0&gdz_user_id=0">© GeoBasis- DE / BKG (' + (new Date).getFullYear() + ')</a>',
             minZoom:12,
-            maxZoom:18
+            maxZoom:18,
+            identify: false
         })
     },
     fl_init = false;
@@ -61,6 +74,7 @@ class Flaechenschema {
     static set() {
         //map_header.set();
         //map_header.show();
+        map.off('click');
         map_header.updateText(`${Flaechenschema.getTxt()[language_manager.getLanguage()].title} (${zeit_slider.getTimeSet()})`);
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
@@ -75,10 +89,12 @@ class Flaechenschema {
         zusatzlayers.bordersGem.getLayer("vg250_gem").addTo(map);
 
         flaechenschema_wms.addTo(map);
-
+        console.log("added Flaechenschema");
         //zusatzlayers.bordersKrs
         let legende = new FlaechenschemaLegende();
-        //map.on('click', this.onClick);
+
+        map.on('click', this.onClick);
+        console.log("onClick set");
         fl_init = true;
     }
 
@@ -97,11 +113,12 @@ class Flaechenschema {
         if (indicator_set || typeof indicator_set !== "undefined") {
             additiveLayer.init();
         }
-        //map.off('click', this.onClick);
+        //map.off('click');
         fl_init = false
     }
-    /*
+
     static onClick(e) {
+        console.log("OnClick in Flaechenschema");
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
@@ -120,8 +137,6 @@ class Flaechenschema {
                     WIDTH = map.getSize().x;
                 }
 
-
-
         let URL = url_flaechenschema_mapserv + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
             BBOX + '&SRS=' +
             SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT +
@@ -136,20 +151,36 @@ class Flaechenschema {
             type: "GET"
         });
         getPixelValue.done(function (data) {
+            //console.log("got Pixelvalue: "+ $(data).text());
             let html_value = $(data).text();
             let html_float = parseFloat(html_value);
+            console.log("got Pixelvalue: "+ html_float);
             let pixel_value = null;
+            let popup = new L.popup({
+                maxWith: 300
+            });
+            popup.setContent('<b>Pixelwert: </b>' + html_float );
+            //+
+            //'<span>Gemeindewert: </span>' + gem_stat);
+            popup.setLatLng(e.latlng);
+            popup.openOn(map);
+            map.openPopup(popup)
         })
+
     }
-    */
+
+
 }
+
 
 
 class FlaechenschemaLegende {
     constructor() {
-        let image = `${url_flaechenschema_mapserv}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`;
+        let legendeURL= "http://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map";
+        let image = `${legendeURL}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`;
         legende.init();
         // hide all Elements except the needed ones ("datengrundlage_container")
+        legende.getEinheitObject().remove();
         let infoChildren = legende.getIndicatorInfoContainer().children();
         let child;
         let keepLegendElements = [legende.getDatengrundlageContainer().attr('id')]; // here include all the elements (from "indicator_info" <div>) that are to be kept
@@ -172,7 +203,7 @@ class FlaechenschemaLegende {
             elements.each(function (key, value) {
                 let src = $(this).attr('src'),
                     url = "https://maps.ioer.de" + src;
-                console.log("URL Flaeuschenschema Legende: "+ url)
+                console.log("URL Flaeuschenschema Legende: "+ url);
                 $(this).attr('src', url);
             });
         });
