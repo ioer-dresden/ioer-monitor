@@ -203,13 +203,10 @@ class Flaechenschema {
             case (code >=  161 && code <=  168):
                 return text[language_manager.getLanguage()].traffic;
 
-
         }
     }
 
-
 }
-
 
 
 class FlaechenschemaLegende {
@@ -219,6 +216,7 @@ class FlaechenschemaLegende {
         legende.init();
         // hide all Elements except the needed ones ("datengrundlage_container")
         legende.getEinheitObject().remove();
+        legende.getDatenalterContainerObject().remove();
         let infoChildren = legende.getIndicatorInfoContainer().children();
         let child;
         let keepLegendElements = [legende.getDatengrundlageContainer().attr('id')]; // here include all the elements (from "indicator_info" <div>) that are to be kept
