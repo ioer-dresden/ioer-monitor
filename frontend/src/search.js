@@ -27,12 +27,13 @@ const search={
                 .getDomObject()
                 .search({
                     type          : 'category',
-                    minCharacters : 2,
+                    minCharacters : 3,
                     error: {
                         noResults   : search.text[language_manager.getLanguage()].noResult,
                         serverError : search.text[language_manager.getLanguage()].serverError
                     },
                     cache: false,
+                    fullTextSearch:'false',
                     apiSettings   : {
                         onResponse: function(Response) {
                             var
@@ -44,7 +45,7 @@ const search={
                             $.each(Response.results, function(index, item) {
                                 var
                                     language   = item.category || 'Unknown',
-                                    maxResults = 15
+                                    maxResults = 50
                                 ;
                                 if(index >= maxResults) {
                                     return false;
