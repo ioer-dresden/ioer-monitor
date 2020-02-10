@@ -10,7 +10,44 @@ let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=
             mining: "Abbau- und Haldenfläche",
             built_up: "Baulich geprägte Fläche",
             urban_green:"Siedlungsfreifläche",
-            traffic:"Verkehrsfläche"
+            traffic:"Verkehrsfläche",
+            field:"Acker",
+            grassland:"Grünland",
+            orchard:"Steuobst",
+            garden:"Gartenland",
+            aboriculture:"Obstbau",
+            wine:"Weinbau",
+            otherAgriculture:"Sonstige Landwirtschaft",
+            deciduous:"Laubholz",
+            conifer:"Nadelholz",
+            mixedForest:"Mischholz",
+            copse:"Gehölz",
+            heath:"Heide",
+            moor:"Moor",
+            swamp:"Sumpf",
+            vegFree:"Unland, vegetationslose Fläche",
+            notDefined:"Z.Z. unbestimmbare Fläche",
+            watercourse:"Fließgewässer",
+            standingWater:"Stehendes Gewässer",
+            harbor:"Hafenbecken",
+            sea: "Meer/Bodden",
+            residential:"Wohnbau",
+            mixedUse:"Mischnutzung",
+            specialUse:"Besondere funktionale Prägung",
+            industrial:"Industrie/Gewerbe",
+            park:"Park/Grünanlage",
+            allotment:"Kleingarten",
+            weekendSettlement:"Wochenendsiedlung",
+            golf:"Golfplatz",
+            cemetery:"Friedhof",
+            otherSettlement:"Sonstige Siedlungsfreifläche",
+            streets:"Straßen (gewidmet)",
+            road:"Fahrwege",
+            rail:"Bahnverkehr",
+            air:"Flugverkehr",
+            roadTrace:"Verkehrsbegleitfläche Straße",
+            railTrace: "Verkehrsbegleitfläche Bahn",
+            airTrace:"Verkehrsbegleitfläche Flug"
         },
         en:{
             landuse: "Land Use",
@@ -22,7 +59,44 @@ let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=
             mining: "Mining and stockpile area",
             built_up: "Built up area",
             urban_green:"Urban green space",
-            traffic:"Traffic infrastructure"
+            traffic:"Traffic infrastructure",
+            field:"Agricultural field",
+            grassland:"Grassland",
+            orchard:"Orchard",
+            garden:"Garden",
+            aboriculture:"Aboriculture",
+            wine:"Viniculture",
+            otherAgriculture:"Other agricultural use",
+            deciduous:"Deciduous",
+            conifer:"Conifer",
+            mixedForest:"Mixed",
+            copse:"Copse",
+            heath:"Heath",
+            moor:"Moor",
+            swamp:"Swamp",
+            vegFree:"Vegetation-free area",
+            notDefined:"Type not defined",
+            watercourse:"Watercourse",
+            standingWater:"Standing water",
+            harbor:"Harbor basin",
+            sea: "Sea/ lagoon",
+            residential:"Residential",
+            mixedUse:"Mixed use",
+            specialUse:"Special functional use",
+            industrial:"Industrial",
+            park:"Park",
+            allotment:"Garden allotment",
+            weekendSettlement:"Weekend settlement",
+            golf:"Golf course",
+            cemetery:"Cemetery",
+            otherSettlement:"Other settlement area",
+            streets:"Street (dedicated)",
+            road:"Road traffic",
+            rail:"Rail traffic",
+            air:"Air traffic",
+            roadTrace:"Road traffic trace-area",
+            railTrace: "Rail traffic trace-area",
+            airTrace:"Air traffic trace-area"
     }
     },
     flaechenschema_wms = new L.tileLayer.wms(url_flaechenschema_mapserv,
@@ -125,7 +199,7 @@ class Flaechenschema {
         if (indicator_set || typeof indicator_set !== "undefined") {
             additiveLayer.init();
         }
-        //map.off('click');
+        map.off('click');
         fl_init = false
     }
 
@@ -164,13 +238,14 @@ class Flaechenschema {
 
         getPixelValue.done(function (data) {
 
-            let html_value = $(data).text().match(/\d+/)[0];
-            let html_float = parseFloat(html_value);
+            let html_value = $(data).text().match(/\d+/)[0],
+                html_float = parseFloat(html_value),
 
-            let popup = new L.popup({
+                popup = new L.popup({
                 maxWith: 300
-            });
-            popup.setContent(` ${text[language_manager.getLanguage()].landuse}:</br>  <b> ${Flaechenschema.getLandUseCode(html_float)}</b>` );
+                }),
+                content= Flaechenschema.getLandUseCode(html_float);
+            popup.setContent(` ${text[language_manager.getLanguage()].landuse}:</br></br>  <b> ${content.category}</b></br> ${content.type}` );
             popup.setLatLng(e.latlng);
             popup.openOn(map);
             map.openPopup(popup)
@@ -178,33 +253,179 @@ class Flaechenschema {
 
     }
     static getLandUseCode(code){
+        let lan=language_manager.getLanguage();
+        let category="",
+            type="";
         switch (true) {
             case (code >=  0 && code <=  7):
-                return text[language_manager.getLanguage()].agriculture;
+                category= text[lan].agriculture;
+                type="";
+                switch(true){
+                    case (code==1):
+                        type=text[lan].field;
+                        break;
+                    case (code==2):
+                        type=text[lan].grassland;
+                        break;
+                    case (code==3):
+                        type=text[lan].orchard;
+                        break;
+                    case (code==4):
+                        type=text[lan].garden;
+                        break;
+                    case (code==5):
+                        type=text[lan].aboriculture;
+                        break;
+                    case (code==6):
+                        type=text[lan].wine;
+                        break;
+                    case (code==7):
+                        type=text[lan].otherAgriculture;
+                        break;
+                }
+                return {"category":category,"type":type};
 
             case (code >=  8 && code <=  11):
-                return text[language_manager.getLanguage()].wooded;
+                category= text[lan].wooded;
+                type="";
+                switch(true){
+                    case (code==8):
+                        type=text[lan].deciduous;
+                        break;
+                    case (code==9):
+                        type=text[lan].conifer;
+                        break;
+                    case (code==10):
+                        type=text[lan].mixedForest;
+                        break;
+                    case (code==11):
+                        type=text[lan].copse;
+                        break;
+                }
+
+                return {"category":category,"type":type};
 
             case (code >=  12 && code <=  16):
-                return text[language_manager.getLanguage()].not_cultivated;
+                category= text[lan].not_cultivated;
+                type="";
+                switch(true){
+                    case (code==12):
+                        type=text[lan].heath;
+                        break;
+                    case (code==13):
+                        type=text[lan].moor;
+                        break;
+                    case (code==14):
+                        type=text[lan].swamp;
+                        break;
+                    case (code==15):
+                        type=text[lan].vegFree;
+                        break;
+                    case (code==16):
+                        type=text[lan].notDefined;
+                        break;
+                }
+                return {"category":category,"type":type};
 
-            case (code >=  16 && code <=  20):
-                return text[language_manager.getLanguage()].water;
+            case (code >=  17 && code <=  20):
+                category= text[lan].water;
+                type="";
+                switch(true){
+                    case (code==17):
+                        type=text[lan].watercourse;
+                        break;
+                    case (code==18):
+                        type=text[lan].standingWater;
+                        break;
+                    case (code==19):
+                        type=text[lan].harbor;
+                        break;
+                    case (code==20):
+                        type=text[lan].sea;
+                        break;
+                }
+                return {"category":category,"type":type};
 
             case (code ==  21):
-                return text[language_manager.getLanguage()].mining;
+                category= text[lan].mining;
+                type="";
+                return {"category":category,"type":type};
 
-            case (code >=  100 && code <=  104):
-                return text[language_manager.getLanguage()].built_up;
+            case (code >=  101 && code <=  104):
+                category= text[lan].built_up;
+                type="";
+                switch(true){
+                    case (code==101):
+                        type=text[lan].residential;
+                        break;
+                    case (code==102):
+                        type=text[lan].mixedUse;
+                        break;
+                    case (code==103):
+                        type=text[lan].specialUse;
+                        break;
+                    case (code==104):
+                        type=text[lan].industrial;
+                        break;
+                }
+                return {"category":category,"type":type};
 
-            case (code >=  120 && code <=  127):
-                return text[language_manager.getLanguage()].urban_green;
+            case (code >=  121 && code <=  127):
+                category= text[lan].urban_green;
+                type="";
+                switch(true){
+                    case (code==121):
+                        type=text[lan].park;
+                        break;
+                    case (code==122):
+                        type=text[lan].allotment;
+                        break;
+                    case (code==123):
+                        type=text[lan].weekendSettlement;
+                        break;
+                    case (code==124):
+                        type=text[lan].golf;
+                        break;
+                    case (code==126):
+                        type=text[lan].cemetery;
+                        break;
+                    case (code==127):
+                        type=text[lan].otherSettlement;
+                        break;
+                }
+                return {"category":category,"type":type};
 
             case (code >=  161 && code <=  168):
-                return text[language_manager.getLanguage()].traffic;
+                category= text[lan].traffic;
+                type="";
+                switch(true){
+                    case (code==161):
+                        type=text[lan].streets;
+                        break;
+                    case (code==162):
+                        type=text[lan].road;
+                        break;
+                    case (code==164):
+                        type=text[lan].rail;
+                        break;
+                    case (code==165):
+                        type=text[lan].air;
+                        break;
+                    case (code==166):
+                        type=text[lan].roadTrace;
+                        break;
+                    case (code==167):
+                        type=text[lan].railTrace;
+                        break;
+                    case (code==168):
+                        type=text[lan].airTrace;
+                        break;
+                }
+                return {"category":category,"type":type};
 
         }
     }
+
 
 }
 
