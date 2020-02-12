@@ -130,6 +130,16 @@ class Search
             }
         }*/
 
+        $query_gem = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_gem_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
+        $erg_gem = DBFactory::getPostgreSQLManager()->query($query_gem);
+        if (empty((array)$erg_bld)) {
+            foreach ($erg_gem as $row) {
+                $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
+                $array = explode(" ", $coordinates);
+                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Gemeinde"},';
+            }
+        }
+
         $query_stt = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_stt_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
         $erg_stt = DBFactory::getPostgreSQLManager()->query($query_stt);
 
@@ -141,15 +151,6 @@ class Search
             }
         }
 
-        $query_gem = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_gem_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
-        $erg_gem = DBFactory::getPostgreSQLManager()->query($query_gem);
-        if (empty((array)$erg_krs)) {
-            foreach ($erg_gem as $row) {
-                $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
-                $array = explode(" ", $coordinates);
-                $JSON .= '{"titel": "' . $row->gen . '","value":["' . $array[0] . '","' . $array[1] . '"],"category":"' .$locations .'","description":"Gemeinde"},';
-            }
-        }
         return $JSON;
     }
 }

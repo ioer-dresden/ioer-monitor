@@ -44,18 +44,23 @@ const search={
                             // translate GitHub API response to work with search
                             $.each(Response.results, function(index, item) {
                                 var
-                                    language   = item.category || 'Unknown',
-                                    maxResults = 50
+                                    language   = item.category || 'Unknown';
+                                /*  Maximum result count removed as of Meeting 12.02.2020
+                                    maxResults = 15
                                 ;
                                 if(index >= maxResults) {
                                     return false;
                                 }
+                                */
                                 // create new category
                                 if(response.results[language] === undefined) {
                                     response.results[language] = {
                                         name    : language,
                                         results : []
                                     };
+                                }
+                                if (item.description=="Gemeinde"){
+                                    console.log("Gmeinde found ey alter!! " + item.titel);
                                 }
                                 // add result to category
                                 response.results[language].results.push({
@@ -64,6 +69,7 @@ const search={
                                     value         : item.value,
                                     category: item.category
                                 });
+                                console.log("Title: "+ item.titel+ " ; Desc: "+ item.description+ " ; Value: "+ item.value+ " ; Category: " + item.category);
                             });
                             return response;
                         },
@@ -79,10 +85,12 @@ const search={
                     },
                     onSelect: function(result,response){
                             var cat = result.category;
+                            console.log("OnSelect!!");
 
-                        if(cat === 'Indikatoren' || 'Indicators'){
+                        if (cat === 'Indikatoren' || cat=== 'Indicators'){
                             indikatorauswahl.checkAvability(result.value,true);
-                        }else if(cat ==='Orte' || 'Locations'){
+
+                        }else if(cat ==='Orte' || cat=== 'Locations'){
                             var lat = result.value[0];
                             var lon = result.value[1];
                             var title = "<b>"+result.title+"</b></br>"+result.description;
