@@ -89,9 +89,17 @@ const indikator_raster = {
                 if (callback) callback();
                 map_header.set();
             });
+        // Setting the pointer
+        $('.leaflet-container').css('cursor','pointer');
+        map.on('movestart', function(){
+            console.log("Dragging!")
+            $('.leaflet-container').css('cursor','grab');
+        })
+        map.on('moveend', function(){
+            $('.leaflet-container').css('cursor','pointer');
+        })
     },
     onClick:function(e){
-        console.log("OnClick in Raster Map of Indicator");
         const object = indikator_raster;
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster" && !Flaechenschema.getState()) {
             try {

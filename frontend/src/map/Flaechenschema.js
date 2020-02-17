@@ -2,6 +2,7 @@
 let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
 
     clickZoom=10,
+    pointer='grab',
 
 text={ de:{
             landuse: "Flächennutzung",
@@ -186,15 +187,15 @@ class Flaechenschema {
 
         map.on('click', this.onClick);
         fl_init = true;
-        // change cursor to pointer if zoom level exceeded
-        map.on('zoomend', function() {
-            if (map.getZoom()>=clickZoom){
-                $('.leaflet-container').css('cursor','pointer');
-            }
-            else {
-                $('.leaflet-container').css('cursor','grab');
-            }
-        });
+        // change cursor to pointer if zoom level exceeded preset value
+        Flaechenschema.manageZoom(clickZoom);
+        map.on('zoomend', function(){Flaechenschema.manageZoom(clickZoom)});
+        map.on('movestart', function(){
+            $('.leaflet-container').css('cursor','grab');
+                                     })
+        map.on('moveend', function(){
+            $('.leaflet-container').css('cursor',Flaechenschema.pointer);
+        })
 
     }
 
@@ -220,7 +221,6 @@ class Flaechenschema {
     static onClick(e) {
 
         if (map.getZoom()>=clickZoom) {
-            console.log("Zoom: " + map.getZoom());
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
@@ -270,6 +270,18 @@ class Flaechenschema {
     }
 
     }
+
+    static manageZoom(clickZoom){
+        if (map.getZoom()>=clickZoom){
+            $('.leaflet-container').css('cursor','pointer');
+            Flaechenschema.pointer='pointer';
+        }
+        else {
+            $('.leaflet-container').css('cursor','grab');
+            Flaechenschema.pointer='grab';
+        }
+    }
+
     static getLandUseCode(code){
         let lan=language_manager.getLanguage();
         let category="",
