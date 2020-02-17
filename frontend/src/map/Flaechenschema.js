@@ -245,7 +245,7 @@ class Flaechenschema {
                 maxWith: 300
                 }),
                 content= Flaechenschema.getLandUseCode(html_float);
-            popup.setContent(` ${text[language_manager.getLanguage()].landuse}:</br></br>  <b> ${content.category}</b></br> ${content.type}` );
+            popup.setContent(`<b> ${content.category}</b></br> ${content.type}` );
             popup.setLatLng(e.latlng);
             popup.openOn(map);
             map.openPopup(popup)
