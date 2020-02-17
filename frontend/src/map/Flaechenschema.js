@@ -1,6 +1,9 @@
 //global variablen
 let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
-    text={ de:{
+
+    clickZoom=10,
+
+text={ de:{
             landuse: "Flächennutzung",
             basemap: "Monitor-Basiskarte Flächennutzung",
             agriculture:"Landwirtschaft",
@@ -142,6 +145,7 @@ let url_flaechenschema_mapserv = "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=
     fl_init = false;
 
 class Flaechenschema {
+
     static getTxt() {
         return {de: {title: "Monitor-Basiskarte Flächennutzung"}, en: {title: "Monitor Land Use Basemap"}};
     }
@@ -182,6 +186,16 @@ class Flaechenschema {
 
         map.on('click', this.onClick);
         fl_init = true;
+        // change cursor to pointer if zoom level exceeded
+        map.on('zoomend', function() {
+            if (map.getZoom()>=clickZoom){
+                $('.leaflet-container').css('cursor','pointer');
+            }
+            else {
+                $('.leaflet-container').css('cursor','grab');
+            }
+        });
+
     }
 
     static remove() {
@@ -204,6 +218,9 @@ class Flaechenschema {
     }
 
     static onClick(e) {
+
+        if (map.getZoom()>=clickZoom) {
+            console.log("Zoom: " + map.getZoom());
         let X = map.layerPointToContainerPoint(e.layerPoint).x,
             Y = map.layerPointToContainerPoint(e.layerPoint).y,
             BBOX = map.getBounds().toBBoxString(),
@@ -216,11 +233,11 @@ class Flaechenschema {
 
         let windowWidth = $(window).width();
 
-                if (windowWidth > 2045) {
-                    WIDTH = 2045;
-                } else {
-                    WIDTH = map.getSize().x;
-                }
+        if (windowWidth > 2045) {
+            WIDTH = 2045;
+        } else {
+            WIDTH = map.getSize().x;
+        }
 
         let URL = url_flaechenschema_mapserv + '&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&BBOX=' +
             BBOX + '&SRS=' +
@@ -242,14 +259,15 @@ class Flaechenschema {
                 html_float = parseFloat(html_value),
 
                 popup = new L.popup({
-                maxWith: 300
+                    maxWith: 300
                 }),
-                content= Flaechenschema.getLandUseCode(html_float);
-            popup.setContent(`<b> ${content.category}</b></br> ${content.type}` );
+                content = Flaechenschema.getLandUseCode(html_float);
+            popup.setContent(`<b> ${content.category}</b></br> ${content.type}`);
             popup.setLatLng(e.latlng);
             popup.openOn(map);
             map.openPopup(popup)
         })
+    }
 
     }
     static getLandUseCode(code){
