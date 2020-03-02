@@ -99,11 +99,12 @@ const main_view = {
     initResponsiveView:function(){
         console.clear();
         console.warn("init Responsive View");
+        console.log("View width: "+ main_view.getWidth()+ " Heigth: "+ main_view.getHeight());
         view_state.setViewState("responsive");
         main_view.getWidth();
         if(main_view.getWidth()<=500 || main_view.getHeight() <=700) {
-            $('.content')
-                .css("overflow-y","auto");
+            //$('.content')
+            //    .css("overflow-y","auto");
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh');
         }
