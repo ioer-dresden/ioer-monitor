@@ -462,7 +462,7 @@ class Flaechenschema {
 
 class FlaechenschemaLegende {
     constructor() {
-        let legendeURL= "http://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map";
+        let legendeURL= "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map";
         let image = `${legendeURL}&MODE=legend&layer=flaechenschema_${zeit_slider.getTimeSet()}&IMGSIZE=150+300`;
         legende.init();
         // hide all Elements except the needed ones ("datengrundlage_container")
