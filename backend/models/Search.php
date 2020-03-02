@@ -101,7 +101,8 @@ class Search
 
         $query_ror = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_ror_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
         $erg_ror = DBFactory::getPostgreSQLManager()->query($query_ror);
-        if (empty((array)$erg_bld)) {
+        if (true) //(empty((array)$erg_bld))          ---check if Bundesland comes before not wanted, as of Meeting 19.02.2020
+        {
             foreach ($erg_ror as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
@@ -112,7 +113,8 @@ class Search
 
         $query_krs = "select gid, ags, gen,des, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_krs_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
         $erg_krs = DBFactory::getPostgreSQLManager()->query($query_krs);
-        if (empty((array)$erg_bld)) {
+        if (true) //(empty((array)$erg_bld))          ---check if Bundesland comes before not wanted, as of Meeting 19.02.2020
+        {
             foreach ($erg_krs as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
@@ -132,7 +134,8 @@ class Search
 
         $query_gem = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_gem_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
         $erg_gem = DBFactory::getPostgreSQLManager()->query($query_gem);
-        if (empty((array)$erg_bld)) {
+        if (true) //(empty((array)$erg_bld))          ---check if Bundesland comes before not wanted, as of Meeting 19.02.2020
+        {
             foreach ($erg_gem as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);
@@ -143,7 +146,8 @@ class Search
         $query_stt = "select gid, ags, gen, ST_AsText(ST_centroid(transform(" . pg_escape_string($geom) . ",4326))) AS CENTER from  vg250_stt_" . $year_pg . "_grob where LOWER(gen) LIKE LOWER('%" . $searchTerm . "%')";
         $erg_stt = DBFactory::getPostgreSQLManager()->query($query_stt);
 
-        if (empty((array)$erg_bld)) {
+        if (true) //(empty((array)$erg_bld))          ---check if Bundesland comes before not wanted, as of Meeting 19.02.2020
+        {
             foreach ($erg_stt as $row) {
                 $coordinates = str_replace(array('POINT(', ')'), array('', ''), $row->center);
                 $array = explode(" ", $coordinates);

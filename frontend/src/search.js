@@ -33,7 +33,7 @@ const search={
                         serverError : search.text[language_manager.getLanguage()].serverError
                     },
                     cache: false,
-                    fullTextSearch:'false',
+                    searchFullText: true, // trying to get the fuzzy search going!
                     apiSettings   : {
                         onResponse: function(Response) {
                             var
@@ -59,9 +59,6 @@ const search={
                                         results : []
                                     };
                                 }
-                                if (item.description=="Gemeinde"){
-                                    console.log("Gmeinde found ey alter!! " + item.titel);
-                                }
                                 // add result to category
                                 response.results[language].results.push({
                                     title       : item.titel,
@@ -69,8 +66,8 @@ const search={
                                     value         : item.value,
                                     category: item.category
                                 });
-                                console.log("Title: "+ item.titel+ " ; Desc: "+ item.description+ " ; Value: "+ item.value+ " ; Category: " + item.category);
                             });
+                            console.info( response);
                             return response;
                         },
                         url: url_backend,
