@@ -11,12 +11,20 @@ const panner = {
         this.getContainer().show();
     },
     create:function(){
+        console.log("creating the world!!")
       $('#Modal').append(`
         <div id="panRight" 
             class="panner tablebackground checker cursor ${exclude.class_gebiete}" 
             data-scroll-modifier='1' data-title="Öffnen Sie die Tabellenansicht" 
             title="Öffnen Sie die Tabellenansicht"></div>
+            
+        <div id="${raster_split.selector_toolbar.replace("#","")}" 
+        class=" cursor ${exclude.class_raster} panner splitterbackground" 
+        data-title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander" 
+        title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
+            
       `);
+
     },
     init:function(){
         this.create();
@@ -45,7 +53,8 @@ const panner = {
             //bind the click functionality
             panner.getObject()
                 .click(function(){
-                    if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete") {
+                    if(raeumliche_visualisierung.getRaeumlicheGliederung()===("gebiete" || "raster")) {
+                        console.log("Opening view");
                         right_view.open();
                     }
                 });

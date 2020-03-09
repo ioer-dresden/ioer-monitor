@@ -33,7 +33,9 @@ const search={
                         serverError : search.text[language_manager.getLanguage()].serverError
                     },
                     cache: false,
-                    searchFullText: true, // trying to get the fuzzy search going!
+                    maxResults:30,
+                    //searchFullText: true, // trying to get the fuzzy search going!
+                    fullTextSearch:true,
                     apiSettings   : {
                         onResponse: function(Response) {
                             var
@@ -79,6 +81,7 @@ const search={
                             }
                         },
                         cache:false
+
                     },
                     onSelect: function(result,response){
                             var cat = result.category;

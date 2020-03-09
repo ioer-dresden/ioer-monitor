@@ -263,24 +263,18 @@ const toolbar = {
                         </div>
                         <div class="dropdown_menu mobile_hidden" id="dropdown_analyse">
                             <ul class="tools w-100">
-                                <li class="w-30">
-                                    <div class="btn_container">
+                                <li class="w-50">
+                                    <div class="btn_container" style="text-align: center" >
                                         <div id="${dev_chart.chart_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
                                          title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance}" id="dev_chart_txt">Werte- entwicklung</div>
                                     </div>
                                 </li>
-                                 <li class="w-35">
+                                 <li class="w-50">
                                     <div class="btn_container">
                                         <div id="${dev_chart.chart_compare_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
                                          title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance.replace("#","")}" data-title=""  id="dev_chart_compare_txt">Entwicklungs- vergleich</div>
-                                    </div>
-                                </li>
-                                <li class="w-30">
-                                    <div class="btn_container">
-                                        <div id="${raster_split.selector_toolbar.replace("#","")}" class="image cursor ${exclude.class_raster}" data-title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander" title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
-                                        <div class="btn_txt wordbreak" data-title=""  id="map_compare_txt">Karten- vergleich</div>
                                     </div>
                                 </li>
                             </ul>
