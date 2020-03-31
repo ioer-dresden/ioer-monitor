@@ -97,7 +97,7 @@ const main_view = {
         return $(window).height();
     },
     initResponsiveView:function(){
-        console.clear();
+        //console.clear();
         console.warn("init Responsive View");
         console.log("View width: "+ main_view.getWidth()+ " Heigth: "+ main_view.getHeight());
         view_state.setViewState("responsive");

@@ -156,7 +156,7 @@ class Flaechenschema {
     }
 
     static init() {
-        zeit_slider.init([2000, 2006, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]);
+        zeit_slider.init([2000, 2006, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018,2019]);
         if (!fl_init) {
             Flaechenschema.set();
         } else {
@@ -171,9 +171,11 @@ class Flaechenschema {
         map_header.updateText(`${Flaechenschema.getTxt()[language_manager.getLanguage()].title} (${zeit_slider.getTimeSet()})`);
         MapHelper.clearMap();
         flaechenschema_wms.setParams({layers: `flaechenschema_${zeit_slider.getTimeSet()}`});
-        //hide all elements which are not needed
+        //hide or gray out all elements which are not needed
         helper.disableElement('.fl-unbind', "");
         helper.enableElement('.indicator_choice', "");
+        $("#ind_compare").css("display","none");
+        $("#panRight").css("display","none");
         toolbar.closeAllMenues();
         $("#btn_flaechenschema").css("background-color", farbschema.getColorHexActive());
         // Adding all extra overlay maps
@@ -215,7 +217,7 @@ class Flaechenschema {
             additiveLayer.init();
         }
         map.off('click');
-        fl_init = false
+        fl_init = false;
     }
 
     static onClick(e) {

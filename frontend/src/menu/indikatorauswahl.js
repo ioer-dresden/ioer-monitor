@@ -253,6 +253,8 @@ const indikatorauswahl ={
         }else{
             start_map.set();
         }
+        console.log("onChange happening! in indikatorauswahl!");
+        exclude.setSpatialExtendelements();
     },
     getIndikatorInfo:function(indicator_id,key_name){
         let val_found = false,

@@ -232,21 +232,37 @@ const toolbar = {
                         <div class="dropdown_menu" id="dropdown_werkzeug">
                             <ul class="tools">
                                 <li class="w-25">
-                                <div class="btn_container">
-                                    <div id="measure" class="image cursor"  title="führen Sie Messungen durch"></div>
-                                    <div class="btn_txt" id="measure_btn">Messen</div>
+                                <div class="btn_container"  style="text-align: center">
+                                    <div id="measure"
+                                     class="image cursor" 
+                                     title="führen Sie Messungen durch"
+                                     style="display: inline-block"></div>
+                                    <div class="btn_txt"
+                                     id="measure_btn"
+                                     style="display: inline-block">Messen</div>
                                     </div>
                                 </li>
                                 <li class="w-25">
-                                    <div class="btn_container">
-                                        <div id="lupe" class="image cursor" title="Lupe um die darunter liegende Grundkarte hervorzuheben"></div>
-                                        <div class="btn_txt" id="lupe_btn">Lupe</div>
+                                    <div class="btn_container"  style="text-align: center">
+                                        <div id="lupe" 
+                                         class="image cursor"
+                                         title="Lupe um die darunter liegende Grundkarte hervorzuheben"
+                                         style="display: inline-block"></div>
+                                        <div class="btn_txt" 
+                                         id="lupe_btn"
+                                         style="display: inline-block">Lupe</div>
                                     </div>
                                 </li>
                                  <li class="w-25">
-                                    <div class="btn_container">
-                                        <div id="btn_glaetten" class="image cursor ${exclude.class_raster}" data-title="Glätten Sie die Rasterkarte" title="Glätten Sie die Rasterkarte"></div>
-                                        <div class="btn_txt" id ="btn_glaetten_txt">Glätten</div>
+                                    <div class="btn_container"  style="text-align: center">
+                                        <div id="btn_glaetten"
+                                         class="image cursor ${exclude.class_raster}" 
+                                         data-title="Glätten Sie die Rasterkarte" 
+                                         title="Glätten Sie die Rasterkarte"
+                                         style="display: inline-block"></div>
+                                        <div class="btn_txt" 
+                                         id ="btn_glaetten_txt"
+                                         style="display: inline-block">Glätten</div>
                                     </div>
                                 </li>
                             </ul>
@@ -266,15 +282,24 @@ const toolbar = {
                                 <li class="w-50">
                                     <div class="btn_container" style="text-align: center" >
                                         <div id="${dev_chart.chart_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
-                                         title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"></div>
-                                        <div class="btn_txt wordbreak ${exclude.class_performance}" id="dev_chart_txt">Werte- entwicklung</div>
+                                         title="Analysieren Sie die zeitliche Entwicklung eines Indikatorwertes"
+                                         style="display: inline-block"></div>
+                                        <div class="btn_txt wordbreak ${exclude.class_performance}"
+                                         id="dev_chart_txt"
+                                         style="display: inline-block">Werte- entwicklung</div>
                                     </div>
                                 </li>
                                  <li class="w-50">
-                                    <div class="btn_container">
-                                        <div id="${dev_chart.chart_compare_selector_toolbar.replace("#","")}" class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
-                                         title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"></div>
-                                        <div class="btn_txt wordbreak ${exclude.class_performance.replace("#","")}" data-title=""  id="dev_chart_compare_txt">Entwicklungs- vergleich</div>
+                                    <div class="btn_container"
+                                     style="text-align: center">
+                                        <div id="${dev_chart.chart_compare_selector_toolbar.replace("#","")}"
+                                         class="image ind_chart ${exclude.class_performance} ${exclude.class_gebiete} cursor oneTime" 
+                                         title="Analysieren Sie die zeitliche Entwicklung mehrerer Indikatorwerte"
+                                         style="display: inline-block"></div>
+                                        <div class="btn_txt wordbreak ${exclude.class_performance.replace("#","")}"
+                                         data-title=""
+                                         id="dev_chart_compare_txt"
+                                         style="display: inline-block">Entwicklungs- vergleich</div>
                                     </div>
                                 </li>
                             </ul>

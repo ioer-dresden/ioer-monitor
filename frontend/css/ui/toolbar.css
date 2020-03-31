@@ -227,6 +227,7 @@
     height: 32px;
     margin-left: 7px;
 }
+.toolbar #content
 .toolbar #content #dropdown_werkzeug .btn_container #measure {
     background: var(--main-color) url(../../assets/icon/ruler.png) no-repeat center center;
 }
