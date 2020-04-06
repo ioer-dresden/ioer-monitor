@@ -15,6 +15,7 @@ const right_view = {
             //set the mobile view
             if (view_state.getViewState() === "responsive") {
                 if (!this.isVisible()) {
+                    console.log("showing responsive in right view");
                     view.show();
                     left_view.hide();
                     view.getCloseIconObject().hide();
@@ -22,15 +23,18 @@ const right_view = {
                     panner.setMapBackground();
                     btn_group_map.hide();
                 } else {
+                    console.log("hiding responsive in right view");
                     view.hide();
                     left_view.show();
                     legende.getShowButtonObject().show();
                     panner.setTableBackground();
                     panner.show();
                     btn_group_map.show();
+                    exclude.setSpatialExtendelements();
                 }
             } else {
                 $('#mapwrap').addClass('splitter_panel');
+                console.log("Splitter panel! in right view");
                 view.show();
                 panner.hide();
                 view.getCloseIconObject().show();
@@ -51,6 +55,7 @@ const right_view = {
         this.hide();
         $('#mapwrap').removeClass('splitter_panel');
         panner.show();
+        console.log("closing right view");
         legende.resize();
         map.invalidateSize();
     },

@@ -119,7 +119,6 @@
     width: 80%;
     height: auto;
     border: 1px solid var(--main-color) !important;;
-    overflow: scroll;
 }
 .indicator_ddm .menu .item{
     border-left: 1px solid var(--main-color) !important;

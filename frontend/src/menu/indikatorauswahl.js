@@ -97,7 +97,7 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=700) {
+                if(main_view.getHeight()>=600) {
                     menu.responsive=false;
                     console.log("Responsive false in indikatorenauswahl. Height: "+ main_view.getHeight());
                     html += `<div id="kat_item_${cat_id}"
@@ -112,6 +112,7 @@ const indikatorauswahl ={
                 }else{
                     console.log("Responsive true in indikatorauswahl! Height: "+ main_view.getHeight());
                     menu.responsive=true;
+                    $('#kat_auswahl').attr('style', 'overflow:auto');
                     html += `<div class="header">
                                 <i class="tags icon"></i>${cat_name()}</div>
                             <div class="divider"></div>`
