@@ -97,7 +97,7 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=600) {
+                if(main_view.getHeight()>=700) {
                     menu.responsive=false;
                     console.log("Responsive false in indikatorenauswahl. Height: "+ main_view.getHeight());
                     html += `<div id="kat_item_${cat_id}"
