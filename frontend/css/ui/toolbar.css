@@ -116,7 +116,7 @@
     font-weight: bold !important;
 }
 .indicator_ddm #kat_auswahl{
-    width: 80%;
+    width: 100%;
     height: auto;
     border: 1px solid var(--main-color) !important;;
 }
