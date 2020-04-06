@@ -36,8 +36,8 @@ const exclude={
                 console.log("enabling Raster"+ $(this).attr("id"));
                 helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
                 if ($(this).attr("id")==="ind_compare"){
-                    // hide the Table Button when in Raster mode
-                    console.log("Showing ind_compare in exclude.js")
+                    // show indicator compare icon when in raster
+                    console.log("Showing ind_compare in exclude.js");
                     $(this).css("display", "initial")
                 }
             });
@@ -46,7 +46,7 @@ const exclude={
                 helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text);
 
                 if ($(this).attr("id")==="panRight"){
-                    // hide the Table Button when in Raster mode
+                    // hide PanRight (table) when in raster
                     console.log("Hiding PanRight in exclude");
                     $(this).css("display", "none")
                 }

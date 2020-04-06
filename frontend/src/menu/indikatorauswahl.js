@@ -97,8 +97,9 @@ const indikatorauswahl ={
                     icon_set=icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=600) {
+                if(main_view.getHeight()>=700) {
                     menu.responsive=false;
+                    console.log("Responsive false in indikatorenauswahl. Height: "+ main_view.getHeight());
                     html += `<div id="kat_item_${cat_id}"
                                   title="${main_view.getHeight() >= 1000 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
                                   class="ui left pointing dropdown link item link_kat" 
@@ -109,6 +110,7 @@ const indikatorauswahl ={
                                 ${cat_name()}
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
                 }else{
+                    console.log("Responsive true in indikatorauswahl! Height: "+ main_view.getHeight());
                     menu.responsive=true;
                     html += `<div class="header">
                                 <i class="tags icon"></i>${cat_name()}</div>

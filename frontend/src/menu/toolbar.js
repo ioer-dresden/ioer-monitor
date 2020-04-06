@@ -69,7 +69,7 @@ const toolbar = {
                                     <input name="Indikatorauswahl" type="hidden"/>
                                     <i class="dropdown icon"></i>
                                     <div class="default text" id="ind_choice_info">Bitte wählen Sie einen Indikator</div>
-                                    <div  id="kat_auswahl" class="menu"></div>
+                                    <div  id="kat_auswahl" class="menu" ></div>
                                 </div>
                                 <button class="btn btn-primary btn_dropdown kennblatt" onclick="kennblatt.open();">Kennblatt</button>
                             </div>
