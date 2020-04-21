@@ -74,6 +74,7 @@ const search = {
                                     value: item.value,
                                     category: item.category,
                                 });
+                                // Sorting the api response, because could not get the Semantic UI to do it correctly by itself
                                 response.results[language].results
                                     .sort((a, b) => {
                                         // Sort results by matching name with keyword position in name

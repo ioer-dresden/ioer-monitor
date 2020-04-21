@@ -162,11 +162,11 @@ const dev_chart = {
                 diagram = $('#diagramm'),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
                 chart_width = diagram.width() - margin.left - margin.right,
-                chart_height = 400 - (array.length * 30),
+                chart_height = $('.ui-dialog').height()*(1.5/3),
                 margin_top = 0,
                 migration_set = false;
 
-            //let chart_height = $('.ui-dialog').height()*(1.5/3);
+
             let x = d3.scaleTime().range([0, chart_width]),
                 y = d3.scaleLinear().range([chart_height, 0]);
 
