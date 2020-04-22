@@ -265,7 +265,7 @@
         "attr": "title"
       },
       "dev_chart_txt":{
-        "de": "Werte- entwicklung",
+        "de": "Wertentwicklung",
         "en": "Value development",
         "type": "#"
       },

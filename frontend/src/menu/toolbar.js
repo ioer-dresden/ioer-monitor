@@ -286,7 +286,7 @@ const toolbar = {
                                          style="display: inline-block"></div>
                                         <div class="btn_txt wordbreak ${exclude.class_performance}"
                                          id="dev_chart_txt"
-                                         style="display: inline-block">Werte- entwicklung</div>
+                                         style="display: inline-block">Wertentwicklung</div>
                                     </div>
                                 </li>
                                  <li class="w-50">

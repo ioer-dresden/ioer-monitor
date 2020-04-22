@@ -23,7 +23,7 @@ const dev_chart = {
             },
             cancel: "Abbrechen",
             value:"Wert",
-            explanation:"Realtive Änderung des Indikators. Anfangswert gleich 100 %"
+            explanation:"Relative Änderung des Indikators. Anfangswert gleich 100 %"
         },
         en: {
             title: {
@@ -111,7 +111,7 @@ const dev_chart = {
                     </div>
                     <div id="diagramm_info_text">
                         <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span> in <b id="diagrmm_gebiets_typ"></b>.</div>
-                        <div>${this.text[lan].explanation} </div>
+                        <div id="explanation"></div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
@@ -140,6 +140,10 @@ const dev_chart = {
         };
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
+        if (dev_chart.chart.settings.ind_vergleich){
+            $('#explanation').text(dev_chart.text[lan].explanation);
+        }
+
         this.chart.create();
     },
     chart: {
@@ -162,7 +166,7 @@ const dev_chart = {
                 diagram = $('#diagramm'),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
                 chart_width = diagram.width() - margin.left - margin.right,
-                chart_height = $('.ui-dialog').height()*(1.5/3),
+                chart_height = $('.ui-dialog').height()*(1.2/3),
                 margin_top = 0,
                 migration_set = false;
 
@@ -230,14 +234,19 @@ const dev_chart = {
                 });
                 if (chart.settings.ind_vergleich) {  // Recalculate the 'value' property of all elements, to display it correctly as percentiles
                     for (let item in chart.merge_data) {
-                        let firstValue = 100;
+                        let firstValue = 100,
+                            minValue= helper.getMinArray(chart.merge_data[item].values, "value");
+
+                        console.log("MinValue: " + minValue);
                         for (let val in chart.merge_data[item].values) {
 
                             if (val == 0) {
                                 firstValue = chart.merge_data[item].values[val].real_value;
 
                             }
-                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value)
+                            console.log("First VAlue: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
+                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value, minValue);
+                            console.log("VAlue true: "+ chart.merge_data[item].values[val].value)
                         }
                     }
 
@@ -247,8 +256,8 @@ const dev_chart = {
                 createPath();
             });
 
-            function calculatePercentiles(firstValue, currentValue) {
-                let onePercent = firstValue / 100;
+            function calculatePercentiles(firstValue, currentValue, minValue) {
+                // todo! Normaliye the values taking minValue into acount!
                 return currentValue / onePercent
             }
 
@@ -288,6 +297,7 @@ const dev_chart = {
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
+                console.log("Min Value of Z axis: "+ minValue);
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
