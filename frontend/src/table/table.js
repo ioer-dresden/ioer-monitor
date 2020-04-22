@@ -446,6 +446,7 @@ const table = {
         TableHelper.setStickTableHeader();
     },
     expand: function () {
+        console.log("Starting expanding table");
         const table = this;
         let grey_border = 'grey_border',
             class_expand = expand_panel.class_expand,
@@ -457,7 +458,7 @@ const table = {
             def = $.Deferred();
 
         TableHelper.resetColspan();
-
+        console.log("Colspan Reset");
         //function
         let getDifferenceValue = function (value_ind, value_ags) {
                 return (value_ags - value_ind).toFixed(2);
@@ -510,13 +511,21 @@ const table = {
         }
 
         function defCalls() {
+            console.log("Getting defCalls!");
             let requests = [];
             $.each(expand_array, function (key, value) {
                 requests.push(RequestManager.getTableExpandValues(value));
+                console.log("Table expand value: ");
+                console.info(value);
             });
+            console.log("table.js requwest array:");
+            console.info(requests);
             $.when.apply($, requests).done(function () {
+                console.log("DefCalls arguments: ");
+                console.info(arguments);
                 def.resolve(arguments);
             });
+            console.log("DefCalls done!");
             return def.promise();
         }
         /*
@@ -541,9 +550,11 @@ const table = {
             return result
         }
         */
+        console.log("starting fetching defCalls results");
         defCalls().done(function (arr) {
             let results = [],
                 lan = language_manager.getLanguage();
+            console.log("starting pushing defCalls results");
             if (expand_array.length === 1) {
                 results.push(arr[0]);
             } else {
@@ -564,6 +575,7 @@ const table = {
 
             //expand the table---------------------------------------------------------------
             try {
+                console.log("Expanding the table");
             $.each(results, function (key, values_expand) {
                 let id = values_expand.id,
                     count = parseInt(values_expand.count),
