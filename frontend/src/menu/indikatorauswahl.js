@@ -93,14 +93,12 @@ const indikatorauswahl = {
 
                 if (color) {
                     background_color = "background-color:" + color + ";";
-                    console.log("There is color for : " + cat_name + " And it is: " + background_color);
                 } else {
                     icon_set = icon;
                 }
                 //create the cat choices
                 if (main_view.getHeight() >= 700) {
                     menu.responsive = false;
-                    console.log("Responsive false in indikatorenauswahl. Height: " + main_view.getHeight());
                     html += `<div id="kat_item_${cat_id}"
                                   title="${main_view.getHeight() >= 1000 ? '' : 'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
                                   class="ui left pointing dropdown link item link_kat" 
@@ -111,8 +109,6 @@ const indikatorauswahl = {
                                 ${cat_name()}
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
                 } else {
-                    console.log("Responsive true in indikatorauswahl! Height: " + main_view.getHeight());
-                    console.log("Icon: "+ icon);
                     menu.responsive = true;
                     $('#kat_auswahl').attr('style', 'overflow:auto');
                     html += `<div class="item" style="${background_color}">
@@ -262,7 +258,6 @@ const indikatorauswahl = {
         } else {
             start_map.set();
         }
-        console.log("onChange happening! in indikatorauswahl!");
         exclude.setSpatialExtendelements();
     },
     getIndikatorInfo: function (indicator_id, key_name) {

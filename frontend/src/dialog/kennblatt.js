@@ -10,7 +10,12 @@ const kennblatt={
             category = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()][('cat_name'+lang_tag())],
             unit = indikatorauswahl.getIndikatorEinheit(),
             info = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("info"+lang_tag())],
-            methodik = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("methodik"+lang_tag())],
+            methodik = function(){
+                let text= indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("methodik"+lang_tag())],
+                textLinesSeparated= text.replace(/°{2,}/g, "</br></br>"),
+                textSpacesAdded= textLinesSeparated.replace(/°/g, " ");
+                return textSpacesAdded;
+            },
             verweise = function(){
                 try {
                     let cont = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("verweise" + lang_tag())],
@@ -104,8 +109,10 @@ const kennblatt={
             },
             literatur=function(){
                 try {
-                    let literatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())];
-                    return he.decode(literatur);
+                    let literatur = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("literatur" + lang_tag())],
+                        literaturLinesSeparated= literatur.replace(/°{2,}/g, "</br></br>"),
+                        literaturSpacesAdded= literaturLinesSeparated.replace(/°/g, " ");
+                    return he.decode(literaturSpacesAdded);
                 }catch(err){
                     console.log(err);
                     return "";
@@ -167,7 +174,7 @@ const kennblatt={
                     <h4>${header_text[language]["daten"]}</h4>
                     <div class="text">${datengrundlage}</div>
                     <h4>${header_text[language]["methodik"]}</h4>
-                    <div class="text">${methodik}</div>
+                    <div class="text">${methodik()}</div>
                     <h4>${header_text[language]["verweise"]}</h4>
                     <div class="text">${verweise()}</div>
                     <h4>${header_text[language]["bemerkung"]}</h4>
