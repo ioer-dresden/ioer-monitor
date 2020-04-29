@@ -1,5 +1,5 @@
 //global variablen
-let url_flaechenschema_mapserv = "https://monitor.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
+let url_flaechenschema_mapserv = "https://maps.ioer.de/cgi-bin/mapserv_dv?Map=/mapsrv_daten/detailviewer/mapfiles/flaechenschema.map", // ACHTUNG!!! Legende wird von maps.ioer.de geholt!!!!! Dumm, aber sonst zugriffverweigerung bei Legendeabfragen!!
 
     clickZoom=10,
     pointer='grab',

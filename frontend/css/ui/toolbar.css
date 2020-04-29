@@ -118,7 +118,8 @@
 .indicator_ddm #kat_auswahl{
     width: 100%;
     height: auto;
-    border: 1px solid var(--main-color) !important;;
+    border: 1px solid var(--main-color) !important;
+    overflow: scroll !important;
 }
 .indicator_ddm .menu .item{
     border-left: 1px solid var(--main-color) !important;
@@ -227,7 +228,6 @@
     height: 32px;
     margin-left: 7px;
 }
-.toolbar #content
 .toolbar #content #dropdown_werkzeug .btn_container #measure {
     background: var(--main-color) url(../../assets/icon/ruler.png) no-repeat center center;
 }

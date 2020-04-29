@@ -234,19 +234,16 @@ const dev_chart = {
                 });
                 if (chart.settings.ind_vergleich) {  // Recalculate the 'value' property of all elements, to display it correctly as percentiles
                     for (let item in chart.merge_data) {
-                        let firstValue = 100,
-                            minValue= helper.getMinArray(chart.merge_data[item].values, "value");
+                        let firstValue = chart.merge_data[item].values[0].real_value,
+                            minValue= helper.getMinArray(chart.merge_data[item].values, "value"),
+                            maxValue= helper.getMaxArray(chart.merge_data[item].values, "value");
 
                         console.log("MinValue: " + minValue);
                         for (let val in chart.merge_data[item].values) {
 
-                            if (val == 0) {
-                                firstValue = chart.merge_data[item].values[val].real_value;
-
-                            }
-                            console.log("First VAlue: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
-                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value, minValue);
-                            console.log("VAlue true: "+ chart.merge_data[item].values[val].value)
+                            console.log("First Value: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
+                            chart.merge_data[item].values[val].value = calculatePercentiles(minValue, maxValue, chart.merge_data[item].values[val].real_value);
+                            console.log("Value true: "+ chart.merge_data[item].values[val].value)
                         }
                     }
 
@@ -256,9 +253,13 @@ const dev_chart = {
                 createPath();
             });
 
-            function calculatePercentiles(firstValue, currentValue, minValue) {
-                // todo! Normaliye the values taking minValue into acount!
-                return currentValue / onePercent
+            function calculatePercentiles(minValue, maxValue, currentValue,) {
+                //  Normalize the values taking minValue into acount! Maybe consider some different logic?
+                let scale= (maxValue-minValue)/100;
+                console.log("Scale: "+ scale);
+                let percentile=currentValue/scale;
+
+                return percentile
             }
 
             function scaleChart() {
@@ -283,9 +284,9 @@ const dev_chart = {
                 minValue = minValue - maxValue / 30;
 
                 // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
-               if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
-                   minValue=0;
-               }
+               //if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
+               //    minValue=0;
+               //}
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
