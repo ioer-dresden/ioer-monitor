@@ -137,8 +137,11 @@ try{
                             '","max":"'.$row_ind->FARBWERT_MAX.
                         '"},"verweise":"' . preg_replace('/\s+/', ' ',str_replace('"',"'",htmlentities($row_ind->VERWEISE))) .
                         '","verweise_en":"' . preg_replace('/\s+/', ' ',str_replace('"',"'",htmlentities($row_ind->VERWEISE_EN))) .
-                        '","interpretation":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION))) .
-                        '","interpretation_en":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION_EN))) .
+                        // !! Because NEWLINES are not correctly passed on in the JSON file, a workaround was implemented as follows:
+                        // 1) all empty spaces turned into '°' symbol. Newlines are represented by '°°°' - tree symbols
+                        // 2) Decoding of '°°°' into html </br> tag happens in Frontend (kennblatt.js); decoding of '°' to ' ' happens in Frontend
+                        '","interpretation":"' . trim(preg_replace('/\s/', '°', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION))) .
+                        '","interpretation_en":"' . trim(preg_replace('/\s/', '°', str_replace('"', "'", $row_ind->BEDEUTUNG_INTERPRETATION_EN))) .
                         '","methodik":"' . trim(preg_replace('/\s/', '°', str_replace('"', "'", $row_ind->METHODIK))) .
                         '","bemerkungen":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEMERKUNGEN))) .
                         '","bemerkungen_en":"' . trim(preg_replace('/\s+/', ' ', str_replace('"', "'", $row_ind->BEMERKUNGEN_EN))) .

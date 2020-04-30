@@ -44,8 +44,20 @@ const kennblatt={
                     return "";
                 }
             },
-            interpretation = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("interpretation"+lang_tag())],
-            bemerkungen = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("bemerkungen"+lang_tag())],
+            interpretation = function(){
+               let interpretation= indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("interpretation"+lang_tag())],
+                   interpretationLinesSeparated= interpretation.replace(/°{2,}/g, "</br></br>"),
+                   interpretationSpacesAdded= interpretationLinesSeparated.replace(/°/g, " ");
+               return interpretationSpacesAdded;
+            },
+
+            bemerkungen = function(){
+                let bemerkungen= indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()][("bemerkungen"+lang_tag())],
+                bemerkungenLinesSeparated= bemerkungen.replace(/°{2,}/g, "</br></br>"),
+                bemerkungenSpacesAdded= bemerkungenLinesSeparated.replace(/°/, " ");
+                return bemerkungenSpacesAdded;
+            },
+
             ogc = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()]["ogc"],
             spatial_extends = indikatorauswahl.getPossebilities()[indikatorauswahl.getSelectedIndikatorKategorie()]['indicators'][indikatorauswahl.getSelectedIndikator()]["spatial_extends"],
             language = language_manager.getLanguage(),
@@ -170,7 +182,7 @@ const kennblatt={
                     <h4>${header_text[language]["beschreibung"]}</h4>
                     <div class="text">${info}</div>
                     <h4>${header_text[language]["bedeutung"]}</h4>
-                    <div class="text">${interpretation}</div>
+                    <div class="text">${interpretation()}</div>
                     <h4>${header_text[language]["daten"]}</h4>
                     <div class="text">${datengrundlage}</div>
                     <h4>${header_text[language]["methodik"]}</h4>
@@ -178,7 +190,7 @@ const kennblatt={
                     <h4>${header_text[language]["verweise"]}</h4>
                     <div class="text">${verweise()}</div>
                     <h4>${header_text[language]["bemerkung"]}</h4>
-                    <div class="text">${bemerkungen}</div>
+                    <div class="text">${bemerkungen()}</div>
                     <h4>${header_text[language]["bezugsebenen"]}</h4>
                     <div class="text">${bezugsebenen()}</div>
                     <div class="html2pdf__page-break"></div>
