@@ -1,6 +1,6 @@
 const panner = {
     getObject:function(){
-        $elem = $('.panner');
+        $elem = $('#panRight');
         return $elem;
     },
     getContainer:function(){return $('.panner')},

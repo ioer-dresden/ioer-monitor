@@ -114,13 +114,15 @@ const main_view = {
         indikatorauswahl.fill();
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==='gebiete'){
             //bind the scroll handeler
-            //reset the bootom padding of the time slider
+            //reset the botom padding of the time slider
             $('#rightPane').css("width","");
             $('#table_ags').removeClass("collapsing");
             $('#mapwrap').removeClass('splitter_panel');
-        }
+        };
+
         //CSS settings
         $('.right_content').css("display","none");
+        panner.controller.set();
     },
     getMobileState:function(){
         return this.getWidth() < 500;
