@@ -388,11 +388,11 @@ const toolbar = {
                                 $(this).slideUp();
                             }
                         });
-                        //set the height og the overflow content inside the menu bar
+                        //set the height of the overflow content inside the menu bar
                         if (main_view.getHeight() <= 1000) {
                             setTimeout(function () {
-                                let height = toolbar.getHeight() - $('#no_overflow').height() - 60;
-                                $('#overflow_content').css("max-height", height + 50);
+                                let height = toolbar.getHeight() - $('#no_overflow').height() - 160;
+                                $('#overflow_content').css("height", height );
                             }, 500);
 
                         }

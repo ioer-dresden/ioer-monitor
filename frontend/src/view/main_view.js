@@ -6,7 +6,8 @@ const main_view = {
     },
     restoreView:function(){
         legende.resize();
-        if (this.getWidth() <= 1000 || this.getHeight()<=750) {
+        console.log("Width: "+ this.getWidth()+ " Height: "+ this.getHeight());
+        if (this.getWidth() <= 1000 || this.getHeight()<=780) {
             this.initResponsiveView();
         }
         else {
@@ -103,8 +104,8 @@ const main_view = {
         view_state.setViewState("responsive");
         main_view.getWidth();
         if(main_view.getWidth()<=500 || main_view.getHeight() <=700) {
-            //$('.content')
-            //    .css("overflow-y","auto");
+            $('.content')
+               .css("overflow-y","auto");
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh');
         }
@@ -114,7 +115,7 @@ const main_view = {
         indikatorauswahl.fill();
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==='gebiete'){
             //bind the scroll handeler
-            //reset the botom padding of the time slider
+            //reset the bootom padding of the time slider
             $('#rightPane').css("width","");
             $('#table_ags').removeClass("collapsing");
             $('#mapwrap').removeClass('splitter_panel');

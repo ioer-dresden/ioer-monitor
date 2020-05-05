@@ -97,7 +97,7 @@ const indikatorauswahl = {
                     icon_set = icon;
                 }
                 //create the cat choices
-                if (main_view.getHeight() >= 700) {
+                if (main_view.getHeight() >= 800) {
                     menu.responsive = false;
                     html += `<div id="kat_item_${cat_id}"
                                   title="${main_view.getHeight() >= 1000 ? '' : 'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
@@ -110,7 +110,7 @@ const indikatorauswahl = {
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
                 } else {
                     menu.responsive = true;
-                    $('#kat_auswahl').attr('style', 'overflow:auto');
+                    //$('#kat_auswahl').attr('style', 'overflow:auto');
                     html += `<div class="item" style="${background_color}">
                                 <div class="header" >
                                     ${ icon ? icon : ''} ${cat_name()}</div>
