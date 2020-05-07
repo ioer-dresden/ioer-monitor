@@ -280,7 +280,7 @@ const additiveLayer={
         setOverlay:function(_id){
             const control = additiveLayer;
             let layer = control.zusatzlayer[_id],
-                name = $(`#zusatz_${_id}`).data("name");
+                name = $('#'+_id).data("name");
 
             if(_id==="mdmap"){
                 OsmBuildings.addEngine();
@@ -302,6 +302,7 @@ const additiveLayer={
                 control.zusatzlayer.setForward();
                 progressbar.remove();
                 legende.getLegendeColorsObject().append(`<div class="zusatzlayer" id="zusatz_${_id}"><div style="border-bottom: 3px solid ${style[_id].color};"></div>${name}</div>`);
+                console.log("added the zusatzlayer to legend: "+ name);
             });
         },
         removeOverlay:function(_id){
