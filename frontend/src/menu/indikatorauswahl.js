@@ -199,6 +199,8 @@ const indikatorauswahl = {
         });
     },
     setIndicator: function (indicator_id) {
+        //close the open dialog windows
+        dialog_manager.close();
         const menu = this;
 
         let ind_param = menu.getSelectedIndikator();
