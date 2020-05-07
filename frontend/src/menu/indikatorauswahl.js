@@ -8,20 +8,20 @@ const indikatorauswahl = {
     responsive: false,
     schema: {
         //collection of icons which stands for each category https://semantic-ui.com/elements/icon.html
-        "N": {"name": "Nachhaltigkeit", "icon": "<i class='leaf icon'></i>", "color": "#bb7274"},
-        "S": {"name": "Siedlung", "icon": "<i class='building icon'></i>", "color": "#e6b8b7"},
-        "V": {"name": "Verkehr", "icon": "<i class='bus icon'></i>", "color": "#bab8e8"},
+        "N": {"name": "Nachhaltigkeit", "icon": "<i class='leaf icon'></i>", "color": false},
+        "S": {"name": "Siedlung", "icon": "<i class='building icon'></i>", "color": "#fceded"},
+        "V": {"name": "Verkehr", "icon": "<i class='bus icon'></i>", "color": "#ededfd"},
         "F": {"name": "Freiraum", "icon": "<i class='tree icon'></i>", "color": "#ecf3db"},
-        "B": {"name": "Bevölkerung", "icon": "<i class='male icon'></i>", "color": "#bb7274"},
-        "D": {"name": "Zersiedelung", "icon": "<i class='spinner icon'></i>", "color": "#bb7274"},
-        "G": {"name": "Gebäude", "icon": "<i class='home icon'></i>", "color": "#e6b8b7"},
-        "L": {"name": "Landschafts- und Naturschutz", "icon": "<i class='bug icon'></i>", "color": "#F0E68C"},
-        "U": {"name": "Landschaftsqualität", "icon": "<i class='heart icon'></i>", "color": "#F0E68C"},
-        "O": {"name": "Ökosystemleistungen", "icon": "<i class='umbrella icon'></i>", "color": "#F0E68C"},
-        "R": {"name": "Risiko", "icon": "<i class='exclamation icon'></i>", "color": "#b5eaf8"},
-        "E": {"name": "Energie", "icon": "<i class='adjust icon'></i>", "color": "f0c08c"},
+        "B": {"name": "Bevölkerung", "icon": "<i class='male icon'></i>", "color": false},
+        "D": {"name": "Zersiedelung", "icon": "<i class='spinner icon'></i>", "color": false},
+        "G": {"name": "Gebäude", "icon": "<i class='home icon'></i>", "color": false},
+        "L": {"name": "Landschafts- und Naturschutz", "icon": "<i class='bug icon'></i>", "color": false},
+        "U": {"name": "Landschaftsqualität", "icon": "<i class='heart icon'></i>", "color": false},
+        "O": {"name": "Ökosystemleistungen", "icon": "<i class='umbrella icon'></i>", "color": false},
+        "R": {"name": "Risiko", "icon": "<i class='exclamation icon'></i>", "color": false},
+        "E": {"name": "Energie", "icon": "<i class='adjust icon'></i>", "color": false},
         "M": {"name": "Materiallager", "icon": "<i class='cubes icon'></i>", "color": false},
-        "X": {"name": "Relief", "icon": "<i class='align right icon'></i>", "color": "#F0E68C"}
+        "X": {"name": "Relief", "icon": "<i class='align right icon'></i>", "color": false}
     },
     getSelectedIndikator: function () {
         return urlparamter.getUrlParameter(this.paramter);
@@ -110,6 +110,11 @@ const indikatorauswahl = {
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
                 } else {
                     menu.responsive = true;
+                    if (!background_color){
+                        // adding a default background color to category items in indicator list
+                        background_color="background-color: #e9ecfb";
+                    }
+
                     //$('#kat_auswahl').attr('style', 'overflow:auto');
                     html += `<div class="item" style="${background_color}">
                                 <div class="header" >
