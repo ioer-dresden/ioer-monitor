@@ -8,6 +8,7 @@ const right_view = {
         return $elem;
     },
     open:function(){
+        console.log("Is the right view visible? "+ this.isVisible());
         const view = this;
         let btn_group_map = $('#btn-group-map');
         //show only the table view, if the user set a indicator

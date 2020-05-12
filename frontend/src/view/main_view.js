@@ -98,6 +98,7 @@ const main_view = {
         return $(window).height();
     },
     initResponsiveView:function(){
+        console.log("init responsive view");
         //console.clear();
         console.warn("init Responsive View");
         console.log("View width: "+ main_view.getWidth()+ " Heigth: "+ main_view.getHeight());
@@ -119,11 +120,11 @@ const main_view = {
             $('#rightPane').css("width","");
             $('#table_ags').removeClass("collapsing");
             $('#mapwrap').removeClass('splitter_panel');
+            panner.controller.set();
         };
 
         //CSS settings
         $('.right_content').css("display","none");
-        panner.controller.set();
     },
     getMobileState:function(){
         return this.getWidth() < 500;

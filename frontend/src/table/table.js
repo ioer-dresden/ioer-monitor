@@ -177,7 +177,9 @@ const table = {
                                                  src="frontend/assets/icon/histogramm.png"/>`,
                         value_td = function () {
                             //Todo HC werden vom Backend nicht weitergegeben
+                            console.log("HC Code for: "+ value.gen);
                             if (hc !== '0') {
+                                console.log("HC: "+ hc);
                                 //split the hc
                                 let hc_arr = hc.split("||"),
                                     hc_text = hc_arr[0];
@@ -185,6 +187,7 @@ const table = {
                                 let hc_value = hc_arr[1];
                                 hc_text = table.text[language_manager.getLanguage()].smallCoverage;
                                 console.log("HC_TEXT 2: " + hc_text);
+                                console.log("HC value: "+hc_value)
                                 return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma}</b>`;
                             } else if (fc !== '0') {
                                 //split the fc

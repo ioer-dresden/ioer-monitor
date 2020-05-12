@@ -12,7 +12,7 @@ const panner = {
     },
     create:function(){
         console.log("creating the world!!")
-      $('#Modal').append(`
+        $('#Modal').append(`
         <div id="panRight" 
             class="panner tablebackground checker cursor ${exclude.class_gebiete}" 
             data-scroll-modifier='1' data-title="Öffnen Sie die Tabellenansicht" 
@@ -53,8 +53,8 @@ const panner = {
             //bind the click functionality
             panner.getObject()
                 .click(function(){
-                    if(raeumliche_visualisierung.getRaeumlicheGliederung()===("gebiete" || "raster")) {
-                        console.log("Opening view");
+                    if(raeumliche_visualisierung.getRaeumlicheGliederung()===("gebiete")) {
+                        console.log("Opening view"+ panner.getObject().text()+ "  Hello");
                         right_view.open();
                     }
                 });
