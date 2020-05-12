@@ -120,9 +120,7 @@ const main_view = {
             $('#rightPane').css("width","");
             $('#table_ags').removeClass("collapsing");
             $('#mapwrap').removeClass('splitter_panel');
-            panner.controller.set();
         };
-
         //CSS settings
         $('.right_content').css("display","none");
     },

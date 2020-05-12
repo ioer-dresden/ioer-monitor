@@ -22,7 +22,9 @@ const right_view = {
                     view.getCloseIconObject().hide();
                     legende.close();
                     panner.setMapBackground();
-                    btn_group_map.hide();
+                    btn_group_map.hide()
+                    panner.hide();
+                    exclude.setSpatialExtendelements();
                 } else {
                     console.log("hiding responsive in right view");
                     view.hide();
@@ -32,7 +34,7 @@ const right_view = {
                     panner.show();
                     btn_group_map.show();
                     exclude.setSpatialExtendelements();
-                }
+                    }
             } else {
                 $('#mapwrap').addClass('splitter_panel');
                 console.log("Splitter panel! in right view");
@@ -50,6 +52,7 @@ const right_view = {
             .unbind()
             .click(function(){
                 view.close();
+                exclude.setSpatialExtendelements();
             });
     },
     close:function(){

@@ -33,14 +33,14 @@ const exclude={
             elements_gebiete= $(`.${this.class_gebiete}`);
         if(raeumliche_visualisierung.getRaeumlicheGliederung()==="raster"){
             elements_raster.each(function() {
-                helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
-                if ($(this).attr("id")==="ind_compare"){
+                //helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
+                if ($(this).attr("id")===raster_split.selector_toolbar.replace("#","")){
                     // show indicator compare icon when in raster
                     $(this).css("display", "initial")
                 }
             });
             elements_gebiete.each(function() {
-                helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text);
+                //helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text);
                 if ($(this).attr("id")==="panRight"){
                     // hide PanRight (table) when in raster
                     $(this).css("display", "none")
@@ -48,15 +48,15 @@ const exclude={
             });
         }else{
             elements_raster.each(function() {
-                helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text_raster);
-                if ($(this).attr("id")==="ind_compare"){
+                //helper.disableElement(`#${$(this).attr("id")}`, exclude.text[language_manager.getLanguage()].disable_text_raster);
+                if ($(this).attr("id")===raster_split.selector_toolbar.replace("#","")){
                     // hide the Indicator comparison when in Vector mode
                     $(this).css("display", "none");
                 }
 
             });
             elements_gebiete.each(function() {
-                helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
+                //helper.enableElement(`#${$(this).attr("id")}`, $(this).data("title"));
                 if ($(this).attr("id")==="panRight"){
                     // hide the Table Button when in Raster mode
                     $(this).css("display", "initial")

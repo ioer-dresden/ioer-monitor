@@ -24,7 +24,6 @@ const panner = {
         title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
             
       `);
-
     },
     init:function(){
         this.create();
