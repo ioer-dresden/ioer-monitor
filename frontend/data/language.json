@@ -361,6 +361,12 @@
         "setTimeout(function(){table.initTableHTML();},1000)"
       ]
     },
+    "hinweis_legende_text": {
+      "de":"Übersicht zu Hinweisen in der Tabelle:",
+      "en":"Overview of the warning icons in the table:",
+      "type":"#",
+      "callback": ["table.init()"]
+    },
     "filter_table": {
       "de":"Tabelle filtern",
       "en":"Filter table",

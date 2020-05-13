@@ -9,6 +9,7 @@ const panner = {
     },
     show:function(){
         this.getContainer().show();
+        exclude.setSpatialExtendelements();
     },
     create:function(){
         console.log("creating the world!!")

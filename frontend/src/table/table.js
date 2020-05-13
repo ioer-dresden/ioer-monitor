@@ -12,8 +12,7 @@ const table = {
             development: "Veränderung des Indikatorwertes für die Gebietseinheit",
             comparison: "Veränderung der Indikatorwerte für die Gebietseinheit",
             noMunicipal: "Nor available on municipal level",
-            smallCoverage: "Grundaktualisierter Flächenanteil beträgt 50-90 % der Gebietsfläche.",
-            actualityDifference: "Aktualitäts- Differenz"
+            actualityDifference: "Aktualitäts- Differenz",
         },
         en: {
             value: "Value",
@@ -26,8 +25,7 @@ const table = {
             statistics: "The key statistical parameters for this spatial unit and timeframe",
             development: "Development of the indicator value over time",
             comparison: "Development of the indicator values over time",
-            smallCoverage: "Latest updated indicator values available only for 50-90 % of the area.",
-            actualityDifference: "Temporal relevance difference"
+            actualityDifference: "Temporal relevance difference",
         }
     },
     td_classes: 'collapsing',
@@ -74,6 +72,11 @@ const table = {
                      <input id="search_input_table" placeholder="Suche nach Orten.." type="text" class="form-control search_input prompt" />
                 </div>
                 <hr class="hr"/>
+                <div id="hinweis_legende">
+                    <div id="hinweis_legende_text" style="display: none">
+                        Übersicht zu Hinweisen in der Tabelle:
+                    </div>
+                </div>
       `);
     },
     getTableHTML: function () {
@@ -176,17 +179,32 @@ const table = {
                                                  id="diagramm_ags${ags}" 
                                                  src="frontend/assets/icon/histogramm.png"/>`,
                         value_td = function () {
-                            //Todo HC werden vom Backend nicht weitergegeben
                             if (hc !== '0') {
-                                console.log("HC: "+ hc);
                                 //split the hc
+
                                 let hc_arr = hc.split("||"),
-                                    hc_text = hc_arr[0];
-                                console.log("HC_TEXT 1: " + hc_text);
-                                let hc_value = hc_arr[1];
-                                hc_text = table.text[language_manager.getLanguage()].smallCoverage;
-                                console.log("HC value: "+hc_value)
-                                return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma}</b>`;
+                                    hc_text="",
+                                    hc_short="";
+                                if (language_manager.getLanguage()==='de'){
+                                    hc_short=hc_arr[0];
+                                    hc_text = hc_arr[2];
+                                }
+                                else {
+                                    hc_short = hc_arr[1];
+                                    hc_text = hc_arr[3]
+                                }
+                                let hc_value = hc_arr[4],
+                                    hinweis_legende_element= `
+                                        <div id=${hc_value} >
+                                            <img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/>
+                                            <b class="">${hc_short} (${hc_text}) </b>
+                                        </div>`;
+                                if (!$('#hinweis_legende').find('#'+hc_value).length) {
+                                    $('#hinweis_legende_text').css("display","inline");
+                                    $('#hinweis_legende').append(hinweis_legende_element);
+                                }
+
+                                return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma} </b>${img_stat + img_trend + img_trend_ind}`;
                             } else if (fc !== '0') {
                                 //split the fc
                                 let fc_arr = fc.split("||"),
@@ -194,7 +212,7 @@ const table = {
                                     fc_beschreibung = fc_arr[3];
                                 return `<b title="${fc_beschreibung}" class="">${fc_name}</b>`;
                             } else {
-                                return `<b class="">${value.value_comma}</b>${img_stat + img_trend + img_trend_ind}`;
+                                return `<b class=""> ${value.value_comma} </b> ${img_stat + img_trend + img_trend_ind}`;
                             }
                         },
                         grundaktualitaet_td = function () {
@@ -394,7 +412,7 @@ const table = {
         let html_table = this.getTableHTML();
 
         $.when(this.clear())
-            .then(this.append(html_table))
+            .then(this.append(html_table), console.log("Appending Table"))
             .then(this.controller.set())
             .then(TableHelper.setRang())
             .then(TableSelection.setSelection())
@@ -447,7 +465,6 @@ const table = {
         TableHelper.setStickTableHeader();
     },
     expand: function () {
-        console.log("Starting expanding table");
         const table = this;
         let grey_border = 'grey_border',
             class_expand = expand_panel.class_expand,
@@ -459,7 +476,6 @@ const table = {
             def = $.Deferred();
 
         TableHelper.resetColspan();
-        console.log("Colspan Reset");
         //function
         let getDifferenceValue = function (value_ind, value_ags) {
                 return (value_ags - value_ind).toFixed(2);
@@ -512,21 +528,13 @@ const table = {
         }
 
         function defCalls() {
-            console.log("Getting defCalls!");
             let requests = [];
             $.each(expand_array, function (key, value) {
                 requests.push(RequestManager.getTableExpandValues(value));
-                console.log("Table expand value: ");
-                console.info(value);
             });
-            console.log("table.js requwest array:");
-            console.info(requests);
             $.when.apply($, requests).done(function () {
-                console.log("DefCalls arguments: ");
-                console.info(arguments);
                 def.resolve(arguments);
             });
-            console.log("DefCalls done!");
             return def.promise();
         }
         /*
@@ -551,11 +559,9 @@ const table = {
             return result
         }
         */
-        console.log("starting fetching defCalls results");
         defCalls().done(function (arr) {
             let results = [],
                 lan = language_manager.getLanguage();
-            console.log("starting pushing defCalls results");
             if (expand_array.length === 1) {
                 results.push(arr[0]);
             } else {
@@ -576,7 +582,6 @@ const table = {
 
             //expand the table---------------------------------------------------------------
             try {
-                console.log("Expanding the table");
             $.each(results, function (key, values_expand) {
                 let id = values_expand.id,
                     count = parseInt(values_expand.count),
