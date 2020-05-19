@@ -90,7 +90,10 @@
     width:75% !important;
 }
 .w-50{
+    text-align: center!important;
+    justify-content: center!important;
     width:50% !important;
+
 }
 .w-30{
     width:30% !important;

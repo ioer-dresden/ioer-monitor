@@ -1,106 +1,106 @@
 //Indikatorauswahl
-const indikatorauswahl ={
-    possebilities:false,
-    all_possible_years:'',
-    filtered_years:'',
-    paramter:'ind',
-    previous_indikator:'',
-    responsive:false,
-    schema:{
+const indikatorauswahl = {
+    possebilities: false,
+    all_possible_years: '',
+    filtered_years: '',
+    paramter: 'ind',
+    previous_indikator: '',
+    responsive: false,
+    schema: {
         //collection of icons which stands for each category https://semantic-ui.com/elements/icon.html
-        "N":{"name":"Nachhaltigkeit","icon":"<i class='leaf icon'></i>","color":false},
-        "S":{"name":"Siedlung","icon":false,"color":"#fceded"},
-        "V":{"name":"Verkehr","icon":false,"color":"#ededfd"},
-        "F":{"name":"Freiraum","icon":false,"color":"#ecf3db"},
-        "B":{"name":"Bevölkerung","icon":"<i class='male icon'></i>","color":false},
-        "D":{"name":"Zersiedelung","icon":"<i class='spinner icon'></i>","color":false},
-        "G":{"name":"Gebäude","icon":"<i class='home icon'></i>","color":false},
-        "L":{"name":"Landschafts- und Naturschutz","icon":"<i class='bug icon'></i>","color":false},
-        "U":{"name":"Landschaftsqualität","icon":"<i class='heart icon'></i>","color":false},
-        "O":{"name":"Ökosystemleistungen","icon":"<i class='umbrella icon'></i>","color":false},
-        "R":{"name":"Risiko","icon":"<i class='exclamation icon'></i>","color":false},
-        "E":{"name":"Energie","icon":"<i class='adjust icon'></i>","color":false},
-        "M":{"name":"Materiallager","icon":"<i class='cubes icon'></i>","color":false},
-        "X":{"name":"Relief","icon":"<i class='align right icon'></i>","color":false}
+        "N": {"name": "Nachhaltigkeit", "icon": "<i class='leaf icon'></i>", "color": false},
+        "S": {"name": "Siedlung", "icon": "<i class='building icon'></i>", "color": "#fceded"},
+        "V": {"name": "Verkehr", "icon": "<i class='bus icon'></i>", "color": "#ededfd"},
+        "F": {"name": "Freiraum", "icon": "<i class='tree icon'></i>", "color": "#ecf3db"},
+        "B": {"name": "Bevölkerung", "icon": "<i class='male icon'></i>", "color": false},
+        "D": {"name": "Zersiedelung", "icon": "<i class='spinner icon'></i>", "color": false},
+        "G": {"name": "Gebäude", "icon": "<i class='home icon'></i>", "color": false},
+        "L": {"name": "Landschafts- und Naturschutz", "icon": "<i class='bug icon'></i>", "color": false},
+        "U": {"name": "Landschaftsqualität", "icon": "<i class='heart icon'></i>", "color": false},
+        "O": {"name": "Ökosystemleistungen", "icon": "<i class='umbrella icon'></i>", "color": false},
+        "R": {"name": "Risiko", "icon": "<i class='exclamation icon'></i>", "color": false},
+        "E": {"name": "Energie", "icon": "<i class='adjust icon'></i>", "color": false},
+        "M": {"name": "Materiallager", "icon": "<i class='cubes icon'></i>", "color": false},
+        "X": {"name": "Relief", "icon": "<i class='align right icon'></i>", "color": false}
     },
-    getSelectedIndikator:function(){
+    getSelectedIndikator: function () {
         return urlparamter.getUrlParameter(this.paramter);
     },
-    getIndikatorKategorie:function(_ind){
-        return $('#'+_ind+"_item").attr("data-kat");
+    getIndikatorKategorie: function (_ind) {
+        return $('#' + _ind + "_item").attr("data-kat");
     },
-    getSelectedIndikatorKategorie:function(){
-        return $('#'+this.getSelectedIndikator()+"_item").attr("data-kat");
+    getSelectedIndikatorKategorie: function () {
+        return $('#' + this.getSelectedIndikator() + "_item").attr("data-kat");
     },
-    setIndikatorParameter:function(_value){
+    setIndikatorParameter: function (_value) {
         urlparamter.setUrlParameter(this.paramter, _value);
     },
-    getIndikatorEinheit:function(){
-        let value =this.getIndikatorInfo(this.getSelectedIndikator(),"unit");
-        if(typeof value ==='undefined' || value===''){
+    getIndikatorEinheit: function () {
+        let value = this.getIndikatorInfo(this.getSelectedIndikator(), "unit");
+        if (typeof value === 'undefined' || value === '') {
             value = '';
         }
         return value;
     },
-    getSelectedIndiktorGrundaktState:function(){
-        let value = $('#'+this.getSelectedIndikator()+'_item').data('actuality');
+    getSelectedIndiktorGrundaktState: function () {
+        let value = $('#' + this.getSelectedIndikator() + '_item').data('actuality');
         return value === 'verfügbar';
     },
-    updateIndikatorParamter:function(_value){
+    updateIndikatorParamter: function (_value) {
         urlparamter.updateURLParameter(this.paramter, _value);
     },
-    getAllPossibleYears:function(){
+    getAllPossibleYears: function () {
         return this.all_possible_years;
     },
-    getFilteredPossibleYears:function(){
+    getFilteredPossibleYears: function () {
         return this.filtered_years;
     },
-    getPossebilities:function(){
+    getPossebilities: function () {
         return this.possebilities;
     },
-    getDOMObject:function(){
+    getDOMObject: function () {
         $elem = $('#indicator_ddm');
         return $elem;
     },
-    init:function(){
+    init: function () {
         this.fill();
         this.controller.set();
     },
-    isVisible:function(){
+    isVisible: function () {
         return this.getDOMObject().is(':visible');
     },
-    fill:function(){
+    fill: function () {
         const menu = this;
         //get all possebilities via ajax
-        $.when(RequestManager.getAllAvaliableIndicators()).done(function(data){
+        $.when(RequestManager.getAllAvaliableIndicators()).done(function (data) {
             menu.possebilities = data;
             let container = $('#kat_auswahl');
             let html = "";
             //fill the Options
-            $.each(data,function(cat_key,cat_value){
+            $.each(data, function (cat_key, cat_value) {
                 let cat_id = cat_key,
-                    cat_name=function(){
+                    cat_name = function () {
                         let cat_name = cat_value.cat_name;
-                        if(language_manager.language==="en"){
+                        if (language_manager.language === "en") {
                             cat_name = cat_value.cat_name_en
                         }
-                        return  cat_name;
+                        return cat_name;
                     },
                     color = menu.schema[cat_id]["color"],
-                    icon= menu.schema[cat_id]["icon"],
+                    icon = menu.schema[cat_id]["icon"],
                     background_color = '',
                     icon_set = '';
 
-                if(color){
-                    background_color="background-color:"+color+";";
-                }else{
-                    icon_set=icon;
+                if (color) {
+                    background_color = "background-color:" + color + ";";
+                } else {
+                    icon_set = icon;
                 }
                 //create the cat choices
-                if(main_view.getHeight()>=600) {
-                    menu.responsive=false;
+                if (main_view.getHeight() >= 800) {
+                    menu.responsive = false;
                     html += `<div id="kat_item_${cat_id}"
-                                  title="${main_view.getHeight() >= 1000 ? '':'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
+                                  title="${main_view.getHeight() >= 1000 ? '' : 'durch erneutes anklicken ändern sie die horizontale Positionierung des Sub-Menü'}"
                                   class="ui left pointing dropdown link item link_kat" 
                                   data-value="${cat_id}"
                                   style="${background_color}">
@@ -108,30 +108,38 @@ const indikatorauswahl ={
                                 <i class="dropdown icon"></i>
                                 ${cat_name()}
                                 <div id="submenu${cat_id}" class="menu submenu upward">`;
-                }else{
-                    menu.responsive=true;
-                    html += `<div class="header">
-                                <i class="tags icon"></i>${cat_name()}</div>
-                            <div class="divider"></div>`
+                } else {
+                    menu.responsive = true;
+                    if (!background_color){
+                        // adding a default background color to category items in indicator list
+                        background_color="background-color: #e9ecfb";
+                    }
+
+                    //$('#kat_auswahl').attr('style', 'overflow:auto');
+                    html += `<div class="item" style="${background_color}">
+                                <div class="header" >
+                                    ${ icon ? icon : ''} ${cat_name()}</div>
+                                <div class="divider"></div>
+                            </div>`
                 }
                 //create the subselection
                 $.each(cat_value.indicators, function (key, value) {
                     let ind_id = key,
-                        ind_name=function(){
+                        ind_name = function () {
                             let ind_name = value.ind_name;
-                            if(language_manager.language==="en"){
+                            if (language_manager.language === "en") {
                                 ind_name = value.ind_name_en
                             }
-                            return  ind_name;
+                            return ind_name;
                         },
                         markierung = value.significant,
                         grundakt_state = value.basic_actuality_state,
                         einheit = value.unit,
                         times = value.times,
-                        markierung_class=function(){
-                            let set="";
-                            if(markierung==="true"){
-                                set= "indicator_ddm_item_bold";
+                        markierung_class = function () {
+                            let set = "";
+                            if (markierung === "true") {
+                                set = "indicator_ddm_item_bold";
                             }
                             return set;
                         };
@@ -147,39 +155,41 @@ const indikatorauswahl ={
                                     data-actuality="${grundakt_state}">`;
                     html += ind_name() + "</div>";
                 });
-                html +='</div></div>';
+                html += '</div></div>';
             });
             container.empty().append(html);
             //sort by attribute 'markierung'
-            $(container).find('div').sort(function(a,b){
-                let contentA =parseInt( $(a).attr('data-sort'));
-                let contentB =parseInt( $(b).attr('data-sort'));
+            $(container).find('div').sort(function (a, b) {
+                let contentA = parseInt($(a).attr('data-sort'));
+                let contentB = parseInt($(b).attr('data-sort'));
                 return (contentA < contentB) ? -1 : (contentA > contentB) ? 1 : 0;
             });
         })
         //append 'Siedlungsdicht for Herr Dr. Meinel'
-            .then(function() {
+            .then(function () {
                     $('#B02DT_item').clone().appendTo('#submenuN');
-    }
+                }
             );
     },
-    checkAvability:function(_ind,draw){
+    checkAvability: function (_ind, draw) {
         let ind = this.getSelectedIndikator();
         const menu = this;
-        if(_ind){ind = _ind;}
-        $.when(RequestManager.getAvabilityIndicator(ind)).done(function(data){
-            $.each(data,function(key,value) {
-                if(value.ind === ind) {
-                    if(value.avability===false){
+        if (_ind) {
+            ind = _ind;
+        }
+        $.when(RequestManager.getAvabilityIndicator(ind)).done(function (data) {
+            $.each(data, function (key, value) {
+                if (value.ind === ind) {
+                    if (value.avability === false) {
                         alert_manager.alertNotAsRaster();
                         return false;
-                    }else{
-                        if(!ind){
+                    } else {
+                        if (!ind) {
                             menu.setIndikatorParameter(ind);
-                        }else{
+                        } else {
                             menu.updateIndikatorParamter(ind);
                         }
-                        if(draw){
+                        if (draw) {
                             menu.setIndicator(ind);
                         }
                         return true;
@@ -188,11 +198,13 @@ const indikatorauswahl ={
             });
         });
     },
-    setIndicator:function(indicator_id){
+    setIndicator: function (indicator_id) {
+        //close the open dialog windows
+        dialog_manager.close();
         const menu = this;
 
         let ind_param = menu.getSelectedIndikator();
-        if(indicator_id || typeof indicator_id!=="undefined") {
+        if (indicator_id || typeof indicator_id !== "undefined") {
             if (!ind_param) {
                 menu.setIndikatorParameter(indicator_id);
             } else {
@@ -250,46 +262,47 @@ const indikatorauswahl ={
                     }
                 }
             }, 500);
-        }else{
+        } else {
             start_map.set();
         }
+        exclude.setSpatialExtendelements();
     },
-    getIndikatorInfo:function(indicator_id,key_name){
+    getIndikatorInfo: function (indicator_id, key_name) {
         let val_found = false,
             id = indicator_id;
-        if(typeof id==="undefined" || !id){
+        if (typeof id === "undefined" || !id) {
             id = this.getSelectedIndikator();
         }
-        $.each(this.getPossebilities(),function(cat_key,cat_value){
+        $.each(this.getPossebilities(), function (cat_key, cat_value) {
             $.each(cat_value.indicators, function (key, value) {
-                if(key===id){
+                if (key === id) {
                     val_found = value[key_name];
                 }
             });
         });
         return val_found;
     },
-    getSelectedIndikatorText:function(){
+    getSelectedIndikatorText: function () {
         const menu = this;
         let name = this.getDOMObject().dropdown('get text');
-        if(name.toLowerCase().indexOf("bitte")===0 || menu.getSelectedIndikator() !== menu.previous_indikator){
-            setTimeout(function(){
-                name = $('#'+menu.getSelectedIndikator()+"_item").text();
+        if (name.toLowerCase().indexOf("bitte") === 0 || menu.getSelectedIndikator() !== menu.previous_indikator) {
+            setTimeout(function () {
+                name = $('#' + menu.getSelectedIndikator() + "_item").text();
                 menu.setSelectedIndikatorText(name);
-            },1000);
+            }, 1000);
         }
         return name;
     },
-    setSelectedIndikatorText:function(value){
-        this.getDOMObject().dropdown('set text',value);
+    setSelectedIndikatorText: function (value) {
+        this.getDOMObject().dropdown('set text', value);
     },
-    getSelectedIndikatorText_Lang:function(){
+    getSelectedIndikatorText_Lang: function () {
         //just as control mechanism
         this.getSelectedIndikatorText();
-        return $('#'+this.getSelectedIndikator()+"_item").attr("data-name");
+        return $('#' + this.getSelectedIndikator() + "_item").attr("data-name");
     },
     //function to clone the indicator dropdown menu to reuse it for example inside table expand or chart
-    cloneMenu:function(appendToId,newClassId,orientation,exclude_kat,possible_indicators){
+    cloneMenu: function (appendToId, newClassId, orientation, exclude_kat, possible_indicators) {
         let elem_id = $(`#${appendToId}`);
         let menu_clone = $('.toolbar #kat_auswahl > div').clone();
 
@@ -298,7 +311,7 @@ const indikatorauswahl ={
         menu_clone
             .removeClass('link_kat')
             .addClass(newClassId)
-            .each(function() {
+            .each(function () {
                 let element = $(this);
                 //add  the needed classes and change the id
                 element
@@ -310,40 +323,40 @@ const indikatorauswahl ={
                     .addClass('transition')
                     .removeAttr("id")
                     .find('.item')
-                    .each(function(){
+                    .each(function () {
                         //if true clone only indicators which times are possible with the indicator set times
-                        if(possible_indicators){
+                        if (possible_indicators) {
                             let times_values = $(this).data("times").toString().split(',');
                             let time = zeit_slider.getTimeSet().toString();
-                            if($.inArray(time,times_values)===-1){
+                            if ($.inArray(time, times_values) === -1) {
                                 $(this).remove();
                             }
                         }
                     });
-        });
+            });
 
         //set the align css for the menu
         let text_align = 'left';
-        if(orientation==='left'){
+        if (orientation === 'left') {
             text_align = 'right';
         }
-        menu_clone.find('.item').children().css('text-align',text_align);
+        menu_clone.find('.item').children().css('text-align', text_align);
         //add the element to the given id
         elem_id
             .html(menu_clone);
 
         //exlude categories for cloning
-        if(exclude_kat){
-            if(exclude_kat instanceof Array){
-                $.each(exclude_kat,function(key,value){
+        if (exclude_kat) {
+            if (exclude_kat instanceof Array) {
+                $.each(exclude_kat, function (key, value) {
                     elem_id.find(`#kat_item_${value}`).remove();
                 });
-            }else {
+            } else {
                 elem_id.find(`#kat_item_${exclude_kat}`).remove();
             }
         }
         //if menu is fully added -> remove empty categories, no need for responisve menu without categories view
-        if(!this.responsive) {
+        if (!this.responsive) {
             var interval = setInterval(function () {
                 //if all indictaor values are ready
                 if (elem_id.find('.submenu').length >= 2) {
@@ -361,17 +374,17 @@ const indikatorauswahl ={
             }, 50);
         }
     },
-    openMenu:function(){
+    openMenu: function () {
         this.getDOMObject().dropdown('show');
     },
-    controller:{
-        set:function(){
+    controller: {
+        set: function () {
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh')
                 .dropdown({
-                    onShow:function(){
+                    onShow: function () {
                         let click = 0;
-                        if(main_view.getHeight()<= 1000) {
+                        if (main_view.getHeight() <= 1000) {
                             $('.link_kat')
                                 .unbind()
                                 .click(function () {
@@ -388,20 +401,20 @@ const indikatorauswahl ={
                     },
                     onChange: function (value, text, $choice) {
                         // if Land Use map is open, close it
-                        if (Flaechenschema.getState()){
+                        if (Flaechenschema.getState()) {
                             Flaechenschema.remove();
                         }
                         //clean the search field
                         $('#search_input_indikatoren').val('');
                         //save the prev selected indicator as paramter
-                        indikatorauswahl.previous_indikator=value;
+                        indikatorauswahl.previous_indikator = value;
                         indikatorauswahl.setIndicator(value);
                         if (raeumliche_visualisierung.getRaeumlicheGliederung() === 'gebiete') {
                             farbliche_darstellungsart.resetSelection();
                             dev_chart.chart.controller.clearChartArray();
                             expand_panel.close();
                         }
-                        if(view_state.getViewState()==="responsive"){
+                        if (view_state.getViewState() === "responsive") {
                             toolbar.close();
                         }
                     },

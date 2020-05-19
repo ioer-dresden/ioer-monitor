@@ -256,11 +256,6 @@
 .toolbar #content #dropdown_analyse #dev_chart_compare{
     background: white url(../../assets/icon/trend_compare.png) no-repeat center center;
 }
-.toolbar #content #dropdown_analyse #ind_compare{
-    background: var(--main-color) url(../../assets/icon/split.png) no-repeat center center;
-    height:40px;
-    margin-bottom: 5px;
-}
 .toolbar #content #dropdown_analyse #ind_stat{
     background: white url(../../assets/icon/histogramm32.png) no-repeat center center;
 }

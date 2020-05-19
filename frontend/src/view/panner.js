@@ -1,6 +1,6 @@
 const panner = {
     getObject:function(){
-        $elem = $('.panner');
+        $elem = $('#panRight');
         return $elem;
     },
     getContainer:function(){return $('.panner')},
@@ -9,13 +9,21 @@ const panner = {
     },
     show:function(){
         this.getContainer().show();
+        exclude.setSpatialExtendelements();
     },
     create:function(){
-      $('#Modal').append(`
+        console.log("creating the world!!")
+        $('#Modal').append(`
         <div id="panRight" 
             class="panner tablebackground checker cursor ${exclude.class_gebiete}" 
             data-scroll-modifier='1' data-title="Öffnen Sie die Tabellenansicht" 
             title="Öffnen Sie die Tabellenansicht"></div>
+            
+        <div id="${raster_split.selector_toolbar.replace("#","")}" 
+        class=" cursor ${exclude.class_raster} panner splitterbackground" 
+        data-title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander" 
+        title="vergleichen Sie 2 Indikatoren oder Zeitschnitte miteinander"></div>
+            
       `);
     },
     init:function(){
@@ -45,7 +53,8 @@ const panner = {
             //bind the click functionality
             panner.getObject()
                 .click(function(){
-                    if(raeumliche_visualisierung.getRaeumlicheGliederung()==="gebiete") {
+                    if(raeumliche_visualisierung.getRaeumlicheGliederung()===("gebiete")) {
+                        console.log("Opening view"+ panner.getObject().text()+ "  Hello");
                         right_view.open();
                     }
                 });

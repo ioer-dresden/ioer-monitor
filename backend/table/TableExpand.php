@@ -20,7 +20,7 @@ class TableExpand{
         $ind_set  = $id_splitted[0];
         //temp array
         $ags_array = array();
-        $year_pg = DBFactory::getMySQLTask()->getPostGreYear($time_set);
+        $year_pg = strval(DBFactory::getMySQLTask()->getPostGreYear($time_set));
         try {
             //store the passed ags JSON in an array
             foreach ($ags_array_user as $item) {

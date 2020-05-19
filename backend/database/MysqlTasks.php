@@ -105,23 +105,23 @@ class MysqlTasks extends MysqlManager
             //create the subquery for brd
             $sql_brd = "IFNULL((SELECT x.INDIKATORWERT FROM m_indikatorwerte_" . $year . " x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags='99' AND x.INDIKATORWERT <=" . $year . "),0) as grundakt_year_brd,
                   IFNULL((SELECT y.INDIKATORWERT FROM m_indikatorwerte_" . $year . " y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS ='99' AND y.INDIKATORWERT <= " . $year . "),0) as grundakt_month_brd,
-                  (select b.INDIKATORWERT from m_indikatorwerte_" . $year . " b where AGS='99' and b.ID_INDIKATOR=i.ID_INDIKATOR) as value_brd,
-                  INDIKATORWERT-(select b.INDIKATORWERT from m_indikatorwerte_" . $year . " b where AGS='99' and b.ID_INDIKATOR=i.ID_INDIKATOR) as diff_brd,";
+                  (select b.INDIKATORWERT from m_indikatorwerte_" . $year . " b where AGS='99' and b.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY b.INDIKATORWERT) as value_brd,
+                  INDIKATORWERT-(select b.INDIKATORWERT from m_indikatorwerte_" . $year . " b where AGS='99' and b.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY b.INDIKATORWERT) as diff_brd,";
 
             if ($length_ags > 2) {
                 $ags_bld = substr($ags, 0, 2);
                 $sql_bld = "IFNULL((SELECT x.INDIKATORWERT FROM m_indikatorwerte_" . $year . " x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags='" . $ags_bld . "' AND x.INDIKATORWERT <=" . $year . "),0) as grundakt_year_bld,
                         IFNULL((SELECT y.INDIKATORWERT FROM m_indikatorwerte_" . $year . " y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS ='" . $ags_bld . "' AND y.INDIKATORWERT <= " . $year . "),0) as grundakt_month_bld,
-                        (select l.INDIKATORWERT from m_indikatorwerte_" . $year . " l where AGS='" . $ags_bld . "' and l.ID_INDIKATOR=i.ID_INDIKATOR) as value_bld,
-                        INDIKATORWERT-(select k.INDIKATORWERT from m_indikatorwerte_" . $year . " k where AGS='" . $ags_bld . "' and k.ID_INDIKATOR=i.ID_INDIKATOR) as diff_bld,";
+                        (select l.INDIKATORWERT from m_indikatorwerte_" . $year . " l where AGS='" . $ags_bld . "' and l.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY l.INDIKATORWERT) as value_bld,
+                        INDIKATORWERT-(select k.INDIKATORWERT from m_indikatorwerte_" . $year . " k where AGS='" . $ags_bld . "' and k.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY k.INDIKATORWERT) as diff_bld,";
             }
 
             if ($length_ags > 5) {
                 $ags_krs = substr($ags, 0, 5);
                 $sql_krs = "IFNULL((SELECT x.INDIKATORWERT FROM m_indikatorwerte_" . $year . " x WHERE x.ID_INDIKATOR = 'Z00AG' AND x.ags='" . $ags_krs . "' AND x.INDIKATORWERT <=" . $year . "),0) as grundakt_year_krs,
                         IFNULL((SELECT y.INDIKATORWERT FROM m_indikatorwerte_" . $year . " y WHERE y.ID_INDIKATOR = 'Z01AG' and y.AGS ='" . $ags_krs . "' AND y.INDIKATORWERT <= " . $year . "),0) as grundakt_month_krs,
-                        (select l.INDIKATORWERT from m_indikatorwerte_" . $year . " l where AGS='" . $ags_krs . "' and l.ID_INDIKATOR=i.ID_INDIKATOR) as value_krs,
-                        INDIKATORWERT-(select k.INDIKATORWERT from m_indikatorwerte_" . $year . " k where AGS='" . $ags_krs . "' and k.ID_INDIKATOR=i.ID_INDIKATOR) as diff_krs,";
+                        (select l.INDIKATORWERT from m_indikatorwerte_" . $year . " l where AGS='" . $ags_krs . "' and l.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY l.INDIKATORWERT) as value_krs,
+                        INDIKATORWERT-(select k.INDIKATORWERT from m_indikatorwerte_" . $year . " k where AGS='" . $ags_krs . "' and k.ID_INDIKATOR=i.ID_INDIKATOR GROUP BY k.INDIKATORWERT) as diff_krs,";
             }
 
             $sql = "Select i.ID_INDIKATOR as id, i.INDIKATORWERT AS value,

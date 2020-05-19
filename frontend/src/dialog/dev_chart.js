@@ -23,7 +23,7 @@ const dev_chart = {
             },
             cancel: "Abbrechen",
             value:"Wert",
-            explanation:"Realtive Änderung des Indikators. Anfangswert gleich 100 %"
+            explanation:"Relative Änderung des Indikators. Anfangswert gleich 100 %"
         },
         en: {
             title: {
@@ -111,7 +111,7 @@ const dev_chart = {
                     </div>
                     <div id="diagramm_info_text">
                         <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span> in <b id="diagrmm_gebiets_typ"></b>.</div>
-                        <div>${this.text[lan].explanation} </div>
+                        <div id="explanation"></div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
@@ -140,6 +140,10 @@ const dev_chart = {
         };
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
+        if (dev_chart.chart.settings.ind_vergleich){
+            $('#explanation').text(dev_chart.text[lan].explanation);
+        }
+
         this.chart.create();
     },
     chart: {
@@ -162,11 +166,11 @@ const dev_chart = {
                 diagram = $('#diagramm'),
                 margin = {top: 20, right: 60, bottom: 30, left: 60},
                 chart_width = diagram.width() - margin.left - margin.right,
-                chart_height = 400 - (array.length * 30),
+                chart_height = $('.ui-dialog').height()*(1.2/3),
                 margin_top = 0,
                 migration_set = false;
 
-            //let chart_height = $('.ui-dialog').height()*(1.5/3);
+
             let x = d3.scaleTime().range([0, chart_width]),
                 y = d3.scaleLinear().range([chart_height, 0]);
 
@@ -230,14 +234,16 @@ const dev_chart = {
                 });
                 if (chart.settings.ind_vergleich) {  // Recalculate the 'value' property of all elements, to display it correctly as percentiles
                     for (let item in chart.merge_data) {
-                        let firstValue = 100;
+                        let firstValue = chart.merge_data[item].values[0].real_value,
+                            minValue= helper.getMinArray(chart.merge_data[item].values, "value"),
+                            maxValue= helper.getMaxArray(chart.merge_data[item].values, "value");
+
+                        console.log("MinValue: " + minValue);
                         for (let val in chart.merge_data[item].values) {
 
-                            if (val == 0) {
-                                firstValue = chart.merge_data[item].values[val].real_value;
-
-                            }
-                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value)
+                            console.log("First Value: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
+                            chart.merge_data[item].values[val].value = calculatePercentiles(minValue, maxValue, chart.merge_data[item].values[val].real_value);
+                            console.log("Value true: "+ chart.merge_data[item].values[val].value)
                         }
                     }
 
@@ -247,9 +253,13 @@ const dev_chart = {
                 createPath();
             });
 
-            function calculatePercentiles(firstValue, currentValue) {
-                let onePercent = firstValue / 100;
-                return currentValue / onePercent
+            function calculatePercentiles(minValue, maxValue, currentValue,) {
+                //  Normalize the values taking minValue into acount! Maybe consider some different logic?
+                let scale= (maxValue-minValue)/100;
+                console.log("Scale: "+ scale);
+                let percentile=currentValue/scale;
+
+                return percentile
             }
 
             function scaleChart() {
@@ -274,9 +284,9 @@ const dev_chart = {
                 minValue = minValue - maxValue / 30;
 
                 // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
-               if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
-                   minValue=0;
-               }
+               //if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
+               //    minValue=0;
+               //}
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
@@ -288,6 +298,7 @@ const dev_chart = {
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
+                console.log("Min Value of Z axis: "+ minValue);
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")

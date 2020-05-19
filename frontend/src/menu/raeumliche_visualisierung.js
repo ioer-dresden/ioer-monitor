@@ -46,8 +46,7 @@ const raeumliche_visualisierung = {
         $('#gebiete_label').css("color",farbschema.getColorHexMain());
         $('#raster_label').css("color","black");
         raster_split.remove();
-        exclude.setSpatialExtendelements()
-        panner.init();
+        exclude.setSpatialExtendelements();
     },
     setChecked:function(){
         this.getDOMObject()

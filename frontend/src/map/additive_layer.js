@@ -280,7 +280,7 @@ const additiveLayer={
         setOverlay:function(_id){
             const control = additiveLayer;
             let layer = control.zusatzlayer[_id],
-                name = $(`#zusatz_${_id}`).data("name");
+                name = $('#'+_id).data("name");
 
             if(_id==="mdmap"){
                 OsmBuildings.addEngine();

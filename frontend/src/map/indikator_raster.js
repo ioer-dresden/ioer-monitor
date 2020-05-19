@@ -89,6 +89,15 @@ const indikator_raster = {
                 if (callback) callback();
                 map_header.set();
             });
+        // Setting the pointer
+        $('.leaflet-container').css('cursor','pointer');
+        map.on('movestart', function(){
+            console.log("Dragging!")
+            $('.leaflet-container').css('cursor','grab');
+        })
+        map.on('moveend', function(){
+            $('.leaflet-container').css('cursor','pointer');
+        })
     },
     onClick:function(e){
         const object = indikator_raster;
@@ -131,7 +140,6 @@ const indikator_raster = {
                     SRS + '&WIDTH=' + WIDTH + '&HEIGHT=' + HEIGHT + '&LAYERS=' + mapOptions[0].layername +
                     '&STYLES=&FORMAT=image/png&TRANSPARENT=true&QUERY_LAYERS=' +
                     mapOptions[0].layername + '&INFO_FORMAT=html&X=' + X + '&Y=' + Y;
-
                 let URL_WFS = 'https://sg.geodatenzentrum.de/wfs_vg250?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&TYPENAME=vg250_gem&BBOX=' +
                     lng + ',' + lat + ',' + (lng + 0.000000000000100) + ',' + (lat + 0.000000000000100) +
                     '&srsName=' + SRS + '&MAXFEATURES=1';
@@ -153,16 +161,29 @@ const indikator_raster = {
                         type: "GET"
                     });
                     getGem.done(function (xml) {
+
                         let gem = $(xml).find('vg250\\:gen,gen').text();
                         let ags = $(xml).find('vg250\\:ags,ags').text();
                         //query the gem statistic
+
+                        /*
+
+                        ACHTUNG! gem statistics funktioniert nicht, denn der Backend @ php/onClick.php auf nicht existierende Tabellen zugreift !!!!!!!!!!!!
+                        Deswegen Gemeindestatistikabfrage ausgeschaltet.
+                        php/onClick läuft auf den ALTEN MapServer, musste also theoretisch auf monitor.ioer.de migriert werden!! Oder in Backend integriert werden (in query.php).
+
+                        */
+
+                        /*
                         let getGemStat = $.ajax({
                             type: "GET",
                             url: urlparamter.getURL_RASTER() + "php/onClickQuery.php",
                             dataType: 'json',
-                            data: {ags: ags, indikator: indikator, jahr: zeit_slider.getTimeSet()}
+                            data: {ags: ags, indikator: indikator, jahr: 2017}
                         });
                         getGemStat.done(function (json) {
+                            console.log("Statistics request done!!!! yeeeeey");
+
                             let data = JSON.parse(json);
                             let layer = new L.GeoJSON(data)
                                 .setStyle({
@@ -173,7 +194,7 @@ const indikator_raster = {
                                 });
 
                             let gem_stat = data.features[0].properties.value;
-
+                        */
                             if (html_float === -9998) {
                                 pixel_value = "nicht Relevant"
                             } else if (html_float < 0) {
@@ -186,8 +207,9 @@ const indikator_raster = {
                                 maxWith: 300
                             });
                             popup.setContent('<b>Pixelwert: </b>' + pixel_value + '</br>' +
-                                '<span>Gemeinde: </span>' + gem + '</br>' +
-                                '<span>Gemeindewert: </span>' + gem_stat);
+                                '<span>Gemeinde: </span>' + gem + '</br>' );
+                                //+
+                                //'<span>Gemeindewert: </span>' + gem_stat);
                             popup.setLatLng(e.latlng);
 
                             //prevent onlick for devider
@@ -195,12 +217,12 @@ const indikator_raster = {
                                 case true:
                                     let split_pos = Math.round(parseFloat($('.leaflet-sbs-divider').css("left").replace("px","")));
                                     if(X !== split_pos){
-                                        layer.addTo(map).bringToFront();
+                                        //layer.addTo(map).bringToFront();
                                         map.openPopup(popup);
                                     }
                                     break;
                                 case false:
-                                    layer.addTo(map).bringToFront();
+                                    //layer.addTo(map).bringToFront();
                                     map.openPopup(popup);
                                     break;
 
@@ -211,7 +233,8 @@ const indikator_raster = {
                             });
 
 
-                        });
+                        //});
+
                     });
                 });
             }catch(error){

@@ -6,7 +6,8 @@ const main_view = {
     },
     restoreView:function(){
         legende.resize();
-        if (this.getWidth() <= 1000 || this.getHeight()<=750) {
+        console.log("Width: "+ this.getWidth()+ " Height: "+ this.getHeight());
+        if (this.getWidth() <= 1000 || this.getHeight()<=780) {
             this.initResponsiveView();
         }
         else {
@@ -97,13 +98,15 @@ const main_view = {
         return $(window).height();
     },
     initResponsiveView:function(){
-        console.clear();
+        console.log("init responsive view");
+        //console.clear();
         console.warn("init Responsive View");
+        console.log("View width: "+ main_view.getWidth()+ " Heigth: "+ main_view.getHeight());
         view_state.setViewState("responsive");
         main_view.getWidth();
-        if(main_view.getWidth()<=500 || main_view.getHeight() <=700) {
+        if(main_view.getWidth()<=500 || main_view.getHeight() <=780) {
             $('.content')
-                .css("overflow-y","auto");
+               .css("overflow-y","auto");
             indikatorauswahl.getDOMObject()
                 .dropdown('refresh');
         }
@@ -117,7 +120,7 @@ const main_view = {
             $('#rightPane').css("width","");
             $('#table_ags').removeClass("collapsing");
             $('#mapwrap').removeClass('splitter_panel');
-        }
+        };
         //CSS settings
         $('.right_content').css("display","none");
     },
