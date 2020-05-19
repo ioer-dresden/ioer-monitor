@@ -23,7 +23,8 @@ const dev_chart = {
             },
             cancel: "Abbrechen",
             value:"Wert",
-            explanation:"Relative Änderung des Indikators. Anfangswert gleich 100 %"
+            explanation:"Relative Änderung des Indikators.",
+            startValue:"Anfangswert"
         },
         en: {
             title: {
@@ -31,7 +32,7 @@ const dev_chart = {
                 true: "Trend comparison"
             },
             info: "This diagram represents the trend of the indicators.",
-            indicator: "available indicators",
+            indicator: "Available indicators",
             choice: "Please choose.....",
             no_choice: "No indicator selected",
             load: "Loading diagram ......",
@@ -44,7 +45,8 @@ const dev_chart = {
             },
             cancel: "Cancel",
             value:"Value",
-            explanation:"Relative change of indicator value. Relative starting value is 100 %"
+            explanation:"Relative change of indicator value.",
+            startValue:"Starting value"
         }
     },
     icon: {
@@ -164,7 +166,7 @@ const dev_chart = {
             let svg = d3.select("#visualisation"),
                 array = chart.ind_array_chart,
                 diagram = $('#diagramm'),
-                margin = {top: 20, right: 60, bottom: 30, left: 60},
+                margin = {top: 20, right: 20, bottom: 30, left: 100},
                 chart_width = diagram.width() - margin.left - margin.right,
                 chart_height = $('.ui-dialog').height()*(1.2/3),
                 margin_top = 0,
@@ -238,11 +240,10 @@ const dev_chart = {
                             minValue= helper.getMinArray(chart.merge_data[item].values, "value"),
                             maxValue= helper.getMaxArray(chart.merge_data[item].values, "value");
 
-
                         for (let val in chart.merge_data[item].values) {
 
-                            console.log("First Value: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
-                            chart.merge_data[item].values[val].value = calculatePercentiles(minValue, maxValue, chart.merge_data[item].values[val].real_value);
+                            console.log("FirstValue:  "+ firstValue + " currentValue: "+ chart.merge_data[item].values[val].real_value);
+                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value);
                             console.log("Value true: "+ chart.merge_data[item].values[val].value)
                         }
                     }
@@ -253,13 +254,13 @@ const dev_chart = {
                 createPath();
             });
 
-            function calculatePercentiles(minValue, maxValue, currentValue,) {
+            function calculatePercentiles(firstValue, currentValue,) {
                 //  Normalize the values taking minValue into acount! Maybe consider some different logic?
-                let scale= (maxValue-minValue)/100;
-                console.log("Scale: "+ scale);
-                let percentile=currentValue/scale;
-
-                return percentile
+                let relativeChange= (currentValue-firstValue)/firstValue*100,
+                    inPercent=relativeChange;
+                console.log("Change=: "+ relativeChange);
+                console.log("In Percent: "+ inPercent)
+                return inPercent
             }
 
             function scaleChart() {
@@ -318,7 +319,13 @@ const dev_chart = {
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
-                        return helper.dotTocomma(d);
+                        if (d === 0){
+                            return dev_chart.text[language_manager.getLanguage()].startValue;
+                        }
+                        if (d > 0) {
+                            return "+" + helper.dotTocomma(d).toString() +" % ";
+                        }
+                        return helper.dotTocomma(d).toString()+" % ";
                     }));
             }
 
