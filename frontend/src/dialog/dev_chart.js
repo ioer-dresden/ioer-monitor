@@ -236,15 +236,10 @@ const dev_chart = {
                 });
                 if (chart.settings.ind_vergleich) {  // Recalculate the 'value' property of all elements, to display it correctly as percentiles
                     for (let item in chart.merge_data) {
-                        let firstValue = chart.merge_data[item].values[0].real_value,
-                            minValue= helper.getMinArray(chart.merge_data[item].values, "value"),
-                            maxValue= helper.getMaxArray(chart.merge_data[item].values, "value");
+                        let firstValue = chart.merge_data[item].values[0].real_value;
 
                         for (let val in chart.merge_data[item].values) {
-
-                            console.log("FirstValue:  "+ firstValue + " currentValue: "+ chart.merge_data[item].values[val].real_value);
                             chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value);
-                            console.log("Value true: "+ chart.merge_data[item].values[val].value)
                         }
                     }
 
@@ -258,8 +253,6 @@ const dev_chart = {
                 //  Normalize the values taking minValue into acount! Maybe consider some different logic?
                 let relativeChange= (currentValue-firstValue)/firstValue*100,
                     inPercent=relativeChange;
-                console.log("Change=: "+ relativeChange);
-                console.log("In Percent: "+ inPercent)
                 return inPercent
             }
 
@@ -299,7 +292,7 @@ const dev_chart = {
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
-                console.log("Min Value of Z axis: "+ minValue);
+                
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
