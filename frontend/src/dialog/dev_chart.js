@@ -312,13 +312,14 @@ const dev_chart = {
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
                     .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
-                        if (d === 0){
+                        if (d === 0 && dev_chart.chart.settings.ind_vergleich){
                             return dev_chart.text[language_manager.getLanguage()].startValue;
                         }
-                        if (d > 0) {
+                        if (d > 0 && dev_chart.chart.settings.ind_vergleich ) {
                             return "+" + helper.dotTocomma(d).toString() +" % ";
                         }
-                        return helper.dotTocomma(d).toString()+" % ";
+                        let unit = dev_chart.chart.settings.ind_vergleich ? "%": einheit;
+                        return helper.dotTocomma(d).toString() + " "+ unit;
                     }));
             }
 
