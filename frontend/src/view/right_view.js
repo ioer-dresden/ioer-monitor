@@ -8,7 +8,6 @@ const right_view = {
         return $elem;
     },
     open:function(){
-        console.log("Is the right view visible? "+ this.isVisible());
         const view = this;
         let btn_group_map = $('#btn-group-map');
         //show only the table view, if the user set a indicator
@@ -16,7 +15,6 @@ const right_view = {
             //set the mobile view
             if (view_state.getViewState() === "responsive") {
                 if (!this.isVisible()) {
-                    console.log("showing responsive in right view");
                     view.show();
                     left_view.hide();
                     view.getCloseIconObject().hide();
@@ -26,7 +24,6 @@ const right_view = {
                     panner.hide();
                     exclude.setSpatialExtendelements();
                 } else {
-                    console.log("hiding responsive in right view");
                     view.hide();
                     left_view.show();
                     legende.getShowButtonObject().show();
@@ -37,7 +34,6 @@ const right_view = {
                     }
             } else {
                 $('#mapwrap').addClass('splitter_panel');
-                console.log("Splitter panel! in right view");
                 view.show();
                 panner.hide();
                 view.getCloseIconObject().show();
@@ -59,7 +55,6 @@ const right_view = {
         this.hide();
         $('#mapwrap').removeClass('splitter_panel');
         panner.show();
-        console.log("closing right view");
         legende.resize();
         map.invalidateSize();
     },

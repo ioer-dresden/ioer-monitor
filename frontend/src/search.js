@@ -106,7 +106,6 @@ const search = {
                     },
                     onSelect: function (result, response) {
                         var cat = result.category;
-                        console.log("OnSelect!!");
 
                         if (cat === 'Indikatoren' || cat === 'Indicators') {
                             indikatorauswahl.checkAvability(result.value, true);

@@ -145,7 +145,6 @@ class ScriptLoader{
     }
     includeScripts(){
         const loader = this;
-        console.log("Including scripts");
         $.getMultiScripts = function(arr) {
             var _arr = $.map(arr, function(scr) {
                 return $.getScript(  scr,function(){

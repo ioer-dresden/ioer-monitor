@@ -6,7 +6,6 @@ const main_view = {
     },
     restoreView:function(){
         legende.resize();
-        console.log("Width: "+ this.getWidth()+ " Height: "+ this.getHeight());
         if (this.getWidth() <= 1000 || this.getHeight()<=780) {
             this.initResponsiveView();
         }
@@ -98,10 +97,8 @@ const main_view = {
         return $(window).height();
     },
     initResponsiveView:function(){
-        console.log("init responsive view");
         //console.clear();
         console.warn("init Responsive View");
-        console.log("View width: "+ main_view.getWidth()+ " Heigth: "+ main_view.getHeight());
         view_state.setViewState("responsive");
         main_view.getWidth();
         if(main_view.getWidth()<=500 || main_view.getHeight() <=780) {
