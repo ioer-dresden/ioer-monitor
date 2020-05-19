@@ -12,7 +12,6 @@ const panner = {
         exclude.setSpatialExtendelements();
     },
     create:function(){
-        console.log("creating the world!!")
         $('#Modal').append(`
         <div id="panRight" 
             class="panner tablebackground checker cursor ${exclude.class_gebiete}" 
@@ -54,7 +53,6 @@ const panner = {
             panner.getObject()
                 .click(function(){
                     if(raeumliche_visualisierung.getRaeumlicheGliederung()===("gebiete")) {
-                        console.log("Opening view"+ panner.getObject().text()+ "  Hello");
                         right_view.open();
                     }
                 });

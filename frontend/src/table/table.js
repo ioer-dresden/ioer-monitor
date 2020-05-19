@@ -412,7 +412,7 @@ const table = {
         let html_table = this.getTableHTML();
 
         $.when(this.clear())
-            .then(this.append(html_table), console.log("Appending Table"))
+            .then(this.append(html_table))
             .then(this.controller.set())
             .then(TableHelper.setRang())
             .then(TableSelection.setSelection())

@@ -70,7 +70,6 @@ class RequestManager{
     }
     //get the needed values to expand the table, has it´s own parameters, because the logic is slightly different
     static getTableExpandValues(expand_values,ags_array){
-        console.log("Table expand values from request manager")
         let ags_set = indikator_json_group.getLayerArray(table.excludedAreas);
         let raumgliederung_set = base_raumgliederung.getBaseRaumgliederungId();
         //optional ags array must include ags object {ags:01}
@@ -79,10 +78,7 @@ class RequestManager{
         }
         let json = JSON.parse('{"ind":{"id":"'+indikatorauswahl.getSelectedIndikator()+'","time":"'+zeit_slider.getTimeSet()+
             '","raumgliederung":"'+raumgliederung_set+'"},"expand_values":'+JSON.stringify(expand_values)+',"ags_array":'+JSON.stringify(ags_set)+',"query":"getTableExpandValues"}');
-        console.log(`Request manager JSON "getTableExpandValues":  `);
-        console.info(json);
-        console.log("The response is:");
-        console.info(this.sendRequestPHP({"file":json,"query":"getTableExpandValues","type":"POST","debug":false}));
+
         return this.sendRequestPHP({"file":json,"query":"getTableExpandValues","type":"POST","debug":false});
     }
     //get the chart values to set up the line chart

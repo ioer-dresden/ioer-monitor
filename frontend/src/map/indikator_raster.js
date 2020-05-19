@@ -92,7 +92,6 @@ const indikator_raster = {
         // Setting the pointer
         $('.leaflet-container').css('cursor','pointer');
         map.on('movestart', function(){
-            console.log("Dragging!")
             $('.leaflet-container').css('cursor','grab');
         })
         map.on('moveend', function(){

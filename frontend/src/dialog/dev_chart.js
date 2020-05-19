@@ -238,7 +238,7 @@ const dev_chart = {
                             minValue= helper.getMinArray(chart.merge_data[item].values, "value"),
                             maxValue= helper.getMaxArray(chart.merge_data[item].values, "value");
 
-                        console.log("MinValue: " + minValue);
+
                         for (let val in chart.merge_data[item].values) {
 
                             console.log("First Value: "+ firstValue+ " Second Value: "+ chart.merge_data[item].values[val].real_value);
