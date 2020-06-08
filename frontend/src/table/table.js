@@ -80,6 +80,12 @@ const table = {
       `);
     },
     getTableHTML: function () {
+        console.log("GEtting table HTML");
+        //ToDo remove previously displayed set HinweisLegende Items!
+        let keepHinweisText = $('#hinweis_legende_text').detach();
+        keepHinweisText.css("display","none");
+        $('#hinweis_legende').empty().append(keepHinweisText);
+
         let layer_array = _.sortBy(indikator_json_group.getLayerArray(), "gen"),
             html_table = `<table id="table_ags" class="${this.table_classes}">`,
             //create the main Table header --private functions
@@ -180,6 +186,7 @@ const table = {
                                                  src="frontend/assets/icon/histogramm.png"/>`,
                         value_td = function () {
                             if (hc !== '0') {
+                                console.log("heighth before: "+ table.getScrollableAreaDOMObject().width());
                                 //split the hc
 
                                 let hc_arr = hc.split("||"),
@@ -195,13 +202,14 @@ const table = {
                                 }
                                 let hc_value = hc_arr[4],
                                     hinweis_legende_element= `
-                                        <div id=${hc_value} >
+                                        <div id=${hc_value} style="display: flex; flex-flow: row">
                                             <img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/>
-                                            <b class="">${hc_short} (${hc_text}) </b>
+                                            <div> -  ${hc_short} (${hc_text}) </div>
                                         </div>`;
                                 if (!$('#hinweis_legende').find('#'+hc_value).length) {
                                     $('#hinweis_legende_text').css("display","inline");
                                     $('#hinweis_legende').append(hinweis_legende_element);
+
                                 }
 
                                 return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma} </b>${img_stat + img_trend + img_trend_ind}`;

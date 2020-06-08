@@ -6,7 +6,7 @@ const main_view = {
     },
     restoreView:function(){
         legende.resize();
-        if (this.getWidth() <= 1000 || this.getHeight()<=780) {
+        if (this.getWidth() <= 1000 || this.getHeight()<=770) {
             this.initResponsiveView();
         }
         else {
