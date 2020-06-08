@@ -541,7 +541,7 @@ const dev_chart = {
                                 y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
                                 text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
-
+                            console.log("VAlue is: "+ value + " ; Real value is: "+ real_value);
                             elem.attr("r", 7.5);
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {

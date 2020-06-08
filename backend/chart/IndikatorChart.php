@@ -58,7 +58,7 @@ class IndikatorChart extends Chart {
                     $this->grundakt_state = true;
                     array_push($result_array, array(
                         "value" => $this->setValue(round($val->value, $this->rundung), $t["time"]),
-                        "real_value" => round($val->value, $this->rundung),
+                        "real_value" => $val->value,
                         "date" => $val->grundakt_month . '/' . $val->grundakt_year,
                         "year" => $val->grundakt_year,
                         "month" => $val->grundakt_month,
