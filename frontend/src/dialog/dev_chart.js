@@ -275,7 +275,7 @@ const dev_chart = {
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
 
                 maxValue = maxValue + maxValue / 30;
-                minValue = minValue - maxValue / 30;
+                minValue = minValue - maxValue / 10;
 
                 // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
                //if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
@@ -292,13 +292,16 @@ const dev_chart = {
                     x.domain(d3.extent([min_date, max_date]));
                 }
                 y.domain(d3.extent([minValue, maxValue]));
-                
+
                 //set x axis
                 g.append("g")
                     .attr("class", "axis axis--x")
                     .style("font-size", "15px")
                     .attr("transform", "translate(0," + chart_height + ")")
-                    .call(d3.axisBottom(x).scale(x).ticks(10).tickFormat(function (d) {
+                    .call(d3.axisBottom(x)
+                        .tickSizeInner(-chart_height)
+                        .scale(x).ticks(10)
+                        .tickFormat(function (d) {
                         if (chart.settings.state_prognose) {
                             if (d.getFullYear() <= helper.getCurrentYear()) {
                                 return d.getFullYear();
@@ -311,7 +314,10 @@ const dev_chart = {
                 g.append("g")
                     .attr("class", "axis axis--y")
                     .style("font-size", "15px")
-                    .call(d3.axisLeft(y).ticks(8).tickFormat(function (d) {
+                    .call(d3.axisLeft(y)
+                        .ticks(8)
+                        .tickSizeInner(- chart_width)
+                        .tickFormat(function (d) {
                         if (d === 0 && dev_chart.chart.settings.ind_vergleich){
                             return dev_chart.text[language_manager.getLanguage()].startValue;
                         }
@@ -320,7 +326,20 @@ const dev_chart = {
                         }
                         let unit = dev_chart.chart.settings.ind_vergleich ? "%": einheit;
                         return helper.dotTocomma(d).toString() + " "+ unit;
-                    }));
+                        })
+
+                    );
+                // Resize ticks:
+                d3.selectAll("g.axis.axis--y g.tick line")
+                    .attr("x2", function(d,i){
+                        //d for the tick line is the value
+                        //of that tick
+                        //(a number between 0 and 1, in this case)
+                        if ( i%2 ) //if it's an even multiple of 10%
+                            return chart_width;
+                        else
+                            return 5;
+                    });
             }
 
             //fill the path values
@@ -425,7 +444,8 @@ const dev_chart = {
                         .attr("id", id)
                         .attr("class", class_band)
                         .attr("style", "background")
-                        .attr("fill", "url(#linear-gradient)");
+                        .attr("fill", "url(#linear-gradient)")
+                        .attr("opacity",0.7);
 
                     //create the legende
                     let legend_migration = svg.append("g")
@@ -541,7 +561,7 @@ const dev_chart = {
                                 y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
                                 text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
-                            console.log("VAlue is: "+ value + " ; Real value is: "+ real_value);
+
                             elem.attr("r", 7.5);
                             //the tooltip for ind vergleich
                             if (dev_chart.chart.settings.ind_vergleich) {
