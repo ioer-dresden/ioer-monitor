@@ -123,9 +123,15 @@ const expand_panel = {
         //if table was expand
         //DDM Time
         if($.inArray(indikatorauswahl.getSelectedIndikator(),ind_differences_hide)!== -1){
+            console.log("Hiding differences");
             $('#differences_div').hide();
         }else{
+            console.log("showing differences");
             $('#differences_div').show();
+            helper.disableElement(this.getDiffernceCheckboxObject());
+            helper.disableElement('#differences_div');
+            helper.disableElement('#time_checkbox');
+            helper.disableElement(this.getZeitschnittauswahlDDMObject())
         }
         //check if only one time possibility
         if(Math.min.apply(Math, jahreArray)!== zeit_slider.getTimeSet()
@@ -367,6 +373,10 @@ const expand_panel = {
                         }
                     },
                     onAdd: function (addedValue, addedText, $addedChoice) {
+                        helper.enableElement(expand_panel.getDiffernceCheckboxObject());
+                        helper.enableElement('#differences_div');
+                        helper.enableElement('#time_checkbox');
+                        helper.enableElement(expand_panel.getZeitschnittauswahlDDMObject());
                         expand_panel.expandArray.push({id:addedValue,text:addedText,time:zeit_slider.getTimeSet(),einheit:false, count: 50});
                         //sort the time array desc
                         expand_panel.expandArray = _.sortBy(expand_panel.expandArray, 'total').reverse();
@@ -378,6 +388,10 @@ const expand_panel = {
                         $(this).blur();
                     },
                     onLabelRemove: function (value) {
+                        helper.disableElement(expand_panel.getDiffernceCheckboxObject());
+                        helper.disableElement('#differences_div');
+                        helper.disableElement('#time_checkbox');
+                        helper.disableElement(expand_panel.getZeitschnittauswahlDDMObject());
                         expand_panel.expandArray = helper.removefromarray(expand_panel.expandArray,value);
                         helper.enableElement("#"+expand_panel.getUebergeordneteKenngroessenObject().attr("id"));
                         helper.enableElement("#"+expand_panel.getHinweisOnlyOlderTimeShiftsObject().attr("id"));
