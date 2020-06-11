@@ -107,6 +107,9 @@ const dev_chart = {
                                         <input type="checkbox" value="" id="prognose">${this.text[lan].trend}
                                     </label>
                                     -->
+                                    <label id="smooth_container">
+                                        <input type="checkbox" value="" id="smooth"> Glättung?
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -138,6 +141,7 @@ const dev_chart = {
             close: function () {
                 dev_chart.chart.settings.state_stueztpnt = false;
                 dev_chart.chart.settings.state_prognose = false;
+                dev_chart.chart.settings.state_smooth = false;
             }
         };
         dialog_manager.setInstruction(instructions);
@@ -155,7 +159,8 @@ const dev_chart = {
             name: "",
             ind_vergleich: false,
             state_stueztpnt: false,
-            state_prognose: false
+            state_prognose: false,
+            state_smooth: false
         },
         ind_array_chart: [],
         merge_data: [],
@@ -203,6 +208,15 @@ const dev_chart = {
                     return y(d.value);
                 });
 
+            let curve= d3.line()
+                .x(function (d) {
+                    return x(d.date);
+                })
+                .y(function (d) {
+                    return y(d.value);
+                })
+                .curve(d3.curveBasis);
+
             let def = $.Deferred();
 
             //create the call
@@ -247,6 +261,7 @@ const dev_chart = {
                 $('#diagramm_loading_info').hide();
                 scaleChart();
                 createPath();
+
             });
 
             function calculatePercentiles(firstValue, currentValue,) {
@@ -300,7 +315,8 @@ const dev_chart = {
                     .attr("transform", "translate(0," + chart_height + ")")
                     .call(d3.axisBottom(x)
                         .tickSizeInner(-chart_height)
-                        .scale(x).ticks(10)
+                        .scale(x)
+                        .ticks(10)
                         .tickFormat(function (d) {
                         if (chart.settings.state_prognose) {
                             if (d.getFullYear() <= helper.getCurrentYear()) {
@@ -335,7 +351,7 @@ const dev_chart = {
                         //d for the tick line is the value
                         //of that tick
                         //(a number between 0 and 1, in this case)
-                        if ( i%2 ) //if it's an even multiple of 10%
+                        if ( i%2 ) //if it's an even
                             return chart_width;
                         else
                             return 5;
@@ -346,6 +362,7 @@ const dev_chart = {
             function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
+                    console.info(data);
                     abstractData(data);
                     try {
                         setMigrationValue(data);
@@ -356,9 +373,12 @@ const dev_chart = {
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
                         setLegende(data, data[0].color.toString());
+                        createRegressionCurve(data);
                     }, 100);
                 });
             }
+
+
 
             //add the data
             function appendData(data, color) {
@@ -372,6 +392,18 @@ const dev_chart = {
                             .attr("stroke-dasharray", _dash_array)
                             .attr("fill", "none")
                             .attr("d", line(array));
+
+                        // append the regression curve
+                        if (chart.settings.state_smooth){
+                            g.append("path")
+                                .data(array)
+                                .attr("class", "regression_line")
+                                .attr('stroke', "red")
+                                .attr("fill", "none")
+                                .attr("d", curve(array));
+                        }
+
+
                     };
                 $.each(data, function (key, value) {
                     if (value.year < (new Date).getFullYear()) {
@@ -615,6 +647,15 @@ const dev_chart = {
                 }
             }
 
+            function createRegressionCurve(data){
+                let lineGenerator = d3.line()
+                    .curve(d3.curveCardinal),
+                    pathData = lineGenerator(data);
+
+                g.append('path')
+                    .attr('d', pathData);
+            }
+
             function parseTime(_string) {
                 let parseTime = d3.timeParse("%m/%Y");
                 return parseTime(_string);
@@ -727,6 +768,21 @@ const dev_chart = {
                             chart.init();
                         } else {
                             chart.settings.state_prognose = false;
+                            chart.init();
+                        }
+                    });
+                //3. regression curve
+                $('#smooth')
+                    .unbind()
+                    .prop('checked', false)
+                    .change(function () {
+                        if (this.checked) {
+                            console.log("Changing to true");
+                            chart.settings.state_smooth = true;
+                            chart.init();
+                        } else {
+                            console.log("Changing to true");
+                            chart.settings.state_smooth = false;
                             chart.init();
                         }
                     });
