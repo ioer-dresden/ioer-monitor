@@ -2,9 +2,9 @@ const ogc_export={
     service:"wms",
     endpoint_id:"ogc_dialog",
     getLink:function(service){
-       if(this.service==="wfs" || this.service==="wcs") {
-           return `https://monitor.ioer.de/cgi-bin/${this.service}?MAP=${indikatorauswahl.getSelectedIndikator()}_${this.service}`;
-           //return `https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=${service}` //<b style="color:red;">&key=<i>Ihr API Key</i></b>`;
+        if(this.service==="wfs" || this.service==="wcs") {
+            //return `https://monitor.ioer.de/cgi-bin/${this.service}?MAP=${indikatorauswahl.getSelectedIndikator()}_${this.service}`;
+            return `https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=${service}<b style="color:red;">&key=<i>Ihr API Key</i></b>`;
         }else{
             return `https://monitor.ioer.de/cgi-bin/wms?MAP=${indikatorauswahl.getSelectedIndikator().toUpperCase()}_wms`;
         }
@@ -74,6 +74,10 @@ const ogc_export={
                                                 <h3 id="wms_link">${object.getLink(_service)}</h3>
                                             </div>
                                             <hr/>
+                                            </div>
+                                                 ${user_login()}
+                                        
+                                              </div> 
                                         </div>
                                         
                                     </div> 

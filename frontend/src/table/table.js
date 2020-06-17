@@ -1069,7 +1069,6 @@ const table = {
                     //table.selection.push(ags);
                     TableSelection.addAgs(ags);
                     TableSelection.setSelection();
-                    //table.setSelection();
                 });
                 //remove selection by uncheck
                 $(document).on("change", ".select_uncheck", function () {
