@@ -894,6 +894,12 @@ const dev_chart = {
                 }
             });
         }
-    }
+    },
+    getDecimalSpaces:function(){
+        return parseInt(indikatorauswahl.getIndikatorInfo(false,"rundung"));
+    },
+    roundNumber: function (number, decimalSpaces) {
+        return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
+    },
 };
 

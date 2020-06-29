@@ -174,6 +174,11 @@ try{
         }
         echo json_encode($jahre);
     }
+    // get the current geometry year
+    else if ($query=='getgeomyear'){
+        $year_pg = DBFactory::getMySQLTask()->getPostGreYear($year);
+        echo json_encode($year_pg);
+    }
     //check avability for given indicator parameters
     else if($query=="getavability"){
         $array = array();

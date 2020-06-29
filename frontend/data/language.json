@@ -424,7 +424,7 @@
       "type":"#",
       "selector":".default",
       "callback": [
-        "setTimeout(function(){expand_panel.setIndikatorauswahlDdm()},500)"
+        "setTimeout(function(){expand_panel.setIndikatorauswahlDdm()},1000)"
       ]
     },
     "time_expand_conatier":{
