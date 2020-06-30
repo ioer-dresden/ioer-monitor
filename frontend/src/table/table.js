@@ -202,17 +202,18 @@ const table = {
                                 }
                                 let hc_value = hc_arr[4],
                                     hinweis_legende_element= `
-                                        <div id=${hc_value} style="display: flex; flex-flow: row">
-                                            <img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/>
-                                            <div> -  ${hc_short} (${hc_text}) </div>
+                                        <div id=${hc_value} style="display: flex; flex-flow: row;">
+                                            <img class="hc_icon" style="object-fit: contain" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/>
+                                            <div style="width: 5%"></div>
+                                            <div>   -  ${hc_short} (${hc_text}) </div>
                                         </div>`;
                                 if (!$('#hinweis_legende').find('#'+hc_value).length) {
-                                    $('#hinweis_legende_text').css("display","inline");
+                                    $('#hinweis_legende_text').css("display","block");
                                     $('#hinweis_legende').append(hinweis_legende_element);
 
                                 }
 
-                                return `<img className="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma} </b>${img_stat + img_trend + img_trend_ind}`;
+                                return `<img class="hc_icon" src="frontend/assets/hinweis/hinweis_${hc_value}.png" title="${hc_text}"/><b class=""> ${value.value_comma} </b>${img_stat + img_trend + img_trend_ind}`;
                             } else if (fc !== '0') {
                                 //split the fc
                                 let fc_arr = fc.split("||"),
