@@ -287,8 +287,10 @@ const dev_chart = {
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
 
+                console.log("min date: "+ min_date+ "\n Max date: "+ max_date);
+                console.log("min Year: "+ minYear+ "\n Max Year: "+ maxYear);
+
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
-                console.log("MaxValue: "+ maxValue+ "\n"+ "min Value: "+ minValue+"\n"+ "Difference: "+ (maxValue-minValue)+ "\n"+ "Added: "+ (maxValue-minValue) / 10)
                 maxValue = maxValue + (maxValue-minValue) / 10;
                 minValue = minValue - (maxValue-minValue) / 10;
 
@@ -299,7 +301,7 @@ const dev_chart = {
 
                 //reset max year if prognose is unset
                 if (!chart.settings.state_prognose) {
-                    max_date = new Date(current_year + 2, 0, 1);
+                    max_date = new Date(current_year , 0, 1);
                 }
                 if (minYear === maxYear) {
                     x.domain(d3.extent([new Date(maxYear - 5, 0, 1), max_date]));
@@ -337,14 +339,22 @@ const dev_chart = {
                         if (d === 0 && dev_chart.chart.settings.ind_vergleich){
                             return dev_chart.text[language_manager.getLanguage()].startValue;
                         }
-                        if (d > 0 && dev_chart.chart.settings.ind_vergleich ) {
-                            return "+" + helper.dotTocomma(d).toString() +" % ";
-                        }
-                        let unit = dev_chart.chart.settings.ind_vergleich ? "%": einheit;
-                        return helper.dotTocomma(d).toString() + " "+ unit;
+                        return helper.dotTocomma(d).toString() ;
                         })
 
                     );
+                // text label for the y axis
+                svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 0 )
+                    .attr("x",0 - (chart_height/2))
+                    .attr("dy", "1em")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "20px")
+                    .text(function(){
+                        return dev_chart.chart.settings.ind_vergleich ? "%": einheit
+                    });
+
                 // Resize ticks:
                 d3.selectAll("g.axis.axis--y g.tick line")
                     .attr("x2", function(d,i){
@@ -535,7 +545,7 @@ const dev_chart = {
                         if (chart.settings.ind_vergleich) {
                             return data[0].name
                         } else {
-                            return data[0].name + data[0].einheit;
+                            return data[0].name + " "+ data[0].einheit;
                         }
                     });
 
