@@ -99,9 +99,11 @@ const dev_chart = {
                         <div id="diagramm_choices">
                             <div id="digramm_choices_container">
                                 <div class="checkboxes">
+                                <!-- Disabled, Kerngruppensitzung 17.06.2020
                                     <label>
                                         <input type="checkbox" value="" id="alle_stpkt">${this.text[lan].pnt}
                                     </label>
+                                    -->
                                     <!--Disabled: Kerngruppenbeschluss am 23.05.19
                                     <label id="prognose_container">
                                         <input type="checkbox" value="" id="prognose">${this.text[lan].trend}
@@ -518,9 +520,9 @@ const dev_chart = {
 
                 legend.append("text")
                     .attr("x", margin.left + 30)
-                    .attr("y", chart_height + 80 +margin_top )
+                    .attr("y", chart_height + 80 + margin_top )
                     .attr("height", 40)
-                    .attr("width", (chart_width))
+                    .attr("width", (chart_width-50))
                     .style("font-size", "20px")
                     .style("fill", color)
                     .text(function () {
