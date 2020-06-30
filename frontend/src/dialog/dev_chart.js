@@ -107,9 +107,6 @@ const dev_chart = {
                                         <input type="checkbox" value="" id="prognose">${this.text[lan].trend}
                                     </label>
                                     -->
-                                    <label id="smooth_container">
-                                        <input type="checkbox" value="" id="smooth"> Glättung?
-                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +138,6 @@ const dev_chart = {
             close: function () {
                 dev_chart.chart.settings.state_stueztpnt = false;
                 dev_chart.chart.settings.state_prognose = false;
-                dev_chart.chart.settings.state_smooth = false;
             }
         };
         dialog_manager.setInstruction(instructions);
@@ -160,7 +156,6 @@ const dev_chart = {
             ind_vergleich: false,
             state_stueztpnt: false,
             state_prognose: false,
-            state_smooth: false
         },
         ind_array_chart: [],
         merge_data: [],
@@ -395,25 +390,12 @@ const dev_chart = {
                 let values_line = [],
                     values_future = [],
                     set = function (array, _dash_array) {
-                        g.append("path")
-                            .data(array)
-                            .attr("class", "path_line")
-                            .attr('stroke', color)
-                            .attr("stroke-dasharray", _dash_array)
-                            .attr("fill", "none")
-                            .attr("d", line(array));
-
-                        // append the regression curve
-                        if (chart.settings.state_smooth){
                             g.append("path")
                                 .data(array)
                                 .attr("class", "regression_line")
-                                .attr('stroke', "red")
+                                .attr('stroke', color)
                                 .attr("fill", "none")
                                 .attr("d", curve(array));
-                        }
-
-
                     };
                 $.each(data, function (key, value) {
                     if (value.year < (new Date).getFullYear()) {
@@ -521,10 +503,10 @@ const dev_chart = {
                 }
             }
 
-            //function to set the legende, margin is a object like margin.left = 50x
+            //function to set the legende, margin is a object like margin.left = 50px
             function setLegende(data, color) {
                 let legend = svg.append("g")
-                        .attr("class", "legend"),
+                        .attr("class", "legend");
                     marginTop = margin_top + 40;
 
                 legend.append('g')
@@ -536,7 +518,7 @@ const dev_chart = {
 
                 legend.append("text")
                     .attr("x", margin.left + 30)
-                    .attr("y", chart_height + 80 + marginTop)
+                    .attr("y", chart_height + 80 +margin_top )
                     .attr("height", 40)
                     .attr("width", (chart_width))
                     .style("font-size", "20px")
@@ -547,9 +529,11 @@ const dev_chart = {
                         } else {
                             return data[0].name + " "+ data[0].einheit;
                         }
-                    });
 
-                margin_top += 20;
+                    })
+                    .call(dev_chart.wrapText, chart_width);
+
+                margin_top += 40;
             }
 
             function createCircle(data, color) {
@@ -781,21 +765,6 @@ const dev_chart = {
                             chart.init();
                         }
                     });
-                //3. regression curve
-                $('#smooth')
-                    .unbind()
-                    .prop('checked', false)
-                    .change(function () {
-                        if (this.checked) {
-                            console.log("Changing to true");
-                            chart.settings.state_smooth = true;
-                            chart.init();
-                        } else {
-                            console.log("Changing to true");
-                            chart.settings.state_smooth = false;
-                            chart.init();
-                        }
-                    });
                 //export
                 download
                     .dropdown({
@@ -912,5 +881,29 @@ const dev_chart = {
         console.log("This is value: "+ number);
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
+    wrapText: function (text, width) {
+    text.each(function() {
+        let text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            x = text.attr("x"),
+            y = text.attr("y"),
+            dy = 2,
+            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+        }
+    });
+}
 };
 
