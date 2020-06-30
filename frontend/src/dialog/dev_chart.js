@@ -288,9 +288,9 @@ const dev_chart = {
                     current_year = helper.getCurrentYear();
 
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
-
-                maxValue = maxValue + maxValue / 30;
-                minValue = minValue - maxValue / 10;
+                console.log("MaxValue: "+ maxValue+ "\n"+ "min Value: "+ minValue+"\n"+ "Difference: "+ (maxValue-minValue)+ "\n"+ "Added: "+ (maxValue-minValue) / 10)
+                maxValue = maxValue + (maxValue-minValue) / 10;
+                minValue = minValue - (maxValue-minValue) / 10;
 
                 // Indicators from the "Nachhaltigkeit" category should all begin at Zero!
                //if (chart.merge_data.length==1 && indikatorauswahl.getIndikatorKategorie(chart.merge_data[0].id)=="N"){
@@ -586,7 +586,7 @@ const dev_chart = {
                                 year = elem.data('year'),
                                 month = elem.data('month'),
                                 value = elem.data('value'),
-                                real_value = elem.data('realvalue'),
+                                real_value = dev_chart.roundNumber(elem.data('realvalue'),3),
                                 color = elem.data('color'),
                                 einheit = elem.data('einheit'),
                                 x = elem.position().left - document.getElementById('visualisation').getBoundingClientRect().x + 10,
@@ -899,6 +899,7 @@ const dev_chart = {
         return parseInt(indikatorauswahl.getIndikatorInfo(false,"rundung"));
     },
     roundNumber: function (number, decimalSpaces) {
+        console.log("This is value: "+ number);
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
 };
