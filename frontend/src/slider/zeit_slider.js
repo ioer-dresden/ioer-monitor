@@ -74,6 +74,21 @@ const zeit_slider={
                                     helper.enableElement("#" + g50_id, "");
                                 }
                             }
+                                let indicator_id= indikatorauswahl.getSelectedIndikator(),
+                                    state_ogc = indikatorauswahl.getIndikatorInfo(indicator_id, "ogc");
+                                //if all indictaor values are ready
+                                if (state_ogc) {
+                                    if (state_ogc.wfs !== "1" || zeit_slider.getTimeSet()<=2006) {
+                                        helper.disableElement("#wfs", "");
+                                    } else {
+                                        helper.enableElement("#wfs", "");
+                                    }
+                                    if (state_ogc.wcs !== "1" || zeit_slider.getTimeSet()<=2006) {
+                                        helper.disableElement(".raster_export", "");
+                                    } else {
+                                        helper.enableElement(".raster_export", "");
+                                    }
+                                }
                             switch (raumgl_test) {
                                 case raumgl_test === 0:
                                     indikator_json.init();
