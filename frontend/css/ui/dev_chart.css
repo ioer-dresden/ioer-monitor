@@ -2,7 +2,6 @@
 #entwicklungsdiagramm_content{
     height: 100%;
     width:100%;
-    overflow-y: auto;
 }
 #entwicklungsdiagramm_content .container{
     width: 90%;
@@ -116,7 +115,7 @@
 }
 #entwicklungsdiagramm_content #diagramm #visualisation{
     width: 100%;
-    height: 100%;
+    height: 600px !important;
 }
 #entwicklungsdiagramm_content #diagramm #visualisation circle{
     cursor: pointer;

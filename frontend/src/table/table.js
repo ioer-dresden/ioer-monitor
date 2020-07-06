@@ -10,7 +10,7 @@ const table = {
             areaInfo: "Gebietesprofil: Charakteristik dieser Raumeinheit mit Werteübersicht aller Indikatoren",
             statistics: "Indikatorwert der Gebietseinheit in Bezug auf statistische Kenngrößen der räumlichen Auswahl und des gewählten Indikators",
             development: "Veränderung des Indikatorwertes für die Gebietseinheit",
-            comparison: "Veränderung der Indikatorwerte für die Gebietseinheit",
+            comparison: "Indikatoretwicklungsvergleich für die Gebietseinheit",
             noMunicipal: "Nor available on municipal level",
             actualityDifference: "Aktualitäts- Differenz",
         },
@@ -24,7 +24,7 @@ const table = {
             areaInfo: "Area information: overview over all the indicators for this spatial unit",
             statistics: "The key statistical parameters for this spatial unit and timeframe",
             development: "Development of the indicator value over time",
-            comparison: "Development of the indicator values over time",
+            comparison: "Indicator comparison of values over time",
             actualityDifference: "Temporal relevance difference",
         }
     },

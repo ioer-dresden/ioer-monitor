@@ -24,7 +24,8 @@ const dev_chart = {
             cancel: "Abbrechen",
             value:"Wert",
             explanation:"Relative Änderung des Indikators.",
-            startValue:"Anfangswert"
+            startValue:"Anfangswert",
+            smoothingCurve:"Glättungskurve für "
         },
         en: {
             title: {
@@ -46,7 +47,8 @@ const dev_chart = {
             cancel: "Cancel",
             value:"Value",
             explanation:"Relative change of indicator value.",
-            startValue:"Starting value"
+            startValue:"Starting value",
+            smoothingCurve: "Smoothing curve for "
         }
     },
     icon: {
@@ -114,14 +116,14 @@ const dev_chart = {
                         </div>
                     </div>
                     <div id="diagramm_info_text">
-                        <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span> in <b id="diagrmm_gebiets_typ"></b>.</div>
+                        <div>${this.text[lan].chart}: <b id="diagramm_gebietsname"></b><span id="diagramm_ags"></span>.</div>
                         <div id="explanation"></div>
                     </div>
                     <div id="container_diagramm" class="container_diagramm">
                         <div id="diagramm">
                             <h3 class="Hinweis_diagramm" id="Hinweis_diagramm_empty">${this.text[lan].no_choice}</h3>
                             <h3 class="Hinweis_diagramm" id="diagramm_loading_info">${this.text[lan].load}......</h3>
-                            <svg id="visualisation" height="100"></svg>
+                            <svg id="visualisation" ></svg>
                         </div>
                         <div id="tooltip" style="pointer-events: none;"></div>
                     </div>
@@ -138,10 +140,11 @@ const dev_chart = {
             width: main_view.getMobileState() ? main_view.getWidth() : main_view.getWidth() * 0.75,
             height: toolbar.getHeight(),
             close: function () {
-                dev_chart.chart.settings.state_stueztpnt = false;
+                dev_chart.chart.settings.state_stueztpnt = true;
                 dev_chart.chart.settings.state_prognose = false;
             }
         };
+        console.log("Instruction height:" + instructions.height);
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
         if (dev_chart.chart.settings.ind_vergleich){
@@ -150,13 +153,14 @@ const dev_chart = {
 
         this.chart.create();
     },
+    margin_top: 0,
     chart: {
         settings: {
             ags: "",
             ind: "",
             name: "",
             ind_vergleich: false,
-            state_stueztpnt: false,
+            state_stueztpnt: true,
             state_prognose: false,
         },
         ind_array_chart: [],
@@ -169,9 +173,9 @@ const dev_chart = {
                 array = chart.ind_array_chart,
                 diagram = $('#diagramm'),
                 margin = {top: 20, right: 20, bottom: 30, left: 100},
+                margin_top=0,
                 chart_width = diagram.width() - margin.left - margin.right,
                 chart_height = $('.ui-dialog').height()*(1.2/3),
-                margin_top = 0,
                 migration_set = false;
 
 
@@ -250,7 +254,8 @@ const dev_chart = {
                         let firstValue = chart.merge_data[item].values[0].real_value;
 
                         for (let val in chart.merge_data[item].values) {
-                            chart.merge_data[item].values[val].value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value);
+                            chart.merge_data[item].values[val].value = dev_chart.roundNumber(calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value), 1) ;
+                            chart.merge_data[item].values[val].real_value = calculatePercentiles(firstValue, chart.merge_data[item].values[val].real_value);
                         }
                     }
 
@@ -284,8 +289,6 @@ const dev_chart = {
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
 
-                console.log("min date: "+ min_date+ "\n Max date: "+ max_date);
-                console.log("min Year: "+ minYear+ "\n Max Year: "+ maxYear);
 
                 // add to Min, Max values to allow for more axis ticks if the values do not vary a lot
                 maxValue = maxValue + (maxValue-minValue) / 10;
@@ -343,11 +346,11 @@ const dev_chart = {
                 // text label for the y axis
                 svg.append("text")
                     .attr("transform", "rotate(-90)")
-                    .attr("y", 0 )
+                    .attr("y", 40 )
                     .attr("x",0 - (chart_height/2))
                     .attr("dy", "1em")
                     .style("text-anchor", "middle")
-                    .style("font-size", "20px")
+                    .style("font-size", "15px")
                     .text(function(){
                         return dev_chart.chart.settings.ind_vergleich ? "%": einheit
                     });
@@ -369,7 +372,6 @@ const dev_chart = {
             function createPath() {
                 $.each(chart.merge_data, function (key, value) {
                     let data = value.values;
-                    console.info(data);
                     abstractData(data);
                     try {
                         setMigrationValue(data);
@@ -480,14 +482,14 @@ const dev_chart = {
                     legend_migration.append('g')
                         .append("rect")
                         .attr("x", margin.left)
-                        .attr("y", chart_height + 60 + margin_top)
+                        .attr("y", chart_height + 60 + dev_chart.margin_top)
                         .attr("width", 30)
                         .attr("height", 10)
                         .style("fill", "url(#linear-gradient)");
 
                     legend_migration.append("text")
                         .attr("x", margin.left + 40)
-                        .attr("y", chart_height + 70 + margin_top)
+                        .attr("y", chart_height + 70 + dev_chart.margin_top)
                         .attr("height", 20)
                         .attr("width", (chart_width * 0.7))
                         .style("fill", "grey")
@@ -496,7 +498,7 @@ const dev_chart = {
                     legend_migration.append('g')
                         .append("rect")
                         .attr("x", margin.left)
-                        .attr("y", chart_height + 80 + margin_top)
+                        .attr("y", chart_height + 80 + dev_chart.margin_top)
                         .attr("width", chart_width)
                         .attr("height", 1)
                         .style("fill", "grey");
@@ -508,34 +510,51 @@ const dev_chart = {
             //function to set the legende, margin is a object like margin.left = 50px
             function setLegende(data, color) {
                 let legend = svg.append("g")
-                        .attr("class", "legend");
+                        .attr("class", "legend")
+                        .attr("id", data[0].id),
                     marginTop = margin_top + 40;
 
-                legend.append('g')
+               let dot =  legend.append('g')
                     .append("circle")
                     .attr("cx", margin.left)
                     .attr("cy", chart_height + 70 + marginTop)
                     .attr("r", 5.5)
-                    .style("fill", color);
+                    .style("fill", color),
 
-                legend.append("text")
+                 dotText =legend.append("text")
                     .attr("x", margin.left + 30)
-                    .attr("y", chart_height + 80 + margin_top )
-                    .attr("height", 40)
+                    .attr("y", chart_height + 40 + marginTop)
+                     .attr("height", 40)
                     .attr("width", (chart_width-50))
                     .style("font-size", "20px")
                     .style("fill", color)
                     .text(function () {
-                        if (chart.settings.ind_vergleich) {
-                            return data[0].name
-                        } else {
-                            return data[0].name + " "+ data[0].einheit;
-                        }
+                        return data[0].name
+                    })
+                    .call(dev_chart.wrapText, chart_width),
 
+                 smoothLineLegend= legend.append('g')
+                    .append("rect")
+                    .attr("x", margin.left-6)
+                    .attr("y",  chart_height + 110 + marginTop)
+                    .attr("width", 12)
+                    .attr("height", 2)
+                    .style("fill", color),
+
+                 smoothLineLegendText = legend.append("text")
+                    .attr("x", margin.left + 30)
+                    .attr("y", chart_height  + 80 + marginTop)
+                    .attr("width", (chart_width-50))
+                    .style("font-size", "20px")
+                    .style("fill", color)
+                    .text(function () {
+                        return (dev_chart.text[language_manager.getLanguage()].smoothingCurve + data[0].name)
                     })
                     .call(dev_chart.wrapText, chart_width);
 
-                margin_top += 40;
+
+               console.log("margin Top: "+ margin_top);
+               margin_top += 100;
             }
 
             function createCircle(data, color) {
@@ -572,7 +591,7 @@ const dev_chart = {
                             }
                         })
                         .attr("data-color", color_set)
-                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].value) + ")")
+                        .attr("transform", "translate(" + x(data[i].date) + "," + y(data[i].real_value) + ")")
                         .on("mouseenter", function () {
                             //handle what happens on moueover
                             const chart = dev_chart.chart,
@@ -582,13 +601,13 @@ const dev_chart = {
                                 year = elem.data('year'),
                                 month = elem.data('month'),
                                 value = elem.data('value'),
-                                real_value = dev_chart.roundNumber(elem.data('realvalue'),3),
+                                real_value = elem.data('realvalue'),
                                 color = elem.data('color'),
                                 einheit = elem.data('einheit'),
                                 x = elem.position().left - document.getElementById('visualisation').getBoundingClientRect().x + 10,
                                 y = elem.position().top - document.getElementById('visualisation').getBoundingClientRect().y + 80,
                                 html = '',
-                                text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + real_value + " " + einheit;
+                                text_value = dev_chart.text[language_manager.getLanguage()].value+ ": " + value + " " + einheit;
 
                             elem.attr("r", 7.5);
                             //the tooltip for ind vergleich
@@ -647,7 +666,6 @@ const dev_chart = {
                 let lineGenerator = d3.line()
                     .curve(d3.curveCardinal),
                     pathData = lineGenerator(data);
-
                 g.append('path')
                     .attr('d', pathData);
             }
@@ -706,13 +724,6 @@ const dev_chart = {
                 //set the info text
                 $("#diagramm_gebietsname").text(chart.settings.name);
                 $('#diagramm_ags').text(" (" + chart.settings.ags + ")");
-                $('#diagrmm_gebiets_typ').text(function () {
-                    if (chart.settings.ind_vergleich) {
-                        return " %"
-                    } else {
-                        return (" " + indikatorauswahl.getIndikatorEinheit())
-                    }
-                });
                 //set the selcted value
                 ind_auswahl
                     .unbind()
@@ -830,7 +841,6 @@ const dev_chart = {
                 $('#visualisation').empty();
                 $("#diagramm_gebietsname").empty();
                 $('#diagramm_ags').empty();
-                $('#diagrmm_gebiets_typ').empty();
             },
             clearChartArray: function () {
                 dev_chart.chart.ind_array_chart = [];
@@ -880,7 +890,6 @@ const dev_chart = {
         return parseInt(indikatorauswahl.getIndikatorInfo(false,"rundung"));
     },
     roundNumber: function (number, decimalSpaces) {
-        console.log("This is value: "+ number);
         return Math.round(parseFloat(number) * Math.pow(10, decimalSpaces)) / Math.pow(10, decimalSpaces)
     },
     wrapText: function (text, width) {

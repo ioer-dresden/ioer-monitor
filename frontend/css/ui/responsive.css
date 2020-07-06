@@ -56,7 +56,8 @@
         display: none;
     }
     #entwicklungsdiagramm_content #diagramm #visualisation{
-        height:500px !important;
+        height:700px !important;
+
     }
     .right_content #tabelle_erweitern{
         width:300px !important;
