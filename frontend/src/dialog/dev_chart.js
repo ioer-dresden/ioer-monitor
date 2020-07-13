@@ -144,7 +144,6 @@ const dev_chart = {
                 dev_chart.chart.settings.state_prognose = false;
             }
         };
-        console.log("Instruction height:" + instructions.height);
         dialog_manager.setInstruction(instructions);
         dialog_manager.create();
         if (dev_chart.chart.settings.ind_vergleich){
@@ -283,8 +282,8 @@ const dev_chart = {
                 });
                 let minYear = helper.getMinArray(data, "year"),
                     maxYear = helper.getMaxArray(data, "year"),
-                    maxValue = helper.getMaxArray(data, "value"),
-                    minValue = helper.getMinArray(data, "value"),
+                    maxValue = helper.getMaxArray(data, "real_value"),
+                    minValue = helper.getMinArray(data, "real_value"),
                     min_date = new Date(minYear - 1, 0, 1),
                     max_date = new Date(maxYear + 1, 0, 1),
                     current_year = helper.getCurrentYear();
@@ -382,20 +381,19 @@ const dev_chart = {
                         appendData(data, data[0].color.toString());
                         createCircle(data, data[0].color.toString());
                         setLegende(data, data[0].color.toString());
-                        createRegressionCurve(data);
                     }, 100);
                 });
             }
 
 
 
-            //add the data
+            //add the data/ regression line
             function appendData(data, color) {
                 let values_line = [],
+                    values_real = [],
                     values_future = [],
-                    set = function (array, _dash_array) {
+                        set = function (array, _dash_array) {
                             g.append("path")
-                                .data(array)
                                 .attr("class", "regression_line")
                                 .attr('stroke', color)
                                 .attr("fill", "none")
@@ -408,7 +406,11 @@ const dev_chart = {
                         values_future.push(value);
                     }
                 });
-                set(values_line, ("7,3"));
+                for (let index in values_line){
+                    values_real.push(values_line[index]);
+                    values_real[index].value=values_real[index].real_value
+                }
+                set(values_real, ("7,3"));
                 if (values_future.length > 0) {
                     values_future.push(values_line[(values_line.length - 1)]);
                     values_future = values_future.sort(function (a, b) {
@@ -552,8 +554,6 @@ const dev_chart = {
                     })
                     .call(dev_chart.wrapText, chart_width);
 
-
-               console.log("margin Top: "+ margin_top);
                margin_top += 100;
             }
 
@@ -567,7 +567,7 @@ const dev_chart = {
                     circle.append("circle")
                         .attr("class", data[0].id + "_circle circle")
                         .attr("r", 5.5)
-                        .attr("data-value", data[i].value)
+                        .attr("data-value", dev_chart.roundNumber(data[i].value, dev_chart.getDecimalSpaces()))
                         .attr('fill', function () {
                             if (data[i].year > (new Date).getFullYear()) {
                                 return 'white';
@@ -662,13 +662,6 @@ const dev_chart = {
                 }
             }
 
-            function createRegressionCurve(data){
-                let lineGenerator = d3.line()
-                    .curve(d3.curveCardinal),
-                    pathData = lineGenerator(data);
-                g.append('path')
-                    .attr('d', pathData);
-            }
 
             function parseTime(_string) {
                 let parseTime = d3.timeParse("%m/%Y");

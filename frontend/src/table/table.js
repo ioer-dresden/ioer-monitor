@@ -80,7 +80,6 @@ const table = {
       `);
     },
     getTableHTML: function () {
-        console.log("GEtting table HTML");
         //ToDo remove previously displayed set HinweisLegende Items!
         let keepHinweisText = $('#hinweis_legende_text').detach();
         keepHinweisText.css("display","none");
@@ -186,7 +185,6 @@ const table = {
                                                  src="frontend/assets/icon/histogramm.png"/>`,
                         value_td = function () {
                             if (hc !== '0') {
-                                console.log("heighth before: "+ table.getScrollableAreaDOMObject().width());
                                 //split the hc
 
                                 let hc_arr = hc.split("||"),
