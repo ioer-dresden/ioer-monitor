@@ -7,9 +7,6 @@ class PostgreTasks extends PostgreManager
     {
         try {
             $year_pg = DBFactory::getMySQLTask()->getPostGreYear($year);
-
-            $log = "  getGeometry ";
-            file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             $digit = '';
             $geom = "x.the_geom ";
             $krs_col = "";

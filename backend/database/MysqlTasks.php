@@ -8,9 +8,6 @@ class MysqlTasks extends MysqlManager
     public function getAllCategoriesGebiete()
     {
         try {
-            $log = "  getAllCategoriesGebiete ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
-            error_log("This is a getAllCategoriesError!");
             $sql = $sql_kategorie = "SELECT * FROM m_thematische_kategorien, m_them_kategorie_freigabe
                         WHERE m_thematische_kategorien.ID_THEMA_KAT = m_them_kategorie_freigabe.ID_THEMA_KAT
                         AND STATUS_KATEGORIE_FREIGABE >=  " . $this->berechtigung . "
@@ -19,7 +16,6 @@ class MysqlTasks extends MysqlManager
             $trace = $e->getTrace();
             echo $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . ' called from ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'];
         }
-        file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
         return $this->query($sql);
     }
 
@@ -27,8 +23,6 @@ class MysqlTasks extends MysqlManager
     public function getAllCategoriesRaster()
     {
         try {
-            $log = "  getAllCategoriesRaster ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
             $sql = "select * from m_thematische_kategorien, m_indikatoren, d_raster 
                 where m_thematische_kategorien.ID_THEMA_KAT = m_indikatoren.ID_THEMA_KAT 
                 and m_indikatoren.ID_INDIKATOR = d_raster.Indikator 
@@ -36,7 +30,6 @@ class MysqlTasks extends MysqlManager
                 group by m_thematische_kategorien.id_thema_kat 
                 order by m_thematische_kategorien.sortierung_thema_kat";
 
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
             return $this->query($sql);
         } catch (Error $e) {
             $trace = $e->getTrace();
@@ -48,8 +41,7 @@ class MysqlTasks extends MysqlManager
     public function getSpatialExtend($modus, $year, $ind)
     {
         try {
-            $log = "  getSpatialExtend ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
+
             $sql_gebiete = "SELECT i.ID_INDIKATOR, i.RAUMEBENE_BLD,i.RAUMEBENE_ROR,i.RAUMEBENE_KRS,i.RAUMEBENE_LKS,
                             i.RAUMEBENE_KFS,i.RAUMEBENE_VWG,i.RAUMEBENE_GEM,i.RAUMEBENE_G50,i.RAUMEBENE_STT
                             FROM m_indikatoren i, m_indikator_freigabe f
@@ -62,7 +54,7 @@ class MysqlTasks extends MysqlManager
                             AND d_raster.INDIKATOR = '" . $ind . "' 
                             group by d_raster.raumgliederung ORDER BY d_raumgliederung.SORTIERUNG ASC";
 
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
+
             if ($modus === "raster") {
                 return $this->query($sql_raster);
             } else {
@@ -78,10 +70,7 @@ class MysqlTasks extends MysqlManager
     public function getSpatialExtendDictionary()
     {
         try {
-            $log = "  getSpatialExtendDictionary ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
             $sql = "SELECT Raumgliederung_HTML as name, NAME_EN as name_en, DB_KENNUNG as id, Sortierung as order_id from v_raumgliederung Group By NAME order by Sortierung";
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
             return $this->query($sql);
         } catch (Error $e) {
             $trace = $e->getTrace();
@@ -95,8 +84,6 @@ class MysqlTasks extends MysqlManager
     public function getAllIndicatorValuesInAGS($year, $ags)
     {
         try {
-            $log = "  getAllIndicatorValuesInAGS ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
             $length_ags = strlen($ags);
             $sql_bld = "";
             $sql_krs = "";
@@ -136,7 +123,6 @@ class MysqlTasks extends MysqlManager
                 And z.ID_INDIKATOR = f.ID_INDIKATOR
                 AND f.STATUS_INDIKATOR_FREIGABE = '" . $this->berechtigung . "' 
                 group by i.ID_INDIKATOR";
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
             return $this->query($sql);
         } catch (Error $e) {
             $trace = $e->getTrace();
@@ -148,8 +134,6 @@ class MysqlTasks extends MysqlManager
     public function getAllIndicatorsByCategoryGebiete($kat, $modus)
     {
         try {
-            $log = "  getAllIndicatorsByCategoryGebiete ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
             $sql = "SELECT m.*,
                 IFNULL((SELECT FARBWERT_MIN from m_zeichenvorschrift where ID_INDIKATOR = m.ID_INDIKATOR),'FFCC99') as FARBWERT_MIN,
                 IFNULL((SELECT FARBWERT_MAX from m_zeichenvorschrift where ID_INDIKATOR = m.ID_INDIKATOR),'66CC99') as FARBWERT_MAX
@@ -170,7 +154,6 @@ class MysqlTasks extends MysqlManager
                 GROUP BY m.INDIKATOR_NAME_KURZ
                 ORDER BY  m.MARKIERUNG DESC, m.SORTIERUNG ASC";
             }
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
             return $this->query($sql);
         } catch (Error $e) {
             $trace = $e->getTrace();
@@ -388,11 +371,8 @@ class MysqlTasks extends MysqlManager
     public function getPostGreYear($year)
     {
         try {
-            $log = "  getPostGreYear ";
-            file_put_contents('log.txt', "MySQL: " . $log, FILE_APPEND);
             $sql = "select PostGIS_Tabelle_Jahr from v_geometrie_jahr_viewer_postgis where Jahr_im_Viewer =" . $year;
             $rs = $this->query($sql);
-            file_put_contents('log.txt', "DONE! " . PHP_EOL, FILE_APPEND);
             return intval($rs[0]->PostGIS_Tabelle_Jahr);
         } catch (Error $e) {
             $trace = $e->getTrace();
