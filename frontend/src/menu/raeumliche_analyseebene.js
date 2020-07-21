@@ -89,7 +89,9 @@ const raeumliche_analyseebene = {
             //if not check if krs is possible as the main option
             else {
                 selected = menu.range[0];
+                $('#Raumgliederung').val(selected);
                 indikator_json_group.clean();
+                raeumliche_analyseebene.updateParamter(selected);
                 alert_manager.alertNotinSpatialRange($('#Raumgliederung option:selected').text(), selected);
                 return false;
             }
@@ -126,6 +128,8 @@ const raeumliche_analyseebene = {
                                     raumgliederung.hide();
                                 }
                             }
+
+
                         }
                     };
                     indikator_json.init(menu.getSelectionId(),callback);

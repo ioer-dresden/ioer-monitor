@@ -1,6 +1,7 @@
-const ogc_export={
-    service:"wms",
-    endpoint_id:"ogc_dialog",
+const ogc_export= {
+    service: "wms",
+    endpoint_id: "ogc_dialog",
+    /*  Dynamic Map-Service links disabled as of Kerngruppernsitzung 15.07.2020
     getLink:function(service){
         if(this.service==="wfs" || this.service==="wcs") {
             //return `https://monitor.ioer.de/cgi-bin/${this.service}?MAP=${indikatorauswahl.getSelectedIndikator()}_${this.service}`;
@@ -9,34 +10,37 @@ const ogc_export={
             return `https://monitor.ioer.de/cgi-bin/wms?MAP=${indikatorauswahl.getSelectedIndikator().toUpperCase()}_wms`;
         }
     },
-    text:{
-        de:{
-            title:function(){return `${ogc_export.service.toUpperCase()}-Dienst`},
-            use:function(){return `Dieser ${ogc_export.service.toUpperCase()}-Dienst steht Ihnen für die Verwendung der Karten in Ihrem eigenen GIS-System zur Verfügung. Voraussetzung ist die Zustimmung zu geltenden Nutzungsbedingungen.`},
-            terms:'Ich akzeptiere alle geltenden <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">Nutzungsbedingungen</a>',
-            url:function(){return `Die zu verwendende URL für den ${ogc_export.service.toUpperCase()}-Dienst lautet:`},
+    */
+    text: {
+        de: {
+            title: `WMS / WCS / WFS-Dienste`,
+            use: `Die WMS/WCS/WFS-Dienste stehen Ihnen für die Verwendung der Karten in Ihrem eigenen GIS-System zur Verfügung. Voraussetzung ist die Zustimmung zu geltenden Nutzungsbedingungen.`,
+            terms: 'Ich akzeptiere alle geltenden <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">Nutzungsbedingungen</a>',
+            urlPart1: 'Die zu verwendende URL für den ',
+            urlPart2: '-Dienst lautet:',
             noAPI: "Wenn Sie noch keinen API-Key besitzen, können Sie diesen durch eine einmalige Anmeldung generieren.",
-            help:'Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung',
-            accept:'Akzeptieren'
+            help: 'Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung',
+            accept: 'Akzeptieren'
 
         },
-        en:{
-            title:function (){return`${ogc_export.service.toUpperCase()}-Service`},
-            use:function(){return `This ${ogc_export.service.toUpperCase()} service is available to you for using the maps in your own GIS system. Prerequisite is the approval of applicable terms of use.`},
-            terms:'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">terms of use</a>',
-            url:function(){return `The URL for the ${ogc_export.service.toUpperCase()} service to use is:`},
-            noAPI:'If you do not have an API-key, you can generate it after registering for the service.',
+        en: {
+            title: `WMS/WCS/WFS-Services`,
+            use: `The WMS/WCS/WFS services are available to you to use the maps in your own GIS system. Prerequisite is the approval of applicable terms of use.`,
+            terms: 'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">terms of use</a>',
+            urlPart1: 'The URL for the ',
+            urlPart2: ' service to use is:',
+            noAPI: 'If you do not have an API-key, you can generate it after registering for the service.',
             help: 'If you need help, you can find instructions here',
-            accept:'Accept'
-        },
+            accept: 'Accept'
+        }
     },
-    open:function(_service){
-        const object = this;
-        this.service = _service;
-        if(typeof indikatorauswahl.getSelectedIndikator() !=='undefined') {
-            let lan = language_manager.getLanguage(),
-                user_login=function(){
-                    if(_service==="wcs" || _service==="wfs") {
+
+        open: function (_service) {
+            const object = this;
+            this.service = _service;
+            if (typeof indikatorauswahl.getSelectedIndikator() !== 'undefined') {
+                let lan = language_manager.getLanguage(),
+                    user_login = function () {
                         return `
                             <h4>${ogc_export.text[language_manager.getLanguage()].noAPI}</h4>
                             <div style="margin-top: 20px; margin-left: 20%;" class="cursor">
@@ -58,52 +62,62 @@ const ogc_export={
                                 </a>
                             </div>
                         `;
-                    }else{return "";}
-                },
-                html = he.encode(`
-                                     <div class="jq_dialog ogc_dialog" id="${object.endpoint_id}">
-                                        <h4>${object.text[lan].use()}</h4>
+                    },
+                    html = he.encode(`
+                                     <div class="jq_dialog ogc_dialog" id="${object.endpoint_id}" xmlns="http://www.w3.org/1999/html">
+                                        <h4>${object.text[lan].use}</h4>
                                         <div class="ogc_accecpt_container">
                                             <input title='${ogc_export.text[language_manager.getLanguage()].accept}' type="checkbox" name="allow" id="ogc_allow"/>
                                             <span>${object.text[lan].terms}</span>
                                         </div>
                                         <hr/>
                                         <div class="ogc_allow display-none" id="allow_container">
-                                            <h4>${object.text[lan].url()}</h4>
+                                            <h4>${object.text[lan].urlPart1}<b>WMS</b> ${object.text[lan].urlPart2}</h4>
                                             <div class="link_container">
-                                                <h3 id="wms_link">${object.getLink(_service)}</h3>
+                                                <h3 id="wms_link">https://monitor.ioer.de/cgi-bin/wms?MAP=${indikatorauswahl.getSelectedIndikator().toUpperCase()}_wms</h3>
+                                            </div>
+                                            <hr/>
+                                            
+                                            <h4>${object.text[lan].urlPart1}WCS ${object.text[lan].urlPart2}</h4>
+                                            <div class="link_container">                                          
+                                                <h3 id="wcs_link">https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=wcs<b>&key=<i  style="color:red;">Ihr API Key</i></b></h3>
+                                            </div>
+                                            <hr/>
+                                            
+                                            <h4>${object.text[lan].urlPart1}WFS ${object.text[lan].urlPart2}</h4>
+                                            <div class="link_container">
+                                                <h3 id="wfs_link">https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=wfs<b>&key=<i  style="color:red;">Ihr API Key</i></b></h3>
                                             </div>
                                             <hr/>
                                             </div>
-                                                 ${user_login()}
-                                        
+                                                 ${user_login()}                                    
                                               </div> 
                                         </div>
                                         
                                     </div> 
                                   `);
-            //settings for the manager
-            let instructions = {
-                endpoint:`${this.endpoint_id}`,
-                html:html,
-                title:this.text[lan].title(),
-                modal:false
-            };
-            dialog_manager.setInstruction(instructions);
-            dialog_manager.create();
-            $('#ogc_allow')
-                .unbind()
-                .change(function(){
-                    let container = $('#allow_container');
-                    if($(this).is(':checked')){
-                        container.show();
-                    }else{
-                        container.hide();
-                    }
-                });
+                //settings for the manager
+                let instructions = {
+                    endpoint: `${this.endpoint_id}`,
+                    html: html,
+                    title: this.text[lan].title,
+                    modal: false
+                };
+                dialog_manager.setInstruction(instructions);
+                dialog_manager.create();
+                $('#ogc_allow')
+                    .unbind()
+                    .change(function () {
+                        let container = $('#allow_container');
+                        if ($(this).is(':checked')) {
+                            container.show();
+                        } else {
+                            container.hide();
+                        }
+                    });
 
-        }else{
-            alert_manager.alertNoIndicatorChosen();
+            } else {
+                alert_manager.alertNoIndicatorChosen();
+            }
         }
-    }
 };

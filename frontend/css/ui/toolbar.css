@@ -364,4 +364,5 @@ color schema
 }
 .toolbar #content .wfs_btn{
     margin-right: 10px;
+    width: 100% !important;
 }

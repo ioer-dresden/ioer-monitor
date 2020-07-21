@@ -45,15 +45,12 @@ class PostgreTasks extends PostgreManager
             $trace = $e->getTrace();
             echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
         }
-        file_put_contents('log.txt', "DONE! ".PHP_EOL, FILE_APPEND);
         return $this->query($sql . $digit);
     }
     function countGeometries($year,$raumgl,$ags_array)
     {
         try {
 
-            $log = "  countGeometries ";
-            file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             $year_pg = DBFactory::getMySQLTask()->getPostGreYear($year);
             $query = "select COUNT(AGS) from vg250_" . $raumgl . "_" . $year_pg . "_grob";
             if (count($ags_array) > 0) {
@@ -79,8 +76,6 @@ class PostgreTasks extends PostgreManager
     }
     function getDescription($des,$ags,$spatial_extend){
         try {
-            $log = "  getDescription ";
-            file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             $value_return = $des;
             if ($spatial_extend === 'bld') {
                 //specal issue for berlin, because ther is a wrong record insde the vg 250
@@ -103,15 +98,12 @@ class PostgreTasks extends PostgreManager
             $trace = $e->getTrace();
             echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
         }
-        file_put_contents('log.txt', "DONE! ".PHP_EOL, FILE_APPEND);
         return $value_return;
     }
     function getAGSName($raumgliederung,$ags,$year)
     {
         try {
 
-            $log = "  getAGSName ";
-            file_put_contents('log.txt', "Postgres: " . $log, FILE_APPEND);
             if (intval($year) == 2018) {
                 $year = DBFactory::getMySQLTask()->getPostGreYear($year);
             }
@@ -122,7 +114,6 @@ class PostgreTasks extends PostgreManager
             $trace = $e->getTrace();
             echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
         }
-        file_put_contents('log.txt', "DONE! ".PHP_EOL, FILE_APPEND);
         return $rs[0]->gen;
     }
 }
