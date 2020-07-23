@@ -13,7 +13,7 @@ const ogc_export={
         de:{
             title:function(){return `${ogc_export.service.toUpperCase()}-Dienst`},
             use:function(){return `Dieser ${ogc_export.service.toUpperCase()}-Dienst steht Ihnen für die Verwendung der Karten in Ihrem eigenen GIS-System zur Verfügung. Voraussetzung ist die Zustimmung zu geltenden Nutzungsbedingungen.`},
-            terms:'Ich akzeptiere alle geltenden <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">Nutzungsbedingungen</a>',
+            terms:'Ich akzeptiere alle geltenden <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor_DE.pdf">Nutzungsbedingungen</a>',
             url:function(){return `Die zu verwendende URL für den ${ogc_export.service.toUpperCase()}-Dienst lautet:`},
             noAPI: "Wenn Sie noch keinen API-Key besitzen, können Sie diesen durch eine einmalige Anmeldung generieren.",
             help:'Falls Sie Hilfe benötigen, finden Sie hier eine Anleitung',
@@ -23,7 +23,7 @@ const ogc_export={
         en:{
             title:function (){return`${ogc_export.service.toUpperCase()}-Service`},
             use:function(){return `This ${ogc_export.service.toUpperCase()} service is available to you for using the maps in your own GIS system. Prerequisite is the approval of applicable terms of use.`},
-            terms:'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf">terms of use</a>',
+            terms:'I accept all applicable <a target="_blank" href="http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor_EN.pdf">terms of use</a>',
             url:function(){return `The URL for the ${ogc_export.service.toUpperCase()} service to use is:`},
             noAPI:'If you do not have an API-key, you can generate it after registering for the service.',
             help: 'If you need help, you can find instructions here',
