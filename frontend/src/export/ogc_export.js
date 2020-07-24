@@ -72,20 +72,22 @@ const ogc_export= {
                                         </div>
                                         <hr/>
                                         <div class="ogc_allow display-none" id="allow_container">
-                                            <h4>${object.text[lan].urlPart1}<b>WMS</b> ${object.text[lan].urlPart2}</h4>
-                                            <div class="link_container">
+                                            
+                                            <div id="wms_link_container" class="link_container">
+                                                <h4>${object.text[lan].urlPart1}<b>WMS</b> ${object.text[lan].urlPart2}</h4>
                                                 <h3 id="wms_link">https://monitor.ioer.de/cgi-bin/wms?MAP=${indikatorauswahl.getSelectedIndikator().toUpperCase()}_wms</h3>
                                             </div>
                                             <hr/>
                                             
-                                            <h4>${object.text[lan].urlPart1}WCS ${object.text[lan].urlPart2}</h4>
-                                            <div class="link_container">                                          
+                          
+                                            <div id="wcs_link_container" class="link_container">   
+                                                <h4>${object.text[lan].urlPart1}WCS ${object.text[lan].urlPart2}</h4>                                       
                                                 <h3 id="wcs_link">https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=wcs<b>&key=<i  style="color:red;">Ihr API Key</i></b></h3>
                                             </div>
                                             <hr/>
                                             
+                                            <div id="wfs_link_container" class="link_container">
                                             <h4>${object.text[lan].urlPart1}WFS ${object.text[lan].urlPart2}</h4>
-                                            <div class="link_container">
                                                 <h3 id="wfs_link">https://monitor.ioer.de/monitor_api/user?id=${indikatorauswahl.getSelectedIndikator().toUpperCase()}&service=wfs<b>&key=<i  style="color:red;">Ihr API Key</i></b></h3>
                                             </div>
                                             <hr/>
@@ -103,8 +105,29 @@ const ogc_export= {
                     title: this.text[lan].title,
                     modal: false
                 };
+
+
                 dialog_manager.setInstruction(instructions);
                 dialog_manager.create();
+
+                // Modify the links being shown based on OGC-Service availability:
+                let state_ogc = indikatorauswahl.getIndikatorInfo(indikatorauswahl.getSelectedIndikator(), "ogc");
+                console.log("Export popup");
+                console.info(state_ogc);
+                if (state_ogc.wfs != "1"){
+                    console.log("hiding wfs!");
+                    $("#wfs_link_container").hide();
+                }
+                else {
+                    $("#wfs_link_container").show();
+                }
+                if (state_ogc.wcs != "1"){
+                    $("#wcs_link_container").hide();
+                }
+                else{
+                    $("#wcs_link_container").show();
+                }
+
                 $('#ogc_allow')
                     .unbind()
                     .change(function () {

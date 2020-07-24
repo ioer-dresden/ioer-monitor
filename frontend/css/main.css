@@ -452,15 +452,7 @@ OGC Dialoge-----------------------------
     display: none;
     margin-top: 10px;
 }
-.ogc_dialog .ogc_allow .link_container{
-    width: 100%;
-    display: inline-block;
-}
-.ogc_dialog .ogc_allow .link_container h3{
-    margin-top: 5px;
-    color:#006dcc;
-    float:left;
-}
+
 .ogc_dialog .ogc_allow .link_container .ogc_info{
     border-radius: 50%;
     background: #006dcc url(../assets/icon/information.png) no-repeat center;

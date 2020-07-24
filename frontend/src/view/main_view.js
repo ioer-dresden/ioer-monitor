@@ -28,7 +28,6 @@ const main_view = {
                 },
                 onDragEnd: function (event) {
                     TableHelper.reinitializeStickyTableHeader();
-                    legende.resize();
                     map.invalidateSize();
                 }
             });

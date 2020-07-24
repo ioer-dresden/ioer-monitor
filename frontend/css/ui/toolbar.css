@@ -331,9 +331,11 @@ color schema
     margin-right: 10px;
     margin-bottom: 1vh;
 }
-.toolbar #content .toolbar #content #wfs{
-    margin-top: 5px !important;
+
+.toolbar #content .dropdown_menu #ogc_services {
+    width: auto !important;
 }
+
 .toolbar #content .dropdown_menu #btn_kartenlink{
     background: #8CB91B;
     color:white;
@@ -345,14 +347,7 @@ color schema
 .toolbar #content .export_div{
     margin-top: 10px;
 }
-.toolbar #content .dropdown_menu #wms {
-    float: left;
-    margin-right: 10px;
-}
-.toolbar #content .dropdown_menu #wcs {
-    margin-right: 10px;
-    margin-left: 10px;
-}
+
 .toolbar #content .dropdown_menu #kartenlink{
     background: #8CB91B;
     color: white;
@@ -362,7 +357,4 @@ color schema
     margin-top: 5px;
     background:#8CB91B;
 }
-.toolbar #content .wfs_btn{
-    margin-right: 10px;
-    width: 100% !important;
-}
+

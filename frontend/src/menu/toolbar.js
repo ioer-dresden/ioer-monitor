@@ -324,7 +324,7 @@ const toolbar = {
                             <button id="wcs" class="btn .btn-info btn_export raster_export" data-format="WCS" onclick="ogc_export.open('wcs')">WCS</button>
                             <button id="wfs" class="btn .btn-info btn_export gebiete_export" data-format="WFS" onclick="ogc_export.open('wfs')">WFS</button>
                             -->
-                            <button id="wfs" class="btn wfs_btn .btn-info btn_export gebiete_export" data-format="WFS" onclick="ogc_export.open('wfs')">WMS / WCS / WFS</button>
+                            <button id="ogc_services" class="btn wfs_btn .btn-info btn_export gebiete_export" data-format="WFS" onclick="ogc_export.open('wfs')">WMS</button>
                             <div class="export_div" id="export_map_display"><b>Export der Kartendarstellung als</b></div>
                             <hr class="hr"/>
                             <div class="btn-group">

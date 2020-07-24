@@ -244,21 +244,25 @@ const indikatorauswahl = {
                 "font-weight": "bold"
             });
             $('#' + indicator_id + "_item").css({"color": farbschema.getColorHexMain(), "font-weight": "bold"});
-            //enable or disbale OGC Services
+            // enable or disbale OGC Services
+            //
             var interval = setInterval(function () {
                 let state_ogc = indikatorauswahl.getIndikatorInfo(indicator_id, "ogc");
                 //if all indictaor values are ready
                 if (state_ogc) {
                     clearInterval(interval);
-                    if (state_ogc.wfs !== "1" || zeit_slider.getTimeSet()<=2006) {
-                        helper.disableElement("#wfs", "");
-                    } else {
-                        helper.enableElement("#wfs", "");
+                    $("#ogc_services").html("WMS");
+                    //  If WCS Service is possible, add text to #ogc_services: "/ WCS"
+                    if (state_ogc.wcs == "1") {
+                        let newButtonLabel= $("#ogc_services").html()+ "/ WCS";
+                        $("#ogc_services").html(newButtonLabel);
+
                     }
-                    if (state_ogc.wcs !== "1" || zeit_slider.getTimeSet()<=2006) {
-                        helper.disableElement(".raster_export", "");
-                    } else {
-                        helper.enableElement(".raster_export", "");
+                    // If WFS Service is possible, Add text to #ogc_service: "/ WFS"
+                    if (state_ogc.wfs == "1") {
+                        let newButtonLabel= $("#ogc_services").html()+ "/ WFS";
+                        $("#ogc_services").html(newButtonLabel);
+
                     }
                 }
             }, 500);
