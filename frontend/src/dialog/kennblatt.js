@@ -142,7 +142,6 @@ const kennblatt={
                     "verweise":"Verweise",
                     "bemerkung":"Bemerkungen",
                     "bezugsebenen":"Bezugsebenen",
-                    "ogc":"Verfügbare Geodienste mit Links",
                     "literatur":"Quellen/Literatur",
                     "erstellePDF":"Erstelle PDF"
                 },
@@ -194,8 +193,8 @@ const kennblatt={
                     <h4>${header_text[language]["bezugsebenen"]}</h4>
                     <div class="text">${bezugsebenen()}</div>
                     <div class="html2pdf__page-break"></div>
-                    <h4>${header_text[language]["ogc"]}</h4>
-                    <div class="text">${ogc_links()}</div>
+                    <!--<h4>${header_text[language]["ogc"]}</h4>
+                    <div class="text">${ogc_links()}</div>-->
                      <h4>${header_text[language]["literatur"]}</h4>
                     <div class="text">${literatur()}</div>
                 </div>
