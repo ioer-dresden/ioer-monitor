@@ -183,7 +183,7 @@ const legende = {
             indikator_info_container.text( info_json['indicators'][indicator_id][("info"+language_tag())]);
             datengrundlage_container.html(`© GeoBasis-DE / BKG (${helper.getCurrentYear()})
                                                     <br/>
-                                                ${datengrundlage}`);
+                                                ${datengrundlage} Gebietsstand: 31.12.2017`);
         if (einheit.length<=0) {
             einheit_container.hide();
         } else {
